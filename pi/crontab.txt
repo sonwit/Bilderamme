@@ -1,0 +1,21 @@
+# Fugleramme — utedelens cron (Pi). Installer med:
+#   scp pi/crontab.txt bruker@192.168.1.225:/tmp/ && ssh bruker@192.168.1.225 'crontab /tmp/crontab.txt'
+#
+# INNKJOERINGSFASE (tett innsamling): vi vil ha nok data til aa se doegnrytme,
+# artsutvalg og om plasseringen fanger fuglene. Selve opptaket koster nesten
+# ingenting naar Pi-en uansett staar paa; det er opplastingen som trekker
+# stroem, og den er fartsbegrenset i scriptet.
+#
+# Naar vi har sett noen dagers statistikk kan dette glisnes ut — f.eks. bare
+# 04-08 hver halvtime — for aa spare batteri.
+
+# Dagsangen (grytidlig sommer i Norge: soloppgang ~04:15 i juli) — hver 20. min
+*/20 3-8 * * * /home/bruker/record_and_upload.sh >> /home/bruker/fugl.log 2>&1
+
+# Resten av dagen — hver time
+0 9-21 * * * /home/bruker/record_and_upload.sh >> /home/bruker/fugl.log 2>&1
+
+# Natta: ingen opptak (fuglene er stille, batteriet lades ikke).
+
+# Hold loggen liten (SD-kortet): behold siste 2000 linjer
+30 2 * * * tail -2000 /home/bruker/fugl.log > /tmp/f.log && mv /tmp/f.log /home/bruker/fugl.log

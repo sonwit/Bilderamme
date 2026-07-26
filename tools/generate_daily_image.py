@@ -18,6 +18,7 @@ Kjøres av cron sammen med push_to_frame.py, se README.md i workspace-repoet, f.
 import os
 import re
 import sys
+import json
 import time
 import random
 import datetime
@@ -98,6 +99,86 @@ DAILY_SUBJECTS = [
     "a bumblebee on a garden flower",
     "a butterfly resting on a leaf",
 ]
+
+# BirdNET-resultatet fra utedelen (Pi tar opp ~06:40, birdnet_analyze.py paa
+# serveren skriver denne). Er den fersk (fra i dag), brukes den/de oeverste
+# artene som dagens motiv i stedet for tilfeldig DAILY_SUBJECTS.
+BIRDS_JSON = os.environ.get("BIRDS_JSON", "/opt/fugleramme/birds.json")
+
+# Smaa scener aa sette den hoerte fuglen i -- DAILY_SUBJECTS har scener bakt
+# inn i teksten, men BirdNET gir bare artsnavn, saa vi legger paa en her.
+HEARD_SCENES = [
+    "perched on a branch",
+    "on a bird feeder",
+    "singing on a fence post",
+    "on a mossy stone",
+    "among garden flowers",
+    "on the lawn",
+]
+
+
+def _article(name: str) -> str:
+    """'a'/'an' for artsnavn. NB: 'Eu...' uttales 'ju' -> 'a European Robin'."""
+    if name[:2].lower() == "eu":
+        return "a"
+    return "an" if name[:1].lower() in "aeiou" else "a"
+
+
+# Hvor mange av dagens arter som er med i trekningen til bildet. Aa alltid ta
+# den aller vanligste ville gitt skjaere og kjoettmeis hver eneste dag; en
+# vektet trekning blant toppen gir variasjon og er fortsatt helt sant -- alle
+# kandidatene er faktisk hoert i hagen i dag.
+HEARD_CANDIDATES = 5
+
+
+def get_heard_bird() -> str | None:
+    """Les birds.json (dagens aggregerte artsliste fra birdnet_analyze.py) og
+    lag dagens motiv av fugler som faktisk ble hoert i hagen. Returnerer None
+    hvis fila mangler, er fra en annen dag eller ikke har noen arter -- da
+    faller run() tilbake til DAILY_SUBJECTS. Feiler stille: en oedelagt
+    birds.json skal aldri stoppe dagens bilde."""
+    try:
+        with open(BIRDS_JSON) as f:
+            data = json.load(f)
+        if data.get("date") != datetime.date.today().isoformat():
+            print(f"birds.json er fra {data.get('date')} (ikke i dag) — "
+                  "bruker tilfeldig motiv.", file=sys.stderr)
+            return None
+        species = (data.get("species") or [])[:HEARD_CANDIDATES]
+        if not species:
+            return None
+
+        # Vekt = hvor godt belagt arten er i dag (antall oekter den ble hoert
+        # i, minst 1). Vanlige gjester dominerer, men en sjeldnere gjest kan
+        # ogsaa faa dagen sin.
+        weights = [max(1, s.get("sessions", 1)) for s in species]
+        picked = random.choices(species, weights=weights,
+                                k=min(2, len(species)))
+        # random.choices trekker med tilbakelegging -- fjern duplikat.
+        chosen = []
+        for s in picked:
+            if s["common_name"] not in [c["common_name"] for c in chosen]:
+                chosen.append(s)
+
+        scene = random.choice(HEARD_SCENES)
+        if len(chosen) == 2:
+            a, b = chosen[0]["common_name"], chosen[1]["common_name"]
+            subject = f"{_article(a)} {a} and {_article(b)} {b} together {scene}"
+        else:
+            a = chosen[0]["common_name"]
+            subject = f"{_article(a)} {a} {scene}"
+
+        print(f"Dagens motiv fra BirdNET ({data.get('sessions_today', '?')} opptak i dag, "
+              f"kandidater: "
+              + ", ".join(f"{s['common_name']} x{s.get('sessions', 1)}" for s in species)
+              + f") -> valgt: {', '.join(c['common_name'] for c in chosen)}")
+        return subject
+    except FileNotFoundError:
+        return None
+    except Exception as e:  # noqa: BLE001
+        print(f"ADVARSEL: klarte ikke lese {BIRDS_JSON}: {e}", file=sys.stderr)
+        return None
+
 
 # Fast hale som holder ALLE bilder panel-vennlige (flate, mettede farger),
 # uansett om det er dagens motiv eller et fritt emne fra Siri.
@@ -435,11 +516,12 @@ def run(subject: str | None = None, style: str | None = None,
     skjermen gjoeres av push_to_frame.py / frame_server.py etterpaa."""
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # Daglig bilde (ingen emne, ingen referanse): velg tilfeldig motiv OG
-    # tilfeldig stil for variasjon. Emne/Siri beholder valgt stil (forutsigbart).
+    # Daglig bilde (ingen emne, ingen referanse): bruk fugl(er) BirdNET hoerte
+    # i hagen i morges hvis birds.json er fersk, ellers tilfeldig motiv.
+    # Tilfeldig stil uansett. Emne/Siri beholder valgt stil (forutsigbart).
     daily_subject = None
     if not subject and not ref_images:
-        daily_subject = random.choice(DAILY_SUBJECTS)
+        daily_subject = get_heard_bird() or random.choice(DAILY_SUBJECTS)
         if style is None:
             style = "random"
 
