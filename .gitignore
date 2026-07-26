@@ -1,0 +1,23 @@
+# Hemmeligheter — WiFi-passord o.l.
+firmware/indoor_frame/config.h
+secrets.h
+*.local.h
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Bygg / midlertidig
+*.bin
+*.o
+*.elf
+build/
+.DS_Store
+
+# Lokale testbilder / rask
+__deltest__
+tools/test*.png
+tools/test*.jpg
+tools/forhaandsvisning.png

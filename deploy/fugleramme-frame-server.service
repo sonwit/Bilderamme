@@ -1,0 +1,22 @@
+[Unit]
+Description=Fugleramme frame-server (fritekst-bilde paa forespoersel, f.eks. via Siri)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Kjoer som din bruker (ikke root), saa bilder tjenesten lager faar samme eier
+# som de cron/manuelt lager -- da unngaar vi "Permission denied" i www/arkiv/.
+# Bytt "bruker" hvis brukeren din heter noe annet. Krever at /opt/fugleramme
+# eies av samme bruker: sudo chown -R bruker:bruker /opt/fugleramme
+User=bruker
+WorkingDirectory=/opt/fugleramme
+# Legg GEMINI_API_KEY (og evt. FRAME_HOST / FRAME_SERVER_PORT / FRAME_TOKEN) i denne fila.
+# Se deploy/frame_server.env.example. Uten GEMINI_API_KEY vil generering feile.
+EnvironmentFile=/opt/fugleramme/frame_server.env
+ExecStart=/opt/fugleramme/venv/bin/python3 /opt/fugleramme/frame_server.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
