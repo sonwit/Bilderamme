@@ -9,13 +9,21 @@
 # Naar vi har sett noen dagers statistikk kan dette glisnes ut — f.eks. bare
 # 04-08 hver halvtime — for aa spare batteri.
 
-# Dagsangen (grytidlig sommer i Norge: soloppgang ~04:15 i juli) — hver 20. min
-*/20 3-8 * * * /home/bruker/record_and_upload.sh >> /home/bruker/fugl.log 2>&1
+# Dagsangen (soloppgang ~04:15 i juli) — hver 30. min 04-08.
+# Var hvert 20. min fra 03:00, men det toemte batteriet: 2026-07-28 doede
+# Pi-en 05:21 midt i en opplasting, og 03-timen ga uansett null deteksjoner.
+# Rushtiden i statistikken er 06-07 — den dekkes fortsatt tett.
+*/30 4-8 * * * /home/bruker/record_and_upload.sh >> /home/bruker/fugl.log 2>&1
 
 # Resten av dagen — hver time
 0 9-21 * * * /home/bruker/record_and_upload.sh >> /home/bruker/fugl.log 2>&1
 
 # Natta: ingen opptak (fuglene er stille, batteriet lades ikke).
+
+# Hjerteslag hele doegnet — ett kort livstegn hvert 15. min, skrevet lokalt
+# (ingen radio). Uten dette vet vi bare at nattopptakene mangler; med dette vet
+# vi noeyaktig NAAR stroemmen tok slutt. Lastes opp med neste opptak.
+*/15 * * * * /home/bruker/heartbeat.sh
 
 # Hold loggen liten (SD-kortet): behold siste 2000 linjer
 30 2 * * * tail -2000 /home/bruker/fugl.log > /tmp/f.log && mv /tmp/f.log /home/bruker/fugl.log
