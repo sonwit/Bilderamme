@@ -68,12 +68,17 @@ def audio_metrics(wav_path: str) -> dict:
     if data.ndim > 1:
         data = data.mean(axis=1)
     peak = float(np.abs(data).max()) if len(data) else 0.0
+    # Robust peak: 99,9-persentilen. ESP32-firmwarens hoeypassfilter lager ett
+    # enkelt fullskala-sample ved opptaksstart; absolutt peak paa 1.0 ville
+    # ellers slaatt av normaliseringen for opptak som reelt er stille.
+    peak999 = float(np.quantile(np.abs(data), 0.999)) if len(data) else 0.0
     rms = float(np.sqrt((data ** 2).mean())) if len(data) else 0.0
     clipped = float((np.abs(data) > 0.99).mean() * 100) if len(data) else 0.0
     return {
         "duration_s": round(len(data) / sr, 1) if sr else 0.0,
         "samplerate": int(sr),
         "peak": round(peak, 4),
+        "peak999": round(peak999, 4),
         "rms": round(rms, 5),
         # dBFS er lettere aa resonnere om enn raa RMS: -60 er nesten stille,
         # -30 er bra nivaa for et feltopptak, 0 er full skala.
@@ -278,7 +283,7 @@ def main() -> int:
         return 1
 
     audio = audio_metrics(wav_path)
-    species = analyze(wav_path, audio["peak"])
+    species = analyze(wav_path, audio["peak999"])
     health = read_health_sidecar(wav_path)
     append_observation(wav_path, species, audio, health)
     today = write_todays_birds()
