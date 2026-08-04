@@ -126,4 +126,15 @@ mv "$WAV" "${WAV%.wav}.json" "$QUEUE_DIR/" 2>/dev/null
 
 trim_queue
 flush_queue
+
+# Send med hjerteslagsloggen (bittelien) saa serveren kan se naar Pi-en levde
+# og naar den var borte -- det er den eneste kilden vi har til «overlevde den
+# natta?», siden riggen ikke har noen batterimaaler.
+HEARTBEAT="${FUGLE_HEARTBEAT:-/home/bruker/heartbeat.log}"
+if [ -s "$HEARTBEAT" ]; then
+  scp -q -o ConnectTimeout=15 -o BatchMode=yes "$HEARTBEAT" \
+      "$SERVER:/opt/fugleramme/data/heartbeat-$(hostname).log" 2>/dev/null \
+    || log "(fikk ikke sendt hjerteslagsloggen — proever igjen neste oekt)"
+fi
+
 log "Ferdig."

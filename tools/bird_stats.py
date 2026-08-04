@@ -35,6 +35,87 @@ OBS_LOG = os.path.join(os.environ.get("FUGLE_DATA_DIR",
 QUIET_DBFS = float(os.environ.get("QUIET_DBFS", "-55"))
 LOUD_DBFS = float(os.environ.get("LOUD_DBFS", "-12"))
 
+# Hvor mange opptak cron SKAL levere per time (maa holdes i synk med
+# pi/crontab.txt). Manglende opptak er det klareste signalet paa at Pi-en var
+# nede -- typisk fordi batteriet ikke holdt gjennom natta.
+EXPECTED_PER_HOUR = {**{h: 3 for h in range(3, 9)},     # */20 3-8
+                     **{h: 1 for h in range(9, 22)}}    # 0 9-21
+
+
+def expected_sessions(date_str: str, now: datetime.datetime,
+                      first: datetime.datetime | None = None) -> int:
+    """Forventet antall opptak for en dato.
+
+    To justeringer, ellers loeper dekningen alltid under 100 %:
+      * innevaerende dag: bare timer som ER passert (og ikke den halvferdige
+        timen vi staar i akkurat naa)
+      * foerste datoen med data: bare timer etter at foerste opptak kom, siden
+        cron-planen ikke fantes foer den."""
+    today = now.date().isoformat()
+    total = 0
+    for h, n in EXPECTED_PER_HOUR.items():
+        if date_str == today and h >= now.hour:
+            continue
+        if first and date_str == first.date().isoformat() and h < first.hour:
+            continue
+        total += n
+    return total
+
+
+DATA_DIR = os.environ.get("FUGLE_DATA_DIR", os.path.join(BASE_DIR, "data"))
+
+# Hjerteslag skrives hvert 15. min. Er det mer enn dette mellom to linjer, var
+# Pi-en borte (stroemmen tok slutt, eller den restartet).
+HEARTBEAT_GAP_MIN = float(os.environ.get("HEARTBEAT_GAP_MIN", "25"))
+
+
+def load_heartbeats() -> list[dict]:
+    """Les alle heartbeat-*.log i data/. CSV: tid,uptime,throttled,uv,temp,wifi."""
+    beats = []
+    try:
+        names = [n for n in os.listdir(DATA_DIR) if n.startswith("heartbeat-")]
+    except FileNotFoundError:
+        return beats
+    for name in names:
+        try:
+            with open(os.path.join(DATA_DIR, name)) as f:
+                for line in f:
+                    p = line.strip().split(",")
+                    if len(p) < 6:
+                        continue
+                    try:
+                        beats.append({
+                            "t": datetime.datetime.fromisoformat(p[0]),
+                            "uptime_s": int(p[1]),
+                            "throttled": p[2],
+                            "uv": int(p[3]),
+                            "host": name[len("heartbeat-"):-len(".log")],
+                        })
+                    except (ValueError, IndexError):
+                        continue
+        except OSError:
+            continue
+    return sorted(beats, key=lambda b: b["t"])
+
+
+def find_outages(beats: list[dict]) -> list[dict]:
+    """Finn periodene der Pi-en var borte. Et hull mellom to hjerteslag betyr
+    at den ikke kjoerte. Er uptime LAVERE etter hullet, har den startet paa
+    nytt (stroembrudd) -- ellers stoppet bare cron/klokka et blaff."""
+    outages = []
+    for a, b in zip(beats, beats[1:]):
+        gap_min = (b["t"] - a["t"]).total_seconds() / 60
+        if gap_min > HEARTBEAT_GAP_MIN:
+            outages.append({
+                "from": a["t"].strftime("%Y-%m-%d %H:%M"),
+                "to": b["t"].strftime("%Y-%m-%d %H:%M"),
+                "minutes": round(gap_min),
+                "rebooted": b["uptime_s"] < a["uptime_s"],
+                # Natt = 21-06. Det er da batteriet er alene om jobben.
+                "at_night": a["t"].hour >= 21 or a["t"].hour < 6,
+            })
+    return outages
+
 
 def load(path: str) -> list[dict]:
     obs = []
@@ -122,8 +203,6 @@ def summarize(obs: list[dict]) -> dict:
         p = o.get("pi") or {}
         if p:
             hosts[p.get("host", "?")] += 1
-            if p.get("undervoltage_events"):
-                undervolt = max(undervolt, int(p["undervoltage_events"]))
             th = str(p.get("throttled", "0x0"))
             try:
                 if int(th, 16) & 0xF:  # lav nibble = skjer NAA
@@ -134,6 +213,51 @@ def summarize(obs: list[dict]) -> dict:
                 temps.append(float(p["temp_c"]))
             if p.get("volt"):
                 volts.append(float(p["volt"]))
+
+    # --- omstarter og undervoltage paa tvers av oppstarter -----------------
+    # `undervoltage_events` teller siden BOOT. Restarter Pi-en (typisk fordi
+    # batteriet gikk tomt) nullstilles telleren -- saa vi kan ikke bare ta
+    # maks. Vi deler i boot-oekter (uptime som gaar NED = omstart) og summerer
+    # maks fra hver oekt.
+    reboots = 0
+    seq = sorted((o for o in obs if o.get("pi", {}).get("uptime_s") is not None),
+                 key=lambda o: o.get("recorded_at", ""))
+    prev_up, boot_max = None, 0
+    for o in seq:
+        up = int(o["pi"]["uptime_s"])
+        uv = int(o["pi"].get("undervoltage_events") or 0)
+        if prev_up is not None and up < prev_up:
+            reboots += 1
+            undervolt += boot_max     # avslutt forrige boot-oekt
+            boot_max = 0
+        boot_max = max(boot_max, uv)
+        prev_up = up
+    undervolt += boot_max
+
+    # Undervoltage per time gir et tall vi kan sammenlikne over tid, uavhengig
+    # av hvor mange doegn rapporten dekker.
+    span_h = 0.0
+    if len(seq) >= 2:
+        try:
+            t0 = datetime.datetime.fromisoformat(seq[0]["recorded_at"])
+            t1 = datetime.datetime.fromisoformat(seq[-1]["recorded_at"])
+            span_h = max((t1 - t0).total_seconds() / 3600, 0.0)
+        except (ValueError, KeyError):
+            pass
+
+    # --- dekning: kom opptakene cron lovte oss? ---------------------------
+    now = datetime.datetime.now()
+    first_obs = None
+    if seq:
+        try:
+            first_obs = datetime.datetime.fromisoformat(seq[0]["recorded_at"])
+        except (ValueError, KeyError):
+            pass
+    coverage = {}
+    for d, v in per_day.items():
+        exp = expected_sessions(d, now, first_obs)
+        coverage[d] = {"expected": exp, "actual": v["sessions"],
+                       "pct": round(100 * v["sessions"] / exp) if exp else None}
 
     return {
         "sessions": len(obs),
@@ -165,8 +289,12 @@ def summarize(obs: list[dict]) -> dict:
             "loud_sessions": loud,
             "clipped_sessions": clipped,
         },
+        "coverage": coverage,
         "power": {
-            "undervoltage_events_max": undervolt,
+            "undervoltage_events": undervolt,
+            "undervoltage_per_hour": round(undervolt / span_h, 2) if span_h else None,
+            "reboots": reboots,
+            "observed_hours": round(span_h, 1),
             "sessions_throttled_now": throttled_now,
             "median_temp_c": round(_median(temps), 1) if temps else None,
             "max_temp_c": round(max(temps), 1) if temps else None,
@@ -205,10 +333,14 @@ def report(s: dict) -> None:
         print(f"  {h:02d}  {v['detections']:5d} {_bar(v['detections'], scale)}"
               f"  ({v['sessions']} opptak, {v['species']} arter)")
 
-    print(f"\n--- Per dag {'-' * 50}")
+    print(f"\n--- Per dag (dekning = kom opptakene cron lovte?) {'-' * 12}")
     for d, v in s["per_day"].items():
-        print(f"  {d}   {v['sessions']:3d} opptak   {v['species']:3d} arter   "
-              f"{v['detections']:4d} deteksjoner")
+        c = s["coverage"].get(d, {})
+        pct = c.get("pct")
+        dek = f"{c.get('actual', 0)}/{c.get('expected', 0)} ({pct}%)" if pct is not None else "-"
+        flagg = "  ⚠ hull" if pct is not None and pct < 90 else ""
+        print(f"  {d}   {v['species']:3d} arter   {v['detections']:4d} deteksjoner   "
+              f"dekning {dek}{flagg}")
 
     a = s["audio"]
     print(f"\n--- Lydnivaa (plassering/mikrofon) {'-' * 27}")
@@ -223,16 +355,96 @@ def report(s: dict) -> None:
 
     p = s["power"]
     print(f"\n--- Stroem og helse {'-' * 42}")
-    print(f"  Undervoltage-hendelser (maks sett siden boot): "
-          f"{p['undervoltage_events_max']}")
-    print(f"  Opptak tatt mens Pi-en var throttlet:          "
-          f"{p['sessions_throttled_now']}")
+    print(f"  Undervoltage-hendelser: {p['undervoltage_events']}"
+          f"   ({p['undervoltage_per_hour']} per time over {p['observed_hours']} t)")
+    print(f"  Omstarter i perioden:   {p['reboots']}")
+    print(f"  Opptak tatt mens Pi-en var throttlet: {p['sessions_throttled_now']}")
     print(f"  Temperatur: median {p['median_temp_c']} °C, maks {p['max_temp_c']} °C")
     if p["hosts"]:
         print(f"  Enheter: {', '.join(f'{k} ({v})' for k, v in p['hosts'].items())}")
-    if p["undervoltage_events_max"]:
-        print("  ⚠ Undervoltage betyr at 5V-skinna dipper under ~4,63 V — "
-              "risiko for SD-korrupsjon. Se docs/Utedel.")
+
+    # --- overlevde den natta? ---------------------------------------------
+    beats = load_heartbeats()
+    outages = find_outages(beats)
+    night_out = [o for o in outages if o["at_night"]]
+    print(f"\n--- Nattoverlevelse (hjerteslag hvert 15. min) {'-' * 16}")
+    if not beats:
+        print("  Ingen hjerteslag enda — kommer fra og med i natt.")
+    else:
+        print(f"  Hjerteslag: {len(beats)} stk, "
+              f"{beats[0]['t']:%Y-%m-%d %H:%M} → {beats[-1]['t']:%Y-%m-%d %H:%M}")
+        if not outages:
+            print("  ✓ Ingen avbrudd — Pi-en har vaert oppe hele perioden.")
+        else:
+            for o in outages[-8:]:
+                natt = " NATT" if o["at_night"] else ""
+                boot = "omstart" if o["rebooted"] else "kun opphold"
+                print(f"  ✗ Borte {o['minutes']:4d} min: "
+                      f"{o['from']} → {o['to']}  ({boot}){natt}")
+            if night_out:
+                verst = max(night_out, key=lambda o: o["minutes"])
+                print(f"  → {len(night_out)} nattavbrudd, lengste "
+                      f"{verst['minutes']} min fra {verst['from']}")
+
+    # --- konklusjon: skal vi bytte maskinvare? ----------------------------
+    print(f"\n--- Vurdering {'-' * 48}")
+    tot_exp = sum(c["expected"] for c in s["coverage"].values())
+    tot_act = sum(c["actual"] for c in s["coverage"].values())
+    # Klampes til 100: manuelle testopptak teller ogsaa med i `actual`, og
+    # «267 % dekning» sier ingenting fornuftig om stroemsituasjonen.
+    dek = min(100, round(100 * tot_act / tot_exp)) if tot_exp else None
+
+    if dek is None:
+        print("  For lite data enda.")
+    elif dek >= 95 and not p["reboots"]:
+        print(f"  ✓ Stroem: dekning {dek} % og ingen omstarter — riggen holder.")
+    elif dek >= 80:
+        print(f"  ~ Stroem: dekning {dek} %, {p['reboots']} omstarter — "
+              "grensetilfelle. Se hvilke timer som mangler nedenfor.")
+    else:
+        print(f"  ✗ Stroem: bare {dek} % av opptakene kom inn "
+              f"({p['reboots']} omstarter) — riggen holder IKKE. "
+              "Bytt til Pi Zero 2W, eller styrk panel/batteri/kabel.")
+
+    # NB: bare uttal deg om natta naar vi FAKTISK har hjerteslag fra natta.
+    # Ellers ville rapporten gitt gronn lampe etter to slag paa ettermiddagen.
+    night_beats = [b for b in beats if b["t"].hour >= 21 or b["t"].hour < 6]
+    if night_out:
+        lengste = max(o["minutes"] for o in night_out)
+        print(f"  ✗ Natt: {len(night_out)} avbrudd i moerket, lengste {lengste} min "
+              "— batteriet holder ikke gjennom natta.")
+    elif len(night_beats) >= 20:   # ~5 timer moerke daekket
+        print("  ✓ Natt: ingen avbrudd — batteriet holder saa langt "
+              "(sjekk igjen etter en graavaersdag).")
+    else:
+        print("  … Natt: ikke nok hjerteslag fra moerket enda — svar i morgen tidlig.")
+
+    if p["undervoltage_events"]:
+        print(f"  ⚠ Undervoltage: 5V-skinna dipper under ~4,63 V "
+              f"({p['undervoltage_per_hour']}/time) — risiko for SD-korrupsjon. "
+              "Mistenk foerst USB-kabelen (tynn/lang), saa panel/batteri.")
+
+    # Bare doem plasseringen paa opptak fra dagsangen (03-08). Midt paa dagen i
+    # slutten av juli er hagen stille uansett -- null arter da sier ingenting
+    # om hvor mikrofonen staar.
+    ph = s["per_hour"]
+    dawn = sum((ph.get(h) or ph.get(str(h)) or {}).get("sessions", 0)
+               for h in range(3, 9))
+    if s["species_total"] == 0 and dawn >= 10:
+        a = s["audio"]
+        if a["median_rms_dbfs"] > QUIET_DBFS:
+            print(f"  ✗ Fugler: null arter paa {dawn} opptak i dagsangen, tross "
+                  "brukbart lydnivaa — mikrofonen staar sannsynligvis for "
+                  "langt fra der fuglene er.")
+        else:
+            print("  ✗ Fugler: null arter OG svaert lavt lydnivaa — "
+                  "sjekk mikrofon/kabling foerst.")
+    elif s["species_total"] == 0:
+        print(f"  … Fugler: ingen arter enda, men bare {dawn} opptak i "
+              "dagsangen (03-08) — for tidlig aa si noe. Svar i morgen.")
+    elif s["species_total"]:
+        print(f"  ✓ Fugler: {s['species_total']} arter hoert — "
+              "lyttedelen fungerer.")
     print()
 
 
