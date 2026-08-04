@@ -1,0 +1,20 @@
+[Unit]
+Description=Fugleramme audio-ingest (tar imot opptak fra ESP32-utedelen, trigger BirdNET)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Samme bruker som resten av /opt/fugleramme (se fugleramme-frame-server.service).
+User=bruker
+WorkingDirectory=/opt/fugleramme
+# Kjoeres i BirdNET-venvet: analysen bruker samme python som tjenesten
+# (ANALYZE_PY default = sys.executable). Valgfritt: INGEST_TOKEN / INGEST_PORT
+# kan legges i frame_server.env — fila deles med frame-serveren.
+EnvironmentFile=-/opt/fugleramme/frame_server.env
+ExecStart=/opt/fugleramme/venv-birdnet/bin/python /opt/fugleramme/audio_ingest.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
