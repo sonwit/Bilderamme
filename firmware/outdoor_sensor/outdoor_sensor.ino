@@ -29,6 +29,7 @@
 #include <time.h>
 #include "esp_sleep.h"
 #include "esp_sntp.h"
+#include "cJSON.h"
 #include "config.h"
 
 // Europa/Oslo med sommertid — brukes til aa regne ut opptaksplanen lokalt.
@@ -40,6 +41,41 @@ static const time_t TIME_VALID_AFTER = 1735689600; // 2025-01-01 — foer dette 
 RTC_DATA_ATTR uint32_t boot_count = 0;
 RTC_DATA_ATTR uint32_t uploads_ok = 0;
 RTC_DATA_ATTR uint32_t uploads_failed = 0;
+
+// ---------------------------------------------------------------- fjernkonfig
+// Justerbare parametre uten reflash: brikken henter GET /config fra serveren
+// etter hver opplasting og lagrer i RTC-minne (overlever deep sleep). Nye
+// verdier gjelder fra NESTE oekt. Ved stroembrudd faller den tilbake til
+// config.h-standardene til foerste vellykkede henting — selvhelende.
+// Endres fra Macen:  curl -X POST --data '{"gain_shift":12}' <server>:8091/config
+struct RemoteCfg {
+  uint32_t magic;
+  int32_t rev;                  // versjonsnummer fra serveren — ekkoes i helse-JSON
+  int16_t gain_shift, highpass_hz, rec_seconds, test_interval_s;
+  int16_t dawn_start, dawn_end, dawn_interval_min, day_start, day_end;
+};
+#define CFG_MAGIC 0xF00D1E55
+RTC_DATA_ATTR RemoteCfg cfg;
+
+static void cfg_defaults() {
+  cfg.magic = CFG_MAGIC;
+  cfg.rev = 0;
+  cfg.gain_shift = GAIN_SHIFT;
+  cfg.highpass_hz = HIGHPASS_HZ;
+  cfg.rec_seconds = REC_SECONDS;
+  cfg.test_interval_s = TEST_INTERVAL_S;
+  cfg.dawn_start = DAWN_START_HOUR;
+  cfg.dawn_end = DAWN_END_HOUR;
+  cfg.dawn_interval_min = DAWN_INTERVAL_MIN;
+  cfg.day_start = DAY_START_HOUR;
+  cfg.day_end = DAY_END_HOUR;
+}
+
+static int16_t clamp16(long v, long lo, long hi) {
+  if (v < lo) return (int16_t)lo;
+  if (v > hi) return (int16_t)hi;
+  return (int16_t)v;
+}
 
 static I2SClass i2s;
 
@@ -95,9 +131,9 @@ static time_t next_slot(time_t now) {
   for (int add_day = 0; add_day < 2; add_day++) {
     struct tm day = lt;
     day.tm_mday += add_day; // mktime normaliserer maanedsskifter
-    for (int h = DAWN_START_HOUR; h <= DAY_END_HOUR; h++) {
-      int step = (h <= DAWN_END_HOUR) ? DAWN_INTERVAL_MIN : 60;
-      if (h < DAWN_START_HOUR || (h > DAWN_END_HOUR && h < DAY_START_HOUR)) continue;
+    for (int h = cfg.dawn_start; h <= cfg.day_end; h++) {
+      int step = (h <= cfg.dawn_end) ? cfg.dawn_interval_min : 60;
+      if (h < cfg.dawn_start || (h > cfg.dawn_end && h < cfg.day_start)) continue;
       for (int m = 0; m < 60; m += step) {
         struct tm slot = day;
         slot.tm_hour = h;
@@ -134,7 +170,7 @@ static size_t record_audio(int16_t *pcm, uint32_t seconds) {
   // enorm rumling under 100 Hz som ellers klipper opptaket og drukner
   // fuglesangen (verifisert 2026-08-04 — BirdNET tolket vindstoetene som
   // myrrikse). Fugler synger fra ~1 kHz, saa filteret koster ingenting.
-  const float hp_a = 1.0f - 6.2832f * HIGHPASS_HZ / SAMPLE_RATE;
+  const float hp_a = 1.0f - 6.2832f * cfg.highpass_hz / SAMPLE_RATE;
   float hp_y = 0, hp_px = 0;
   bool hp_primed = false;  // start paa foerste sample — ellers gir DC-nivaaet
                            // ett fullskala-sprett i starten av hvert opptak
@@ -145,13 +181,13 @@ static size_t record_audio(int16_t *pcm, uint32_t seconds) {
     for (size_t i = 0; i < n; i++) {
       float xs = (float)raw[i];
       int32_t v;
-      if (HIGHPASS_HZ > 0) {
+      if (cfg.highpass_hz > 0) {
         if (!hp_primed) { hp_px = xs; hp_primed = true; }
         hp_y = hp_a * (hp_y + xs - hp_px);
         hp_px = xs;
-        v = (int32_t)hp_y >> GAIN_SHIFT;
+        v = (int32_t)hp_y >> cfg.gain_shift;
       } else {
-        v = raw[i] >> GAIN_SHIFT;          // 24-bit i 32-bit ramme -> 16 bit (+gain)
+        v = raw[i] >> cfg.gain_shift;      // 24-bit i 32-bit ramme -> 16 bit (+gain)
       }
       if (v > 32767) v = 32767;
       if (v < -32768) v = -32768;
@@ -189,8 +225,9 @@ static String health_json(uint32_t awake_ms) {
   j += ", \"uploads_failed\": " + String(uploads_failed);
   j += ", \"awake_ms\": " + String(awake_ms);
   j += ", \"temp_c\": " + String(temperatureRead(), 1);
-  j += ", \"duration_req_s\": " + String(REC_SECONDS);
-  j += ", \"gain_shift\": " + String(GAIN_SHIFT);
+  j += ", \"duration_req_s\": " + String(cfg.rec_seconds);
+  j += ", \"gain_shift\": " + String(cfg.gain_shift);
+  j += ", \"cfg_rev\": " + String(cfg.rev);
 #if BATT_ADC_PIN >= 0
   uint32_t mv = 0;
   for (int i = 0; i < 8; i++) mv += analogReadMilliVolts(BATT_ADC_PIN);
@@ -225,12 +262,53 @@ static bool upload(uint8_t *wav, size_t len, const char *stamp, const String &he
   return false;
 }
 
+// Hent fjernkonfig fra serveren (kalles mens wifi likevel er oppe, etter
+// opplasting). Ukjente/utelatte noekler beholder gjeldende verdi; alle
+// verdier klemmes til trygge omraader (rec_seconds er PSRAM-begrenset).
+static void fetch_config() {
+  String url = String("http://") + INGEST_HOST + ":" + String(INGEST_PORT) + "/config";
+  if (strlen(INGEST_TOKEN)) url += String("?token=") + INGEST_TOKEN;
+  HTTPClient http;
+  http.setTimeout(8000);
+  if (!http.begin(url)) return;
+  int code = http.GET();
+  String body = (code == 200) ? http.getString() : "";
+  http.end();
+  if (code != 200 || !body.length()) return;
+
+  cJSON *root = cJSON_Parse(body.c_str());
+  if (!root) { log_line("Fjernkonfig: ugyldig JSON — ignorert."); return; }
+  struct { const char *key; int16_t *dst; long lo, hi; } fields[] = {
+    {"gain_shift",        &cfg.gain_shift,        8, 16},
+    {"highpass_hz",       &cfg.highpass_hz,       0, 2000},
+    {"rec_seconds",       &cfg.rec_seconds,      10, 75},
+    {"test_interval_s",   &cfg.test_interval_s,   0, 3600},
+    {"dawn_start",        &cfg.dawn_start,        0, 23},
+    {"dawn_end",          &cfg.dawn_end,          0, 23},
+    {"dawn_interval_min", &cfg.dawn_interval_min, 5, 60},
+    {"day_start",         &cfg.day_start,         0, 23},
+    {"day_end",           &cfg.day_end,           0, 23},
+  };
+  for (auto &f : fields) {
+    cJSON *v = cJSON_GetObjectItem(root, f.key);
+    if (cJSON_IsNumber(v)) *f.dst = clamp16((long)v->valuedouble, f.lo, f.hi);
+  }
+  cJSON *rev = cJSON_GetObjectItem(root, "rev");
+  if (cJSON_IsNumber(rev) && (int32_t)rev->valuedouble != cfg.rev) {
+    cfg.rev = (int32_t)rev->valuedouble;
+    log_line("Fjernkonfig rev %ld tatt i bruk (gain %d, hp %d Hz, %d s, plan %02d-%02d/%d+%02d-%02d).",
+             (long)cfg.rev, cfg.gain_shift, cfg.highpass_hz, cfg.rec_seconds,
+             cfg.dawn_start, cfg.dawn_end, cfg.dawn_interval_min, cfg.day_start, cfg.day_end);
+  }
+  cJSON_Delete(root);
+}
+
 // ---------------------------------------------------------------- hovedloep
 
 static void go_to_sleep(time_t now) {
   uint64_t sleep_s;
-  if (TEST_INTERVAL_S > 0) {
-    sleep_s = TEST_INTERVAL_S;
+  if (cfg.test_interval_s > 0) {
+    sleep_s = cfg.test_interval_s;
     log_line("TESTMODUS: sover %llu s.", (unsigned long long)sleep_s);
   } else if (now > TIME_VALID_AFTER) {
     time_t nxt = next_slot(now);
@@ -253,6 +331,7 @@ static void go_to_sleep(time_t now) {
 
 void setup() {
   Serial.begin(115200);
+  if (cfg.magic != CFG_MAGIC) cfg_defaults(); // kaldstart/stroembrudd -> config.h
   boot_count++;
   bool cold_boot = esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_UNDEFINED;
   if (cold_boot) delay(2500); // gi USB-serial tid til aa koble til ved benken
@@ -266,7 +345,7 @@ void setup() {
   }
 
   // --- 1. opptak (radio roeres ikke — stille og stroemgjerrig) --------------
-  const size_t samples_wanted = (size_t)SAMPLE_RATE * REC_SECONDS;
+  const size_t samples_wanted = (size_t)SAMPLE_RATE * cfg.rec_seconds;
   const size_t wav_bytes = 44 + samples_wanted * 2;
   uint8_t *wav = (uint8_t *)ps_malloc(wav_bytes);
   if (!wav) {
@@ -274,9 +353,10 @@ void setup() {
              (unsigned)(wav_bytes / 1024));
     go_to_sleep(time(nullptr));
   }
-  log_line("Tar opp %d s @ %d Hz ...", REC_SECONDS, SAMPLE_RATE);
+  log_line("Tar opp %d s @ %d Hz (gain %d, hp %d Hz, cfg rev %ld) ...",
+           cfg.rec_seconds, SAMPLE_RATE, cfg.gain_shift, cfg.highpass_hz, (long)cfg.rev);
   uint32_t rec_start_ms = millis();
-  size_t samples = record_audio((int16_t *)(wav + 44), REC_SECONDS);
+  size_t samples = record_audio((int16_t *)(wav + 44), cfg.rec_seconds);
   if (samples < (size_t)SAMPLE_RATE * 5) { // < 5 s er ikke verdt aa analysere
     log_line("Opptaket ble for kort (%u samples) — dropper oekten.", (unsigned)samples);
     free(wav);
@@ -301,6 +381,7 @@ void setup() {
     String health = health_json(millis());
     if (upload(wav, 44 + samples * 2, stamp, health)) uploads_ok++;
     else uploads_failed++;
+    fetch_config(); // mens radioen likevel er paa — gjelder fra neste oekt
   } else {
     log_line("Ingen nett/klokke — opptaket droppes (vises som hull i dekningen).");
     uploads_failed++;

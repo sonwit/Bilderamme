@@ -161,6 +161,24 @@ IKKE, siden hver deep sleep-oppvåkning er en omstart og ville forsøplet
 omstart-statistikken. `boot_count` som nullstilles = strømbrudd;
 `uploads_failed` som øker = wifi-trøbbel.
 
+## Fjernkonfig — juster parametre uten aa hente ned boksen
+
+ESP-en henter `GET /config` fra mottakeren etter hver opplasting og tar
+verdiene i bruk fra **neste** oekt (lagres i RTC-minne; stroembrudd = tilbake
+til config.h-standardene til neste henting). Endre fra Macen:
+
+```bash
+curl -X POST --data '{"rev": 2, "gain_shift": 12}' http://192.168.1.38:8091/config
+```
+
+Gyldige noekler: `gain_shift` (8–16), `highpass_hz` (0–2000), `rec_seconds`
+(10–75, PSRAM-grense), `test_interval_s` (0=plan, ellers benketest),
+`dawn_start/dawn_end/dawn_interval_min/day_start/day_end` (opptaksplanen —
+juster naar vinteren flytter graalysningen). Bump `rev` ved hver endring:
+brikken ekkoer den som `cfg_rev` i helse-JSON-en, saa du ser i observasjonene
+noeyaktig naar den plukket opp endringen. Verdiene klemmes til trygge omraader
+i firmwaren.
+
 ## Kjente quirks i drift (ufarlige)
 
 - **NTP over svakt wifi feiler av og til** (UDP drukner først). Da stemples
