@@ -1,5 +1,6 @@
 # Hemmeligheter — WiFi-passord o.l.
 firmware/indoor_frame/config.h
+firmware/outdoor_sensor/config.h
 secrets.h
 *.local.h
 
