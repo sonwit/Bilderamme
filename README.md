@@ -17,12 +17,25 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
   `frame.bin` i riktig panelformat. Serveres også på
   `http://192.168.1.38:8080/frame.bin` for inspeksjon/debugging.
 - ✅ **Daglig push:** `tools/push_to_frame.py` sender `frame.bin` videre til
-  rammen rett etter generering — se «Daglig flyt» under. Kjør fra cron på
-  hjemmeserveren. **Gjenstår:** legge scriptet inn på hjemmeserveren og sette
-  opp selve cron-linjen (se «Test alt», steg 5).
-- ⬜ **Utedel (sensor-Pi, fuglelyd via BirdNET):** ikke bygget ennå. Været
-  hentes allerede fra yr (api.met.no) av hjemmeserveren; fuglelyd/BirdNET er neste
-  steg om det skal med i prompten.
+  rammen rett etter generering — se «Daglig flyt» under. Kjøres fra cron på
+  hjemmeserveren (07:07, verifisert 2026-07-24).
+- ✅ **Webapp + Siri:** `tools/frame_server.py` (systemd-tjeneste, port 8090) —
+  galleri over alle genererte bilder, «lag nytt bilde»-skjema, og
+  `POST /generate` for Siri-snarveien. Se `docs/Webapp — galleri og
+  generering.md` og `docs/On-demand — Siri-kommando.md`.
+- ✅ **Utedel v2 (XIAO ESP32-S3, fuglelyd):** montert ute og i drift
+  2026-08-04. Våkner fra deep sleep etter plan (04:00–08:30 hvert 30. min,
+  09–21 hver time), tar opp 60 s fra INMP441, POST-er til serveren og sover
+  på ~14 µA. Soldrevet: panel → Waveshare Solar Power Manager (D) → 10 Ah
+  LiPo → XIAO-ens BAT-pads. Se `firmware/outdoor_sensor/` og
+  `docs/Utedel v2 — ESP32-S3 XIAO.md`.
+  *(v1 med Raspberry Pi 3 B trakk for mye strøm og døde 2026-07-28 —
+  historikk og lærdommer i `docs/Utedel — status og neste steg.md`.)*
+- ✅ **BirdNET-pipeline (hjemmeserver):** `tools/audio_ingest.py` (systemd,
+  port 8091) tar imot opptakene og trigger `tools/birdnet_analyze.py` →
+  `data/observations.jsonl` (alt, for godt) + `birds.json` (dagens arter, som
+  dagens bilde genereres fra). `tools/bird_stats.py` lager statistikk og
+  daglig rapport: arter, lydnivå, dekning.
 
 ### Kjente snurrer (ikke bugs, men lurt å vite om)
 
@@ -52,16 +65,28 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
 ```
 fugleramme/
 ├── firmware/
-│   └── indoor_frame/       ESP32-S3 Arduino-sketch for 13.3" Spectra 6 e-Paper.
-│                           Kjører en liten HTTP-server: POST /display med
-│                           960000 raa byte -> tegnes på panelet. PUSH, ikke pull —
-│                           brettet henter ingenting selv.
+│   ├── indoor_frame/       ESP32-S3 Arduino-sketch for 13.3" Spectra 6 e-Paper.
+│   │                       Kjører en liten HTTP-server: POST /display med
+│   │                       960000 raa byte -> tegnes på panelet. PUSH, ikke pull —
+│   │                       brettet henter ingenting selv.
+│   └── outdoor_sensor/     XIAO ESP32-S3 Arduino-sketch for utedelen: deep sleep
+│                           etter opptaksplan, 60 s I2S-opptak (INMP441) i PSRAM,
+│                           høypassfilter mot vind, NTP-synk, HTTP-opplasting med
+│                           helse-JSON. Se docs/Utedel v2 — ESP32-S3 XIAO.md.
 ├── tools/
 │   ├── send_to_frame.py    Gjør et vilkårlig bilde (jpg/png) om til panel-format
 │   │                       og sender det til rammen. Til manuell testing fra Macen.
-│   └── push_to_frame.py    Sender en allerede ferdig-pakket frame.bin (960000 byte,
-│                           ingen bildebehandling) til rammen. Kjøres fra cron på
-│                           hjemmeserveren rett etter generate_daily_image.py.
+│   ├── push_to_frame.py    Sender en ferdig-pakket frame.bin til rammen. Cron.
+│   ├── generate_daily_image.py  Dagens bilde: vær (yr) + dagens hørte fugler
+│   │                       (birds.json) -> Gemini -> dither -> frame.bin.
+│   ├── frame_server.py     Webapp/galleri + Siri-endepunkt (systemd, port 8090).
+│   ├── audio_ingest.py     Mottak av opptak fra utedelen (systemd, port 8091);
+│   │                       trigger analysen. ESP32 kan ikke scp — derfor HTTP.
+│   ├── birdnet_analyze.py  BirdNET på én WAV -> observations.jsonl + birds.json.
+│   └── bird_stats.py       Statistikk/rapport: arter, lydnivå, dekning, strøm.
+├── pi/                     v1-utedelen (Raspberry Pi 3 B) — pensjonert 2026-08-04,
+│                           beholdt som referanse/reserve.
+├── deploy/                 deploy.sh + systemd-tjenestefiler for hjemmeserveren.
 └── docs/                   Prosjektnotater og guider.
 ```
 
@@ -69,9 +94,15 @@ fugleramme/
 
 ```
 /opt/fugleramme/
-├── generate_daily_image.py   Genererer dagens bilde (Gemini), henter vær
-│                              (yr/api.met.no), dithrer til 6-fargepaletten,
-│                              skriver frame.bin.
+├── generate_daily_image.py   Dagens bilde (Gemini + vær + dagens fugler).
+├── frame_server.py            Webapp/Siri (systemd: fugleramme-frame-server, :8090)
+├── audio_ingest.py            Mottak fra utedelen (systemd: fugleramme-audio-ingest, :8091)
+├── birdnet_analyze.py         BirdNET-analyse (kjøres av audio_ingest per opptak)
+├── bird_stats.py              Statistikk (cron 22:00 -> logs/stats.log)
+├── birds.json                 DAGENS aggregerte artsliste (leses av bildegen.)
+├── audio/                     Innkomne opptak + helse-sidecars (ryddes etter 21 d)
+├── data/observations.jsonl    Én linje per analysert opptak — for godt
+├── venv/  venv-birdnet/       To venv-er: bilde/Gemini og BirdNET
 └── www/
     ├── frame.bin              Dagens bilde, panel-format (960000 byte).
     ├── preview.png             Forhåndsvisning av frame.bin, RGB.
@@ -249,10 +280,19 @@ De 6 fargene er **svart, hvit, rød, gul, blå, grønn**. Bygg bildene rundt dis
 - Beige/pastell går greit med `atkinson` (blir subtil tekstur på hvitt), men
   ble stygt med `floyd`. Er du i tvil: kjør `--preview` først.
 
-## Maskinvare (innedel)
+## Maskinvare
 
+**Innedel:**
 - Waveshare ESP32-S3-ePaper-13.3E6 (13.3", 7-farge Spectra 6, WiFi, 16 MB PSRAM)
 - IKEA RÖDALM 30×40 cm ramme
+
+**Utedel (v2, i drift fra 2026-08-04):**
+- Seeed XIAO ESP32-S3 (8 MB PSRAM — 60 s opptak bor i minnet, deep sleep ~14 µA)
+- INMP441 I2S-mikrofon (gjenbrukt fra v1), skumgummi som vindbeskyttelse
+- Waveshare Solar Power Manager (D) — MPPT-lading fra solcellepanel + vern.
+  NB: modulens 5V-utgang brukes IKKE (powerbank-brikken kutter ved µA-last);
+  XIAO-en går rett på batteriet via BAT-padene.
+- 3,7 V 10 000 mAh LiPo + solcellepanel (6–24 V inn på manageren)
 
 Full komponentliste og prosjektbeskrivelse i `docs/`.
 
