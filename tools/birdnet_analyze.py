@@ -29,7 +29,6 @@ import datetime
 import json
 import os
 import sys
-import tempfile
 
 import numpy as np
 import soundfile as sf
@@ -50,14 +49,9 @@ OBS_LOG = os.path.join(DATA_DIR, "observations.jsonl")
 # holder paa lyden en stund: da kan vi lytte gjennom et rart treff i ettertid.
 AUDIO_KEEP_DAYS = int(os.environ.get("AUDIO_KEEP_DAYS", "21"))
 
-# INMP441-mikrofonen tar opp LAVT nivaa (se «Fallgruver» i handoff-dokumentet).
-# Er opptaket svakere enn dette, peak-normaliseres det foer analyse -- BirdNET
-# treffer mye bedre paa normalisert signal (verifisert: 0 treff -> treff).
-NORMALIZE_BELOW_PEAK = float(os.environ.get("BIRDNET_NORM_PEAK", "0.5"))
-
 
 # ----------------------------------------------------------------------
-# Lyd: maal nivaa og normaliser svake opptak
+# Lyd: maal nivaa
 # ----------------------------------------------------------------------
 
 def audio_metrics(wav_path: str) -> dict:
@@ -69,8 +63,9 @@ def audio_metrics(wav_path: str) -> dict:
         data = data.mean(axis=1)
     peak = float(np.abs(data).max()) if len(data) else 0.0
     # Robust peak: 99,9-persentilen. ESP32-firmwarens hoeypassfilter lager ett
-    # enkelt fullskala-sample ved opptaksstart; absolutt peak paa 1.0 ville
-    # ellers slaatt av normaliseringen for opptak som reelt er stille.
+    # enkelt fullskala-sample ved opptaksstart, saa `peak` er nesten alltid 1.0
+    # og sier lite. peak999 ignorerer slike enkeltsamples og er det maalet man
+    # faktisk skal lese naar man vurderer om nivaaet ute er fornuftig.
     peak999 = float(np.quantile(np.abs(data), 0.999)) if len(data) else 0.0
     rms = float(np.sqrt((data ** 2).mean())) if len(data) else 0.0
     clipped = float((np.abs(data) > 0.99).mean() * 100) if len(data) else 0.0
@@ -87,47 +82,45 @@ def audio_metrics(wav_path: str) -> dict:
     }
 
 
-def _maybe_normalize(wav_path: str, peak: float) -> str:
-    """Peak-normaliser svake opptak til en midlertidig fil. Returnerer stien
-    som skal analyseres (originalen hvis nivaaet alt er greit, eller noe gaar
-    galt -- et unormalisert forsoek er bedre enn ingen analyse)."""
-    if peak <= 0 or peak >= NORMALIZE_BELOW_PEAK:
-        return wav_path
+def recorded_datetime(wav_path: str) -> datetime.datetime:
+    """Naar opptaket ble GJORT, lest ut av filnavnet (fugl_YYYYmmdd_HHMMSS.wav).
+    Faller tilbake paa "naa" hvis navnet ikke foelger moensteret. En koe kan
+    gjoere opptaks- og analysetidspunkt veldig forskjellige, saa alt som handler
+    om *naar fuglen sang* maa bruke denne -- ikke klokka paa serveren."""
+    base = os.path.basename(wav_path)
     try:
-        data, sr = sf.read(wav_path)
-        data = data * (0.89 / peak)
-        fd, tmp = tempfile.mkstemp(suffix=".wav", prefix="norm_")
-        os.close(fd)
-        sf.write(tmp, data, sr)
-        print(f"Svakt opptak (peak {peak:.3f}) — normalisert foer analyse.")
-        return tmp
-    except Exception as e:  # noqa: BLE001
-        print(f"ADVARSEL: normalisering feilet ({e}) — analyserer originalen.",
-              file=sys.stderr)
-        return wav_path
+        stamp = base.replace("fugl_", "").rsplit(".", 1)[0]
+        return datetime.datetime.strptime(stamp, "%Y%m%d_%H%M%S")
+    except ValueError:
+        return datetime.datetime.now()
 
 
 # ----------------------------------------------------------------------
 # BirdNET
 # ----------------------------------------------------------------------
 
-def analyze(wav_path: str, peak: float) -> list[dict]:
-    """Kjoer BirdNET paa fila (peak-normalisert ved behov). Returnerer arter
-    dedupet paa navn, med beste konfidens og antall 3-sekunders vinduer arten
-    ble hoert i (`detections` -- en grov aktivitets-/naerhetsindikator)."""
-    norm_path = _maybe_normalize(wav_path, peak)
+def analyze(wav_path: str) -> list[dict]:
+    """Kjoer BirdNET paa fila. Returnerer arter dedupet paa navn, med beste
+    konfidens og antall 3-sekunders vinduer arten ble hoert i (`detections` --
+    en grov aktivitets-/naerhetsindikator).
+
+    Datoen som sendes inn er OPPTAKETS, ikke dagens: BirdNET bygger en liste
+    over hvilke arter som er sannsynlige paa stedet den uka, og lista endrer
+    seg gjennom sesongen. Sender vi dagens dato for et gammelt opptak, faar vi
+    et annet svar enn det opptaket egentlig fortjener -- verifisert: samme fil
+    ga null myrrikse med opptaksdato 27. juli og 1,00 med 5. august.
+
+    Vi normaliserer IKKE nivaaet foerst. Det ble proevd, men BirdNET
+    normaliserer selv internt: A/B paa 10 opptak fra begge utedelene ga
+    identisk konfidens (avvik <= 0,01) med og uten."""
     analyzer = Analyzer()
     rec = Recording(
-        analyzer, norm_path,
+        analyzer, wav_path,
         lat=LAT, lon=LON,
-        date=datetime.date.today(),
+        date=recorded_datetime(wav_path).date(),
         min_conf=MIN_CONF,
     )
-    try:
-        rec.analyze()
-    finally:
-        if norm_path != wav_path:
-            os.remove(norm_path)
+    rec.analyze()
 
     best: dict[str, dict] = {}
     for d in rec.detections:
@@ -164,16 +157,8 @@ def append_observation(wav_path: str, species: list[dict], audio: dict,
                        health: dict) -> dict:
     """Legg oekten til i observations.jsonl (append-only, én linje per opptak)."""
     now = datetime.datetime.now()
-    # Tidspunktet i filnavnet (fugl_YYYYmmdd_HHMMSS.wav) er naar opptaket ble
-    # GJORT -- det er det vi vil ha i statistikken, ikke naar serveren rakk aa
-    # analysere det (en koe kan gjoere de to veldig forskjellige).
-    recorded = now
+    recorded = recorded_datetime(wav_path)
     base = os.path.basename(wav_path)
-    try:
-        stamp = base.replace("fugl_", "").rsplit(".", 1)[0]
-        recorded = datetime.datetime.strptime(stamp, "%Y%m%d_%H%M%S")
-    except ValueError:
-        pass
 
     obs = {
         "recorded_at": recorded.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -283,7 +268,7 @@ def main() -> int:
         return 1
 
     audio = audio_metrics(wav_path)
-    species = analyze(wav_path, audio["peak999"])
+    species = analyze(wav_path)
     health = read_health_sidecar(wav_path)
     append_observation(wav_path, species, audio, health)
     today = write_todays_birds()
