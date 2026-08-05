@@ -14,8 +14,8 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
   Se `firmware/indoor_frame/`.
 - ✅ **Bildegenerering (hjemmeserver):** `generate_daily_image.py` på
   `192.168.1.38` genererer dagens bilde, henter vær, dithrer og skriver
-  `frame.bin` i riktig panelformat. Serveres også på
-  `http://192.168.1.38:8080/frame.bin` for inspeksjon/debugging.
+  `frame.bin` i riktig panelformat under `/opt/fugleramme/www/`. Hentes med
+  `scp` for inspeksjon/debugging — se «Feilsøking» under.
 - ✅ **Daglig push:** `tools/push_to_frame.py` sender `frame.bin` videre til
   rammen rett etter generering — se «Daglig flyt» under. Kjøres fra cron på
   hjemmeserveren (07:07, verifisert 2026-07-24).
@@ -39,6 +39,12 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
 
 ### Kjente snurrer (ikke bugs, men lurt å vite om)
 
+- **`fugleramme.local` er *rammen*, ikke hjemmeserveren.** Navnet peker på
+  ESP32-en i bilderammen (`192.168.1.94`), som bare svarer med en liten
+  statusside på `/` og tar imot `POST /display`. Webappen/galleriet ligger på
+  hjemmeserveren, som ikke kunngjør noe `.local`-navn i det
+  hele tatt (avahi kjører ikke der) — den må nås på IP:
+  `http://192.168.1.38:8090/`.
 - **"Connection reset" når du sender med `send_to_frame.py`/`push_to_frame.py`:**
   Firmwaren kaller `client.stop()` rett etter å ha skrevet HTTP-svaret, uten
   å flushe først — det gjør at klienten av og til får en "connection reset"
@@ -108,8 +114,10 @@ fugleramme/
     ├── preview.png             Forhåndsvisning av frame.bin, RGB.
     └── original.png            Det AI-genererte bildet før dithering.
 ```
-`www/` serveres på `http://192.168.1.38:8080/` — nyttig for å se hva som ble
-generert og for feilsøking, men rammen henter **ikke** derfra selv (se under).
+Filene i `www/` serveres **ikke** over HTTP. Vil du se hva som ble generert,
+bruk galleriet i webappen på `http://192.168.1.38:8090/` (viser hele arkivet
+under `/arkiv/`), eller hent filene direkte med `scp` — se «Feilsøking» under.
+Rammen henter uansett ikke selv; den får bildet pushet (se under).
 
 ## Hvordan alt henger sammen (daglig flyt)
 
@@ -203,13 +211,14 @@ hjemmeserveren og sender det rått, uten `send_to_frame.py`s bildebehandling —
 akkurat det `push_to_frame.py` gjør):
 
 ```bash
-curl -s http://192.168.1.38:8080/frame.bin -o /tmp/frame.bin
+scp bruker@192.168.1.38:/opt/fugleramme/www/frame.bin /tmp/frame.bin
 ls -la /tmp/frame.bin                       # skal være nøyaktig 960000 byte
 curl -s -X POST --data-binary @/tmp/frame.bin \
      -H "Content-Type: application/octet-stream" \
      http://fugleramme.local/display
 ```
-Se på skjermen: stemmer motivet og fargene med `http://192.168.1.38:8080/preview.png`?
+Se på skjermen: stemmer motivet og fargene med forhåndsvisningen? Hent den med
+`scp bruker@192.168.1.38:/opt/fugleramme/www/preview.png /tmp/ && open /tmp/preview.png`.
 Er bildet **rotert eller forskjøvet**, se «Ting å dobbeltsjekke» under.
 
 **5. Sett opp cron på hjemmeserveren**
