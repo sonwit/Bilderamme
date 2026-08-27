@@ -45,8 +45,10 @@ BirdNET kjører på **hjemmeserveren**, ikke på Pi-en. Pi-en er en tynn lydsens
   - Kamera (RPi HQ Camera V1.0 + 6mm lens, og Camera Module 3) virker også (`rpicam-still`).
 - **E-ink-ramme** — `fugleramme.local` (ESP32-S3, DHCP — var `.94`, er `.92` per
   2026-08-27, så ikke hardkod IP-en noe sted). HTTP-server; `POST /display`
-  med **nøyaktig 960000 byte** tegner bildet. Push, ikke pull. Linux-serveren
-  mangler `libnss-mdns`, men `push_to_frame.py` gjør mDNS-oppslaget selv.
+  med **nøyaktig 960000 byte** tegner bildet. Push, ikke pull. Serveren fikk
+  `libnss-mdns` + `avahi-daemon` 26. aug, så `.local` løser seg i OS-et
+  (`getent hosts fugleramme.local` → `192.168.1.92`). `push_to_frame.py` har
+  i tillegg sitt eget mDNS-oppslag som reserve hvis avahi skulle ryke.
 
 ## Bevist (verifisert virker)
 

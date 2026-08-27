@@ -42,11 +42,15 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
 - **`fugleramme.local` er *rammen*, ikke hjemmeserveren.** Navnet peker på
   ESP32-en i bilderammen, som bare svarer med en liten
   statusside på `/` og tar imot `POST /display`.
-  Bruk navnet og ikke IP-en: rammen får adresse fra DHCP, og da den byttet fra
-  `.94` til `.92` etter en omstart 2026-08-26 stoppet dagens bilde i flere døgn
-  uten at noe annet feilet. `push_to_frame.py` slår opp `.local`-navnet over
-  mDNS på egen hånd når OS-et ikke klarer det, så det virker også fra
-  Linux-serveren uten `avahi`/`libnss-mdns`. Webappen/galleriet ligger på
+  Bruk navnet og ikke IP-en. Rammen får adresse fra DHCP, og den byttet fra
+  `.94` til `.92` en gang mellom 9. og 19. august. Resultatet står i
+  `logs/daily.log`: **åtte døgn på rad (19.–26. aug) med
+  `[Errno 113] No route to host`**, mens alt annet gikk som normalt — bildet ble
+  generert og arkivert hver morgen, det kom bare aldri fram. Veggen viste
+  9. august-bildet i atten dager. Fikset 26. aug ved å installere `libnss-mdns`
+  på serveren og sette `FRAME_HOST=fugleramme.local`; første vellykkede push
+  var 27. aug. `push_to_frame.py` slår i tillegg opp `.local` over mDNS på egen
+  hånd hvis OS-oppslaget skulle svikte. Webappen/galleriet ligger på
   hjemmeserveren, som ikke kunngjør noe `.local`-navn i det
   hele tatt (avahi kjører ikke der) — den må nås på IP:
   `http://192.168.1.38:8090/`.
