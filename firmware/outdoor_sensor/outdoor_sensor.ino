@@ -339,6 +339,24 @@ void setup() {
   log_line("=== fugleramme utedel v2 — oppvaakning #%lu (%s) ===",
            (unsigned long)boot_count, cold_boot ? "kaldstart" : "timer");
 
+  // Batterilinja gjenskapt 27.08.2026 fra brettets egen flash. Formatstrengen
+  // "Batteri: %.2f V (ADC-pinne %d, deler %.3f)" laa i binaeren, men fantes
+  // ikke i noen commit — den ble flashet fra en ucommittet endring paa Macen,
+  // og forsvant da Macen ble nullstilt. Koden rundt er rekonstruert; utskriften
+  // er verifisert identisk med brettets ("Batteri: 4.07 V (ADC-pinne 1, deler 2.004)").
+  //
+  // Behold den. Da Macen ble nullstilt var config.h borte, og det var NETTOPP
+  // denne linja som fortalte oss hvilken ADC-pinne og hvilken delerverdi
+  // brettet faktisk brukte — helse-JSON-en rapporterer bare resultatet.
+#if BATT_ADC_PIN >= 0
+  {
+    uint32_t mv = 0;
+    for (int i = 0; i < 8; i++) mv += analogReadMilliVolts(BATT_ADC_PIN);
+    log_line("Batteri: %.2f V (ADC-pinne %d, deler %.3f)",
+             (mv / 8) * BATT_DIVIDER / 1000.0, BATT_ADC_PIN, (double)BATT_DIVIDER);
+  }
+#endif
+
   // Kaldstart uten gyldig klokke: synk foerst, saa vi kan stemple og planlegge.
   if (time(nullptr) < TIME_VALID_AFTER) {
     if (wifi_connect()) ntp_sync();

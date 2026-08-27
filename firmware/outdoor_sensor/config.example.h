@@ -40,7 +40,9 @@
 // spenningsdeler fra BAT+ til GND, midtpunktet til en ADC-pinne (A0 = GPIO1).
 // Sett -1 for aa slaa av (da rapporteres ingen "volt" i helse-JSON).
 #define BATT_ADC_PIN  -1
-#define BATT_DIVIDER  2.0                     // (R1+R2)/R2 — 2.0 ved like motstander
+#define BATT_DIVIDER  2.0                     // (R1+R2)/R2 — 2.0 ved like motstander.
+                                              // Verdt aa kalibrere mot et multimeter:
+                                              // brettet i drift bruker 2.004.
 
 // ---------------------------------------------------------------- opptaksplan
 // Samme plan som Pi-ens crontab: dagsang hvert 30. min 04:00–08:30,
