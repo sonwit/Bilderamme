@@ -14,11 +14,18 @@
  *
  * Naa til med: http://fugleramme.local  (mDNS) eller IP-en som printes i Serial.
  *
+ * Rammen henger i veggen og har ingen resetknapp noen gidder aa trykke paa, saa
+ * den passer paa seg selv: en task-watchdog starter brettet paa nytt hvis noe
+ * blokkerer (typisk driverens ReadBusyH, som venter i en uendelig loekke hvis
+ * BUSY-pinnen aldri slipper), og WiFi-en gjenopprettes — eller brettet startes
+ * paa nytt — hvis nettet forsvinner under drift. Se WDT_TIMEOUT_MS under.
+ *
  * WiFi-innstillinger ligger i config.h (kopier config.example.h -> config.h).
  */
 
 #include <WiFi.h>
 #include <ESPmDNS.h>
+#include <esp_task_wdt.h>
 #include "config.h"
 #include "EPD_13in3e.h"
 #include "audio.h"
@@ -26,8 +33,76 @@
 // Framebuffer: 600 byte/rad * 1600 rader = 960000 byte (2 piksler per byte)
 #define FB_SIZE  ((EPD_13IN3E_WIDTH / 2) * EPD_13IN3E_HEIGHT)
 
+// Watchdog: en normal skjermtegning blokkerer i 25-35 s, og EPD_13IN3E_Init()
+// kommer i tillegg — derfor 120 s og ikke noe kortere. Henger panelet eller
+// nettverksloekken lenger enn det, er brettet uansett dodt for oss, og en
+// omstart er bedre enn en ramme som er borte til noen drar ut stroemmen.
+#define WDT_TIMEOUT_MS           120000UL
+
+// Faar vi ikke WiFi ved oppstart innen dette, start paa nytt (ruteren kan ha
+// vaert nede i et stroembrudd og trenger litt lenger tid enn brettet).
+#define WIFI_BOOT_TIMEOUT_MS      60000UL
+
+// Forsvinner WiFi under drift: proev reconnect, og gi opp (= omstart) etter dette.
+#define WIFI_RECONNECT_TIMEOUT_MS 120000UL
+
 WiFiServer server(80);
 uint8_t   *framebuffer = nullptr;
+
+bool          wdtActive  = false;
+unsigned long wifiLostAt = 0;      // millis() da WiFi forsvant, 0 = tilkoblet
+
+// Mat watchdogen. Trygg aa kalle selv om oppsettet feilet.
+// (Ingen 'static' paa funksjonene her: Arduinos prototypegenerator lager
+// oedelagte prototyper av static-funksjoner i en .ino, og skissa slutter aa
+// kompilere. Verifisert 2026-08-27.)
+void wdtFeed() {
+  if (wdtActive) esp_task_wdt_reset();
+}
+
+void wdtSetup() {
+  esp_task_wdt_config_t cfg;
+  cfg.timeout_ms     = WDT_TIMEOUT_MS;
+  cfg.idle_core_mask = 0;               // vi passer paa loop-tasken, ikke idle-taskene
+  cfg.trigger_panic  = true;            // panic -> omstart
+
+  // Arduino-kjernen har allerede satt opp task-watchdogen, saa reconfigure()
+  // er normalveien. init() foerst ville logget en roed "TWDT already
+  // initialized" i bootloggen hver gang, uten at noe var galt.
+  esp_err_t err = esp_task_wdt_reconfigure(&cfg);
+  if (err == ESP_ERR_INVALID_STATE) err = esp_task_wdt_init(&cfg);
+  if (err == ESP_OK) err = esp_task_wdt_add(NULL);   // abonner denne tasken (setup+loop)
+
+  wdtActive = (err == ESP_OK);
+  if (wdtActive) Serial.printf("Watchdog paa (%lu s).\n", WDT_TIMEOUT_MS / 1000);
+  else           Serial.printf("ADVARSEL: fikk ikke satt opp watchdog (%d).\n", (int)err);
+}
+
+// Holder WiFi i live mellom bilder. Rammen staar stille i doegn av gangen, og
+// en droppet forbindelse som aldri kom tilbake er nettopp naar den blir borte.
+void wifiKeepAlive() {
+  if (WiFi.status() == WL_CONNECTED) {
+    if (wifiLostAt) {
+      Serial.print("WiFi tilbake. IP: ");
+      Serial.println(WiFi.localIP());
+      wifiLostAt = 0;
+    }
+    return;
+  }
+
+  if (wifiLostAt == 0) {
+    wifiLostAt = millis();
+    if (wifiLostAt == 0) wifiLostAt = 1;      // millis()-wrap: 0 betyr "tilkoblet"
+    Serial.println("WiFi borte — kobler til paa nytt...");
+    WiFi.disconnect();
+    WiFi.begin(WIFI_SSID, WIFI_PASS);
+  } else if (millis() - wifiLostAt > WIFI_RECONNECT_TIMEOUT_MS) {
+    Serial.println("WiFi kom ikke tilbake — starter brettet paa nytt.");
+    Serial.flush();
+    ESP.restart();
+  }
+  delay(200);
+}
 
 void renderFramebuffer() {
   Serial.println("Rendering...");
@@ -40,6 +115,8 @@ void renderFramebuffer() {
 void setup() {
   Serial.begin(115200);
   delay(200);
+
+  wdtSetup();
 
   DEV_Module_Init();
   audioInit();
@@ -57,7 +134,18 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASS);
   Serial.print("Kobler til WiFi");
-  while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); }
+  unsigned long wifiStart = millis();
+  while (WiFi.status() != WL_CONNECTED) {
+    if (millis() - wifiStart > WIFI_BOOT_TIMEOUT_MS) {
+      Serial.printf("\nFikk ikke WiFi paa %lu s — starter paa nytt.\n",
+                    WIFI_BOOT_TIMEOUT_MS / 1000);
+      Serial.flush();
+      ESP.restart();
+    }
+    wdtFeed();
+    delay(500);
+    Serial.print(".");
+  }
   Serial.println();
   Serial.print("WiFi tilkoblet. IP: ");
   Serial.println(WiFi.localIP());
@@ -80,6 +168,9 @@ void setup() {
 }
 
 void loop() {
+  wdtFeed();
+  wifiKeepAlive();
+
   WiFiClient client = server.available();
   if (!client) return;
 
@@ -104,6 +195,8 @@ void loop() {
     if (contentLength != FB_SIZE) {
       client.printf("HTTP/1.1 400 Bad Request\r\nConnection: close\r\n\r\n"
                     "Forventet %d byte, fikk %ld\r\n", FB_SIZE, contentLength);
+      client.flush();
+      delay(5);
       client.stop();
       Serial.printf("Feil stoerrelse: %ld (skal vaere %d)\n", contentLength, FB_SIZE);
       return;
@@ -118,6 +211,7 @@ void loop() {
         int n = client.read(framebuffer + got, FB_SIZE - got);
         if (n > 0) { got += n; lastData = millis(); }
       } else {
+        wdtFeed();
         delay(1);
       }
     }
@@ -125,12 +219,16 @@ void loop() {
     if (got != FB_SIZE) {
       client.printf("HTTP/1.1 500 Internal Error\r\nConnection: close\r\n\r\n"
                     "Mottok bare %u byte\r\n", (unsigned)got);
+      client.flush();
+      delay(5);
       client.stop();
       Serial.printf("Ufullstendig: %u/%d byte\n", (unsigned)got, FB_SIZE);
       return;
     }
 
     client.print("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nOK\r\n");
+    client.flush();
+    delay(5);
     client.stop();
 
     audioImageChime();     // "pling" med en gang bildet er mottatt
@@ -144,6 +242,8 @@ void loop() {
     client.print(" byte til <code>/display</code>.</p><p>IP: ");
     client.print(WiFi.localIP().toString());
     client.print("</body></html>");
+    client.flush();
+    delay(5);
     client.stop();
   }
 }
