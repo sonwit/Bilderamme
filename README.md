@@ -86,6 +86,7 @@ fugleramme/
 │   ├── generate_daily_image.py  Dagens bilde: vær (yr) + dagens hørte fugler
 │   │                       (birds.json) -> Gemini -> dither -> frame.bin.
 │   ├── frame_server.py     Webapp/galleri + Siri-endepunkt (systemd, port 8090).
+│   ├── flash_firmware.sh   Kompiler + flash begge brettene med arduino-cli.
 │   ├── audio_ingest.py     Mottak av opptak fra utedelen (systemd, port 8091);
 │   │                       trigger analysen. ESP32 kan ikke scp — derfor HTTP.
 │   ├── birdnet_analyze.py  BirdNET på én WAV -> observations.jsonl + birds.json.
@@ -179,12 +180,20 @@ er verifisert å virke — ingen ny flashing nødvendig.
 
 **1. Flash firmwaren (kun hvis brettet ikke allerede kjører den)**
 
+```bash
+cp firmware/indoor_frame/config.example.h firmware/indoor_frame/config.h
+# fyll inn WiFi-navn/passord (2,4 GHz), så:
+./tools/flash_firmware.sh --monitor
 ```
-cd firmware/indoor_frame
-cp config.example.h config.h      # fyll inn WiFi-navn/passord (2,4 GHz)
-```
-Åpne `indoor_frame.ino` i Arduino IDE (ESP32S3 Dev Module, Flash 32MB, PSRAM OPI),
-og last opp. Serial Monitor (115200) viser IP-en og `http://fugleramme.local`.
+Scriptet kompilerer og laster opp med riktige board-innstillinger (ESP32S3 Dev
+Module, Flash 32MB, PSRAM OPI) uten at Arduino IDE er involvert. Serial Monitor
+(115200) viser IP-en og `http://fugleramme.local`. Førstegangsoppsett av
+arduino-cli og feilsøking: `docs/Flashing med arduino-cli.md`.
+
+> **Etter en reflash kan rammen få ny DHCP-IP.** Da må `FRAME_HOST` i
+> `/opt/fugleramme/frame_server.env` oppdateres, ellers feiler både cron-jobben
+> 07:07 og webappen/Siri med `[Errno 113] No route to host`. Se siste avsnitt i
+> flashe-dokumentet for engangsfiksen og de to varige.
 
 **2. Sjekk at rammen er på og svarer** (kjør fra en maskin på samme nett som
 rammen, f.eks. Macen — se «⚠️ To nettverk under samme navn» i
