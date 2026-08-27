@@ -35,11 +35,48 @@ OBS_LOG = os.path.join(os.environ.get("FUGLE_DATA_DIR",
 QUIET_DBFS = float(os.environ.get("QUIET_DBFS", "-55"))
 LOUD_DBFS = float(os.environ.get("LOUD_DBFS", "-12"))
 
-# Hvor mange opptak cron SKAL levere per time (maa holdes i synk med
-# pi/crontab.txt). Manglende opptak er det klareste signalet paa at Pi-en var
-# nede -- typisk fordi batteriet ikke holdt gjennom natta.
-EXPECTED_PER_HOUR = {**{h: 3 for h in range(3, 9)},     # */20 3-8
-                     **{h: 1 for h in range(9, 22)}}    # 0 9-21
+# Utedelens opptaksplan — MAA holdes i synk med firmware/outdoor_sensor/config.h
+# (DAWN_*/DAY_*): dagsang hver halvtime 04:00-08:30, ellers hver hele time
+# 09:00-21:00 = 23 oekter per doegn.
+#
+# Stod tidligere som en per-time-tabell tilpasset den gamle Pi-en (*/20 i
+# dagsangen, 31 oekter per doegn). Utedel v2 leverte hver eneste planlagte oekt
+# 27.08., men ble maalt mot 31 og fikk "⚠ hull, 76 %". Falskt alarm — planen
+# var byttet, ikke dekningen.
+DAWN_START_HOUR   = int(os.environ.get("DAWN_START_HOUR", "4"))
+DAWN_END_HOUR     = int(os.environ.get("DAWN_END_HOUR", "8"))    # til og med
+DAWN_INTERVAL_MIN = int(os.environ.get("DAWN_INTERVAL_MIN", "30"))
+DAY_START_HOUR    = int(os.environ.get("DAY_START_HOUR", "9"))
+DAY_END_HOUR      = int(os.environ.get("DAY_END_HOUR", "21"))
+
+# Opptaket starter et minutt eller to FOER slottet (08:59 hoerer til 09:00-oekta),
+# saa vi runder av i utedelens favoer naar vi teller.
+SLOT_SLACK_MIN = 5
+
+# Hvor langt fra et slott et opptak kan ligge og fortsatt regnes som DEN oekta.
+# Halve dagsang-intervallet: da kan to opptak aldri havne paa samme slott.
+SLOT_MATCH_MIN = 15
+
+
+def scheduled_slots() -> list[int]:
+    """Planlagte oekter i et doegn, som minutter etter midnatt."""
+    slots = []
+    m = DAWN_START_HOUR * 60
+    while m <= DAWN_END_HOUR * 60 + 59:
+        slots.append(m)
+        m += DAWN_INTERVAL_MIN
+    slots += [h * 60 for h in range(DAY_START_HOUR, DAY_END_HOUR + 1)]
+    return sorted(set(slots))
+
+
+def slot_for(minutes: int) -> int | None:
+    """Hvilken planlagt oekt hoerer et opptak paa dette klokkeslettet til?
+
+    Returnerer None for opptak som ikke hoerer til planen (kaldstart etter et
+    stroembrudd, manuelle oekter fra benken). De teller ikke som dekning, men
+    skal heller ikke faa dekningen til aa se ut som over 100 %."""
+    best = min(scheduled_slots(), key=lambda m: abs(m - minutes))
+    return best if abs(best - minutes) <= SLOT_MATCH_MIN else None
 
 
 def expected_sessions(date_str: str, now: datetime.datetime,
@@ -47,19 +84,16 @@ def expected_sessions(date_str: str, now: datetime.datetime,
     """Forventet antall opptak for en dato.
 
     To justeringer, ellers loeper dekningen alltid under 100 %:
-      * innevaerende dag: bare timer som ER passert (og ikke den halvferdige
-        timen vi staar i akkurat naa)
-      * foerste datoen med data: bare timer etter at foerste opptak kom, siden
-        cron-planen ikke fantes foer den."""
-    today = now.date().isoformat()
-    total = 0
-    for h, n in EXPECTED_PER_HOUR.items():
-        if date_str == today and h >= now.hour:
-            continue
-        if first and date_str == first.date().isoformat() and h < first.hour:
-            continue
-        total += n
-    return total
+      * innevaerende dag: bare oekter som ER passert
+      * foerste datoen med data: bare oekter etter at foerste opptak kom, siden
+        planen ikke fantes foer den."""
+    slots = scheduled_slots()
+    if date_str == now.date().isoformat():
+        slots = [m for m in slots if m <= now.hour * 60 + now.minute]
+    if first and date_str == first.date().isoformat():
+        start = first.hour * 60 + first.minute - SLOT_SLACK_MIN
+        slots = [m for m in slots if m >= start]
+    return len(slots)
 
 
 DATA_DIR = os.environ.get("FUGLE_DATA_DIR", os.path.join(BASE_DIR, "data"))
@@ -161,7 +195,8 @@ def summarize(obs: list[dict]) -> dict:
     species_best: dict[str, float] = {}
     species_sci: dict[str, str] = {}
     species_days: defaultdict = defaultdict(set)
-    per_day: defaultdict = defaultdict(lambda: {"sessions": 0, "species": set(), "detections": 0})
+    per_day: defaultdict = defaultdict(lambda: {"sessions": 0, "species": set(), "detections": 0,
+                                               "slots": set()})
     per_hour: defaultdict = defaultdict(lambda: {"sessions": 0, "detections": 0, "species": set()})
 
     levels, quiet, loud, clipped, silent_sessions = [], 0, 0, 0, 0
@@ -171,6 +206,13 @@ def summarize(obs: list[dict]) -> dict:
     for o in obs:
         d, h = o.get("date", "?"), o.get("hour", 0)
         per_day[d]["sessions"] += 1
+        try:
+            t = datetime.datetime.fromisoformat(o["recorded_at"])
+            slot = slot_for(t.hour * 60 + t.minute)
+            if slot is not None:
+                per_day[d]["slots"].add(slot)
+        except (ValueError, KeyError, TypeError):
+            pass
         per_hour[h]["sessions"] += 1
 
         sp = o.get("species", [])
@@ -256,8 +298,12 @@ def summarize(obs: list[dict]) -> dict:
     coverage = {}
     for d, v in per_day.items():
         exp = expected_sessions(d, now, first_obs)
-        coverage[d] = {"expected": exp, "actual": v["sessions"],
-                       "pct": round(100 * v["sessions"] / exp) if exp else None}
+        # Dekning = hvor mange av de planlagte oektene som faktisk kom, ikke
+        # hvor mange opptak som finnes. Ekstra opptak utenfor planen skal ikke
+        # kunne skjule en oekt som mangler.
+        got = len(v["slots"])
+        coverage[d] = {"expected": exp, "actual": got, "sessions": v["sessions"],
+                       "pct": round(100 * got / exp) if exp else None}
 
     return {
         "sessions": len(obs),
@@ -409,7 +455,15 @@ def report(s: dict) -> None:
     # NB: bare uttal deg om natta naar vi FAKTISK har hjerteslag fra natta.
     # Ellers ville rapporten gitt gronn lampe etter to slag paa ettermiddagen.
     night_beats = [b for b in beats if b["t"].hour >= 21 or b["t"].hour < 6]
-    if night_out:
+    newest = max((b["t"] for b in beats), default=None)
+    stale = (datetime.datetime.now() - newest).days if newest else None
+    if stale is not None and stale > 3:
+        # Utedel v2 (ESP32) skriver ingen hjerteslag — de siste er fra Pi-en.
+        # Uten denne sjekken doemmer vi natta paa maanedsgamle tall.
+        print(f"  … Natt: ingen ferske hjerteslag (siste {newest:%Y-%m-%d}, "
+              f"{stale} doegn siden). Utedel v2 sender ikke hjerteslag — bruk "
+              "\"volt\" i helse-JSON-ene i stedet.")
+    elif night_out:
         lengste = max(o["minutes"] for o in night_out)
         print(f"  ✗ Natt: {len(night_out)} avbrudd i moerket, lengste {lengste} min "
               "— batteriet holder ikke gjennom natta.")

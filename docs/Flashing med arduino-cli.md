@@ -193,9 +193,9 @@ sudo systemctl restart fugleramme-frame-server
 ```
 
 **Dette skal du slippe nå.** `FRAME_HOST` skal stå til `fugleramme.local`, ikke
-en IP: `push_to_frame.py` slår opp `.local`-navnet over mDNS selv (`resolve_host`),
-uten at serveren trenger `avahi`/`libnss-mdns`, og firmwaren kunngjør navnet
-allerede (`indoor_frame.ino`, `MDNS.begin`). Da kan rammen få hvilken IP den vil.
+en IP: serveren fikk `libnss-mdns` + `avahi-daemon` 26. aug, og firmwaren
+kunngjør navnet (`indoor_frame.ino`, `MDNS.begin`). Da kan rammen få hvilken
+IP den vil.
 
 Vil du ha belte *og* bukseseler:
 
