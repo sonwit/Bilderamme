@@ -18,7 +18,18 @@ laster opp, og kan åpne Serial Monitor etterpå.
 
 brew install arduino-cli
 arduino-cli version                 # skal svare med et versjonsnummer
+
+# Apple Silicon: arduino-cli trenger Rosetta (se under). Spør om passordet ditt.
+softwareupdate --install-rosetta --agree-to-license
 ```
+
+> **Hvorfor Rosetta på en M-Mac?** arduino-cli kjører Arduinos `ctags` som en
+> del av kompileringen — den leser skissa og genererer funksjonsprototyper — og
+> den finnes bare som Intel-binær. Uten Rosetta stopper byggingen med
+> `fork/exec …/ctags: bad CPU type in executable`. `flash_firmware.sh` sjekker
+> dette og sier fra. (`universal-ctags` fra Homebrew er *ikke* et alternativ:
+> den mangler feltene Arduino bruker til å utlede returtypen, og genererer
+> prototyper som `static  wdtFeed();` — koden slutter å kompilere.)
 
 > Vil du unngå Homebrew:
 > ```bash
@@ -114,11 +125,32 @@ Alle lovlige verdier: `arduino-cli board details --fqbn esp32:esp32:esp32s3`.
 
 ## 5. Feilsøking
 
+**Innedelen dukker opp som TO porter — og de gjør ulike ting**
+Brettet har en USB-hub med både ESP32-S3-ens innebygde USB og en CH343
+USB-serie-brikke. Begge heter `/dev/cu.usbmodemXXXX`, så navnet skiller dem
+ikke. Slik finner du ut hvilken som er hvilken:
+
+```bash
+arduino-cli board list        # den som sier «ESP32 Family Device» er Espressif-porten
+```
+
+- **Espressif-porten** (`ESP32 Family Device`, f.eks. `/dev/cu.usbmodem21101`)
+  — **flash hit**.
+- **CH343-porten** (`Unknown`, f.eks. `/dev/cu.usbmodem5B901714551`) — **her
+  kommer serieutskriften**. FQBN-en har `CDCOnBoot=default` (= USB CDC av), så
+  `Serial.print` går ut på UART-en, ikke på Espressif-porten. Kobler du Serial
+  Monitor til Espressif-porten får du helt tomt — det betyr *ikke* at brettet
+  er dødt.
+
+```bash
+./tools/flash_firmware.sh --port /dev/cu.usbmodem21101          # flash
+arduino-cli monitor --port /dev/cu.usbmodem5B901714551 \
+    --config baudrate=115200                                    # se loggen
+```
+
 **«Fant ingen USB-seriellport»**
 Sjekk hva Macen ser med `arduino-cli board list`. Er lista tom: prøv en annen
-USB-C-kabel (mange er kun strøm). Innedelen bruker en CH343 USB-serie-brikke —
-macOS 12+ har driver innebygd, og porten heter typisk `/dev/cu.usbserial-xxxx`
-eller `/dev/cu.wchusbserialxxxx`.
+USB-C-kabel (mange er kun strøm). macOS 12+ har CH343-driveren innebygd.
 
 **Opplastingen henger på «Connecting…»**
 Hold inne **BOOT**, trykk og slipp **RESET**, slipp så **BOOT**. Brettet står
@@ -160,10 +192,14 @@ sudo sed -i 's/^FRAME_HOST=.*/FRAME_HOST=192.168.1.NY/' /opt/fugleramme/frame_se
 sudo systemctl restart fugleramme-frame-server
 ```
 
-Slipp å gjøre dette hver gang — to varige fikser, velg én:
+**Dette skal du slippe nå.** `FRAME_HOST` skal stå til `fugleramme.local`, ikke
+en IP: `push_to_frame.py` slår opp `.local`-navnet over mDNS selv (`resolve_host`),
+uten at serveren trenger `avahi`/`libnss-mdns`, og firmwaren kunngjør navnet
+allerede (`indoor_frame.ino`, `MDNS.begin`). Da kan rammen få hvilken IP den vil.
 
-1. **mDNS på serveren** (best): `sudo apt install libnss-mdns` drar inn avahi
-   og legger `mdns4_minimal` inn i `hosts:`-linja i `/etc/nsswitch.conf`.
-   Deretter `FRAME_HOST=fugleramme.local`, og rammen kan få hvilken IP den vil.
-   Firmwaren kunngjør navnet allerede (`indoor_frame.ino`, `MDNS.begin`).
-2. **DHCP-reservasjon på ruteren**: Google Home-appen → enheten → statisk IP.
+Vil du ha belte *og* bukseseler:
+
+1. **DHCP-reservasjon på ruteren**: Google Home-appen → enheten → statisk IP.
+2. **mDNS i selve OS-et på serveren**: `sudo apt install libnss-mdns` drar inn
+   avahi og legger `mdns4_minimal` inn i `hosts:`-linja i `/etc/nsswitch.conf`.
+   Da løser `.local` seg for alle programmer på serveren, ikke bare våre.
