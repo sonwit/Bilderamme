@@ -76,6 +76,27 @@ EOF
   exit 1
 fi
 
+# ---------------------------------------------------------------- Rosetta
+# arduino-cli kjører Arduinos «ctags» som en del av kompileringen, og den
+# finnes bare som Intel-binær. På Apple Silicon uten Rosetta stopper byggingen
+# med et ganske ubrukelig «bad CPU type in executable», så vi tar det her i
+# stedet. (universal-ctags fra Homebrew er ikke et alternativ — den mangler
+# feltene Arduino bruker til å generere funksjonsprototyper, og lager i stedet
+# ødelagt kode som ikke kompilerer.)
+if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ] &&
+   [ ! -d /Library/Apple/usr/share/rosetta ] &&
+   [ ! -f /Library/Apple/usr/libexec/oah/libRosettaRuntime ]; then
+  cat >&2 <<'EOF'
+Rosetta mangler — arduino-cli klarer ikke kompilere uten.
+
+Installer den én gang (kommandoen spør om passordet ditt):
+    softwareupdate --install-rosetta --agree-to-license
+
+Kjør så dette scriptet på nytt.
+EOF
+  exit 1
+fi
+
 # ---------------------------------------------------------------- esp32-kjerne
 if ! arduino-cli core list 2>/dev/null | grep -q "^$ESP32_CORE "; then
   echo "→ esp32-kjernen mangler. Installerer den (≈1 GB, tar noen minutter) ..."
