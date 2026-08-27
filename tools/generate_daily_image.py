@@ -11,7 +11,7 @@ Miljøvariabel:
 
 Kjøres av cron sammen med push_to_frame.py, se README.md i workspace-repoet, f.eks.:
   7 7 * * * cd /opt/fugleramme && venv/bin/python3 generate_daily_image.py >> logs/daily.log 2>&1 \
-            && venv/bin/python3 push_to_frame.py --host 192.168.1.94 >> logs/daily.log 2>&1
+            && venv/bin/python3 push_to_frame.py >> logs/daily.log 2>&1
 (07:07, ikke hel time — vær-API-er er som regel mest overbelastet akkurat kl. XX:00.)
 """
 

@@ -40,20 +40,25 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
 ### Kjente snurrer (ikke bugs, men lurt å vite om)
 
 - **`fugleramme.local` er *rammen*, ikke hjemmeserveren.** Navnet peker på
-  ESP32-en i bilderammen (`192.168.1.94`), som bare svarer med en liten
-  statusside på `/` og tar imot `POST /display`. Webappen/galleriet ligger på
+  ESP32-en i bilderammen, som bare svarer med en liten
+  statusside på `/` og tar imot `POST /display`.
+  Bruk navnet og ikke IP-en: rammen får adresse fra DHCP, og da den byttet fra
+  `.94` til `.92` etter en omstart 2026-08-26 stoppet dagens bilde i flere døgn
+  uten at noe annet feilet. `push_to_frame.py` slår opp `.local`-navnet over
+  mDNS på egen hånd når OS-et ikke klarer det, så det virker også fra
+  Linux-serveren uten `avahi`/`libnss-mdns`. Webappen/galleriet ligger på
   hjemmeserveren, som ikke kunngjør noe `.local`-navn i det
   hele tatt (avahi kjører ikke der) — den må nås på IP:
   `http://192.168.1.38:8090/`.
 - **"Connection reset" når du sender med `send_to_frame.py`/`push_to_frame.py`:**
-  Firmwaren kaller `client.stop()` rett etter å ha skrevet HTTP-svaret, uten
-  å flushe først — det gjør at klienten av og til får en "connection reset"
-  mens den prøver å *lese* svaret, selv om bildet ble mottatt og tegnet helt
-  fint. Begge scriptene håndterer nå dette (skiller "klarte ikke sende" fra
-  "sendte ok, men fikk ikke lest svaret") og gir en tydelig melding i stedet
-  for en traceback. Vil du fjerne snurren helt: legg til `client.flush();
-  delay(5);` før begge `client.stop()`-kallene i `indoor_frame.ino` og reflash
-  — ikke nødvendig for at noe skal virke, bare kosmetikk i loggen.
+  Firmwaren kalte `client.stop()` rett etter å ha skrevet HTTP-svaret, uten
+  å flushe først — det gjorde at klienten av og til fikk en "connection reset"
+  mens den prøvde å *lese* svaret, selv om bildet ble mottatt og tegnet helt
+  fint. `indoor_frame.ino` flusher nå før hver `client.stop()`, så snurren er
+  borte etter reflash. Begge scriptene håndterer den uansett (skiller "klarte
+  ikke sende" fra "sendte ok, men fikk ikke lest svaret") og gir en tydelig
+  melding i stedet for en traceback — så et brett med gammel firmware virker
+  fortsatt.
 - **Grumsete/støyete bilde på skjermen er ofte forventet, ikke en feil:**
   testet med `tools/test.png` (et mykt akvarell-aktig bilde) 2026-07-21, og
   det så støyete ut på skjermen. En lokalt generert forhåndsvisning

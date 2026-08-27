@@ -23,7 +23,7 @@ Den tunge jobben (Gemini + dithering + push til rammen) kjøres i en bakgrunnstr
 og bare én jobb kjøres om gangen. Rammen spiller et "pling" når bildet lander.
 
 Miljøvariabler:
-  GEMINI_API_KEY   kreves      FRAME_HOST  rammens adresse (default 192.168.1.94)
+  GEMINI_API_KEY   kreves      FRAME_HOST  rammens adresse (default fugleramme.local)
   FRAME_SERVER_PORT (8090)     FRAME_TOKEN valgfri delt hemmelighet (?token=... )
 
 Kjør som systemd-tjeneste, se deploy/fugleramme-frame-server.service.
@@ -44,9 +44,12 @@ from PIL import Image
 # Importer nabo-scriptene uansett hvor serveren kjøres fra.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import generate_daily_image as gen
-from push_to_frame import post_frame, SendFailed
+from push_to_frame import post_frame, SendFailed, DEFAULT_HOST
 
-FRAME_HOST = os.environ.get("FRAME_HOST", "192.168.1.94")
+# Ett sted for defaulten: push_to_frame.DEFAULT_HOST. (Den stod hardkodet til
+# en IP her, og da rammen fikk ny DHCP-leie 2026-08-26 gikk webappen/Siri rett
+# i "No route to host" mens push_to_frame.py fra cron var uberoert.)
+FRAME_HOST = os.environ.get("FRAME_HOST", DEFAULT_HOST)
 FRAME_PATH = os.environ.get("FRAME_PATH", os.path.join(gen.OUTPUT_DIR, "frame.bin"))
 PORT = int(os.environ.get("FRAME_SERVER_PORT", "8090"))
 TOKEN = os.environ.get("FRAME_TOKEN")

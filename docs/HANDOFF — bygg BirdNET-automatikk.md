@@ -33,7 +33,7 @@ BirdNET kjører på **hjemmeserveren**, ikke på Pi-en. Pi-en er en tynn lydsens
   - `/opt/fugleramme/venv-birdnet` — BirdNET (birdnetlib, tensorflow-cpu, librosa, resampy)
   - `frame_server.py` kjører som systemd-tjeneste `fugleramme-frame-server` (User=bruker) på port 8090.
   - Cron kjører dagens bilde kl. 07 (se «Fallgruver» pkt. 1 for den eksakte linja).
-  - Hemmeligheter i `/opt/fugleramme/frame_server.env` (`GEMINI_API_KEY`, `FRAME_HOST=192.168.1.94`).
+  - Hemmeligheter i `/opt/fugleramme/frame_server.env` (`GEMINI_API_KEY`, `FRAME_HOST=fugleramme.local`).
 - **Utendørs sensor** — `ssh bruker@192.168.1.225` (hostname `fugleramme-pi`,
   Raspberry Pi 3 model B, Raspberry Pi OS 64-bit, Debian trixie). **Dette er en
   testbenk**; endelig hjem blir en Pi Zero 2W (bestilt) — alt overføres 1:1.
@@ -43,9 +43,10 @@ BirdNET kjører på **hjemmeserveren**, ikke på Pi-en. Pi-en er en tynn lydsens
   - `/boot/firmware/config.txt`: `dtparam=i2s=on` + `dtoverlay=googlevoicehat-soundcard`.
   - Mikrofon = **card 1**, enhet **`plughw:1`**. Opptak: `arecord -D plughw:1 -c1 -r 48000 -f S32_LE ...`
   - Kamera (RPi HQ Camera V1.0 + 6mm lens, og Camera Module 3) virker også (`rpicam-still`).
-- **E-ink-ramme** — IP `192.168.1.94` (ESP32-S3). HTTP-server; `POST /display`
-  med **nøyaktig 960000 byte** tegner bildet. Push, ikke pull. `.local` slår ikke
-  opp fra Linux-serveren → bruk IP.
+- **E-ink-ramme** — `fugleramme.local` (ESP32-S3, DHCP — var `.94`, er `.92` per
+  2026-08-27, så ikke hardkod IP-en noe sted). HTTP-server; `POST /display`
+  med **nøyaktig 960000 byte** tegner bildet. Push, ikke pull. Linux-serveren
+  mangler `libnss-mdns`, men `push_to_frame.py` gjør mDNS-oppslaget selv.
 
 ## Bevist (verifisert virker)
 

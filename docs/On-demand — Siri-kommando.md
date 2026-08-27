@@ -14,7 +14,7 @@ er bare den enkleste veien på Apple-utstyr, og krever ingen tredjeparts-tjenest
         [Hjemmeserver: frame_server.py]
           → bygger prompt rundt emnet (samme panel-vennlige stil som daglig)
           → Gemini genererer → dither → skriv frame.bin
-          → push til rammen (192.168.1.94)
+          → push til rammen (fugleramme.local)
              [ESP32-rammen tegner bildet, spiller et "pling" når det lander]
 ```
 
@@ -42,7 +42,8 @@ allerede ligger i `/opt/fugleramme/` — sørg for at de er den nyeste versjonen
 nano /opt/fugleramme/frame_server.env
 ```
 Sett minst `GEMINI_API_KEY` (samme nøkkel som det daglige scriptet bruker) og
-`FRAME_HOST=192.168.1.94`. Lagre.
+`FRAME_HOST=fugleramme.local`. Lagre. (Navn, ikke IP — rammen får adressen fra
+DHCP og har byttet den før. Scriptet slår opp `.local` over mDNS selv.)
 
 **3. Test at den starter** (på serveren):
 ```bash
