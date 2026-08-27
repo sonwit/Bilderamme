@@ -47,8 +47,8 @@ BirdNET kjører på **hjemmeserveren**, ikke på Pi-en. Pi-en er en tynn lydsens
   2026-08-27, så ikke hardkod IP-en noe sted). HTTP-server; `POST /display`
   med **nøyaktig 960000 byte** tegner bildet. Push, ikke pull. Serveren fikk
   `libnss-mdns` + `avahi-daemon` 26. aug, så `.local` løser seg i OS-et
-  (`getent hosts fugleramme.local` → `192.168.1.92`). `push_to_frame.py` har
-  i tillegg sitt eget mDNS-oppslag som reserve hvis avahi skulle ryke.
+  (`getent hosts fugleramme.local` → `192.168.1.92`). Ryker avahi, slutter
+  navnet å løse seg — sett `FRAME_HOST` til en IP til det er oppe igjen.
 
 ## Bevist (verifisert virker)
 

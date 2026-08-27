@@ -49,8 +49,7 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
   generert og arkivert hver morgen, det kom bare aldri fram. Veggen viste
   9. august-bildet i atten dager. Fikset 26. aug ved å installere `libnss-mdns`
   på serveren og sette `FRAME_HOST=fugleramme.local`; første vellykkede push
-  var 27. aug. `push_to_frame.py` slår i tillegg opp `.local` over mDNS på egen
-  hånd hvis OS-oppslaget skulle svikte. Webappen/galleriet ligger på
+  var 27. aug. Webappen/galleriet ligger på
   hjemmeserveren, som ikke kunngjør noe `.local`-navn i det
   hele tatt (avahi kjører ikke der) — den må nås på IP:
   `http://192.168.1.38:8090/`.

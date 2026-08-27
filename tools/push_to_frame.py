@@ -30,14 +30,13 @@ Cron (after generate_daily_image.py, logging both to the same file):
 
 Notes:
 - Default host is the mDNS name "fugleramme.local", NOT a fixed IP. The board
-  gets its address from DHCP, and it has changed under us before (.94 -> .92
-  after a reboot), which silently broke the daily push for days. The name
-  always follows the board.
-  Plain Linux servers don't resolve .local out of the box (macOS/iOS do via
-  Bonjour, Linux needs avahi-daemon + libnss-mdns), so resolve_host() below
-  falls back to asking over mDNS itself when the OS can't. That means this
-  works on a bare server with no extra packages. A DHCP reservation for the
-  board is still a nice belt-and-braces, but no longer required.
+  gets its address from DHCP and it HAS changed under us: 19-26 Aug 2026 this
+  push failed eight days running with [Errno 113] No route to host while the
+  image was generated and archived every morning as usual — nothing looked
+  broken except logs/daily.log. The name follows the board; an IP does not.
+  Resolving .local needs avahi-daemon + libnss-mdns on Linux (macOS/iOS do it
+  via Bonjour). The home server has both since 26 Aug. On a server without
+  them, pass an IP with --host / FRAME_HOST instead.
 - KNOWN FIRMWARE QUIRK (confirmed 2026-07-21, fixed 2026-08-27): indoor_frame.ino
   used to call client.print(...) followed immediately by client.stop() with no
   flush/delay in between. That made the ESP32 send a TCP reset instead of a
@@ -60,8 +59,6 @@ Notes:
 import argparse
 import http.client
 import os
-import socket
-import struct
 import sys
 import time
 
@@ -71,140 +68,9 @@ DEFAULT_HOST = os.environ.get("FRAME_HOST", "fugleramme.local")
 RETRIES = 4
 RETRY_DELAY = 20  # seconds
 
-MDNS_GROUP = "224.0.0.251"
-MDNS_PORT = 5353
-_resolved = {}          # navn -> IP, saa vi bare gjoer oppslaget en gang per kjoering
-
 
 class SendFailed(Exception):
     """Raised when we couldn't even hand the body off to the board — real failure, worth retrying."""
-
-
-def _dns_name(name):
-    """Koder "fugleramme.local" som DNS-labels: \x0Afugleramme\x05local\x00."""
-    out = b""
-    for label in name.rstrip(".").split("."):
-        raw = label.encode("ascii")
-        if not 0 < len(raw) < 64:
-            raise ValueError(f"ugyldig label i {name!r}")
-        out += bytes([len(raw)]) + raw
-    return out + b"\x00"
-
-
-def _read_name(data, off):
-    """Leser et (evt. komprimert) DNS-navn. Returnerer (navn, offset etter navnet)."""
-    parts, end, hops = [], None, 0
-    while True:
-        if off >= len(data):
-            raise ValueError("avkuttet DNS-navn")
-        length = data[off]
-        if length & 0xC0 == 0xC0:                       # pekar til tidligere navn
-            if off + 1 >= len(data):
-                raise ValueError("avkuttet DNS-peker")
-            if end is None:
-                end = off + 2
-            off = struct.unpack_from("!H", data, off)[0] & 0x3FFF
-            hops += 1
-            if hops > 16:                               # sloeyfe i pekerne
-                raise ValueError("DNS-pekersloeyfe")
-            continue
-        off += 1
-        if length == 0:
-            break
-        parts.append(data[off:off + length].decode("ascii", "replace"))
-        off += length
-    return ".".join(parts), (end if end is not None else off)
-
-
-def _a_record_for(data, name):
-    """Plukker ut A-recorden for `name` fra et DNS/mDNS-svar, eller None."""
-    if len(data) < 12:
-        return None
-    _, _, qd, an, ns, ar = struct.unpack_from("!6H", data, 0)
-    off = 12
-    for _ in range(qd):                                 # hopp over spoersmaalene
-        _, off = _read_name(data, off)
-        off += 4
-    for _ in range(an + ns + ar):
-        rname, off = _read_name(data, off)
-        if off + 10 > len(data):
-            return None
-        rtype, _rclass, _ttl, rdlen = struct.unpack_from("!HHIH", data, off)
-        off += 10
-        rdata = data[off:off + rdlen]
-        off += rdlen
-        if rtype == 1 and rdlen == 4 and rname.lower().rstrip(".") == name.lower().rstrip("."):
-            return socket.inet_ntoa(rdata)
-    return None
-
-
-def mdns_lookup(name, timeout=4.0):
-    """Spoer etter A-recorden til et .local-navn over mDNS, uten avahi.
-
-    QU-biten (0x8000 i QCLASS) ber om unicast-svar rett tilbake til porten vaar,
-    saa vi slipper aa binde 5353 og krangle med en evt. avahi-daemon.
-    """
-    query = struct.pack("!6H", 0, 0, 1, 0, 0, 0) + _dns_name(name) + struct.pack("!2H", 1, 0x8001)
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 255)
-        sock.settimeout(0.5)
-        sock.bind(("", 0))
-        deadline = time.monotonic() + timeout
-        next_send = 0.0
-        while time.monotonic() < deadline:
-            if time.monotonic() >= next_send:
-                try:
-                    sock.sendto(query, (MDNS_GROUP, MDNS_PORT))
-                except OSError:
-                    pass
-                next_send = time.monotonic() + 1.0
-            try:
-                data, _ = sock.recvfrom(2048)
-            except socket.timeout:
-                continue
-            except OSError:
-                break
-            try:
-                ip = _a_record_for(data, name)
-            except ValueError:
-                continue
-            if ip:
-                return ip
-    finally:
-        sock.close()
-    return None
-
-
-def resolve_host(host, timeout=4.0):
-    """Gjoer rammens adresse om til en IP.
-
-    Vanlig navneoppslag foerst (en IP i FRAME_HOST gaar rett gjennom, og paa
-    macOS/avahi loeser .local seg selv). Bare hvis OS-et gir opp paa et
-    .local-navn spoer vi over mDNS selv — det er det som gjoer at en ny
-    DHCP-leie paa rammen ikke lenger stopper dagens bilde.
-    """
-    if host in _resolved:
-        return _resolved[host]
-    try:
-        ip = socket.gethostbyname(host)
-        _resolved[host] = ip
-        return ip
-    except OSError as e:
-        if not host.lower().endswith(".local"):
-            raise SendFailed(f"fant ikke {host}: {e}") from e
-        os_err = e
-
-    ip = mdns_lookup(host, timeout)
-    if not ip:
-        raise SendFailed(
-            f"fant ikke {host} — verken via OS-et ({os_err}) eller mDNS. "
-            "Staar rammen paa? Er serveren paa samme nett/VLAN? "
-            "Sett FRAME_HOST til en IP for aa gaa utenom navneoppslaget."
-        )
-    print(f"mDNS: {host} -> {ip}", file=sys.stderr)
-    _resolved[host] = ip
-    return ip
 
 
 def post_frame(frame_path, host, timeout=60):
@@ -219,7 +85,7 @@ def post_frame(frame_path, host, timeout=60):
         )
 
     hostname = host.split("://", 1)[-1].rstrip("/")
-    conn = http.client.HTTPConnection(resolve_host(hostname), timeout=timeout)
+    conn = http.client.HTTPConnection(hostname, timeout=timeout)
     try:
         conn.request(
             "POST",
