@@ -196,6 +196,28 @@ def size_factor(scientific: str) -> float:
     rel = max(1.0, length_cm(scientific)) / REF_LENGDE_CM
     return min(STOERRELSE_MAKS, max(STOERRELSE_MIN, rel ** STOERRELSE_EKSP))
 
+
+# Skalaen skal si hvor mye papir fuglen tar, ikke hvor hoey den blir.
+# Plansjene har vidt forskjellige proporsjoner: skjaera er bredere enn hoey
+# (halen er halve fuglen), kattugla er hoeyere enn bred. Skalerte vi paa
+# hoeyde alene fikk skjaera dobbel bredde paa kjoepet og dekket 139 000
+# piksler mot uglas 44 000 -- tre ganger saa mye papir til en fugl som veier
+# under halvparten. Vi sikter derfor mot et kvadrat med side ah*skala og
+# regner hoeyden ut fra plansjens eget sideforhold.
+#
+# Klemt fordi ytterpunktene er plansjer, ikke fugler: en flygende fugl med
+# utslaatte vinger er tre ganger saa bred som hoey, og uten tak ville den
+# krympet til en strek.
+ASPEKT_MIN = float(os.environ.get("FUGL_ASPEKT_MIN", "0.72"))
+ASPEKT_MAKS = float(os.environ.get("FUGL_ASPEKT_MAKS", "1.40"))
+
+
+def scale_height(ah: int, scientific: str, raa: Image.Image) -> int:
+    side = ah * size_factor(scientific)
+    aspekt = min(ASPEKT_MAKS, max(ASPEKT_MIN, raa.width / raa.height))
+    return max(1, round(side / (aspekt ** 0.5)))
+
+
 # Under dette snittnivaaet regnes pikselen som fugl, over som papir. Hard
 # terskel med vilje: myke kanter blir lyse mellomtoner, og de finnes ikke i
 # panelets palett — de ville blitt dither-stoey rundt hver fugl.
@@ -468,7 +490,7 @@ def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
             paa_hvitt.paste(raa, (0, 0), raa)
 
             ax, ay, ah = plass["x"], plass["y"], plass["h"]
-            h = round(ah * size_factor(sci))
+            h = scale_height(ah, sci, raa)
             fugl = raa.resize((max(1, round(raa.width * h / raa.height)), h),
                               Image.LANCZOS)
             sk = h / raa.height
