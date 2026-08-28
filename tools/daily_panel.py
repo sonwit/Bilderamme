@@ -48,6 +48,22 @@ def kjoer(navn: str, *args: str) -> None:
 def main() -> int:
     os.makedirs(WWW, exist_ok=True)
     kjoer("compose_branch.py", "--birds", BIRDS, "--puss", PUSS)
+    # Puta avgjoeres av om teksten FAKTISK kolliderer med illustrasjonen, ikke
+    # av hvor mye blekk som ligger i et rektangel. Sida tegnes derfor én gang
+    # uten bakgrunn foerst: alt som ikke er hvitt der er tekst, og da kan vi
+    # maale bare under bokstavene. Koster to ekstra chromium-skudd, ingen
+    # API-kall.
+    maske_html = os.path.join(WWW, "panel-maske.html")
+    maske_png = os.path.join(WWW, "panel-maske.png")
+    bg_json = os.path.join(os.path.dirname(WWW), "plates", "dagens-bakgrunn.json")
+    bg_png = os.path.join(os.path.dirname(WWW), "plates", "dagens-bakgrunn.png")
+    if os.path.exists(bg_json) and os.path.exists(bg_png):
+        kjoer("render_daily_panel.py", "--birds", BIRDS, "--out", maske_html,
+              "--uten-bakgrunn")
+        kjoer("render_panel_png.py", "--html", maske_html, "--bare-png", maske_png)
+        kjoer("tekstkollisjon.py", "--maske", maske_png,
+              "--bakgrunn", bg_png, "--json", bg_json)
+
     kjoer("render_daily_panel.py", "--birds", BIRDS, "--out", HTML)
     kjoer("render_panel_png.py", "--html", HTML, "--out-dir", WWW)
 

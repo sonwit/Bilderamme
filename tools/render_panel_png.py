@@ -54,7 +54,14 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="HTML-side -> frame.bin for panelet.")
     ap.add_argument("--html", required=True)
     ap.add_argument("--out-dir", default="/opt/fugleramme/www")
+    ap.add_argument("--bare-png", metavar="UT.PNG",
+                    help="bare rastrer til denne fila, ingen dithering")
     args = ap.parse_args()
+
+    if args.bare_png:
+        html_to_png(args.html, args.bare_png)
+        print(f"OK: {args.bare_png}")
+        return 0
 
     os.makedirs(args.out_dir, exist_ok=True)
     raw = os.path.join(args.out_dir, "panel.png")

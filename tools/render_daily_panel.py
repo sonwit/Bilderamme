@@ -28,6 +28,7 @@ import datetime
 import html
 import json
 import os
+import re
 import sys
 import urllib.request
 
@@ -43,7 +44,11 @@ PLATES_DIR = os.environ.get(
     os.path.join(_HERE, "plates") if os.path.isdir(os.path.join(_HERE, "plates"))
     else os.path.join(_HERE, "..", "plates"))
 
-LAT, LON = 60.09, 10.93
+# Kartverket-koordinater for hagen. Se generate_daily_image.py.
+LAT, LON = 59.98, 10.93
+# Bunnteksten leser konstanten i stedet for aa gjenta tallene som
+# streng -- de to sto og kunne drive fra hverandre.
+STED = f"{LAT:.4f}\u00b0N {LON:.4f}\u00b0\u00d8"
 MET_USER_AGENT = os.environ.get(
     "MET_USER_AGENT", "fugleramme-epaper/1.0 https://github.com/sonwit/Bilderamme")
 
@@ -408,7 +413,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
 
     markoerer = _markoerer()
     kilde = (f"{len(sure) + len(unsure)} arter på {sessions} opptak · BirdNET"
-             "<br>utedelen i hagen · 60.09°N 10.93°Ø")
+             "<br>utedelen i hagen · " + STED)
     kildeblokk = f'<div class="kilde">{kilde}</div>' if bg_meta else ""
     overlegg_cls = " overlegg" if bg_meta else ""
     bakgrunn_img = (f'<img class="bakgrunn" src="file://'
@@ -491,7 +496,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
         sideplansje = plate_block(side, "side-plansje", False)
         liste_innhold = f"<table>{rows}</table>"
         bunntekst = ('<footer class="bunn">'
-                     '<span>BirdNET · utedelen i hagen · 60.09°N 10.93°Ø</span>'
+                     f'<span>BirdNET · utedelen i hagen · {STED}</span>'
                      f'<span>{len(sure) + len(unsure)} arter på {sessions} '
                      'opptak</span></footer>')
 
@@ -688,6 +693,12 @@ def main():
                     default=os.environ.get("PANEL_BAR", "av"),
                     help="vis konfidens-baren i tillegg til prosenten "
                          "(samme tall to ganger; av som standard)")
+    ap.add_argument("--uten-bakgrunn", action="store_true",
+                    help="tegn sida UTEN illustrasjonen og uten pute. Brukes "
+                         "til aa lage en tekstmaske: alt som ikke er hvitt i "
+                         "resultatet er tekst, og da kan vi maale om teksten "
+                         "faktisk kolliderer med motivet i stedet for aa "
+                         "gjette ut fra et rektangel.")
     ap.add_argument("--pute", choices=("maalt", "alltid", "aldri"),
                     default=os.environ.get("PANEL_PUTE", "maalt"),
                     help="hvit flate under teksten i overlegget")
@@ -695,8 +706,12 @@ def main():
 
     birds = load_birds(args.birds)
     weather = None if args.no_weather else get_weather()
-    out = build_html(birds, weather, pute=args.pute,
+    out = build_html(birds, weather,
+                     pute="aldri" if args.uten_bakgrunn else args.pute,
                      bar=(args.bar == "paa"), sortering=args.sortering)
+    if args.uten_bakgrunn:
+        # Fjern bakgrunnsbildet, behold alt annet noeyaktig som det er.
+        out = re.sub(r'<img class="bakgrunn"[^>]*>', "", out)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w") as f:
         f.write(out)

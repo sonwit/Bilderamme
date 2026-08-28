@@ -35,7 +35,12 @@ from google.genai import types
 # Konfigurasjon
 # ----------------------------------------------------------------------
 
-LAT, LON = 60.09, 10.93          # her
+# Kartverket-koordinater for hagen (59.98° N,
+# 10.93° E). Stod tidligere som 60.09, 10.93 -- 12 km
+# for langt nord. Det paavirket baade vaervarselet og BirdNETs
+# artsfilter, som bruker posisjon + dato til aa avgjoere hva som er
+# plausibelt her akkurat naa.
+LAT, LON = 59.98, 10.93
 OUTPUT_DIR = os.environ.get("FRAME_OUTPUT_DIR", "/opt/fugleramme/www")
 # Arkiv: hvert bilde (full-farge originalen) lagres her med tidsstempel, saa
 # historikken beholdes selv om www/original.png overskrives ved neste bilde.

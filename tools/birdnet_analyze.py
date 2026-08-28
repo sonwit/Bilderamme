@@ -37,7 +37,8 @@ from birdnetlib import Recording
 from birdnetlib.analyzer import Analyzer
 
 # Samme koordinater som generate_daily_image.py (her).
-LAT, LON = 60.09, 10.93
+# Kartverket-koordinater for hagen. Se generate_daily_image.py.
+LAT, LON = 59.98, 10.93
 MIN_CONF = float(os.environ.get("BIRDNET_MIN_CONF", "0.25"))
 
 BASE_DIR = os.environ.get("FUGLE_DIR", "/opt/fugleramme")
