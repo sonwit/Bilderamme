@@ -47,7 +47,8 @@
       "y": 830,
       "h": 165,
       "speil": true,
-      "type": "gren"
+      "type": "gren",
+      "maks_overlapp": 0.32
     },
     {
       "x": 1010,
