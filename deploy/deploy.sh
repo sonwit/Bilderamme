@@ -23,7 +23,26 @@ scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/birdnet_analyze.py" \
     "$HERE/tools/bird_stats.py" \
     "$HERE/tools/audio_ingest.py" \
+    "$HERE/tools/daily_panel.py" \
+    "$HERE/tools/compose_branch.py" \
+    "$HERE/tools/compose_hero.py" \
+    "$HERE/tools/render_daily_panel.py" \
+    "$HERE/tools/render_panel_png.py" \
+    "$HERE/tools/prepare_plates.py" \
+    "$HERE/tools/fetch_plates.py" \
+    "$HERE/tools/bird_names.py" \
     "$SERVER:$DEST/"
+
+# Plansjebiblioteket: kildeskanningene, den faste grenen og 1:1-fuglene med
+# fotpunktene sine. Ikke plates/vasket/ (lages av prepare_plates.py) og ikke
+# plates/dagens-* (byttes hver morgen) — de skal ikke overskrives herfra.
+if [ -d "$HERE/plates" ]; then
+  echo "→ Kopierer plansjer og fugler ..."
+  ssh "$SERVER" "mkdir -p $DEST/plates/fugler"
+  scp "$HERE"/plates/*.jpg "$HERE"/plates/gren.png "$HERE"/plates/plates.json \
+      "$SERVER:$DEST/plates/" 2>/dev/null || true
+  scp "$HERE"/plates/fugler/* "$SERVER:$DEST/plates/fugler/" 2>/dev/null || true
+fi
 
 echo "→ Kopierer systemd-tjenestefiler ..."
 scp "$HERE/deploy/fugleramme-frame-server.service" "$SERVER:/tmp/fugleramme-frame-server.service"
