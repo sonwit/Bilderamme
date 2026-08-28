@@ -1,0 +1,37 @@
+{
+  "Turdus iliacus": {
+    "fil": "turdus-iliacus.jpg",
+    "commons": "File:British ornithology (18934958076).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_%2818934958076%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
+  },
+  "Spinus spinus": {
+    "fil": "spinus-spinus.jpg",
+    "commons": "File:Keulemans Onze vogels 1 33.jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AKeulemans_Onze_vogels_1_33.jpg",
+    "lisens": "Public domain",
+    "opphav": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:John_Gerrard_Keulemans\" class=\"extiw\" title=\"w:en:John Gerrard Keulemans\"><span title=\"Dutch bird artist (1842-1912)\">John Gerrard Keulemans</span></a></"
+  },
+  "Pica pica": {
+    "fil": "pica-pica.jpg",
+    "commons": "File:British ornithology (18961155885).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_%2818961155885%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
+  },
+  "Sitta europaea": {
+    "fil": "sitta-europaea.jpg",
+    "commons": "File:Naumann (II. 23) (8090126671).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ANaumann_%28II._23%29_%288090126671%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Hennicke, Carl Richard; Naumann, Johann Andreas; Naumann, Johann Andreas; Naumann, Johann Friedrich"
+  },
+  "Strix aluco": {
+    "fil": "strix-aluco.jpg",
+    "commons": "File:GouldBirdsEuropeITawny Owl.jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AGouldBirdsEuropeITawny_Owl.jpg",
+    "lisens": "Public domain",
+    "opphav": "J and E Gould E Lear"
+  }
+}
