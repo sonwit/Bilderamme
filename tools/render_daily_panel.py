@@ -59,6 +59,19 @@ MET_USER_AGENT = os.environ.get(
 SURE_CONF = float(os.environ.get("PANEL_SURE_CONF", "0.5"))
 MAX_ROWS = int(os.environ.get("PANEL_MAX_ROWS", "7"))
 
+# Merket som knytter fuglen paa plansjen til linja i lista. Skiva skal peke,
+# ikke rope: liten nok til aa forsvinne i tegningen paa avstand, stor nok til
+# aa leses paa en meters hold.
+#
+# MERKE_LOEFT loefter sifferet med padding under. Flex sentrerer LINJEBOKSEN,
+# ikke blekket, saa hvor sifferet faktisk havner avhenger av skriftens metrikk
+# og av stoerrelsen. Verdien er maalt, ikke gjettet: sifferet i det ferdige
+# arket spenner -5..+5 om skivas senter med 17 px og loeft 0. Endrer du
+# MERKE_TALL, maal paa nytt -- ved 15 px trengtes ett piksel loeft.
+MERKE_PX = int(os.environ.get("PANEL_MERKE_PX", "26"))
+MERKE_TALL = int(os.environ.get("PANEL_MERKE_TALL", "17"))
+MERKE_LOEFT = int(os.environ.get("PANEL_MERKE_LOEFT", "0"))
+
 UKEDAGER = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"]
 MAANEDER = ["januar", "februar", "mars", "april", "mai", "juni", "juli",
             "august", "september", "oktober", "november", "desember"]
@@ -643,14 +656,24 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
      nummereringen leses som en feil. */
   .art .nr {{ flex:0 0 30px; font-size:19px; }}
   .art .navn {{ flex:1 1 auto; }}
-  /* Svart skive med hvitt tall. Baade #000 og #fff er blant panelets seks
-     farger, saa skiva blir like skarp som teksten -- og da leses tallet
-     uansett om det staar paa papir, bark eller fjaerdrakt. */
-  .markoer {{ position:absolute; z-index:1; width:34px; height:34px;
-              margin:-17px 0 0 -17px;          /* sentrer paa punktet */
+  /* Hvit skive med tynn svart ring og svart tall. Bakgrunnen spiller ingen
+     rolle -- skiva dekker den -- men merket roper ikke slik en svart skive
+     gjorde. Graatt er ikke et alternativ: panelet har seks farger, og en
+     graatone har ingen av dem, saa den ville blitt fargeprikker. Ren #fff og
+     #000 dithres ikke i det hele tatt. */
+  .markoer {{ position:absolute; z-index:1; width:{MERKE_PX}px; height:{MERKE_PX}px;
+              margin:-{MERKE_PX // 2}px 0 0 -{MERKE_PX // 2}px;  /* sentrer paa punktet */
               display:flex; align-items:center; justify-content:center;
-              font-size:21px; line-height:1; border-radius:50%;
-              background:var(--blekk); color:var(--papir); }}
+              font-size:{MERKE_TALL}px; line-height:1; border-radius:50%;
+              padding-bottom:{MERKE_LOEFT * 2}px;
+              border:2px solid var(--blekk);
+              /* EB Garamond har gammelstil-sifre som standard: 3, 4, 5 og 7
+                 henger under grunnlinja, 6 og 8 stikker opp. Da ville hvert
+                 tall staatt i sin egen hoeyde i skiva. Vi ber om versaltall,
+                 som alle har samme hoeyde og staar paa grunnlinja. */
+              font-variant-numeric:lining-nums tabular-nums;
+              font-feature-settings:"lnum" 1,"tnum" 1;
+              background:var(--papir); color:var(--blekk); }}
   .art {{ padding:11px 0; border-bottom:1px solid var(--blekk); }}
   .art .l1 {{ display:flex; justify-content:space-between; align-items:baseline;
               font-size:26px; line-height:1.15; }}
