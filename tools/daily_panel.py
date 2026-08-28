@@ -4,7 +4,7 @@ Fugleramme: dagens fugleside, hele veien fra birds.json til frame.bin.
 
 Dette er inngangspunktet cron kaller. Det gjoer i tur og orden:
 
-  1. compose_branch.py  — dagens fugler paa den faste grenen (og pusser dem)
+  1. compose_branch.py  — dagens fugler paa den faste grenen (og retusjerer dem)
   2. render_daily_panel — sida som HTML, med lista oppaa illustrasjonen
   3. render_panel_png   — rastrer + Atkinson-dithring -> www/frame.bin
   4. arkiverer sida saa galleriet paa :8090 faar den med
@@ -32,10 +32,10 @@ WWW = os.environ.get("FRAME_OUTPUT_DIR", "/opt/fugleramme/www")
 ARKIV = os.environ.get("FRAME_ARCHIVE_DIR", os.path.join(WWW, "arkiv"))
 HTML = os.path.join(WWW, "panel.html")
 
-# Pussetrinnet koster ett Gemini-kall og kan feile. Sett PUSS=0 for aa hoppe
+# Retusjtrinnet koster ett Gemini-kall og kan feile. Sett RETUSJ=0 for aa hoppe
 # over det -- sida blir fortsatt riktig, fuglene ser bare litt mindre ut som
 # de griper.
-PUSS = os.environ.get("PUSS", "2")
+RETUSJ = os.environ.get("RETUSJ", "2")
 
 
 def kjoer(navn: str, *args: str) -> None:
@@ -47,7 +47,7 @@ def kjoer(navn: str, *args: str) -> None:
 
 def main() -> int:
     os.makedirs(WWW, exist_ok=True)
-    kjoer("compose_branch.py", "--birds", BIRDS, "--puss", PUSS)
+    kjoer("compose_branch.py", "--birds", BIRDS, "--retusj", RETUSJ)
     # Puta avgjoeres av om teksten FAKTISK kolliderer med illustrasjonen, ikke
     # av hvor mye blekk som ligger i et rektangel. Sida tegnes derfor én gang
     # uten bakgrunn foerst: alt som ikke er hvitt der er tekst, og da kan vi

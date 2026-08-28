@@ -48,7 +48,7 @@ FUGL_DIR = os.path.join(PLATES_DIR, "fugler")
 
 # Settes fra --nye-fotpunkter i main().
 NYE_FOTPUNKTER = False
-PUSS_MODELL = None
+RETUSJ_MODELL = None
 # Latinske navn som skal tegnes paa nytt selv om fila finnes
 # (--ny-fugl). Bildene er tilfeldige, saa av og til vil man bare ha
 # en ny variant uten aa slette filer for haand.
@@ -461,7 +461,7 @@ def perch_y(ark: Image.Image, x: int, y_hint: int, vindu: int = 150) -> int:
     return min(topper, key=lambda t: abs(t - y_hint)) if topper else y_hint
 
 
-# Hvor mye to fugler faar overlappe. Litt er helt greit -- pussetrinnet
+# Hvor mye to fugler faar overlappe. Litt er helt greit -- retusjtrinnet
 # fletter dem pent sammen, og en flokk paa samme grein SKAL staa taett. Men
 # to store fugler paa naesten samme punkt (kattugla landet oppaa skjaera da
 # tekstsperren dyttet begge mot hoeyre) blir bare rot.
@@ -587,8 +587,8 @@ def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
 # sonene paa nytt etterpaa, og et forsoek som skitner til tekstfeltet blir
 # FORKASTET -- da beholder vi den lokale versjonen. Garantien ligger i
 # maalingen, ikke i tilliten.
-def puss_prompt(plassert: list[dict]) -> str:
-    """Pusse-instruksen, bygget av det som faktisk staar i bildet.
+def retusj_prompt(plassert: list[dict]) -> str:
+    """Retusj-instruksen, bygget av det som faktisk staar i bildet.
 
     Den var foer en fast tekst om aa faa fuglene til aa «sitte paa veden de
     staar paa». Paa myrmalen ga det tull: en flygende skjaere har ingen ved aa
@@ -638,14 +638,14 @@ def puss_prompt(plassert: list[dict]) -> str:
 
 # Foreleggets oppløsning: hoeyere enn REF_MAX ellers i prosjektet, fordi
 # modellen her skal GJENSKAPE arket, ikke bare hente stil fra det.
-PUSS_REF = int(os.environ.get("PUSS_REF", "1200"))
+RETUSJ_REF = int(os.environ.get("RETUSJ_REF", "1200"))
 
 
-SONE_SLAKK = float(os.environ.get("PUSS_SLAKK", "0.01"))
+SONE_SLAKK = float(os.environ.get("RETUSJ_SLAKK", "0.01"))
 
 
 def _god_nok(soner: dict, basis: dict) -> bool:
-    """Godtar et pusseforsoek som ikke gjoer tekstsonen VERRE enn den var.
+    """Godtar et retusjforsoek som ikke gjoer tekstsonen VERRE enn den var.
 
     Absolutt terskel gaar ikke naar malen selv har blekk der: myrmalens
     sivkant ligger saavidt inne i sonen, og da ville ingen forsoek noen gang
@@ -660,32 +660,32 @@ def _god_nok(soner: dict, basis: dict) -> bool:
     return True
 
 
-def refine(ark: Image.Image, tries: int,
+def retusjer(ark: Image.Image, tries: int,
            plassert: list[dict]) -> tuple[Image.Image, dict, bool]:
     """Send arket tilbake for aa faa foettene til aa gripe. Returnerer
-    (bilde, soner, ble_pusset). Faller tilbake paa originalen hvis ingen
+    (bilde, soner, ble_retusjert). Faller tilbake paa originalen hvis ingen
     forsoek holder tekstsonen ren."""
     ref = ark.copy()
-    ref.thumbnail((PUSS_REF, PUSS_REF), Image.LANCZOS)
+    ref.thumbnail((RETUSJ_REF, RETUSJ_REF), Image.LANCZOS)
     basis = zone_report(ark)
     for forsoek in range(1, tries + 1):
         try:
             kandidat = fit_to_panel(whiten(
-                generate_image(puss_prompt(plassert), ref_images=[ref],
+                generate_image(retusj_prompt(plassert), ref_images=[ref],
                                aspect_ratio="3:4",
-                               model=PUSS_MODELL)))
+                               model=RETUSJ_MODELL)))
         except Exception as e:  # noqa: BLE001
-            print(f"  puss {forsoek}/{tries} feilet: {str(e)[:120]}", file=sys.stderr)
+            print(f"  retusj {forsoek}/{tries} feilet: {str(e)[:120]}", file=sys.stderr)
             continue
         soner = zone_report(kandidat)
         status = " ".join(f"{n}={v['blekk']*100:.1f}%/verst {v['verst']*100:.1f}%"
                           for n, v in soner.items())
         ren = _god_nok(soner, basis)
-        print(f"  puss {forsoek}/{tries}: {status}  "
+        print(f"  retusj {forsoek}/{tries}: {status}  "
               f"{'godtatt' if ren else 'FORKASTET — rotet i tekstsonen'}")
         if ren:
             return kandidat, soner, True
-    print("  ingen pusseforsoek holdt tekstsonen ren — beholder den lokale "
+    print("  ingen retusjforsoek holdt tekstsonen ren — beholder den lokale "
           "sammensettingen", file=sys.stderr)
     return ark, zone_report(ark), False
 
@@ -894,7 +894,7 @@ def lag_mal(mal: dict, tries: int = 3) -> None:
         if not os.path.exists(basefil):
             raise SystemExit(f"Mangler {basefil} — lag {base} foerst.")
         r = Image.open(basefil).convert("RGB")
-        r.thumbnail((PUSS_REF, PUSS_REF), Image.LANCZOS)
+        r.thumbnail((RETUSJ_REF, RETUSJ_REF), Image.LANCZOS)
         refs = [r]
         print(f"  forelegg: {os.path.basename(basefil)}")
 
@@ -902,7 +902,7 @@ def lag_mal(mal: dict, tries: int = 3) -> None:
     for forsoek in range(1, tries + 1):
         img = fit_to_panel(whiten(generate_image(
             mal["prompt"], ref_images=refs, aspect_ratio="3:4",
-            model=PUSS_MODELL)))
+            model=RETUSJ_MODELL)))
         img, ramme_fjernet = fjern_ramme(img)
         if ramme_fjernet:
             print("      (fjernet en tegnet ramme rundt arket)")
@@ -938,13 +938,13 @@ def main() -> int:
                          "(kan gjentas)")
     ap.add_argument("--nye-fotpunkter", action="store_true",
                     help="bestem fotpunktene paa nytt (manuelt satte roeres ikke)")
-    # gemini-3-pro-image gjoer pussetrinnet merkbart bedre enn
+    # gemini-3-pro-image gjoer retusjtrinnet merkbart bedre enn
     # gemini-2.5-flash-image: taerne griper faktisk rundt veden, og
     # streken holder seg renere. Satt som standard KUN her -- det daglige
     # AI-bildet bruker fortsatt sin egen modell til noen bestemmer noe annet.
-    ap.add_argument("--puss-modell",
-                    default=os.environ.get("PUSS_MODELL", "gemini-3-pro-image"),
-                    help="bildemodell for pussetrinnet")
+    ap.add_argument("--retusj-modell",
+                    default=os.environ.get("RETUSJ_MODELL", "gemini-3-pro-image"),
+                    help="bildemodell for retusjtrinnet")
     ap.add_argument("--sjekk-foetter", metavar="UT.PNG",
                     help="kontaktark med kryss der fotpunktene er satt")
     ap.add_argument("--kart", action="store_true",
@@ -953,15 +953,15 @@ def main() -> int:
                                   "som passer dagens fugler best)")
     ap.add_argument("--lag-mal", metavar="NAVN",
                     help="generer bakgrunnsbildet for en mal og avslutt")
-    ap.add_argument("--puss", type=int, default=int(os.environ.get("PUSS_TRIES", "2")),
+    ap.add_argument("--retusj", type=int, default=int(os.environ.get("RETUSJ_TRIES", "2")),
                     help="antall forsoek paa aa la Gemini feste foettene til "
                          "grenen (0 = hopp over)")
     ap.add_argument("--bare-fugler", action="store_true",
                     help="lag manglende 1:1-fugler og stopp")
     args = ap.parse_args()
 
-    global NYE_FOTPUNKTER, PUSS_MODELL, NY_FUGL
-    NYE_FOTPUNKTER, PUSS_MODELL = args.nye_fotpunkter, args.puss_modell
+    global NYE_FOTPUNKTER, RETUSJ_MODELL, NY_FUGL
+    NYE_FOTPUNKTER, RETUSJ_MODELL = args.nye_fotpunkter, args.retusj_modell
     NY_FUGL = {a.strip().lower() for a in args.ny_fugl}
 
     if args.sjekk_foetter:
@@ -972,7 +972,7 @@ def main() -> int:
     if args.lag_mal:
         if args.lag_mal not in maler:
             raise SystemExit(f"Ingen mal som heter {args.lag_mal} i {MAL_DIR}")
-        lag_mal(maler[args.lag_mal], args.puss or 3)
+        lag_mal(maler[args.lag_mal], args.retusj or 3)
         return 0
 
     birds = load_birds(args.birds)
@@ -1012,9 +1012,9 @@ def main() -> int:
 
     ark, plassert = compose(species, mal)
     ark = fit_to_panel(ark)
-    pusset = False
-    if args.puss > 0:
-        ark, soner, pusset = refine(ark, args.puss, plassert)
+    retusjert = False
+    if args.retusj > 0:
+        ark, soner, retusjert = retusjer(ark, args.retusj, plassert)
     else:
         soner = zone_report(ark)
     for navn, v in soner.items():
@@ -1022,7 +1022,7 @@ def main() -> int:
               f"verste baand {v['verst']*100:5.1f} %  "
               f"{'ren' if v['ren'] else 'OPPTATT'}")
 
-    # Merkeplassene finnes paa det ferdige arket -- pussingen flytter piksler,
+    # Merkeplassene finnes paa det ferdige arket -- retusjeringen flytter piksler,
     # og et merke plassert foer den kan havne oppaa en nytegnet kvist.
     label_spots(ark, plassert)
 
@@ -1033,7 +1033,7 @@ def main() -> int:
             "date": birds.get("date") or datetime.date.today().isoformat(),
             "mal": mal["navn"],
             "metode": (f"{mal['navn']} + 1:1-fugler, satt sammen lokalt"
-                       + (" og pusset av Gemini" if pusset else "")),
+                       + (" og retusjert av Gemini" if retusjert else "")),
             "species": [{"common_name": s["common_name"],
                          "scientific_name": s["scientific_name"],
                          "norsk": norwegian_name(s["scientific_name"],
@@ -1044,7 +1044,7 @@ def main() -> int:
                         for s in plassert],
         }, f, indent=2, ensure_ascii=False)
     print(f"OK: {BG_PNG} — {len(plassert)} fugler paa malen " + mal["navn"]
-          + (", pusset" if pusset else ", upusset"))
+          + (", retusjert" if retusjert else ", uretusjert"))
     return 0
 
 

@@ -88,7 +88,7 @@ fremdeles det Siri-kommandoen og «lag nytt bilde» i webappen bruker.
   tekstsonen, altså verre enn uten mal. Løsningen ble å flytte komposisjonen ut
   av modellen: den tegner én fugl om gangen, og `compose_branch.py` limer dem på
   grenen selv. Da er plasseringen et regnestykke og tekstsonen måler 0,0 %.
-  Modellen brukes fortsatt til å pusse kontaktpunktene, men **hvert forsøk måles
+  Modellen brukes fortsatt til å retusjere kontaktpunktene, men **hvert forsøk måles
   og forkastes hvis det skitner til tekstfeltet**.
 - **Gråtoner og gjennomsiktighet finnes ikke på dette panelet.** Et halvgjennom-
   siktig hvitt felt bak tekst virker som en god idé og blir en grumsete flekk:
@@ -196,7 +196,7 @@ daily_panel.py                                     "fugleramme.local"
       hver art: 1:1-fugl fra plates/fugler/
       lim dem på plates/gren.png i faste
         festepunkter, skalert etter cm
-      Gemini pusser kontaktpunktene
+      Gemini retusjerer kontaktpunktene
       mål tekstsonene → forkast om urent
   → render_daily_panel.py
       yr / api.met.no (vær)
@@ -347,12 +347,12 @@ under teksten.
 ```bash
 # på serveren, i bilde-venv-et
 venv/bin/python daily_panel.py                    # hele kjeden -> www/frame.bin
-venv/bin/python compose_branch.py --birds birds.json --puss 0   # uten AI-pussing
+venv/bin/python compose_branch.py --birds birds.json --retusj 0   # uten AI-retusj
 venv/bin/python render_daily_panel.py --bar paa   # med konfidens-bar
-PUSS=0 venv/bin/python daily_panel.py             # spar et Gemini-kall
+RETUSJ=0 venv/bin/python daily_panel.py             # spar et Gemini-kall
 ```
 
-`--puss` sender det ferdige arket tilbake til Gemini for å få tærne til å gripe
+`--retusj` sender det ferdige arket tilbake til Gemini for å få tærne til å gripe
 rundt veden. `gemini-3-pro-image` gjør det merkbart bedre enn
 `gemini-2.5-flash-image` og er standard for akkurat det steget; det daglige
 AI-bildet bruker fortsatt sin egen modell.
