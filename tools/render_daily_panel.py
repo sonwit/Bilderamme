@@ -401,7 +401,9 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
         ut = []
         for sci, n in nummer.items():
             mx, my = tegnet[sci]["merke"]
-            ut.append(f'<span class="markoer" style="left:{mx}px;top:{my}px">{n}</span>')
+            flate = " flate" if tegnet[sci].get("merke_flate") else ""
+            ut.append(f'<span class="markoer{flate}" '
+                      f'style="left:{mx}px;top:{my}px">{n}</span>')
         return "".join(ut)
 
     markoerer = _markoerer()
@@ -604,8 +606,11 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
      bokser lot vaerboksen ligge midt oppe paa illustrasjonen; nå holder all
      teksten seg i den samme tomme spalten modellen ble bedt om aa la staa. */
   .overlegg .info  {{ grid-column:1/6; grid-row:1/4; align-self:start; }}
+  /* align-self:start er poenget: uten den strekker ruta seg til rad 16, og
+     den hvite puta dekker hele venstre halvdel helt ned til nedre kant --
+     oppaa greinene. Naa er boksen bare saa hoey som teksten i den. */
   .overlegg .liste {{ grid-column:1/6; grid-row:4/16; padding-top:26px;
-                      overflow:hidden; }}
+                      align-self:start; overflow:hidden; }}
   /* Kilde og sum staar naa under lista i venstrespalten, ikke som en strek
      tvers over arket -- da faar illustrasjonen hele hoeyden. */
   .overlegg .kilde {{ font-size:16px; line-height:1.45; padding-top:14px;
@@ -638,6 +643,9 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
               margin:-17px 0 0 -17px;          /* sentrer paa punktet */
               display:flex; align-items:center; justify-content:center;
               font-size:25px; line-height:1; color:var(--blekk); }}
+  /* Naar tallet maa staa oppaa motivet: en hvit skive under. Ren #fff er en
+     av panelets seks farger, saa den blir like skarp som teksten. */
+  .markoer.flate {{ background:var(--papir); border-radius:50%; }}
   .art {{ padding:11px 0; border-bottom:1px solid var(--blekk); }}
   .art .l1 {{ display:flex; justify-content:space-between; align-items:baseline;
               font-size:26px; line-height:1.15; }}

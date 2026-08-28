@@ -17,27 +17,26 @@
     9,
     10
   ],
-  "prompt": "A marshy shoreline drawn as a 19th-century engraved book plate: reeds, sedge tussocks and a low muddy bank running along the BOTTOM of the image, with a few taller reed stems rising on the right side. Fine engraved linework, muted greens and browns, hand-coloured lithograph style. The upper-left region — the left 48% of the width, from the very top down to 75% of the height — must be completely empty white paper: no reeds, no stems, no shading, nothing at all. The upper RIGHT area, above the reeds, must be open empty white sky — no clouds, no shading, nothing — so that birds can be added there later. Keep the bottom 4% empty white paper across the full width. Pure white background everywhere, no paper texture, no ageing, no border, no frame. No birds, no text, no captions, no signature. Tall vertical composition.",
+  "prompt": "A marshy shoreline drawn as a 19th-century engraved book plate: reeds, sedge tussocks and a muddy bank along the BOTTOM of the image. IMPORTANT: the vegetation must SLOPE — tall reeds and sedge only in the RIGHT THIRD, and from there the bank falls away steadily to the LEFT, so that on the left half there is only low open mud and short grass with a low horizon, leaving open white space above it. Fine engraved linework, muted greens and browns, hand-coloured lithograph style. The upper-left region — the left 48% of the width, from the very top down to 75% of the height — must be completely empty white paper: no reeds, no stems, no shading, nothing at all. The upper RIGHT area, above the reeds, must be open empty white sky — no clouds, no shading, nothing — so that birds can be added there later. Pure white background everywhere, no paper texture, no ageing, no border. Do NOT draw any rectangular frame, border line or ruled edge around the image — the illustration bleeds to the very edge of the paper on all four sides. No birds, no text, no captions, no signature. Tall vertical composition.",
   "plasser": [
     {
-      "x": 700,
-      "y": 1258,
-      "h": 200,
+      "x": 330,
+      "y": 1430,
+      "h": 195,
       "speil": false,
       "type": "bakke"
     },
     {
-      "x": 940,
-      "y": 1268,
+      "x": 620,
+      "y": 1395,
       "h": 175,
       "speil": true,
-      "type": "bakke",
-      "maks_overlapp": 0.26
+      "type": "bakke"
     },
     {
       "x": 880,
-      "y": 1425,
-      "h": 145,
+      "y": 1345,
+      "h": 150,
       "speil": false,
       "type": "bakke"
     },

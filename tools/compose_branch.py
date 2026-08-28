@@ -679,6 +679,7 @@ def sjekk_foetter(ut: str) -> None:
 # lete oss fram til en aapen flekk i stedet for aa gjette fra layouten.
 MERKE = 40                                   # stoerrelsen paa flekken vi tester
 MERKE_HVIT = 252.0                           # snittnivaa som regnes som blankt
+MERKE_LYST = 236.0                           # reservekrav: lyst nok til svart tall
 
 
 def label_spots(ark: Image.Image, plassert: list[dict]) -> None:
@@ -691,7 +692,8 @@ def label_spots(ark: Image.Image, plassert: list[dict]) -> None:
     H, W = a.shape
     tatt: list[tuple] = []
 
-    def blankt(cx: int, cy: int) -> bool:
+
+    def blankt(cx: int, cy: int, grense: float = MERKE_HVIT) -> bool:
         if not (MERKE <= cx <= W - MERKE and MERKE <= cy <= H - MERKE):
             return False
         # Aldri inn i tekstspalten (venstre 48 %, ned til 75 % av hoeyden).
@@ -700,7 +702,7 @@ def label_spots(ark: Image.Image, plassert: list[dict]) -> None:
         if any(abs(cx - tx) < MERKE and abs(cy - ty) < MERKE for tx, ty in tatt):
             return False
         felt = a[cy - MERKE // 2:cy + MERKE // 2, cx - MERKE // 2:cx + MERKE // 2]
-        return bool(felt.size and felt.mean() > MERKE_HVIT)
+        return bool(felt.size and felt.mean() > grense)
 
     for sp in plassert:
         x0, y0, x1, y1 = sp["boks"]
@@ -712,14 +714,39 @@ def label_spots(ark: Image.Image, plassert: list[dict]) -> None:
                 kandidater.append((x0 - ut, y0 + int(h * fy)))
             kandidater.append(((x0 + x1) // 2, y0 - ut))
             kandidater.append(((x0 + x1) // 2, y1 + ut))
-        for cx, cy in kandidater:
-            if blankt(int(cx), int(cy)):
-                sp["merke"] = [int(cx), int(cy)]
-                tatt.append((int(cx), int(cy)))
-                break
-        else:
-            print(f"      (fant ingen aapen plass til merket for "
-                  f"{sp.get('common_name', '?')})")
+        # Foerst ren hvit flate. Finner vi ingen, godtar vi en lys en --
+        # myrmalens bleke mudder er ikke hvitt, men et svart tall leses fint
+        # mot det, og et tall er bedre enn ingen kobling til lista.
+        plass = next((k for k in kandidater if blankt(int(k[0]), int(k[1]))), None)
+        if plass is None:
+            plass = next((k for k in kandidater
+                          if blankt(int(k[0]), int(k[1]), MERKE_LYST)), None)
+        flate = False
+        if plass is None:
+            # Ingen aapen plass i det hele tatt -- typisk en bakkefugl der den
+            # eneste hvite luften ligger inne i tekstspalten. Da tar vi den
+            # minst travle flekken og ber sida legge en hvit skive under
+            # tallet. Ren hvit er en av panelets seks farger, saa skiva blir
+            # like skarp som teksten.
+            def travelhet(k):
+                cx, cy = int(k[0]), int(k[1])
+                if not (MERKE <= cx <= W - MERKE and MERKE <= cy <= H - MERKE):
+                    return 1e9
+                if cx < SPERRE_X and cy < SPERRE_Y:
+                    return 1e9
+                felt = a[cy - MERKE // 2:cy + MERKE // 2,
+                         cx - MERKE // 2:cx + MERKE // 2]
+                return -felt.mean() if felt.size else 1e9
+            plass = min(kandidater, key=travelhet)
+            if travelhet(plass) >= 1e9:
+                print(f"      (fant ingen plass til merket for "
+                      f"{sp.get('common_name', '?')})")
+                continue
+            flate = True
+
+        sp["merke"] = [int(plass[0]), int(plass[1])]
+        sp["merke_flate"] = flate
+        tatt.append((int(plass[0]), int(plass[1])))
 
 
 def kart(mal: dict) -> None:
@@ -733,6 +760,62 @@ def kart(mal: dict) -> None:
             continue
         seg = np.split(ink, np.where(np.diff(ink) > 12)[0] + 1)
         print(f"  x={x:4d}  overflater y={[int(s[0]) for s in seg if len(s) > 4]}")
+
+
+def fjern_ramme(img: Image.Image, kant: int = 45) -> tuple[Image.Image, bool]:
+    """Fjern en tegnet ramme rundt arket, hvis den finnes.
+
+    Modellen tegner den av og til uansett hvor tydelig prompten forbyr det --
+    myrmalen fikk en 1 px strek ~25 px inn, tre forsoek paa rad. Vi leter etter
+    en rad/kolonne naer hver kant som er dekket over mer enn halve lengden, og
+    hvitner den og alt UTENFOR den. Motivet ligger innenfor rammen, saa
+    ingenting av det gaar tapt.
+
+    Merk at det er ramma vi fjerner, ikke en marg: en mal der motivet faktisk
+    gaar helt ut i kanten (grenmalen) har ingen slik gjennomgaaende strek, og
+    blir staaende urort."""
+    a = np.asarray(img.convert("RGB")).copy()
+    H, W, _ = a.shape
+    moerk = a.mean(axis=2) < 225
+    funnet = False
+
+    for side in ("topp", "bunn", "venstre", "hoeyre"):
+        if side in ("topp", "bunn"):
+            rader = range(kant) if side == "topp" else range(H - 1, H - kant - 1, -1)
+            treff = [r for r in rader if moerk[r, :].mean() > 0.5]
+            if treff:
+                r = treff[0]
+                if side == "topp":
+                    a[:r + 3, :] = 255
+                else:
+                    a[r - 2:, :] = 255
+                funnet = True
+        else:
+            kols = range(kant) if side == "venstre" else range(W - 1, W - kant - 1, -1)
+            treff = [c for c in kols if moerk[:, c].mean() > 0.5]
+            if treff:
+                c = treff[0]
+                if side == "venstre":
+                    a[:, :c + 3] = 255
+                else:
+                    a[:, c - 2:] = 255
+                funnet = True
+
+    return Image.fromarray(a, "RGB"), funnet
+
+
+def har_ramme(img: Image.Image, kant: int = 45) -> bool:
+    """Har modellen tegnet en ramme rundt arket?
+
+    Sonemaalingen fanger den ikke -- en strek paa én piksel er promiller av
+    sonen -- men den er stygg og gjoer at malen ikke gaar helt ut i kanten.
+    Her ser vi etter en sammenhengende moerk strek langs OEVRE kant: er mer
+    enn halve bredden dekket der, er det en ramme og ikke motiv (myrmalen har
+    tomt papir oeverst, grenmalen har bare tynne kvister)."""
+    a = np.asarray(img.convert("RGB"), dtype=np.float32).mean(axis=2)
+    baand = a[:kant, :]
+    dekket = (baand < 225).any(axis=0).mean()
+    return bool(dekket > 0.5)
 
 
 def lag_mal(mal: dict, tries: int = 3) -> None:
@@ -761,15 +844,20 @@ def lag_mal(mal: dict, tries: int = 3) -> None:
         img = fit_to_panel(whiten(generate_image(
             mal["prompt"], ref_images=refs, aspect_ratio="3:4",
             model=PUSS_MODELL)))
+        img, ramme_fjernet = fjern_ramme(img)
+        if ramme_fjernet:
+            print("      (fjernet en tegnet ramme rundt arket)")
         soner = zone_report(img)
-        sum_verst = sum(v["verst"] for v in soner.values())
+        ramme = har_ramme(img)
+        sum_verst = sum(v["verst"] for v in soner.values()) + (1.0 if ramme else 0.0)
         print(f"  forsoek {forsoek}/{tries}: "
               + " ".join(f"{n}={v['blekk']*100:.1f}%/verst {v['verst']*100:.1f}%"
-                         for n, v in soner.items()))
+                         for n, v in soner.items())
+              + ("  RAMME rundt arket" if ramme else ""))
         if best_sum is None or sum_verst < best_sum:
             best, best_soner, best_sum = img, soner, sum_verst
-        if all(v["ren"] for v in soner.values()):
-            print("  alle soner rene — beholder denne")
+        if all(v["ren"] for v in soner.values()) and not ramme:
+            print("  alle soner rene og ingen ramme — beholder denne")
             break
 
     for navn, v in best_soner.items():
@@ -895,7 +983,8 @@ def main() -> int:
                          "norsk": norwegian_name(s["scientific_name"],
                                                  s["common_name"]),
                          "boks": s["boks"], "fot": s["fot"],
-                         "merke": s.get("merke")}
+                         "merke": s.get("merke"),
+                         "merke_flate": s.get("merke_flate", False)}
                         for s in plassert],
         }, f, indent=2, ensure_ascii=False)
     print(f"OK: {BG_PNG} — {len(plassert)} fugler paa malen " + mal["navn"]
