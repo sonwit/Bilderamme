@@ -1,6 +1,6 @@
 {
   "navn": "gren-sommer",
-  "tittel": "Gren med sommerløv",
+  "tittel": "Rogn med sommerløv",
   "bilde": "gren-sommer.png",
   "basert_paa": "gren",
   "maaneder": [
@@ -8,5 +8,5 @@
     7,
     8
   ],
-  "prompt": "Redraw this exact branch, keeping its shape, position, thickness and the path of every twig IDENTICAL — do not move, add or remove any branch. The only change: it is high summer, so the twigs carry fresh green leaves, a deep and slightly varied green, with a few small seed keys. DIRECTION OF GROWTH IS CRITICAL: every leaf must grow from the branch towards the RIGHT and towards the BOTTOM of the picture. No leaf, no twig and no shadow may extend LEFTWARD past the branch into the open part of the page. The left 48% of the width, from the very top down to 75% of the height, must remain completely empty white paper — exactly as empty as it is now, with nothing at all in it. Leave gaps between the leaf clusters rather than a solid mass, so the branch outline stays clearly readable underneath. Keep the same 19th-century engraved book-plate style, fine linework, hand-coloured. Pure white background, no paper texture, no border. Do NOT draw any rectangular frame or ruled edge around the image. No birds, no text, no signature."
+  "prompt": "Redraw this exact branch, keeping its shape, position, thickness and the path of every twig IDENTICAL — do not move, add or remove any branch. The tree is a ROWAN (Sorbus aucuparia). The only change: it is summer, so the branch carries rowan foliage — PINNATE leaves, each leaf a stalk with 11 to 15 small oval serrated leaflets in opposite pairs, deep green. Absolutely no maple leaves and no winged maple seeds. Two or three flat clusters of small unripe green berries. COUNT AND PLACEMENT: draw only FIVE OR SIX leaf sprays in the whole picture, no more. Every spray must be attached on the RIGHT side of the trunk and hang down and to the right. Leave long stretches of bare wood between them — most of the branch must show no leaves at all, exactly as in the reference. The left 48% of the width, from the very top down to 75% of the height, must remain completely empty white paper — nothing at all in it. Keep the same 19th-century engraved book-plate style, fine linework, hand-coloured, and keep the existing grey-brown bark exactly as it is. Pure white background, no paper texture, no border. Do NOT draw any rectangular frame or ruled edge around the image. No birds, no text, no signature."
 }
