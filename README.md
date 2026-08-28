@@ -1,11 +1,17 @@
 # Fugleramme
 
-Et DIY-prosjekt som kombinerer fuglelyd-gjenkjenning, værdata og AI-bildegenerering
-for å vise et daglig oppdatert kunstbilde på en 13.3" e-ink bilderamme.
+Et DIY-prosjekt som kombinerer fuglelyd-gjenkjenning, værdata og AI-tegnede
+fugleplansjer til en daglig oppdatert side på en 13.3" e-ink bilderamme.
 
-Hver morgen: hjemmeserveren genererer et bilde med Gemini (`gemini-2.5-flash-image`),
-basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers palett, og
-**pusher** det til e-ink-rammen inne, som viser det og sover til neste morgen.
+Hver morgen: hjemmeserveren setter sammen **dagens fugleside** — artene BirdNET
+faktisk hørte i hagen, med norsk og latinsk navn, klokkeslett og sikkerhet, over
+en plansje der de samme fuglene sitter på en gren i stil med gamle fuglebøker.
+Sida dithres til panelets 6-fargers palett og **pushes** til e-ink-rammen inne,
+som viser den og sover til neste morgen.
+
+Fram til august 2026 var det daglige motivet et fritt AI-bilde av dagens fugl.
+Den veien finnes fortsatt — den er reserve hvis fuglesida feiler, og den er
+fremdeles det Siri-kommandoen og «lag nytt bilde» i webappen bruker.
 
 ## Status
 
@@ -13,9 +19,11 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
   svarer på ping, og `send_to_frame.py` fikk skjermen til å tegne et bilde.
   Se `firmware/indoor_frame/`.
 - ✅ **Bildegenerering (hjemmeserver):** `generate_daily_image.py` på
-  `192.168.1.38` genererer dagens bilde, henter vær, dithrer og skriver
+  `192.168.1.38` genererer et fritt AI-bilde, henter vær, dithrer og skriver
   `frame.bin` i riktig panelformat under `/opt/fugleramme/www/`. Hentes med
-  `scp` for inspeksjon/debugging — se «Feilsøking» under.
+  `scp` for inspeksjon/debugging — se «Feilsøking» under. Var den daglige veien
+  fram til 2026-08-28; nå reserve for fuglesida, og fortsatt det Siri og
+  webappen bruker.
 - ✅ **Daglig push:** `tools/push_to_frame.py` sender `frame.bin` videre til
   rammen rett etter generering — se «Daglig flyt» under. Kjøres fra cron på
   hjemmeserveren (07:07, verifisert 2026-07-24).
@@ -31,6 +39,15 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
   `docs/Utedel v2 — ESP32-S3 XIAO.md`.
   *(v1 med Raspberry Pi 3 B trakk for mye strøm og døde 2026-07-28 —
   historikk og lærdommer i `docs/Utedel — status og neste steg.md`.)*
+- ✅ **Dagens fugleside (hjemmeserver):** `tools/daily_panel.py` kjører hele
+  kjeden 07:07 — `compose_branch.py` (fuglene på grenen) → `render_daily_panel.py`
+  (sida som HTML) → `render_panel_png.py` (rastrer + dithrer) → `push_to_frame.py`.
+  Feiler noe, faller cron tilbake på `generate_daily_image.py`. Se «Dagens
+  fugleside» under.
+- ✅ **Plansjebibliotek:** `plates/` — skannede plansjer fra Wikimedia Commons
+  (public domain, valgt med `tools/fetch_plates.py`), den faste grenen
+  `gren.png`, og én 1:1-fugl per art under `plates/fugler/` med fotpunktet sitt
+  i en sidecar-JSON. Lages én gang per art og gjenbrukes hver dag arten dukker opp.
 - ✅ **BirdNET-pipeline (hjemmeserver):** `tools/audio_ingest.py` (systemd,
   port 8091) tar imot opptakene og trigger `tools/birdnet_analyze.py` →
   `data/observations.jsonl` (alt, for godt) + `birds.json` (dagens arter, som
@@ -62,6 +79,23 @@ basert på værdata fra yr (api.met.no), dithrer det til panelets 6-fargers pale
   ikke sende" fra "sendte ok, men fikk ikke lest svaret") og gir en tydelig
   melding i stedet for en traceback — så et brett med gammel firmware virker
   fortsatt.
+- **Prompt-styrt komposisjon er ikke til å stole på — mål, ikke håp.** Da
+  fuglesida skulle ha et tomt felt til venstre for teksten, ba vi Gemini om det
+  i klartekst («the left 48% must be completely empty white paper», gjentatt tre
+  ganger). Samme prompt ga **0,1 % blekk i tekstsonen ett forsøk og 14,8 % det
+  neste**. Vi ga den til og med en ferdig gren som referansebilde med «reproduser
+  denne i samme posisjon» — den tegnet sin egen gren midt på sida og la 20,6 % i
+  tekstsonen, altså verre enn uten mal. Løsningen ble å flytte komposisjonen ut
+  av modellen: den tegner én fugl om gangen, og `compose_branch.py` limer dem på
+  grenen selv. Da er plasseringen et regnestykke og tekstsonen måler 0,0 %.
+  Modellen brukes fortsatt til å pusse kontaktpunktene, men **hvert forsøk måles
+  og forkastes hvis det skitner til tekstfeltet**.
+- **Gråtoner og gjennomsiktighet finnes ikke på dette panelet.** Et halvgjennom-
+  siktig hvitt felt bak tekst virker som en god idé og blir en grumsete flekk:
+  fargen finnes ikke i paletten, så dithringen gjetter den med prikker. Ren
+  `#fff` treffer paletten eksakt og dithres ikke i det hele tatt. Samme regel
+  gjelder alt annet på sida — hele fuglesida er tegnet i de seks fargene, og
+  det er derfor teksten blir knivskarp.
 - **Grumsete/støyete bilde på skjermen er ofte forventet, ikke en feil:**
   testet med `tools/test.png` (et mykt akvarell-aktig bilde) 2026-07-21, og
   det så støyete ut på skjermen. En lokalt generert forhåndsvisning
@@ -91,14 +125,31 @@ fugleramme/
 │   ├── send_to_frame.py    Gjør et vilkårlig bilde (jpg/png) om til panel-format
 │   │                       og sender det til rammen. Til manuell testing fra Macen.
 │   ├── push_to_frame.py    Sender en ferdig-pakket frame.bin til rammen. Cron.
-│   ├── generate_daily_image.py  Dagens bilde: vær (yr) + dagens hørte fugler
+│   ├── generate_daily_image.py  Fritt AI-bilde: vær (yr) + dagens hørte fugler
 │   │                       (birds.json) -> Gemini -> dither -> frame.bin.
+│   │                       Reserve for fuglesida + Siri/webb.
 │   ├── frame_server.py     Webapp/galleri + Siri-endepunkt (systemd, port 8090).
 │   ├── flash_firmware.sh   Kompiler + flash begge brettene med arduino-cli.
 │   ├── audio_ingest.py     Mottak av opptak fra utedelen (systemd, port 8091);
 │   │                       trigger analysen. ESP32 kan ikke scp — derfor HTTP.
 │   ├── birdnet_analyze.py  BirdNET på én WAV -> observations.jsonl + birds.json.
-│   └── bird_stats.py       Statistikk/rapport: arter, lydnivå, dekning, strøm.
+│   ├── bird_stats.py       Statistikk/rapport: arter, lydnivå, dekning, strøm.
+│   │
+│   │                       — Dagens fugleside (kjøres i denne rekkefølgen) —
+│   ├── daily_panel.py      Inngangspunktet cron kaller. Kjører de tre under.
+│   ├── compose_branch.py   Dagens fugler limt på den faste grenen, lokalt.
+│   ├── render_daily_panel.py  Sida som HTML på nøyaktig 1200x1600.
+│   ├── render_panel_png.py    Rastrer HTML -> PNG -> dither -> frame.bin.
+│   │
+│   │                       — Plansjebiblioteket (engangsjobb per art) —
+│   ├── fetch_plates.py     Kortliste + nedlasting fra Wikimedia Commons.
+│   ├── prepare_plates.py   Vasker skanninger: papirtone -> rent hvitt.
+│   ├── compose_hero.py     Lager grenmalen; alternativ AI-komponert plansje.
+│   └── bird_names.py       Norske navn + kroppslengder, nøklet på latinsk navn.
+├── plates/                 Plansjebiblioteket. Kildeskanninger (PD, fra Commons),
+│                           gren.png, og fugler/<art>.png + .json med fotpunkt.
+│                           vasket/ og dagens-* lages på serveren, ikke i repoet.
+├── design/                 Artboards for designcanvaset (tre layoutretninger).
 ├── pi/                     v1-utedelen (Raspberry Pi 3 B) — pensjonert 2026-08-04,
 │                           beholdt som referanse/reserve.
 ├── deploy/                 deploy.sh + systemd-tjenestefiler for hjemmeserveren.
@@ -109,7 +160,14 @@ fugleramme/
 
 ```
 /opt/fugleramme/
-├── generate_daily_image.py   Dagens bilde (Gemini + vær + dagens fugler).
+├── daily_panel.py             DAGENS SIDE — det cron kjører (07:07)
+├── compose_branch.py          fuglene på grenen
+├── render_daily_panel.py      sida som HTML
+├── render_panel_png.py        rastrering + dithring -> frame.bin
+├── plates/                    plansjer, gren.png, fugler/ (1:1 + fotpunkt)
+│   ├── vasket/                hvitpunkt-korrigerte plansjer (lages lokalt)
+│   └── dagens-bakgrunn.png    dagens ferdige illustrasjon + .json med sonemåling
+├── generate_daily_image.py   Reserve hvis fuglesida feiler + Siri/webb-bilder.
 ├── frame_server.py            Webapp/Siri (systemd: fugleramme-frame-server, :8090)
 ├── audio_ingest.py            Mottak fra utedelen (systemd: fugleramme-audio-ingest, :8091)
 ├── birdnet_analyze.py         BirdNET-analyse (kjøres av audio_ingest per opptak)
@@ -132,10 +190,20 @@ Rammen henter uansett ikke selv; den får bildet pushet (se under).
 
 ```
 [Hjemmeserver 192.168.1.38]                      [ESP32-S3 e-Paper-ramme]
-generate_daily_image.py                            "fugleramme.local"
-  → yr / api.met.no (vær)                                (HTTP-server, port 80)
-  → Gemini (bilde)
-  → dither til 6 farger, pakk 2 px/byte
+daily_panel.py                                     "fugleramme.local"
+  → compose_branch.py                                    (HTTP-server, port 80)
+      les birds.json (dagens arter)
+      hver art: 1:1-fugl fra plates/fugler/
+      lim dem på plates/gren.png i faste
+        festepunkter, skalert etter cm
+      Gemini pusser kontaktpunktene
+      mål tekstsonene → forkast om urent
+  → render_daily_panel.py
+      yr / api.met.no (vær)
+      HTML 1200x1600, tekst i palettfarger
+  → render_panel_png.py
+      headless chromium → PNG
+      Atkinson-dither, pakk 2 px/byte
   → skriv www/frame.bin  ──┐
                             │
 push_to_frame.py           │
@@ -145,12 +213,22 @@ push_to_frame.py           │
                                                        (~20-35 sek)
 ```
 
-Begge stegene trigges av **ett cron-kall** på hjemmeserveren (`crontab -e`,
-verifisert fungerende 2026-07-24):
+Hele kjeden trigges av **ett cron-kall** på hjemmeserveren (`crontab -e`,
+byttet fra AI-bildet til fuglesida 2026-08-28):
 
 ```cron
-7 7 * * * cd /opt/fugleramme && set -a && . /opt/fugleramme/frame_server.env && set +a && venv/bin/python3 generate_daily_image.py >> logs/daily.log 2>&1 && venv/bin/python3 push_to_frame.py >> logs/daily.log 2>&1
+7 7 * * * cd /opt/fugleramme && set -a && . /opt/fugleramme/frame_server.env && set +a && { venv/bin/python3 daily_panel.py || venv/bin/python3 generate_daily_image.py; } >> logs/daily.log 2>&1 && venv/bin/python3 push_to_frame.py >> logs/daily.log 2>&1
 ```
+
+**AI-bildet er reserven.** `daily_panel.py` går bare ut med 0 hvis `frame.bin`
+faktisk finnes og er 960000 byte. Har ingen av dagens arter fått plansje ennå,
+eller er Gemini nede, kjører `generate_daily_image.py` i stedet — da henger det
+et bilde på veggen i stedet for ingenting. Push-steget bryr seg ikke om hvem som
+lagde fila.
+
+Merk at 07:07 er tidlig for en side som sier «Hørt i dag»: klokka sju rommer
+lista bare morgenøktene (04:00–07:00). Headeren teller opptakene, så det er ikke
+usant — men vil du ha hele dagen, må jobben flyttes til kvelden.
 
 Tidspunktet er med vilje 07:07, ikke hel time: vær-API-er er mest overbelastet
 akkurat kl. XX:00 (alle verdens cron-jobber treffer samtidig — det ga to dagers
@@ -183,6 +261,101 @@ klokke/deep-sleep-vekk-og-hent-logikk innebygd. Det er også nøyaktig samme
 mekanisme som ble brukt til å få det første testbildet på skjermen
 (`send_to_frame.py` fra Macen), så dette gjenbruker en løsning som allerede
 er verifisert å virke — ingen ny flashing nødvendig.
+
+## Dagens fugleside
+
+Sida er ett fast oppsett: infoboks oppe til venstre, artslista under den,
+bunnlinje, og en fugleplansje som fyller resten av arket. Alt er tegnet i
+panelets seks farger, så teksten dithres ikke.
+
+### Å legge til en ny art
+
+Når BirdNET hører noe nytt, trengs to engangsjobber. Begge lagres og gjenbrukes
+hver dag arten dukker opp igjen.
+
+**1. Finn en plansje.** Commons har en `<Vitenskapelig navn> (illustrations)`-
+kategori for 40 av de 41 artene vi har hørt så langt — Gould, Keulemans,
+Naumann, Morris — alle falt i det fri. Kategoriene inneholder også frimerker,
+lydfiler og 250 px-utsnitt, så maskinen lager kortliste og du velger:
+
+```bash
+python3 tools/fetch_plates.py --shortlist --birds birds.json --out plates/velg.html
+python3 tools/fetch_plates.py --get "File:Keulemans Onze vogels 1 33.jpg" --for "Spinus spinus"
+python3 tools/prepare_plates.py          # vasker papirtonen til rent hvitt
+```
+
+Velg plansjer med **lyst papir**. En mørk, gulnet skanning lar seg ikke redde av
+hvitpunkt-korreksjonen, og blir grumsete på panelet.
+
+**2. Fuglen tegnes.** Første gang arten er med på sida lager `compose_branch.py`
+en 1:1-fugl av den med plansjen som forelegg, og bestemmer fotpunktet med
+`gemini-3.5-flash`. Begge deler lagres i `plates/fugler/`. Sjekk resultatet:
+
+```bash
+python3 tools/compose_branch.py --sjekk-foetter fotpunkter.png
+```
+
+Kontaktarket viser hver fugl med et kryss der fotpunktet er satt. Ser et feil ut,
+rett `fot` i artens `.json` og sett `"kilde": "manuell"` — da rører ingen senere
+kjøring det igjen, heller ikke `--nye-fotpunkter`.
+
+### Hvorfor fotpunkt og ikke bunnkant
+
+Nederste piksel i bildet er **halespissen** på en skjære, ikke foten. Aligner man
+på den, lander halen på veden og fuglen henger i lufta over. Samme gjelder
+vannrett: sentrerer man på bildets bredde, havner føttene godt til side for
+festepunktet fordi halen drar tyngdepunktet med seg. Fotpunktet løser begge.
+
+### Størrelser
+
+Fuglene skaleres etter faktisk kroppslengde (`LENGDE_CM` i `bird_names.py`,
+totallengde med hale). Rett proporsjon går ikke — en gråhegre på 94 cm ville
+gjort grønnsisiken på 12 til en flekk — så det komprimeres:
+
+```
+skala = (lengde / 21 cm) ** 0,6,   klemt til 0,55–1,60
+```
+
+Med rødvingetrosten som midtpunkt gir det skjære 1,56× og grønnsisik 0,71×.
+Største art får den tykkeste greina nederst, minste den tynne kvisten øverst.
+
+### Festepunktene
+
+`ANKRE` i `compose_branch.py` er en liste `(x, y, høyde, speilvendt)` sortert
+nedenfra og opp. `y` snappes til greinas faktiske overflate, så punktene kan
+settes omtrentlig — `--kart` viser hvor grenen har ved ved hver x.
+
+Hver fugl prøver ankrene i tur og orden og tar det første der den får stå i fred
+(inntil 22 % overlapp; en flokk på samme grein skal stå tett). Vil du ha flere
+fugler på sida, legg til ankre og hent plansjer for flere arter — resten ordner
+seg selv.
+
+### Tekstsonen er en hard sperre
+
+Ingen fugl får overlappe feltet der teksten står (venstre 48 %, ned til 75 % av
+høyden). Blir en fugl bred nok til å nå inn, flyttes den sidelengs — og
+`perch_y` finner ny ved under føttene, så den ikke blir stående og sveve. Er den
+for bred til å få plass til høyre, krymper den i stedet.
+
+Etterpå måles sonene uansett, i vannrette bånd og ikke som snitt: en enslig fugl
+midt i artslista ga 1,9 % totalt — under grensen — mens den lå rett oppå fire
+linjer tekst. Sonen som ikke blir ren, får en **helt ugjennomsiktig** hvit pute
+under teksten.
+
+### Kjøre for hånd
+
+```bash
+# på serveren, i bilde-venv-et
+venv/bin/python daily_panel.py                    # hele kjeden -> www/frame.bin
+venv/bin/python compose_branch.py --birds birds.json --puss 0   # uten AI-pussing
+venv/bin/python render_daily_panel.py --bar paa   # med konfidens-bar
+PUSS=0 venv/bin/python daily_panel.py             # spar et Gemini-kall
+```
+
+`--puss` sender det ferdige arket tilbake til Gemini for å få tærne til å gripe
+rundt veden. `gemini-3-pro-image` gjør det merkbart bedre enn
+`gemini-2.5-flash-image` og er standard for akkurat det steget; det daglige
+AI-bildet bruker fortsatt sin egen modell.
 
 ## Kom i gang / test alt
 
