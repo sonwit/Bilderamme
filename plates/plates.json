@@ -61,5 +61,12 @@
     "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_%2818964485341%29.jpg",
     "lisens": "Public domain",
     "opphav": "Graves, George"
+  },
+  "Phoenicurus phoenicurus": {
+    "fil": "phoenicurus-phoenicurus.jpg",
+    "commons": "File:Atlas de poche des oiseaux de France, Suisse, et Belgique, utiles ou nuisibles (Pl. 37) (6388888223).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AAtlas_de_poche_des_oiseaux_de_France%2C_Suisse%2C_et_Belgique%2C_utiles_ou_nuisibles_%28Pl._37%29_%286388888223%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Hamonville, Jean Charles Louis Tardif"
   }
 }

@@ -298,8 +298,32 @@ def ensure_bird(s: dict, positur: str = "sittende",
                                 ref_images=[ref], aspect_ratio="1:1"))
     os.makedirs(FUGL_DIR, exist_ok=True)
     img.save(dest)
-    print(f"  laget {os.path.basename(dest)} ({img.width}x{img.height})")
+    stram_til_fuglen(dest)
     return dest
+
+
+def stram_til_fuglen(sti: str) -> None:
+    """Klipp den lagrede fila ned til fuglen selv, paa hvit bunn.
+
+    Modellen tegner paa et 1024x1024-ark og legger av og til igjen en svak
+    strek eller et par prikker ute i hjoernet. Skaleringen sikter paa BOKSEN,
+    ikke paa fuglen, saa en slik flekk krymper fuglen paa arket: kjoettmeisas
+    utsnitt var 907x854 der bare 9,3 % var fugl, og paa sida ble den halve
+    stoerrelsen den skulle hatt ved siden av en spettmeis paa samme 14 cm.
+
+    cutout() kaster loese flekker uansett naar bildet leses, men da ligger
+    feilen fortsatt i fila og dukker opp igjen neste gang noen ser paa den.
+    Her skrives fila slik den skal vaere med én gang. Hvit bunn, ikke
+    gjennomsiktig: cutout leser med convert(\"RGB\"), og en alfakanal ville
+    blitt svart."""
+    tett = cutout(sti)
+    paa_hvitt = Image.new("RGB", tett.size, (255, 255, 255))
+    paa_hvitt.paste(tett, (0, 0), tett)
+    paa_hvitt.save(sti)
+    andel = (np.asarray(tett.convert("RGBA"))[:, :, 3] > 0).mean()
+    merknad = "" if andel >= 0.15 else "   <- mistenkelig tynn, se paa den"
+    print(f"  laget {os.path.basename(sti)} ({tett.width}x{tett.height}, "
+          f"{andel*100:.0f} % fugl){merknad}")
 
 
 # ----------------------------------------------------------------------
@@ -416,6 +440,26 @@ def foot_row(fugl: Image.Image) -> int:
     return int(rader[-1]) if len(rader) else maske.shape[0] - 1
 
 
+# En loes flekk mindre enn denne andelen av den stoerste sammenhengende
+# klatten regnes som stoey og kastes. En virkelig loesrevet fugledel -- en fot,
+# en vingespiss -- er aldri saa liten; stoeyen er noen faa piksler.
+FLEKK = float(os.environ.get("FUGL_FLEKK", "0.01"))
+
+
+def uten_flekker(maske: np.ndarray) -> np.ndarray:
+    """Behold den stoerste klatten og alt som er en reell del av fuglen."""
+    from scipy import ndimage
+
+    merket, n = ndimage.label(maske)
+    if n <= 1:
+        return maske
+    stoerrelser = ndimage.sum(maske, merket, range(1, n + 1))
+    grense = stoerrelser.max() * FLEKK
+    beholdes = np.zeros(n + 1, dtype=bool)
+    beholdes[1:] = stoerrelser >= grense
+    return beholdes[merket]
+
+
 def cutout(path: str) -> Image.Image:
     """Fjern papiret rundt fuglen og beskjaer til fuglen selv.
 
@@ -427,13 +471,21 @@ def cutout(path: str) -> Image.Image:
     binary_fill_holes fyller nettopp de hullene i motivmasken som ikke henger
     sammen med kanten -- altsaa hvitt som er innelukket av fjaerdrakt. (PIL sin
     ImageDraw.floodfill ble proevd foerst og fylte ingenting i denne
-    Pillow-versjonen: 0 % av bakgrunnen ble merket.)"""
+    Pillow-versjonen: 0 % av bakgrunnen ble merket.)
+
+    Loese flekker kastes foer beskjaeringen. Modellen legger av og til igjen
+    en svak strek eller et par prikker ute i hjoernet av arket, og siden
+    skaleringen sikter paa BOKSEN, ikke paa fuglen, blir fuglen tilsvarende
+    mindre: kjoettmeisas utsnitt var 907x854 der bare 9,3 % var fugl, mot
+    spettmeisas 452x445 med 40,4 %. Paa arket ble kjoettmeisa dermed halve
+    stoerrelsen den skulle hatt, enda begge er 14 cm."""
     from scipy import ndimage
 
     img = Image.open(path).convert("RGB")
     arr = np.asarray(img, dtype=np.float32)
     motiv = arr.mean(axis=2) < KUTT
     synlig = ndimage.binary_fill_holes(motiv)
+    synlig = uten_flekker(synlig)
 
     rows, cols = np.where(synlig.any(axis=1))[0], np.where(synlig.any(axis=0))[0]
     if not len(rows) or not len(cols):

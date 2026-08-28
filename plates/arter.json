@@ -16,5 +16,14 @@
     "overvintrer": true,
     "kilde": "modell",
     "lagt_til": "2026-08-28"
+  },
+  "phoenicurus phoenicurus": {
+    "norsk": "Rødstjert",
+    "engelsk": "Common redstart",
+    "lengde_cm": 14.0,
+    "habitat": "tre",
+    "overvintrer": false,
+    "kilde": "modell",
+    "lagt_til": "2026-08-28"
   }
 }
