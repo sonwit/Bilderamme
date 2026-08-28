@@ -1,0 +1,124 @@
+{
+  "timestamp": "2026-08-28T09:02:50",
+  "date": "2026-08-28",
+  "sessions_today": 12,
+  "species": [
+    {
+      "common_name": "Redwing",
+      "scientific_name": "Turdus iliacus",
+      "confidence": 0.787,
+      "detections": 4,
+      "sessions": 2,
+      "first_heard": "07:59",
+      "last_heard": "08:29"
+    },
+    {
+      "common_name": "Eurasian Siskin",
+      "scientific_name": "Spinus spinus",
+      "confidence": 0.877,
+      "detections": 3,
+      "sessions": 2,
+      "first_heard": "06:29",
+      "last_heard": "08:29"
+    },
+    {
+      "common_name": "Eurasian Magpie",
+      "scientific_name": "Pica pica",
+      "confidence": 0.966,
+      "detections": 6,
+      "sessions": 1,
+      "first_heard": "06:59",
+      "last_heard": "06:59"
+    },
+    {
+      "common_name": "Eurasian Nuthatch",
+      "scientific_name": "Sitta europaea",
+      "confidence": 0.736,
+      "detections": 3,
+      "sessions": 1,
+      "first_heard": "07:29",
+      "last_heard": "07:29"
+    },
+    {
+      "common_name": "Spotted Crake",
+      "scientific_name": "Porzana porzana",
+      "confidence": 0.511,
+      "detections": 3,
+      "sessions": 1,
+      "first_heard": "08:59",
+      "last_heard": "08:59"
+    },
+    {
+      "common_name": "Tawny Owl",
+      "scientific_name": "Strix aluco",
+      "confidence": 0.81,
+      "detections": 1,
+      "sessions": 1,
+      "first_heard": "07:59",
+      "last_heard": "07:59"
+    },
+    {
+      "common_name": "Common Redstart",
+      "scientific_name": "Phoenicurus phoenicurus",
+      "confidence": 0.604,
+      "detections": 1,
+      "sessions": 1,
+      "first_heard": "06:29",
+      "last_heard": "06:29"
+    },
+    {
+      "common_name": "Common Snipe",
+      "scientific_name": "Gallinago gallinago",
+      "confidence": 0.518,
+      "detections": 1,
+      "sessions": 1,
+      "first_heard": "08:59",
+      "last_heard": "08:59"
+    },
+    {
+      "common_name": "Little Ringed Plover",
+      "scientific_name": "Charadrius dubius",
+      "confidence": 0.444,
+      "detections": 1,
+      "sessions": 1,
+      "first_heard": "06:29",
+      "last_heard": "06:29"
+    },
+    {
+      "common_name": "Great Bittern",
+      "scientific_name": "Botaurus stellaris",
+      "confidence": 0.415,
+      "detections": 1,
+      "sessions": 1,
+      "first_heard": "03:45",
+      "last_heard": "03:45"
+    },
+    {
+      "common_name": "Mistle Thrush",
+      "scientific_name": "Turdus viscivorus",
+      "confidence": 0.264,
+      "detections": 1,
+      "sessions": 1,
+      "first_heard": "08:29",
+      "last_heard": "08:29"
+    },
+    {
+      "common_name": "Common House-Martin",
+      "scientific_name": "Delichon urbicum",
+      "confidence": 0.26,
+      "detections": 1,
+      "sessions": 1,
+      "first_heard": "07:29",
+      "last_heard": "07:29"
+    },
+    {
+      "common_name": "Bohemian Waxwing",
+      "scientific_name": "Bombycilla garrulus",
+      "confidence": 0.258,
+      "detections": 1,
+      "sessions": 1,
+      "first_heard": "08:29",
+      "last_heard": "08:29"
+    }
+  ]
+}
