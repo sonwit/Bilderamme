@@ -287,6 +287,12 @@ def foot_point(bird_path: str, fugl: Image.Image, force: bool = False) -> tuple[
 
     Rekkefoelge: manuelt satt punkt > modellen > heuristikken. Et punkt som
     er skrevet inn for haand skal ALDRI overskrives av en ny kjoering."""
+    # En flygende fugl har ingen foetter aa sette ned -- luftplassene sentrerer
+    # paa kroppen. Da er det bortkastet aa bruke et modellkall paa aa lete
+    # etter taer, og et lagret punkt ville bare vaert forvirrende.
+    if os.path.basename(bird_path).endswith("-flyvende.png"):
+        return fugl.width // 2, fugl.height // 2
+
     meta_p = _meta_path(bird_path)
     if os.path.exists(meta_p) and not force:
         try:
@@ -339,15 +345,28 @@ def foot_row(fugl: Image.Image) -> int:
 
 
 def cutout(path: str) -> Image.Image:
-    """Fjern det hvite papiret rundt fuglen og beskjaer til fuglen selv."""
+    """Fjern papiret rundt fuglen og beskjaer til fuglen selv.
+
+    Terskel alene gaar ikke: den fjerner ALT som er lyst nok, ogsaa hvitt
+    MIDT i fuglen. Skjaera mistet buken og skulderflekken sin og ble
+    gjennomsiktig der. Bakgrunn er ikke «lyst», det er «lyst og ikke omsluttet
+    av fugl».
+
+    binary_fill_holes fyller nettopp de hullene i motivmasken som ikke henger
+    sammen med kanten -- altsaa hvitt som er innelukket av fjaerdrakt. (PIL sin
+    ImageDraw.floodfill ble proevd foerst og fylte ingenting i denne
+    Pillow-versjonen: 0 % av bakgrunnen ble merket.)"""
+    from scipy import ndimage
+
     img = Image.open(path).convert("RGB")
     arr = np.asarray(img, dtype=np.float32)
-    maske = arr.mean(axis=2) < KUTT
-    rows, cols = np.where(maske.any(axis=1))[0], np.where(maske.any(axis=0))[0]
+    motiv = arr.mean(axis=2) < KUTT
+    synlig = ndimage.binary_fill_holes(motiv)
+
+    rows, cols = np.where(synlig.any(axis=1))[0], np.where(synlig.any(axis=0))[0]
     if not len(rows) or not len(cols):
         raise ValueError(f"{path} er helt hvit")
-    rgba = np.dstack([arr.astype(np.uint8),
-                      (maske * 255).astype(np.uint8)])
+    rgba = np.dstack([arr.astype(np.uint8), (synlig * 255).astype(np.uint8)])
     ut = Image.fromarray(rgba, "RGBA")
     return ut.crop((int(cols[0]), int(rows[0]), int(cols[-1]) + 1, int(rows[-1]) + 1))
 
