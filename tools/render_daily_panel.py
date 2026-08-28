@@ -112,14 +112,29 @@ def norsk_dato(d: datetime.date) -> tuple[str, str]:
     return UKEDAGER[d.weekday()], f"{d.day}. {MAANEDER[d.month - 1]} {d.year}"
 
 
-def split_species(species: list[dict], max_rows: int | None = None) -> tuple[list[dict], list[dict]]:
-    """Del i «hoert» (paa veggen) og «ogsaa mulige» (fotnote). Sortert paa
-    hvor godt belagt arten er: flere oekter > flere deteksjoner > hoeyere
-    konfidens. En art hoert i to oekter er mer troverdig enn én med hoey score
-    i én enkelt tre-sekunders bit."""
-    ordered = sorted(species, key=lambda s: (-s.get("sessions", 1),
-                                             -s.get("detections", 0),
-                                             -s.get("confidence", 0.0)))
+# Hva som skal staa oeverst i lista.
+#   "sikkerhet" -- hoeyest BirdNET-score foerst (standard)
+#   "belegg"    -- flest oekter foerst, saa deteksjoner, saa score
+#
+# Det var "belegg" foerst, med den begrunnelsen at en art hoert i flere oekter
+# er mer troverdig enn én med hoey score i én tre-sekunders bit. I praksis ga
+# det feil svar: myrriksa dukket opp i fire oekter paa 58 % og la seg oeverst,
+# selv om en myrrikse i en hage paa Hagen er et av de klassiske
+# BirdNET-feiltreffene. Fire svake treff paa samme feil art er fortsatt fire
+# svake treff.
+SORTERING = os.environ.get("PANEL_SORTERING", "sikkerhet")
+
+
+def split_species(species: list[dict], max_rows: int | None = None,
+                  sortering: str | None = None) -> tuple[list[dict], list[dict]]:
+    """Del i «hoert» (paa veggen) og «ogsaa mulige» (fotnote)."""
+    if (sortering or SORTERING) == "belegg":
+        noekkel = lambda s: (-s.get("sessions", 1), -s.get("detections", 0),  # noqa: E731
+                             -s.get("confidence", 0.0))
+    else:
+        noekkel = lambda s: (-s.get("confidence", 0.0), -s.get("sessions", 1),  # noqa: E731
+                             -s.get("detections", 0))
+    ordered = sorted(species, key=noekkel)
     sure = [s for s in ordered
             if s.get("confidence", 0) >= SURE_CONF or s.get("sessions", 1) >= 2]
     unsure = [s for s in ordered if s not in sure]
@@ -318,7 +333,7 @@ def species_card(s: dict, bar: bool = False, nr: int | None = None) -> str:
 
 
 def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
-               bar: bool = False) -> str:
+               bar: bool = False, sortering: str | None = None) -> str:
     """pute styrer den hvite flaten under teksten i overlegget:
     'maalt'  -- bare der compose_hero maalte at sonen ikke ble tom (standard)
     'alltid' -- alltid, uansett maaling (tryggest, mest synlig)
@@ -328,7 +343,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
     ukedag, dato = norsk_dato(date)
     bg_meta = todays_background(birds.get("date", ""))
     sure, unsure = split_species(birds.get("species", []),
-                                 OVERLAY_ROWS if bg_meta else None)
+                                 OVERLAY_ROWS if bg_meta else None, sortering)
     sessions = birds.get("sessions_today", 0)
 
     hero_meta = None if bg_meta else todays_hero(birds.get("date", ""))
@@ -658,6 +673,9 @@ def main():
     ap.add_argument("--birds", default="test/data/birds-2026-08-28.json")
     ap.add_argument("--out", default="test/panel.html")
     ap.add_argument("--no-weather", action="store_true")
+    ap.add_argument("--sortering", choices=("sikkerhet", "belegg"),
+                    default=SORTERING,
+                    help="hva som staar oeverst i lista")
     ap.add_argument("--bar", choices=("av", "paa"),
                     default=os.environ.get("PANEL_BAR", "av"),
                     help="vis konfidens-baren i tillegg til prosenten "
@@ -670,7 +688,7 @@ def main():
     birds = load_birds(args.birds)
     weather = None if args.no_weather else get_weather()
     out = build_html(birds, weather, pute=args.pute,
-                     bar=(args.bar == "paa"))
+                     bar=(args.bar == "paa"), sortering=args.sortering)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w") as f:
         f.write(out)

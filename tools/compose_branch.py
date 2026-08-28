@@ -49,6 +49,10 @@ FUGL_DIR = os.path.join(PLATES_DIR, "fugler")
 # Settes fra --nye-fotpunkter i main().
 NYE_FOTPUNKTER = False
 PUSS_MODELL = None
+# Latinske navn som skal tegnes paa nytt selv om fila finnes
+# (--ny-fugl). Bildene er tilfeldige, saa av og til vil man bare ha
+# en ny variant uten aa slette filer for haand.
+NY_FUGL: set = set()
 
 # Festepunkter langs grenen: (x_senter, y_foetter, hoeyde, speilvendt).
 # y-verdiene er lest ut av gren.png — der grenen faktisk har en overflate paa
@@ -213,6 +217,8 @@ def ensure_bird(s: dict, positur: str = "sittende",
     if positur == "flyvende":
         navn += "-flyvende"
     dest = os.path.join(FUGL_DIR, navn + ".png")
+    if sci.strip().lower() in NY_FUGL:
+        force = True
     if os.path.exists(dest) and not force:
         return dest
     forelegg = plate_path(sci)
@@ -507,7 +513,7 @@ def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
         # Boksen tas vare paa saa sida kan sette et tall ved fuglen som
         # peker tilbake i artslista. Koordinatene er i arkets piksler
         # (1200x1600), som er noeyaktig panelets -- ingen omregning senere.
-        plassert.append({**s, "boks": list(boks), "fot": [x, y]})
+        plassert.append({**s, "boks": list(boks), "fot": [x, y], "type": typ})
     return ark, plassert
 
 
@@ -520,24 +526,52 @@ def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
 # sonene paa nytt etterpaa, og et forsoek som skitner til tekstfeltet blir
 # FORKASTET -- da beholder vi den lokale versjonen. Garantien ligger i
 # maalingen, ikke i tilliten.
-PUSS_PROMPT = (
-    "This is an antique bird plate: birds standing on a bare branch, on white "
-    "paper. Each bird is already in the right place, at the right size. "
-    "Your job is to make every bird look like it is genuinely PERCHED on the "
-    "wood it stands on, not pasted on top of it. "
-    "You MAY: rotate or tilt a bird a little so its posture follows the angle "
-    "of its branch; redraw its legs, toes and claws so they wrap around and "
-    "grip the wood; adjust how the tail hangs and how the body balances over "
-    "the feet; nudge a bird a few pixels so the feet meet the branch exactly; "
-    "and redraw the small area of branch where the feet touch. "
-    "You MUST NOT: change any bird's size, move a bird to a different branch "
-    "or a different part of the page, change which species is where, add or "
-    "remove birds, branches, twigs, leaves, text, captions or shadows. "
-    "Leave the empty white area alone — the left 48% of the width from the top "
-    "down to 75% of the height must stay completely empty white paper. "
-    "Keep the fine engraved linework and the hand-coloured lithograph style, "
-    "and keep the pure white background."
-)
+def puss_prompt(plassert: list[dict]) -> str:
+    """Pusse-instruksen, bygget av det som faktisk staar i bildet.
+
+    Den var foer en fast tekst om aa faa fuglene til aa «sitte paa veden de
+    staar paa». Paa myrmalen ga det tull: en flygende skjaere har ingen ved aa
+    sitte paa, saa modellen tegnet inn en stubbe og satte den paa den. Naa
+    faar den vite hva hver enkelt fugl gjoer -- og at ingenting nytt skal
+    legges til."""
+    typer = {p.get("type", "gren") for p in plassert}
+    oppgaver = []
+    if "gren" in typer:
+        oppgaver.append(
+            "The birds standing on branches: make their toes wrap around and "
+            "grip the wood, with correct contact and weight, and let each "
+            "bird's body and tail angle follow the branch it stands on.")
+    if "bakke" in typer:
+        oppgaver.append(
+            "The birds standing on the ground: plant their feet properly on "
+            "the mud or among the stems, so they stand in the vegetation "
+            "rather than on top of it.")
+    if "luft" in typer:
+        oppgaver.append(
+            "The birds in flight: they must STAY in flight, wings spread, "
+            "with open empty sky around and below them. Do not give them "
+            "anything to land on and do not fold their wings.")
+
+    return (
+        "This is an antique bird plate. Every bird is already in the right "
+        "place, at the right size, doing the right thing. "
+        "Your job is ONLY to make each bird belong in the scene instead of "
+        "looking pasted on top of it. "
+        + " ".join(oppgaver) + " "
+        "You MAY rotate or tilt a bird slightly, redraw its legs, toes and "
+        "claws, adjust how the tail hangs, nudge a bird a few pixels, and "
+        "redraw the small area where it meets what it stands on. "
+        "You MUST NOT add ANYTHING that is not already in the picture — no "
+        "new branch, perch, stump, twig, plant, ground or shadow. Do not add "
+        "or remove birds. Do not change any bird's size, do not move a bird "
+        "somewhere else, and do not change which species is where. "
+        "Leave the empty white area alone — the left 48% of the width from "
+        "the top down to 72% of the height must stay completely empty white "
+        "paper. "
+        "Keep the fine engraved linework, the hand-coloured lithograph style "
+        "and the pure white background."
+    )
+
 
 # Foreleggets oppløsning: hoeyere enn REF_MAX ellers i prosjektet, fordi
 # modellen her skal GJENSKAPE arket, ikke bare hente stil fra det.
@@ -563,7 +597,8 @@ def _god_nok(soner: dict, basis: dict) -> bool:
     return True
 
 
-def refine(ark: Image.Image, tries: int) -> tuple[Image.Image, dict, bool]:
+def refine(ark: Image.Image, tries: int,
+           plassert: list[dict]) -> tuple[Image.Image, dict, bool]:
     """Send arket tilbake for aa faa foettene til aa gripe. Returnerer
     (bilde, soner, ble_pusset). Faller tilbake paa originalen hvis ingen
     forsoek holder tekstsonen ren."""
@@ -573,7 +608,8 @@ def refine(ark: Image.Image, tries: int) -> tuple[Image.Image, dict, bool]:
     for forsoek in range(1, tries + 1):
         try:
             kandidat = fit_to_panel(whiten(
-                generate_image(PUSS_PROMPT, ref_images=[ref], aspect_ratio="3:4",
+                generate_image(puss_prompt(plassert), ref_images=[ref],
+                               aspect_ratio="3:4",
                                model=PUSS_MODELL)))
         except Exception as e:  # noqa: BLE001
             print(f"  puss {forsoek}/{tries} feilet: {str(e)[:120]}", file=sys.stderr)
@@ -745,6 +781,10 @@ def lag_mal(mal: dict, tries: int = 3) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser(description="Sett dagens fugler paa grenen.")
     ap.add_argument("--birds", default=os.path.join(HERE, "birds.json"))
+    ap.add_argument("--ny-fugl", action="append", metavar="'Genus art'",
+                    default=[],
+                    help="tegn arten paa nytt selv om bildet finnes "
+                         "(kan gjentas)")
     ap.add_argument("--nye-fotpunkter", action="store_true",
                     help="bestem fotpunktene paa nytt (manuelt satte roeres ikke)")
     # gemini-3-pro-image gjoer pussetrinnet merkbart bedre enn
@@ -769,8 +809,9 @@ def main() -> int:
                     help="lag manglende 1:1-fugler og stopp")
     args = ap.parse_args()
 
-    global NYE_FOTPUNKTER, PUSS_MODELL
+    global NYE_FOTPUNKTER, PUSS_MODELL, NY_FUGL
     NYE_FOTPUNKTER, PUSS_MODELL = args.nye_fotpunkter, args.puss_modell
+    NY_FUGL = {a.strip().lower() for a in args.ny_fugl}
 
     if args.sjekk_foetter:
         sjekk_foetter(args.sjekk_foetter)
@@ -825,7 +866,7 @@ def main() -> int:
     ark = fit_to_panel(ark)
     pusset = False
     if args.puss > 0:
-        ark, soner, pusset = refine(ark, args.puss)
+        ark, soner, pusset = refine(ark, args.puss, plassert)
     else:
         soner = zone_report(ark)
     for navn, v in soner.items():
