@@ -376,7 +376,10 @@ def compose(species: list[dict]) -> tuple[Image.Image, list[dict]]:
         # saa klørne ser ut til aa gripe. Hale og vingespisser faar henge
         # under greina, som de skal.
         ark.paste(fugl, (x - fx, y - fy + 4), fugl)
-        plassert.append({**s, "_anker": [x, y, fugl.height]})
+        # Boksen tas vare paa saa sida kan sette et tall ved fuglen som
+        # peker tilbake i artslista. Koordinatene er i arkets piksler
+        # (1200x1600), som er noeyaktig panelets -- ingen omregning senere.
+        plassert.append({**s, "boks": list(boks), "fot": [x, y]})
     return ark, plassert
 
 
@@ -483,6 +486,54 @@ def sjekk_foetter(ut: str) -> None:
     print(f"OK: {ut} — {len(filer)} fugler med fotpunkt")
 
 
+# Tallet ved fuglen skal staa i REN hvit luft. Legges det oppaa greina eller
+# i fjaerdrakten, forsvinner det i dithringen. Vi har pikslene her, saa vi kan
+# lete oss fram til en aapen flekk i stedet for aa gjette fra layouten.
+MERKE = 40                                   # stoerrelsen paa flekken vi tester
+MERKE_HVIT = 252.0                           # snittnivaa som regnes som blankt
+
+
+def label_spots(ark: Image.Image, plassert: list[dict]) -> None:
+    """Finn en aapen plass ved hver fugl og skriv den inn som `merke`.
+
+    Proever i tur og orden: hoeyre for fuglen, venstre, over, under -- foerst
+    naert, saa lenger ut. Ingen aapen plass funnet: hopp over merket heller
+    enn aa sette et tall der det ikke kan leses."""
+    a = np.asarray(ark.convert("RGB"), dtype=np.float32).mean(axis=2)
+    H, W = a.shape
+    tatt: list[tuple] = []
+
+    def blankt(cx: int, cy: int) -> bool:
+        if not (MERKE <= cx <= W - MERKE and MERKE <= cy <= H - MERKE):
+            return False
+        # Aldri inn i tekstspalten (venstre 48 %, ned til 75 % av hoeyden).
+        if cx < SPERRE_X and cy < SPERRE_Y:
+            return False
+        if any(abs(cx - tx) < MERKE and abs(cy - ty) < MERKE for tx, ty in tatt):
+            return False
+        felt = a[cy - MERKE // 2:cy + MERKE // 2, cx - MERKE // 2:cx + MERKE // 2]
+        return bool(felt.size and felt.mean() > MERKE_HVIT)
+
+    for sp in plassert:
+        x0, y0, x1, y1 = sp["boks"]
+        h = max(1, y1 - y0)
+        kandidater = []
+        for ut in (26, 50, 78):
+            for fy in (0.22, 0.5, 0.78):
+                kandidater.append((x1 + ut, y0 + int(h * fy)))
+                kandidater.append((x0 - ut, y0 + int(h * fy)))
+            kandidater.append(((x0 + x1) // 2, y0 - ut))
+            kandidater.append(((x0 + x1) // 2, y1 + ut))
+        for cx, cy in kandidater:
+            if blankt(int(cx), int(cy)):
+                sp["merke"] = [int(cx), int(cy)]
+                tatt.append((int(cx), int(cy)))
+                break
+        else:
+            print(f"      (fant ingen aapen plass til merket for "
+                  f"{sp.get('common_name', '?')})")
+
+
 def kart() -> None:
     """Skriv ut hvor grenen har overflate, som hjelp til aa sette ANKRE."""
     a = np.asarray(Image.open(GREN_PNG).convert("RGB")).mean(axis=2)
@@ -556,6 +607,10 @@ def main() -> int:
               f"verste baand {v['verst']*100:5.1f} %  "
               f"{'ren' if v['ren'] else 'OPPTATT'}")
 
+    # Merkeplassene finnes paa det ferdige arket -- pussingen flytter piksler,
+    # og et merke plassert foer den kan havne oppaa en nytegnet kvist.
+    label_spots(ark, plassert)
+
     ark.save(BG_PNG)
     with open(BG_JSON, "w") as f:
         json.dump({
@@ -566,7 +621,9 @@ def main() -> int:
             "species": [{"common_name": s["common_name"],
                          "scientific_name": s["scientific_name"],
                          "norsk": norwegian_name(s["scientific_name"],
-                                                 s["common_name"])}
+                                                 s["common_name"]),
+                         "boks": s["boks"], "fot": s["fot"],
+                         "merke": s.get("merke")}
                         for s in plassert],
         }, f, indent=2, ensure_ascii=False)
     print(f"OK: {BG_PNG} — {len(plassert)} fugler paa grenen"

@@ -292,7 +292,7 @@ def species_row(s: dict, bar: bool = True) -> str:
       </tr>"""
 
 
-def species_card(s: dict, bar: bool = False) -> str:
+def species_card(s: dict, bar: bool = False, nr: int | None = None) -> str:
     """Art som stablet kort. Venstrespalten i overlegget er bare ~550 px bred,
     saa tabellen med tre kolonner faar ikke plass -- her ligger navn og prosent
     paa én linje, resten under.
@@ -305,9 +305,12 @@ def species_card(s: dict, bar: bool = False) -> str:
     okt = f"{sess} økter" if sess > 1 else f"{s.get('detections', 0)} ggr"
     spor = (f'<div class="bar-spor"><div class="bar-fyll" '
             f'style="width:{conf*100:.0f}%"></div></div>') if bar else ""
+    # Plassen holdes av ogsaa uten tall, ellers starter de unummererte
+    # linjene lenger til venstre enn resten.
+    tall = f'<span class="nr">{nr if nr else ""}</span>' 
     return f"""
       <div class="art">
-        <div class="l1">{_name_html(s)}<span class="p">{conf*100:.0f}%</span></div>
+        <div class="l1">{tall}<span class="navn">{_name_html(s)}</span><span class="p">{conf*100:.0f}%</span></div>
         <div class="l2"><span class="latin">{html.escape(s.get('scientific_name',''))}</span>
              · {_heard(s)} · {okt}</div>
         {spor}
@@ -359,6 +362,34 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
         return "" if ren else " pute" + kant
 
     pute_venstre, pute_bunn = _pute("venstre"), _pute("bunn")
+    # Tallene knytter fuglen paa plansjen til linja i lista. De settes i den
+    # HVITE luften ved siden av fuglen, ikke oppaa den: et tall midt i
+    # fjaerdrakten forsvinner i dithringen.
+    # Nummereringen gjelder BARE artene som faktisk er tegnet opp, og loeper
+    # 1..k i listas rekkefoelge. Numererte vi alle linjene, ville 1, 7 og 8
+    # peke paa fugler som ikke finnes paa plansjen -- et tall uten svar er
+    # verre enn ikke noe tall.
+    tegnet = {}
+    if bg_meta:
+        tegnet = {sp["scientific_name"]: sp for sp in bg_meta.get("species", [])
+                  if sp.get("merke")}
+    nummer: dict[str, int] = {}
+    for sp in sure:
+        sci = sp.get("scientific_name", "")
+        if sci in tegnet:
+            nummer[sci] = len(nummer) + 1
+
+    def _markoerer() -> str:
+        """Tallene som knytter fuglen paa plansjen til linja i lista.
+        Posisjonen er funnet av compose_branch.py i det ferdige arket -- den
+        vet hvor det er ren hvit luft, det gjoer ikke denne fila."""
+        ut = []
+        for sci, n in nummer.items():
+            mx, my = tegnet[sci]["merke"]
+            ut.append(f'<span class="markoer" style="left:{mx}px;top:{my}px">{n}</span>')
+        return "".join(ut)
+
+    markoerer = _markoerer()
     overlegg_cls = " overlegg" if bg_meta else ""
     bakgrunn_img = (f'<img class="bakgrunn" src="file://'
                     f'{html.escape(os.path.abspath(BG_PNG))}" alt="">'
@@ -429,7 +460,9 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
         # liten plansje -- alt det er bakgrunnen naa.
         midtdel = ""
         sideplansje = ""
-        liste_innhold = "".join(species_card(s, bar=bar) for s in sure)
+        liste_innhold = "".join(
+            species_card(s, bar=bar, nr=nummer.get(s.get("scientific_name", "")))
+            for s in sure)
     else:
         midtdel = ('<div class="regel"></div>\n  '
                    + (hero_block(hero_meta) if hero_meta
@@ -570,16 +603,26 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
 
   /* Kompakt: raden er navn + prosent paa én linje og detaljene under.
      Uten baren gaar radhoeyden fra ~83 til ~54 px. */
+  /* Tallet foran arten peker paa den samme fuglen i plansjen. Alle linjer
+     nummereres, ogsaa de som ikke er tegnet opp -- en liste med hull i
+     nummereringen leses som en feil. */
+  .art .nr {{ flex:0 0 30px; font-size:19px; }}
+  .art .navn {{ flex:1 1 auto; }}
+  .markoer {{ position:absolute; z-index:1; width:34px; height:34px;
+              margin:-17px 0 0 -17px;          /* sentrer paa punktet */
+              display:flex; align-items:center; justify-content:center;
+              font-size:25px; line-height:1; color:var(--blekk); }}
   .art {{ padding:11px 0; border-bottom:1px solid var(--blekk); }}
   .art .l1 {{ display:flex; justify-content:space-between; align-items:baseline;
               font-size:26px; line-height:1.15; }}
   .art .l1 .p {{ font-size:18px; }}
-  .art .l2 {{ font-size:17px; margin-top:4px; }}
+  .art .l2 {{ font-size:17px; margin-top:4px; padding-left:30px; }}
   .art .bar-spor {{ display:block; width:100%; height:10px; margin-top:5px;
                     border:2px solid var(--blekk); }}
 </style>
 
 {bakgrunn_img}
+{markoerer}
 <div class="side{overlegg_cls}">
   {topptekst}
 
