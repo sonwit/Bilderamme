@@ -41,8 +41,9 @@ from generate_daily_image import generate_image  # noqa: E402
 from prepare_plates import whiten              # noqa: E402
 from compose_hero import (BG_JSON, BG_PNG, REF_MAX,  # noqa: E402
                           fit_to_panel, zone_report)
-from render_daily_panel import (PLATES_DIR, get_weather, load_birds,  # noqa: E402
-                                plate_path, split_species)
+from render_daily_panel import (OVERLAY_ROWS, PLATES_DIR,  # noqa: E402
+                                get_weather, load_birds, plate_path,
+                                split_species)
 
 FUGL_DIR = os.path.join(PLATES_DIR, "fugler")
 
@@ -152,6 +153,14 @@ def last_maler() -> list[dict]:
 
     for m in list(raa.values()):
         loes(m)
+    # Etter at arven er loest: en plass kan begrense seg til bestemte maler.
+    # Den lille plassen paa nedre grein er ren luft paa bjoerka og den bare
+    # greina -- 2 % blekk -- men ligger midt inne i barmassen paa grankvisten,
+    # der samme rute er 58 % dekket. Ett skjelett, men ikke hver plass er
+    # brukbar i hver aarstid.
+    for m in raa.values():
+        m["plasser"] = [p for p in m.get("plasser", [])
+                        if not p.get("bare_i") or m["navn"] in p["bare_i"]]
     return list(raa.values())
 
 
@@ -983,7 +992,10 @@ def main() -> int:
     # Plass for plass, sikreste art foerst. Uten dette faller enkeltbekkasinen
     # ut av myrmalen fordi den ligger paa aattendeplass i lista, mens en
     # groennsisik som ikke kan staa i siv tar plassen.
-    species = velg_arter(kandidater, mal)
+    # Ikke flere fugler enn lista har rader til: et tall paa arket skal alltid
+    # kunne slaas opp i lista. Malen har flere plasser enn det -- de ekstra er
+    # der for at de rette artene skal faa staa, ikke for aa fylle arket.
+    species = velg_arter(kandidater, mal)[:OVERLAY_ROWS]
     print("Arter: " + ", ".join(
         norwegian_name(s["scientific_name"], s["common_name"]) for s in species))
 

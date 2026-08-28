@@ -65,9 +65,29 @@
       "type": "gren"
     },
     {
+      "x": 460,
+      "y": 1422,
+      "h": 130,
+      "speil": false,
+      "type": "gren",
+      "bare_i": [
+        "gren",
+        "gren-vaar",
+        "gren-sommer",
+        "gren-host"
+      ]
+    },
+    {
       "x": 720,
       "y": 640,
       "h": 110,
+      "speil": false,
+      "type": "luft"
+    },
+    {
+      "x": 740,
+      "y": 150,
+      "h": 115,
       "speil": false,
       "type": "luft"
     }

@@ -176,7 +176,14 @@ BG_PNG = os.path.join(PLATES_DIR, "dagens-bakgrunn.png")
 BG_JSON = os.path.join(PLATES_DIR, "dagens-bakgrunn.json")
 # Hvor mange arter overlegget viser. Den staaende venstrespalten er hoeyere enn
 # lista i standard-layouten, saa der faar vi plass til nesten hele dagen.
-OVERLAY_ROWS = int(os.environ.get("PANEL_OVERLAY_ROWS", "10"))
+# Hvor mange arter lista viser naar den ligger OPPAA illustrasjonen.
+#
+# Aatte, ikke ti, og tallet er maalt: med aatte rader naar nederste tekstpiksel
+# y=1182, med ni y=1263. Sperren i compose_branch gaar ved y=1200 -- under den
+# staar det fugler paa nedre grein, og plasseringen antar at teksten holder seg
+# over. Ti rader brøt den antakelsen: kildelinjene la seg oppaa en
+# roedvingetrost, og puta som skulle redde lesbarheten dekket to fugler.
+OVERLAY_ROWS = int(os.environ.get("PANEL_OVERLAY_ROWS", "8"))
 
 
 def todays_background(date: str) -> dict | None:
@@ -642,7 +649,10 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
   /* align-self:start er poenget: uten den strekker ruta seg til rad 16, og
      den hvite puta dekker hele venstre halvdel helt ned til nedre kant --
      oppaa greinene. Naa er boksen bare saa hoey som teksten i den. */
-  .overlegg .liste {{ grid-column:1/6; grid-row:4/16; padding-top:26px;
+  /* Lista starter paa rutenettlinje 4 (y=300), og vaerblokka over slutter
+     ved y=296. De 26 pikslene padding paa toppen ble derfor 64 px luft foer
+     overskriften -- mer enn seksjonen trenger for aa lese som en seksjon. */
+  .overlegg .liste {{ grid-column:1/6; grid-row:4/16; padding-top:6px;
                       align-self:start; overflow:hidden; }}
   /* Kilde og sum staar naa under lista i venstrespalten, ikke som en strek
      tvers over arket -- da faar illustrasjonen hele hoeyden. */
@@ -752,6 +762,10 @@ def main():
     if args.uten_bakgrunn:
         # Fjern bakgrunnsbildet, behold alt annet noeyaktig som det er.
         out = re.sub(r'<img class="bakgrunn"[^>]*>', "", out)
+        # Og merkene: de skal LIGGE oppaa illustrasjonen, det er hele poenget
+        # med dem. Var de med i maska, ville hver eneste dag telle som
+        # tekstkollisjon og puta staa paa for godt.
+        out = re.sub(r'<span class="markoer"[^>]*>.*?</span>', "", out)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w") as f:
         f.write(out)

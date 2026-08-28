@@ -17,6 +17,14 @@ hvor mange av dem som havner paa noe moerkt nok til aa svelge svart tekst.
 Resultatet skrives tilbake i sidecar-JSON-en som `soner[...]["ren"]`, saa
 render_daily_panel.py sin pute-logikk virker uendret -- bare paa et maal som
 betyr noe.
+
+Maalingen dekker HELE arket, ikke sonerektangelet. Rektangelet var en rest
+fra da vi telte blekk: da maatte man si hvor man skulle telle. Maska sier det
+selv -- den er sida uten illustrasjon, saa alt som ikke er hvitt der ER tekst,
+uansett hvor paa arket det staar. Det er ikke en detalj: listeboksen vokser
+nedover med antall arter, og med ni fugler naadde kildelinjene ned til y=1300
+mens rektangelet sluttet ved y=1152. Teksten laa synlig oppaa en rodvingetrost
+og maalingen meldte «ren».
 """
 
 from __future__ import annotations
@@ -39,8 +47,17 @@ MOERK = float(os.environ.get("KOLLISJON_MOERK", "165"))
 # Litt luft rundt bokstavene: et moerkt parti som taangerer teksten er ogsaa
 # et problem, selv om det ikke ligger midt paa en strek.
 LUFT = int(os.environ.get("KOLLISJON_LUFT", "3"))
-# Andel av tekstpikslene i sonen som kan ligge moerkt foer den trenger pute.
+# Andel av tekstpikslene i et baand som kan ligge moerkt foer sida trenger pute.
 GRENSE = float(os.environ.get("KOLLISJON_GRENSE", "0.01"))
+# Maalt i vannrette baand, ikke som ett snitt over arket. Noeyaktig samme
+# laerdom som sonemaalingen i compose_hero: teksten ligger i linjer nedover
+# sida, og to kildelinjer som er helt dekket forsvinner i snittet av ni linjer
+# som ligger fritt. Med ni fugler ble 4,8 % kollisjon i det nederste baandet
+# til 0,7 % over hele arket -- under grensa, saa puta uteble og linjene laa
+# synlig oppaa en roedvingetrost.
+BAAND = int(os.environ.get("KOLLISJON_BAAND", "10"))
+# Et baand med en haandfull tekstpiksler skal ikke kunne avgjoere noe.
+MIN_PIKSLER = int(os.environ.get("KOLLISJON_MIN", "500"))
 
 
 def main() -> int:
@@ -63,17 +80,27 @@ def main() -> int:
         meta = json.load(f)
     soner = meta.setdefault("soner", {})
 
-    for navn, x0, y0, x1, y1 in SONER:
-        t = tekst[int(y0 * H):int(y1 * H), int(x0 * W):int(x1 * W)]
-        d = moerk[int(y0 * H):int(y1 * H), int(x0 * W):int(x1 * W)]
-        antall = int(t.sum())
-        kollisjon = float((t & d).sum() / antall) if antall else 0.0
-        ren = kollisjon <= GRENSE
+    antall = int(tekst.sum())
+    snitt = float((tekst & moerk).sum() / antall) if antall else 0.0
+    verst = 0.0
+    for i in range(BAAND):
+        y0, y1 = i * H // BAAND, (i + 1) * H // BAAND
+        t = tekst[y0:y1]
+        n = int(t.sum())
+        if n < MIN_PIKSLER:
+            continue
+        verst = max(verst, float((t & moerk[y0:y1]).sum() / n))
+
+    # Ett maal for hele arket, skrevet under hvert sonenavn: puta er én
+    # avgjoerelse -- enten ligger teksten fritt, eller saa gjoer den ikke det.
+    ren = verst <= GRENSE
+    for navn, *_ in SONER:
         soner.setdefault(navn, {})
-        soner[navn]["kollisjon"] = round(kollisjon, 4)
+        soner[navn]["kollisjon"] = round(snitt, 4)
+        soner[navn]["verst"] = round(verst, 4)
         soner[navn]["ren"] = ren
         print(f"  sone {navn:9s} {antall:6d} tekstpiksler, "
-              f"{kollisjon*100:5.2f} % paa moerk bunn  "
+              f"{snitt*100:5.2f} % paa moerk bunn, verste baand {verst*100:5.2f} %  "
               f"{'ren' if ren else 'TRENGER PUTE'}")
 
     with open(args.json, "w") as f:
