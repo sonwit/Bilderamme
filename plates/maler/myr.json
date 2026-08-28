@@ -21,22 +21,23 @@
   "plasser": [
     {
       "x": 700,
-      "y": 1432,
-      "h": 190,
+      "y": 1258,
+      "h": 200,
       "speil": false,
       "type": "bakke"
     },
     {
-      "x": 430,
-      "y": 1462,
+      "x": 940,
+      "y": 1268,
       "h": 175,
       "speil": true,
-      "type": "bakke"
+      "type": "bakke",
+      "maks_overlapp": 0.26
     },
     {
-      "x": 935,
-      "y": 1398,
-      "h": 160,
+      "x": 880,
+      "y": 1425,
+      "h": 145,
       "speil": false,
       "type": "bakke"
     },

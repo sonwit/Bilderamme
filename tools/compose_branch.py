@@ -493,7 +493,11 @@ def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
                         y = perch_y(ark, x, y)
 
             boks = (x - fx, y - fy + 4, x - fx + fugl.width, y - fy + 4 + fugl.height)
-            if any(_overlapp(boks, b) > MAKS_OVERLAPP for b in opptatt):
+            # Plassen kan tillate mer overlapp enn standarden. Paa myrkanten
+            # er det bare ett baelte der en bakkefugl faar kroppen mot lyst
+            # papir, saa de to vaderne maa staa taett -- slik de faktisk gjoer.
+            tak = plass.get("maks_overlapp", MAKS_OVERLAPP)
+            if any(_overlapp(boks, b) > tak for b in opptatt):
                 continue                  # opptatt plass — proev neste
             valgt = (plass, fugl, x, y, fx, fy, boks, flyttet, typ)
             break
