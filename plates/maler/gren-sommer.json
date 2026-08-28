@@ -1,0 +1,12 @@
+{
+  "navn": "gren-sommer",
+  "tittel": "Gren med sommerløv",
+  "bilde": "gren-sommer.png",
+  "basert_paa": "gren",
+  "maaneder": [
+    6,
+    7,
+    8
+  ],
+  "prompt": "Redraw this exact branch, keeping its shape, position, thickness and the path of every twig IDENTICAL — do not move, add or remove any branch. The only change: it is high summer, so the twigs carry fresh green leaves, a deep and slightly varied green, with a few small seed keys. DIRECTION OF GROWTH IS CRITICAL: every leaf must grow from the branch towards the RIGHT and towards the BOTTOM of the picture. No leaf, no twig and no shadow may extend LEFTWARD past the branch into the open part of the page. The left 48% of the width, from the very top down to 75% of the height, must remain completely empty white paper — exactly as empty as it is now, with nothing at all in it. Leave gaps between the leaf clusters rather than a solid mass, so the branch outline stays clearly readable underneath. Keep the same 19th-century engraved book-plate style, fine linework, hand-coloured. Pure white background, no paper texture, no border. Do NOT draw any rectangular frame or ruled edge around the image. No birds, no text, no signature."
+}
