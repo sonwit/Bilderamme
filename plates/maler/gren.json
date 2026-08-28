@@ -1,0 +1,16 @@
+{
+  "navn": "gren",
+  "tittel": "Bar gren",
+  "bilde": "gren.png",
+  "habitat": ["tre"],
+  "maaneder": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  "prompt": "A single bare tree branch, drawn as a 19th-century engraved book plate: fine linework, muted brown bark, no leaves. The branch enters at the bottom-right corner, runs along the BOTTOM edge and up the RIGHT edge, forming an L that frames the lower and right margins of the page, with a few small side twigs reaching inward. The upper-left region — the left 48% of the width, from the very top down to 75% of the height — must be completely empty white paper: nothing at all there. Keep the bottom 6% empty white paper across the full width. Pure white background, no paper texture, no border, no frame, no shading behind the branch. No birds, no text, no signature. Tall vertical composition.",
+  "plasser": [
+    {"x": 700,  "y": 1364, "h": 205, "speil": false, "type": "gren"},
+    {"x": 350,  "y": 1400, "h": 195, "speil": false, "type": "gren"},
+    {"x": 900,  "y": 1034, "h": 180, "speil": true,  "type": "gren"},
+    {"x": 1035, "y": 830,  "h": 165, "speil": true,  "type": "gren"},
+    {"x": 1010, "y": 596,  "h": 170, "speil": true,  "type": "gren"},
+    {"x": 1000, "y": 299,  "h": 155, "speil": false, "type": "gren"}
+  ]
+}

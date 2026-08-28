@@ -1,0 +1,8 @@
+{
+  "navn": "gren-vaar",
+  "tittel": "Gren med knopper",
+  "bilde": "gren-vaar.png",
+  "basert_paa": "gren",
+  "maaneder": [4, 5],
+  "prompt": "Redraw this exact branch, keeping its shape, position, thickness and every twig IDENTICAL — do not move, add or remove any branch. The only change: it is early spring, so the twigs now carry small swelling leaf buds and a few half-opened fresh green leaves, sparse and delicate, close to the wood. Keep the same 19th-century engraved book-plate style, fine linework, hand-coloured. The upper-left region — the left 48% of the width, from the very top down to 75% of the height — must stay completely empty white paper, exactly as it is now. Pure white background, no paper texture, no border, no frame. No birds, no text, no signature."
+}

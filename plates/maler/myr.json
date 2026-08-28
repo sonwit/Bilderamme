@@ -1,0 +1,58 @@
+{
+  "navn": "myr",
+  "tittel": "Myrkant med siv",
+  "bilde": "myr.png",
+  "habitat": [
+    "vaatmark",
+    "bakke",
+    "luft"
+  ],
+  "maaneder": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "prompt": "A marshy shoreline drawn as a 19th-century engraved book plate: reeds, sedge tussocks and a low muddy bank running along the BOTTOM of the image, with a few taller reed stems rising on the right side. Fine engraved linework, muted greens and browns, hand-coloured lithograph style. The upper-left region — the left 48% of the width, from the very top down to 75% of the height — must be completely empty white paper: no reeds, no stems, no shading, nothing at all. The upper RIGHT area, above the reeds, must be open empty white sky — no clouds, no shading, nothing — so that birds can be added there later. Keep the bottom 4% empty white paper across the full width. Pure white background everywhere, no paper texture, no ageing, no border, no frame. No birds, no text, no captions, no signature. Tall vertical composition.",
+  "plasser": [
+    {
+      "x": 700,
+      "y": 1432,
+      "h": 190,
+      "speil": false,
+      "type": "bakke"
+    },
+    {
+      "x": 430,
+      "y": 1462,
+      "h": 175,
+      "speil": true,
+      "type": "bakke"
+    },
+    {
+      "x": 935,
+      "y": 1398,
+      "h": 160,
+      "speil": false,
+      "type": "bakke"
+    },
+    {
+      "x": 880,
+      "y": 330,
+      "h": 150,
+      "speil": false,
+      "type": "luft"
+    },
+    {
+      "x": 1055,
+      "y": 165,
+      "h": 125,
+      "speil": true,
+      "type": "luft"
+    }
+  ]
+}

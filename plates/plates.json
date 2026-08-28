@@ -33,5 +33,19 @@
     "side": "https://commons.wikimedia.org/wiki/File%3AGouldBirdsEuropeITawny_Owl.jpg",
     "lisens": "Public domain",
     "opphav": "J and E Gould E Lear"
+  },
+  "Porzana porzana": {
+    "fil": "porzana-porzana.jpg",
+    "commons": "File:Nederlandsche vogelen (KB) - Porzana porzana (261pl).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ANederlandsche_vogelen_%28KB%29_-_Porzana_porzana_%28261pl%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:Cornelius_Nozeman\" class=\"extiw\" title=\"w:en:Cornelius Nozeman\"><span title=\"Remonstrant ministers (1720-1786)\">Cornelius Nozeman</span></a></bdi> / <bdi"
+  },
+  "Gallinago gallinago": {
+    "fil": "gallinago-gallinago.jpg",
+    "commons": "File:A history of British birds (6009018942).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AA_history_of_British_birds_%286009018942%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Morris, F. O."
   }
 }

@@ -361,7 +361,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
         ren = (bg_meta.get("soner", {}).get(sone) or {}).get("ren", False)
         return "" if ren else " pute" + kant
 
-    pute_venstre, pute_bunn = _pute("venstre"), _pute("bunn")
+    pute_venstre = _pute("venstre")
     # Tallene knytter fuglen paa plansjen til linja i lista. De settes i den
     # HVITE luften ved siden av fuglen, ikke oppaa den: et tall midt i
     # fjaerdrakten forsvinner i dithringen.
@@ -390,6 +390,9 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
         return "".join(ut)
 
     markoerer = _markoerer()
+    kilde = (f"{len(sure) + len(unsure)} arter på {sessions} opptak · BirdNET"
+             "<br>utedelen i hagen · 60.09°N 10.93°Ø")
+    kildeblokk = f'<div class="kilde">{kilde}</div>' if bg_meta else ""
     overlegg_cls = " overlegg" if bg_meta else ""
     bakgrunn_img = (f'<img class="bakgrunn" src="file://'
                     f'{html.escape(os.path.abspath(BG_PNG))}" alt="">'
@@ -463,12 +466,17 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
         liste_innhold = "".join(
             species_card(s, bar=bar, nr=nummer.get(s.get("scientific_name", "")))
             for s in sure)
+        bunntekst = ""
     else:
         midtdel = ('<div class="regel"></div>\n  '
                    + (hero_block(hero_meta) if hero_meta
                       else plate_block(hero, "hero", True)))
         sideplansje = plate_block(side, "side-plansje", False)
         liste_innhold = f"<table>{rows}</table>"
+        bunntekst = ('<footer class="bunn">'
+                     '<span>BirdNET · utedelen i hagen · 60.09°N 10.93°Ø</span>'
+                     f'<span>{len(sure) + len(unsure)} arter på {sessions} '
+                     'opptak</span></footer>')
 
     return f"""<meta charset="utf-8">
 <title>Fugleramme — {dato}</title>
@@ -581,9 +589,12 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
      bokser lot vaerboksen ligge midt oppe paa illustrasjonen; nå holder all
      teksten seg i den samme tomme spalten modellen ble bedt om aa la staa. */
   .overlegg .info  {{ grid-column:1/6; grid-row:1/4; align-self:start; }}
-  .overlegg .liste {{ grid-column:1/6; grid-row:4/14; padding-top:26px;
+  .overlegg .liste {{ grid-column:1/6; grid-row:4/16; padding-top:26px;
                       overflow:hidden; }}
-  .overlegg .bunn  {{ grid-column:1/13; grid-row:16/17; }}
+  /* Kilde og sum staar naa under lista i venstrespalten, ikke som en strek
+     tvers over arket -- da faar illustrasjonen hele hoeyden. */
+  .overlegg .kilde {{ font-size:16px; line-height:1.45; padding-top:14px;
+                      margin-top:14px; border-top:2px solid var(--blekk); }}
 
   .info .kicker {{ font-size:19px; }}
   .info h1 {{ font-size:60px; line-height:1.04; font-weight:600; margin-top:8px; }}
@@ -632,14 +643,12 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
     <h3>Hørt i dag</h3>
     {liste_innhold}
     {fotnote}
+    {kildeblokk}
   </section>
 
   {sideplansje}
 
-  <footer class="bunn{pute_bunn}">
-    <span>BirdNET · utedelen i hagen · 60.09°N 10.93°Ø</span>
-    <span>{len(sure) + len(unsure)} arter på {sessions} opptak</span>
-  </footer>
+  {bunntekst}
 </div>
 """
 

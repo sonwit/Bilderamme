@@ -36,13 +36,13 @@ from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from bird_names import length_cm, norwegian_name  # noqa: E402
+from bird_names import habitat, length_cm, norwegian_name  # noqa: E402
 from generate_daily_image import generate_image  # noqa: E402
 from prepare_plates import whiten              # noqa: E402
-from compose_hero import (BG_JSON, BG_PNG, GREN_PNG, REF_MAX,  # noqa: E402
+from compose_hero import (BG_JSON, BG_PNG, REF_MAX,  # noqa: E402
                           fit_to_panel, zone_report)
-from render_daily_panel import (PLATES_DIR, load_birds, plate_path,  # noqa: E402
-                                split_species)
+from render_daily_panel import (PLATES_DIR, get_weather, load_birds,  # noqa: E402
+                                plate_path, split_species)
 
 FUGL_DIR = os.path.join(PLATES_DIR, "fugler")
 
@@ -58,20 +58,107 @@ PUSS_MODELL = None
 # Alle punktene ligger UTENFOR tekstsonen (x < 576 og y < 1200): punkt A er
 # under lista, resten til hoeyre for den. Det er den garantien hele denne
 # fila finnes for.
-# Rekkefoelgen er NEDENFRA OG OPP, ikke etter hvor godt belagt arten er:
-# stoerste fugl faar den tykkeste greina nederst, minste faar tynnkvisten
-# oeverst. En skjaere paa en topp-kvist ser feil ut uansett hvor sikker
-# BirdNET var.
-ANKRE = [
-    (700, 1364, 205, False),   # nedre grein, midt paa — tykkest
-    (350, 1400, 195, False),   # nedre grein til venstre, under artslista
-    (900, 1034, 180, True),    # sidegrein opp mot stammen
-    (1035, 830, 165, True),    # stammen mellom sidegreina og oevre gaffel
-                               # (trukket inn fra 1090: spettmeisen laa
-                               #  for taett i hoeyre kant)
-    (1010, 596, 170, True),    # oevre gaffel
-    (1000, 299, 155, False),   # toppen — tynnest
-]
+# ----------------------------------------------------------------------
+# Maler
+# ----------------------------------------------------------------------
+# En mal er ett habitat: et bakgrunnsbilde og en liste plasser aa sette fugler
+# paa. Den ligger som JSON i plates/maler/, saa en ny mal er en fil og ikke en
+# kodeendring.
+#
+# Plass-typene svarer til hva fuglen faktisk gjoer:
+#   "gren"   sitter paa ved -- y snappes til greinas overflate, fotpunkt brukes
+#   "bakke"  staar paa mark/siv -- y er bakkelinja, ingen snapping
+#   "luft"   flyr -- ingen fotpunkt, fuglen sentreres paa punktet, og den
+#            tegnes i FLYGENDE positur (egen 1:1-fil per art)
+#
+# Plassene staar NEDENFRA OG OPP for gren/bakke: stoerste fugl faar den
+# tykkeste greina nederst. En skjaere paa en topp-kvist ser feil ut uansett
+# hvor sikker BirdNET var.
+MAL_DIR = os.path.join(PLATES_DIR, "maler")
+
+# Hvilke arter en plass tar imot. En skjaere kan ikke staa i siv, og en
+# myrrikse hoerer ikke hjemme paa en kvist -- men ALLE fugler kan fly, saa
+# luftplassene tar imot hvem som helst. Det er ogsaa det som gjoer at
+# myrmalen faar liv en dag bare et par vaatmarksarter er hoert: resten
+# flyr over.
+PLASS_TAR_IMOT = {
+    "gren": {"tre"},
+    "bakke": {"vaatmark", "bakke"},
+    "luft": {"tre", "vaatmark", "bakke", "luft"},
+}
+
+
+def passer(plass: dict, sci: str) -> bool:
+    return habitat(sci) in PLASS_TAR_IMOT.get(plass.get("type", "gren"), set())
+
+
+def last_maler() -> list[dict]:
+    """Alle maler, med arv loest opp.
+
+    En sesongvariant («samme gren, men med knopper») arver plassene fra
+    grunnmalen sin. Det er hele poenget med arven: varianten tegnes OPPAA den
+    samme greina, saa festepunktene stemmer fortsatt og trenger ikke maales
+    paa nytt for hver aarstid."""
+    if not os.path.isdir(MAL_DIR):
+        return []
+    raa = {}
+    for f in sorted(os.listdir(MAL_DIR)):
+        if f.endswith(".json"):
+            with open(os.path.join(MAL_DIR, f)) as fh:
+                m = json.load(fh)
+                raa[m["navn"]] = m
+    for m in raa.values():
+        base = raa.get(m.get("basert_paa"))
+        if base:
+            if not m.get("plasser"):
+                m["plasser"] = base["plasser"]
+            m.setdefault("habitat", base.get("habitat", []))
+    return list(raa.values())
+
+
+def velg_mal(species: list[dict], maaned: int, tvungen: str | None = None,
+             vaersymbol: str = "") -> dict:
+    """Malen som passer dagens fugler best.
+
+    Poeng = hvor mange av artene som hoerer hjemme i malens habitat. Er ingen
+    mal bedre enn grenmalen, vinner den -- den er standarden fordi de aller
+    fleste hagefuglene sitter paa en grein. Maaneds-filteret hindrer at
+    snoemalen dukker opp i juli."""
+    maler = [m for m in last_maler()
+             if maaned in m.get("maaneder", list(range(1, 13)))
+             # En mal kan kreve bestemt vaer. Snoemalen skal ikke dukke opp
+             # paa barmark i november bare fordi maaneden stemmer.
+             and (not m.get("vaer") or vaersymbol in m["vaer"])]
+    if not maler:
+        raise SystemExit(f"Ingen maler i {MAL_DIR}")
+    if tvungen:
+        # Tvungen mal gaar utenom baade maaneds- og vaerfilteret. Uten det kan
+        # man ikke se paa hoestmalen i august, som er nettopp naar man vil
+        # sjekke at den ser riktig ut.
+        for m in last_maler():
+            if m["navn"] == tvungen:
+                return m
+        raise SystemExit(f"Fant ingen mal som heter {tvungen} i {MAL_DIR}")
+
+    def poeng(m):
+        h = set(m.get("habitat", []))
+        treff = sum(1 for s in species if habitat(s.get("scientific_name", "")) in h)
+        # En mal som ogsaa treffer vaeret gaar foran en som bare treffer
+        # habitatet -- snoedekt gran naar det faktisk snoer.
+        vaer = 1 if (m.get("vaer") and vaersymbol in m["vaer"]) else 0
+        # Sesongvarianter foran den noeytrale grunnmalen: staar det en variant
+        # for akkurat denne maaneden, er den mer presis enn aarsrund-greina.
+        sesong = 1 if len(m.get("maaneder", [])) < 12 else 0
+        return (treff, vaer, sesong, 1 if m["navn"] == "gren" else 0)
+
+    beste = max(maler, key=poeng)
+    for m in sorted(maler, key=poeng, reverse=True):
+        h = set(m.get("habitat", []))
+        n = sum(1 for s in species if habitat(s.get("scientific_name", "")) in h)
+        print(f"  mal {m['navn']:8s} {n} av {len(species)} arter i habitat"
+              + ("   <- valgt" if m is beste else ""))
+    return beste
+
 
 # Relativ stoerrelse. Rett proporsjon (lengde/lengde) gaar ikke: en graahegre
 # paa 94 cm ved siden av en groennsisik paa 12 ville gjort sisiken til en
@@ -99,24 +186,33 @@ def size_factor(scientific: str) -> float:
 KUTT = float(os.environ.get("FUGL_KUTT", "242"))
 
 
-def bird_prompt(common: str, sci: str) -> str:
-    return (
-        f"A single {common} ({sci}), hand-coloured 19th-century lithograph in "
-        "the style of the reference plate: fine engraved linework, naturalistic "
-        "plumage and markings. Side profile, perched upright, legs and feet "
-        "clearly visible below the body. "
+def bird_prompt(common: str, sci: str, positur: str = "sittende") -> str:
+    felles = (
+        "hand-coloured 19th-century lithograph in the style of the reference "
+        "plate: fine engraved linework, naturalistic plumage and markings. "
         "NO branch, no perch, no twig, no leaves, no ground, no shadow. "
         "The bird alone, isolated on a pure white background. "
         "No border, no frame, no text, no caption, no signature. "
         "The bird fills most of the frame."
     )
+    if positur == "flyvende":
+        return (f"A single {common} ({sci}) in flight, {felles} "
+                "Side view, wings fully spread, body level, as in a plate "
+                "showing the bird on the wing. Feet tucked, not extended.")
+    return (f"A single {common} ({sci}), {felles} "
+            "Side profile, perched upright, legs and feet clearly visible "
+            "below the body.")
 
 
-def ensure_bird(s: dict, force: bool = False) -> str | None:
+def ensure_bird(s: dict, positur: str = "sittende",
+                force: bool = False) -> str | None:
     """Hent (eller lag) artens 1:1-fugl. Lages én gang og gjenbrukes hver dag
     arten dukker opp — det er derfor biblioteket vokser med arter, ikke dager."""
     sci = s["scientific_name"]
-    dest = os.path.join(FUGL_DIR, sci.strip().lower().replace(" ", "-") + ".png")
+    navn = sci.strip().lower().replace(" ", "-")
+    if positur == "flyvende":
+        navn += "-flyvende"
+    dest = os.path.join(FUGL_DIR, navn + ".png")
     if os.path.exists(dest) and not force:
         return dest
     forelegg = plate_path(sci)
@@ -126,7 +222,7 @@ def ensure_bird(s: dict, force: bool = False) -> str | None:
         return None
     ref = Image.open(forelegg).convert("RGB")
     ref.thumbnail((REF_MAX, REF_MAX), Image.LANCZOS)
-    img = whiten(generate_image(bird_prompt(s["common_name"], sci),
+    img = whiten(generate_image(bird_prompt(s["common_name"], sci, positur),
                                 ref_images=[ref], aspect_ratio="1:1"))
     os.makedirs(FUGL_DIR, exist_ok=True)
     img.save(dest)
@@ -302,52 +398,65 @@ def _overlapp(a: tuple, b: tuple) -> float:
     return (bx * by) / minste if minste else 1.0
 
 
-def compose(species: list[dict]) -> tuple[Image.Image, list[dict]]:
-    ark = Image.open(GREN_PNG).convert("RGB")
+def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
+    ark = Image.open(os.path.join(MAL_DIR, mal["bilde"])).convert("RGB")
     plassert = []
     # Stoerste art nederst paa den tykkeste greina, minste oeverst.
     etter_stoerrelse = sorted(species,
                               key=lambda s: -length_cm(s.get("scientific_name", "")))
-    ledige = list(ANKRE)
+    ledige = list(mal["plasser"])
     opptatt: list[tuple] = []
     for s in etter_stoerrelse:
         if not ledige:
             break
-        sti = ensure_bird(s)
-        if not sti:
-            continue
         sci = s["scientific_name"]
         print(f"  {norwegian_name(sci, s['common_name']):16s} "
-              f"{length_cm(sci):3.0f} cm -> {size_factor(sci):.2f}x")
-        raa = cutout(sti)
-        # Fotpunktet maales paa UTSNITTET (samme utsnitt hver gang, saa
-        # koordinatene holder). Modellen ser bildet paa hvit bunn.
-        paa_hvitt = Image.new("RGB", raa.size, (255, 255, 255))
-        paa_hvitt.paste(raa, (0, 0), raa)
-        raa_fot = foot_point(sti, paa_hvitt, force=NYE_FOTPUNKTER)
+              f"{length_cm(sci):3.0f} cm -> {size_factor(sci):.2f}x  "
+              f"[{habitat(sci)}]")
 
-        # Proev ankrene i tur og orden og ta det foerste der fuglen faar staa
+        # Proev plassene i tur og orden og ta den foerste der fuglen faar staa
         # i fred. Uten dette havnet kattugla oppaa skjaera: begge ble dyttet
         # mot hoeyre av tekstsperren og endte paa samme punkt.
         valgt = None
-        for anker in ledige:
-            ax, ay, ah, speil = anker
+        for plass in ledige:
+            typ = plass.get("type", "gren")
+            if not passer(plass, sci):
+                continue
+            positur = "flyvende" if typ == "luft" else "sittende"
+            sti = ensure_bird(s, positur, force=False)
+            if not sti:
+                break                      # ingen plansje aa tegne etter
+            raa = cutout(sti)
+            paa_hvitt = Image.new("RGB", raa.size, (255, 255, 255))
+            paa_hvitt.paste(raa, (0, 0), raa)
+
+            ax, ay, ah = plass["x"], plass["y"], plass["h"]
             h = round(ah * size_factor(sci))
             fugl = raa.resize((max(1, round(raa.width * h / raa.height)), h),
                               Image.LANCZOS)
             sk = h / raa.height
-            fx, fy = round(raa_fot[0] * sk), round(raa_fot[1] * sk)
-            if speil:
+            if typ == "luft":
+                # En flygende fugl har ingen foetter aa sette ned. Punktet er
+                # midt paa kroppen, og den skal ikke snappe til noe.
+                fx, fy = fugl.width // 2, fugl.height // 2
+            else:
+                rf = foot_point(sti, paa_hvitt, force=NYE_FOTPUNKTER)
+                fx, fy = round(rf[0] * sk), round(rf[1] * sk)
+            if plass.get("speil"):
                 fugl = fugl.transpose(Image.FLIP_LEFT_RIGHT)
                 fx = fugl.width - fx       # fotpunktet speiles med bildet
-            x, y = ax, perch_y(ark, ax, ay)   # snap til veden
 
-            # Kom klar av tekstfeltet. Kantene regnes fra FOTPUNKTET, ikke fra
-            # bildets midte: det er der fuglen faktisk kommer til aa staa.
+            # Bare gren-plasser snapper til ved. Bakke- og luftplasser er
+            # satt der de skal vaere.
+            x, y = ax, perch_y(ark, ax, ay) if typ == "gren" else ay
+
+            # Kom klar av tekstfeltet. Kantene regnes fra FESTEPUNKTET, ikke
+            # fra bildets midte: det er der fuglen faktisk kommer til aa staa.
             flyttet = False
             if (x - fx) < SPERRE_X and (y - fy) < SPERRE_Y:
                 x = SPERRE_X + fx + 8
-                y = perch_y(ark, x, y)
+                if typ == "gren":
+                    y = perch_y(ark, x, y)
                 flyttet = True
                 if (x - fx + fugl.width) > 1180:
                     ny_h = max(90, round(h * (1180 - SPERRE_X) / fugl.width))
@@ -355,26 +464,26 @@ def compose(species: list[dict]) -> tuple[Image.Image, list[dict]]:
                     fugl = fugl.resize((round(fugl.width * sk2), ny_h), Image.LANCZOS)
                     fx, fy = round(fx * sk2), round(fy * sk2)
                     x = SPERRE_X + fx + 8
-                    y = perch_y(ark, x, y)
+                    if typ == "gren":
+                        y = perch_y(ark, x, y)
 
             boks = (x - fx, y - fy + 4, x - fx + fugl.width, y - fy + 4 + fugl.height)
             if any(_overlapp(boks, b) > MAKS_OVERLAPP for b in opptatt):
-                continue                  # opptatt plass — proev neste anker
-            valgt = (anker, fugl, x, y, fx, fy, boks, flyttet)
+                continue                  # opptatt plass — proev neste
+            valgt = (plass, fugl, x, y, fx, fy, boks, flyttet, typ)
             break
 
         if valgt is None:
             print("      (fant ingen ledig plass — hopper over)")
             continue
-        anker, fugl, x, y, fx, fy, boks, flyttet = valgt
-        ledige.remove(anker)
+        plass, fugl, x, y, fx, fy, boks, flyttet, typ = valgt
+        ledige.remove(plass)
         opptatt.append(boks)
-        print(f"      {fugl.height} px paa ({x}, {y})"
+        print(f"      {typ}: {fugl.height} px paa ({x}, {y})"
               + ("  — flyttet klar av teksten" if flyttet else ""))
 
-        # Fotpunktet legges paa greinas overflate, med fire piksler overlapp
-        # saa klørne ser ut til aa gripe. Hale og vingespisser faar henge
-        # under greina, som de skal.
+        # Festepunktet legges der det skal, med fire piksler overlapp saa
+        # klørne ser ut til aa gripe. Hale og vingespisser faar henge under.
         ark.paste(fugl, (x - fx, y - fy + 4), fugl)
         # Boksen tas vare paa saa sida kan sette et tall ved fuglen som
         # peker tilbake i artslista. Koordinatene er i arkets piksler
@@ -416,12 +525,32 @@ PUSS_PROMPT = (
 PUSS_REF = int(os.environ.get("PUSS_REF", "1200"))
 
 
+SONE_SLAKK = float(os.environ.get("PUSS_SLAKK", "0.01"))
+
+
+def _god_nok(soner: dict, basis: dict) -> bool:
+    """Godtar et pusseforsoek som ikke gjoer tekstsonen VERRE enn den var.
+
+    Absolutt terskel gaar ikke naar malen selv har blekk der: myrmalens
+    sivkant ligger saavidt inne i sonen, og da ville ingen forsoek noen gang
+    bli godtatt, uansett hvor pent modellen oppfoerte seg."""
+    from compose_hero import SONE_GRENSE
+    for navn, v in soner.items():
+        if navn == "bunn":
+            continue                       # bunnen har alltid mal-innhold
+        tak = max(SONE_GRENSE, basis.get(navn, {}).get("verst", 0.0) + SONE_SLAKK)
+        if v["verst"] > tak:
+            return False
+    return True
+
+
 def refine(ark: Image.Image, tries: int) -> tuple[Image.Image, dict, bool]:
     """Send arket tilbake for aa faa foettene til aa gripe. Returnerer
     (bilde, soner, ble_pusset). Faller tilbake paa originalen hvis ingen
     forsoek holder tekstsonen ren."""
     ref = ark.copy()
     ref.thumbnail((PUSS_REF, PUSS_REF), Image.LANCZOS)
+    basis = zone_report(ark)
     for forsoek in range(1, tries + 1):
         try:
             kandidat = fit_to_panel(whiten(
@@ -433,7 +562,7 @@ def refine(ark: Image.Image, tries: int) -> tuple[Image.Image, dict, bool]:
         soner = zone_report(kandidat)
         status = " ".join(f"{n}={v['blekk']*100:.1f}%/verst {v['verst']*100:.1f}%"
                           for n, v in soner.items())
-        ren = soner.get("venstre", {}).get("ren", False)
+        ren = _god_nok(soner, basis)
         print(f"  puss {forsoek}/{tries}: {status}  "
               f"{'godtatt' if ren else 'FORKASTET — rotet i tekstsonen'}")
         if ren:
@@ -518,7 +647,7 @@ def label_spots(ark: Image.Image, plassert: list[dict]) -> None:
         x0, y0, x1, y1 = sp["boks"]
         h = max(1, y1 - y0)
         kandidater = []
-        for ut in (26, 50, 78):
+        for ut in (26, 50, 78, 110, 150):
             for fy in (0.22, 0.5, 0.78):
                 kandidater.append((x1 + ut, y0 + int(h * fy)))
                 kandidater.append((x0 - ut, y0 + int(h * fy)))
@@ -534,9 +663,10 @@ def label_spots(ark: Image.Image, plassert: list[dict]) -> None:
                   f"{sp.get('common_name', '?')})")
 
 
-def kart() -> None:
-    """Skriv ut hvor grenen har overflate, som hjelp til aa sette ANKRE."""
-    a = np.asarray(Image.open(GREN_PNG).convert("RGB")).mean(axis=2)
+def kart(mal: dict) -> None:
+    """Skriv ut hvor malen har overflate, som hjelp til aa sette plassene."""
+    a = np.asarray(Image.open(os.path.join(MAL_DIR, mal["bilde"]))
+                   .convert("RGB")).mean(axis=2)
     for x in range(100, 1200, 100):
         ink = np.where(a[:, x] < 225)[0]
         if not len(ink):
@@ -544,6 +674,53 @@ def kart() -> None:
             continue
         seg = np.split(ink, np.where(np.diff(ink) > 12)[0] + 1)
         print(f"  x={x:4d}  overflater y={[int(s[0]) for s in seg if len(s) > 4]}")
+
+
+def lag_mal(mal: dict, tries: int = 3) -> None:
+    """Generer malens bakgrunnsbilde fra prompten som staar i malfila.
+
+    Kjoeres én gang per mal, ikke daglig -- bakgrunnen skal vaere den samme
+    hver dag, saa sida faar et gjenkjennelig skjelett.
+
+    Samme forsoeksloekke som resten: modellen er like ustadig her som ellers.
+    Hoestmalen la 11,7 % blekk i tekstsonen foerste forsoek selv om
+    grunnmalen den tegnet oppaa var helt ren der. Vi tar flere forsoek og
+    beholder det reneste."""
+    refs = None
+    base = mal.get("basert_paa")
+    if base:
+        basefil = os.path.join(MAL_DIR, f"{base}.png")
+        if not os.path.exists(basefil):
+            raise SystemExit(f"Mangler {basefil} — lag {base} foerst.")
+        r = Image.open(basefil).convert("RGB")
+        r.thumbnail((PUSS_REF, PUSS_REF), Image.LANCZOS)
+        refs = [r]
+        print(f"  forelegg: {os.path.basename(basefil)}")
+
+    best, best_soner, best_sum = None, None, None
+    for forsoek in range(1, tries + 1):
+        img = fit_to_panel(whiten(generate_image(
+            mal["prompt"], ref_images=refs, aspect_ratio="3:4",
+            model=PUSS_MODELL)))
+        soner = zone_report(img)
+        sum_verst = sum(v["verst"] for v in soner.values())
+        print(f"  forsoek {forsoek}/{tries}: "
+              + " ".join(f"{n}={v['blekk']*100:.1f}%/verst {v['verst']*100:.1f}%"
+                         for n, v in soner.items()))
+        if best_sum is None or sum_verst < best_sum:
+            best, best_soner, best_sum = img, soner, sum_verst
+        if all(v["ren"] for v in soner.values()):
+            print("  alle soner rene — beholder denne")
+            break
+
+    for navn, v in best_soner.items():
+        print(f"  sone {navn:9s} {v['blekk']*100:5.1f} % blekk, "
+              f"verste baand {v['verst']*100:5.1f} %  "
+              f"{'ren' if v['ren'] else 'OPPTATT'}")
+    os.makedirs(MAL_DIR, exist_ok=True)
+    ut = os.path.join(MAL_DIR, mal["bilde"])
+    best.save(ut)
+    print(f"OK: {ut} ({best.width}x{best.height})")
 
 
 def main() -> int:
@@ -561,7 +738,11 @@ def main() -> int:
     ap.add_argument("--sjekk-foetter", metavar="UT.PNG",
                     help="kontaktark med kryss der fotpunktene er satt")
     ap.add_argument("--kart", action="store_true",
-                    help="vis hvor grenen har overflate (til aa sette ANKRE)")
+                    help="vis hvor malen har overflate (til aa sette plassene)")
+    ap.add_argument("--mal", help="tving en bestemt mal (ellers velges den "
+                                  "som passer dagens fugler best)")
+    ap.add_argument("--lag-mal", metavar="NAVN",
+                    help="generer bakgrunnsbildet for en mal og avslutt")
     ap.add_argument("--puss", type=int, default=int(os.environ.get("PUSS_TRIES", "2")),
                     help="antall forsoek paa aa la Gemini feste foettene til "
                          "grenen (0 = hopp over)")
@@ -575,18 +756,44 @@ def main() -> int:
     if args.sjekk_foetter:
         sjekk_foetter(args.sjekk_foetter)
         return 0
-    if args.kart:
-        kart()
+
+    maler = {m["navn"]: m for m in last_maler()}
+    if args.lag_mal:
+        if args.lag_mal not in maler:
+            raise SystemExit(f"Ingen mal som heter {args.lag_mal} i {MAL_DIR}")
+        lag_mal(maler[args.lag_mal], args.puss or 3)
         return 0
-    if not os.path.exists(GREN_PNG):
-        raise SystemExit(f"Mangler {GREN_PNG} — kjoer compose_hero.py --lag-gren foerst.")
 
     birds = load_birds(args.birds)
-    sure, _ = split_species(birds.get("species", []), len(ANKRE))
-    species = [s for s in sure if plate_path(s.get("scientific_name", ""))]
-    if not species:
+    dato = (datetime.date.fromisoformat(birds["date"]) if birds.get("date")
+            else datetime.date.today())
+
+    # Malen velges av dagens arter, saa artslista maa bestemmes foerst -- men
+    # da vet vi ikke enda hvor mange plasser malen har. Vi tar rikelig og
+    # kutter etterpaa.
+    kandidater, _ = split_species(birds.get("species", []), 12)
+    kandidater = [s for s in kandidater if plate_path(s.get("scientific_name", ""))]
+    if not kandidater:
         print("Ingen av dagens arter har en plansje ennaa.", file=sys.stderr)
         return 1
+
+    vaer = None if args.mal else get_weather()
+    mal = velg_mal(kandidater, dato.month, args.mal,
+                   (vaer or {}).get("symbol", ""))
+    bilde = os.path.join(MAL_DIR, mal["bilde"])
+    if not os.path.exists(bilde):
+        raise SystemExit(f"Mangler {bilde} — kjoer --lag-mal {mal['navn']} foerst.")
+    if args.kart:
+        kart(mal)
+        return 0
+
+    # Artene som hoerer hjemme i malen foerst. Uten dette faller
+    # enkeltbekkasinen ut av myrmalen fordi den ligger paa aattendeplass i
+    # lista, mens en groennsisik som ikke kan staa i siv tar plassen.
+    h = set(mal.get("habitat", []))
+    species = ([s for s in kandidater if habitat(s["scientific_name"]) in h]
+               + [s for s in kandidater if habitat(s["scientific_name"]) not in h]
+               )[:len(mal["plasser"])]
     print("Arter: " + ", ".join(
         norwegian_name(s["scientific_name"], s["common_name"]) for s in species))
 
@@ -595,7 +802,7 @@ def main() -> int:
             ensure_bird(s)
         return 0
 
-    ark, plassert = compose(species)
+    ark, plassert = compose(species, mal)
     ark = fit_to_panel(ark)
     pusset = False
     if args.puss > 0:
@@ -616,7 +823,8 @@ def main() -> int:
         json.dump({
             "soner": soner,
             "date": birds.get("date") or datetime.date.today().isoformat(),
-            "metode": ("gren + 1:1-fugler, satt sammen lokalt"
+            "mal": mal["navn"],
+            "metode": (f"{mal['navn']} + 1:1-fugler, satt sammen lokalt"
                        + (" og pusset av Gemini" if pusset else "")),
             "species": [{"common_name": s["common_name"],
                          "scientific_name": s["scientific_name"],
@@ -626,7 +834,7 @@ def main() -> int:
                          "merke": s.get("merke")}
                         for s in plassert],
         }, f, indent=2, ensure_ascii=False)
-    print(f"OK: {BG_PNG} — {len(plassert)} fugler paa grenen"
+    print(f"OK: {BG_PNG} — {len(plassert)} fugler paa malen " + mal["navn"]
           + (", pusset" if pusset else ", upusset"))
     return 0
 

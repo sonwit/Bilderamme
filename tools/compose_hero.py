@@ -66,8 +66,9 @@ SONER = [
     # Ett sammenhengende felt til venstre i stedet for topp+venstre hver for
     # seg: infoboksen og artslista ligger naa i samme spalte, og det er
     # enklere for modellen aa forholde seg til ÉN tom flate enn to.
-    ("venstre",  0.00, 0.00, 0.48, 0.75),   # infoboks + artsliste
-    ("bunn",     0.00, 0.94, 1.00, 1.00),   # bunnlinja
+    ("venstre",  0.00, 0.00, 0.48, 0.72),   # infoboks + artsliste
+    # (Bunnsonen er borte: bunnlinja ble flyttet inn under lista, saa malen
+    #  skal fylle nedre kant og maa ikke holdes ren der.)
 ]
 # Hvor stor andel av en sone som kan ha blekk foer teksten trenger en hvit pute
 # under seg. 3 % taaler en enslig kvist; over det begynner bokstavene aa drukne.
@@ -118,7 +119,8 @@ def fit_to_panel(img: Image.Image, w: int = 1200, h: int = 1600) -> Image.Image:
     return ark
 
 
-GREN_PNG = os.path.join(PLATES_DIR, "gren.png")
+# Grenmalen bor naa sammen med de andre malene i plates/maler/.
+GREN_PNG = os.path.join(PLATES_DIR, "maler", "gren.png")
 
 # Grunnen til at grenen finnes: prompt-tekst styrer komposisjon daarlig.
 # Samme instruks ga 0,1 % blekk i tekstsonen ett forsoek og 14,8 % det neste.

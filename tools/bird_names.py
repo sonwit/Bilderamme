@@ -290,6 +290,89 @@ def length_cm(scientific_name: str) -> float:
     return STANDARD_LENGDE
 
 
+# ----------------------------------------------------------------------
+# Habitat — hvilken mal arten hoerer hjemme i
+# ----------------------------------------------------------------------
+# Fire grovkategorier, valgt fordi de svarer til hva fuglen SITTER paa i en
+# illustrasjon, ikke til oekologisk korrekt inndeling:
+#
+#   "tre"       sitter paa greiner og kvister  -> grenmalen
+#   "vaatmark"  staar i siv, vann eller myr    -> myrmalen
+#   "bakke"     staar paa aapen mark           -> myrmalen (bakkeplassene)
+#   "luft"      tegnes flygende                -> luftplassene i malene
+#
+# En kattugle er en skogsfugl, men den sitter paa en grein -- derfor "tre".
+# Enkeltbekkasin kunne staatt i siv, men den er like ofte i lufta over myra.
+HABITAT = {
+    # --- luft: tegnes flygende, aldri sittende ---
+    "hirundo rustica": "luft", "delichon urbicum": "luft",
+    "riparia riparia": "luft", "apus apus": "luft",
+
+    # --- vaatmark ---
+    "porzana porzana": "vaatmark", "crex crex": "vaatmark",
+    "rallus aquaticus": "vaatmark", "gallinula chloropus": "vaatmark",
+    "fulica atra": "vaatmark", "botaurus stellaris": "vaatmark",
+    "ardea cinerea": "vaatmark", "grus grus": "vaatmark",
+    "gallinago gallinago": "vaatmark", "scolopax rusticola": "vaatmark",
+    "numenius arquata": "vaatmark", "tringa ochropus": "vaatmark",
+    "tringa totanus": "vaatmark", "actitis hypoleucos": "vaatmark",
+    "charadrius dubius": "vaatmark", "charadrius hiaticula": "vaatmark",
+    "vanellus vanellus": "vaatmark", "anas platyrhynchos": "vaatmark",
+    "anas crecca": "vaatmark", "mareca penelope": "vaatmark",
+    "aythya fuligula": "vaatmark", "bucephala clangula": "vaatmark",
+    "mergus merganser": "vaatmark", "cygnus olor": "vaatmark",
+    "cygnus cygnus": "vaatmark", "anser anser": "vaatmark",
+    "branta canadensis": "vaatmark", "podiceps cristatus": "vaatmark",
+    "tachybaptus ruficollis": "vaatmark", "gavia arctica": "vaatmark",
+    "acrocephalus schoenobaenus": "vaatmark", "emberiza schoeniclus": "vaatmark",
+    "larus canus": "vaatmark", "larus argentatus": "vaatmark",
+    "larus ridibundus": "vaatmark", "chroicocephalus ridibundus": "vaatmark",
+    "sterna hirundo": "vaatmark",
+
+    # --- bakke: aapen mark, ikke greiner ---
+    "motacilla alba": "bakke", "motacilla flava": "bakke",
+    "anthus pratensis": "bakke", "anthus trivialis": "bakke",
+    "alauda arvensis": "bakke", "oenanthe oenanthe": "bakke",
+    "saxicola rubetra": "bakke", "phasianus colchicus": "bakke",
+    "lagopus lagopus": "bakke",
+}
+
+# Alt annet sitter paa en grein. Det er de aller fleste hagefuglene, saa
+# standarden skal vaere den og ikke noe mer eksotisk.
+STANDARD_HABITAT = "tre"
+
+# Arter som klarer seg gjennom vinteren her og derfor passer paa granmalen.
+# (Trekkfugler skal ikke sitte i snoe.)
+OVERVINTRER = {
+    "parus major", "cyanistes caeruleus", "periparus ater", "poecile palustris",
+    "poecile montanus", "lophophanes cristatus", "aegithalos caudatus",
+    "sitta europaea", "certhia familiaris", "troglodytes troglodytes",
+    "regulus regulus", "erithacus rubecula", "pyrrhula pyrrhula",
+    "chloris chloris", "carduelis carduelis", "spinus spinus",
+    "acanthis flammea", "loxia curvirostra", "loxia pytyopsittacus",
+    "coccothraustes coccothraustes", "passer domesticus", "passer montanus",
+    "emberiza citrinella", "fringilla coelebs", "turdus merula",
+    "turdus pilaris", "bombycilla garrulus", "pica pica", "corvus cornix",
+    "corvus corax", "corvus monedula", "garrulus glandarius",
+    "nucifraga caryocatactes", "dendrocopos major", "dryobates minor",
+    "dryocopus martius", "picus viridis", "strix aluco", "bubo bubo",
+    "aegolius funereus", "glaucidium passerinum", "surnia ulula",
+    "accipiter nisus", "accipiter gentilis", "buteo buteo",
+    "tetrao urogallus", "lyrurus tetrix", "tetrastes bonasia",
+    "columba palumbus", "columba livia", "streptopelia decaocto",
+    "sturnus vulgaris",
+}
+
+
+def habitat(scientific_name: str) -> str:
+    """Grovkategori for hvilken mal arten passer i."""
+    return HABITAT.get((scientific_name or "").strip().lower(), STANDARD_HABITAT)
+
+
+def overvintrer(scientific_name: str) -> bool:
+    return (scientific_name or "").strip().lower() in OVERVINTRER
+
+
 if __name__ == "__main__":
     import json
     import sys
