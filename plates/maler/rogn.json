@@ -1,0 +1,9 @@
+{
+  "navn": "rogn",
+  "tittel": "Rogn med bær",
+  "bilde": "rogn.png",
+  "basert_paa": "gren",
+  "maaneder": [],
+  "prompt": "Redraw this exact branch, keeping its shape, position, thickness and the path of every twig IDENTICAL — do not move, add or remove any branch. The tree is a ROWAN (Sorbus aucuparia). The only change: it is autumn, so the branch carries SPARSE rowan foliage — only a few pinnate leaves left, each a stalk with small oval serrated leaflets in opposite pairs, turned yellow, orange and rust red, some leaflets already fallen so the stalks are partly bare. The main feature is the BERRIES: several heavy drooping clusters of small round orange-red rowan berries, bright and clearly drawn. Absolutely no maple leaves and no winged seeds. Much more bare wood than leaf — the branch structure must read clearly. DIRECTION OF GROWTH IS CRITICAL: every leaf and berry cluster must grow from the branch towards the RIGHT and towards the BOTTOM of the picture. No leaf, no twig, no berry and no shadow may extend LEFTWARD past the branch into the open part of the page. The left 48% of the width, from the very top down to 75% of the height, must remain completely empty white paper — exactly as empty as it is now, with nothing at all in it. Keep the same 19th-century engraved book-plate style, fine linework, hand-coloured, and keep the existing grey-brown bark exactly as it is. Pure white background, no paper texture, no border. Do NOT draw any rectangular frame or ruled edge around the image. No birds, no text, no signature.",
+  "merknad": "Ute av rotasjonen: tom maanedsliste. Bær og fugler paa samme gren ble for mye paa én gang. Hentes fram med --mal rogn."
+}
