@@ -733,79 +733,61 @@ def sjekk_foetter(ut: str) -> None:
     print(f"OK: {ut} — {len(filer)} fugler med fotpunkt")
 
 
-# Tallet ved fuglen skal staa i REN hvit luft. Legges det oppaa greina eller
-# i fjaerdrakten, forsvinner det i dithringen. Vi har pikslene her, saa vi kan
-# lete oss fram til en aapen flekk i stedet for aa gjette fra layouten.
-MERKE = 40                                   # stoerrelsen paa flekken vi tester
-MERKE_HVIT = 252.0                           # snittnivaa som regnes som blankt
-MERKE_LYST = 236.0                           # reservekrav: lyst nok til svart tall
+# Merket settes ved FOTPUNKTET, ikke ved bildekanten. Fotpunktet er ett punkt
+# vi selv har satt; bildekanten er hele silhuetten, og hos en skjaere er halve
+# den hale. Et merke «26 px utenfor boksen» kunne derfor havne 200 px fra
+# fuglen: spettmeisens tall endte 150 px til venstre for den, naermere
+# myrriksa enn meisen, fordi det naermeste rene papiret laa hos naboen.
+MERKE = 40                                   # merket krever saa mye albuerom
+MERKE_UT = 36                                # avstand fra foten til merket
 
 
 def label_spots(ark: Image.Image, plassert: list[dict]) -> None:
-    """Finn en aapen plass ved hver fugl og skriv den inn som `merke`.
+    """Sett merket ved hver fugls fotpunkt, og velg stil etter bunnen der.
 
-    Proever i tur og orden: hoeyre for fuglen, venstre, over, under -- foerst
-    naert, saa lenger ut. Ingen aapen plass funnet: hopp over merket heller
-    enn aa sette et tall der det ikke kan leses."""
-    a = np.asarray(ark.convert("RGB"), dtype=np.float32).mean(axis=2)
-    H, W = a.shape
+    Posisjonen er fast: rett nedenfor foten, foerst mot venstre. Fotpunktet
+    flytter seg ikke -- det er der VI satte fuglen -- saa tallet peker alltid
+    paa riktig fugl, ogsaa naar silhuetten er skjev av en lang hale.
+
+    Tallet tegnes som hvitt paa en svart skive, og da spiller bunnen ingen
+    rolle: baade #000 og #fff er blant panelets seks farger, saa skiva blir
+    like skarp som teksten uansett hva som ligger under. Derfor maaler vi
+    ikke lenger bakgrunnen -- og slipper at samme art faar tall én dag og
+    skive den neste, alt etter hva retusjen tegnet."""
+    W, H = ark.size
     tatt: list[tuple] = []
 
-
-    def blankt(cx: int, cy: int, grense: float = MERKE_HVIT) -> bool:
+    def brukbar(cx: int, cy: int) -> bool:
         if not (MERKE <= cx <= W - MERKE and MERKE <= cy <= H - MERKE):
             return False
         # Aldri inn i tekstspalten (venstre 48 %, ned til 75 % av hoeyden).
         if cx < SPERRE_X and cy < SPERRE_Y:
             return False
-        if any(abs(cx - tx) < MERKE and abs(cy - ty) < MERKE for tx, ty in tatt):
-            return False
-        felt = a[cy - MERKE // 2:cy + MERKE // 2, cx - MERKE // 2:cx + MERKE // 2]
-        return bool(felt.size and felt.mean() > grense)
+        return not any(abs(cx - tx) < MERKE and abs(cy - ty) < MERKE
+                       for tx, ty in tatt)
 
     for sp in plassert:
         x0, y0, x1, y1 = sp["boks"]
-        h = max(1, y1 - y0)
-        kandidater = []
-        for ut in (26, 50, 78, 110, 150):
-            for fy in (0.22, 0.5, 0.78):
-                kandidater.append((x1 + ut, y0 + int(h * fy)))
-                kandidater.append((x0 - ut, y0 + int(h * fy)))
-            kandidater.append(((x0 + x1) // 2, y0 - ut))
-            kandidater.append(((x0 + x1) // 2, y1 + ut))
-        # Foerst ren hvit flate. Finner vi ingen, godtar vi en lys en --
-        # myrmalens bleke mudder er ikke hvitt, men et svart tall leses fint
-        # mot det, og et tall er bedre enn ingen kobling til lista.
-        plass = next((k for k in kandidater if blankt(int(k[0]), int(k[1]))), None)
+        fx, fy = sp["fot"]
+        if sp.get("type") == "luft":
+            # En flygende fugl har ingen foetter aa staa paa: «fot» er midt
+            # paa kroppen, saa merket maa utenfor silhuetten i stedet.
+            kand = [(x0 - MERKE_UT, y1), (x1 + MERKE_UT, y1),
+                    (x0 - MERKE_UT, y0), (x1 + MERKE_UT, y0)]
+        else:
+            # Rett nedenfor foten ligger ved eller bakke -- aldri fuglekropp.
+            kand = [(fx - MERKE_UT, fy + MERKE_UT // 2),
+                    (fx + MERKE_UT, fy + MERKE_UT // 2),
+                    (fx - MERKE_UT, fy - MERKE_UT),
+                    (fx + MERKE_UT, fy - MERKE_UT)]
+        plass = next((k for k in kand if brukbar(int(k[0]), int(k[1]))), None)
         if plass is None:
-            plass = next((k for k in kandidater
-                          if blankt(int(k[0]), int(k[1]), MERKE_LYST)), None)
-        flate = False
-        if plass is None:
-            # Ingen aapen plass i det hele tatt -- typisk en bakkefugl der den
-            # eneste hvite luften ligger inne i tekstspalten. Da tar vi den
-            # minst travle flekken og ber sida legge en hvit skive under
-            # tallet. Ren hvit er en av panelets seks farger, saa skiva blir
-            # like skarp som teksten.
-            def travelhet(k):
-                cx, cy = int(k[0]), int(k[1])
-                if not (MERKE <= cx <= W - MERKE and MERKE <= cy <= H - MERKE):
-                    return 1e9
-                if cx < SPERRE_X and cy < SPERRE_Y:
-                    return 1e9
-                felt = a[cy - MERKE // 2:cy + MERKE // 2,
-                         cx - MERKE // 2:cx + MERKE // 2]
-                return -felt.mean() if felt.size else 1e9
-            plass = min(kandidater, key=travelhet)
-            if travelhet(plass) >= 1e9:
-                print(f"      (fant ingen plass til merket for "
-                      f"{sp.get('common_name', '?')})")
-                continue
-            flate = True
-
-        sp["merke"] = [int(plass[0]), int(plass[1])]
-        sp["merke_flate"] = flate
-        tatt.append((int(plass[0]), int(plass[1])))
+            print(f"      (fant ingen plass til merket for "
+                  f"{sp.get('common_name', '?')})")
+            continue
+        cx, cy = int(plass[0]), int(plass[1])
+        sp["merke"] = [cx, cy]
+        tatt.append((cx, cy))
 
 
 def kart(mal: dict) -> None:
@@ -1038,9 +1020,8 @@ def main() -> int:
                          "scientific_name": s["scientific_name"],
                          "norsk": norwegian_name(s["scientific_name"],
                                                  s["common_name"]),
-                         "boks": s["boks"], "fot": s["fot"],
-                         "merke": s.get("merke"),
-                         "merke_flate": s.get("merke_flate", False)}
+                         "boks": s["boks"], "fot": s["fot"], "type": s.get("type", "gren"),
+                         "merke": s.get("merke")}
                         for s in plassert],
         }, f, indent=2, ensure_ascii=False)
     print(f"OK: {BG_PNG} — {len(plassert)} fugler paa malen " + mal["navn"]

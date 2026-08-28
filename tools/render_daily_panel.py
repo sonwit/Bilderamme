@@ -401,13 +401,12 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
 
     def _markoerer() -> str:
         """Tallene som knytter fuglen paa plansjen til linja i lista.
-        Posisjonen er funnet av compose_branch.py i det ferdige arket -- den
-        vet hvor det er ren hvit luft, det gjoer ikke denne fila."""
+        Posisjonen er satt av compose_branch.py ved fuglens fotpunkt -- den
+        vet hvor fuglen staar, det gjoer ikke denne fila."""
         ut = []
         for sci, n in nummer.items():
             mx, my = tegnet[sci]["merke"]
-            flate = " flate" if tegnet[sci].get("merke_flate") else ""
-            ut.append(f'<span class="markoer{flate}" '
+            ut.append(f'<span class="markoer" '
                       f'style="left:{mx}px;top:{my}px">{n}</span>')
         return "".join(ut)
 
@@ -644,13 +643,14 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
      nummereringen leses som en feil. */
   .art .nr {{ flex:0 0 30px; font-size:19px; }}
   .art .navn {{ flex:1 1 auto; }}
+  /* Svart skive med hvitt tall. Baade #000 og #fff er blant panelets seks
+     farger, saa skiva blir like skarp som teksten -- og da leses tallet
+     uansett om det staar paa papir, bark eller fjaerdrakt. */
   .markoer {{ position:absolute; z-index:1; width:34px; height:34px;
               margin:-17px 0 0 -17px;          /* sentrer paa punktet */
               display:flex; align-items:center; justify-content:center;
-              font-size:25px; line-height:1; color:var(--blekk); }}
-  /* Naar tallet maa staa oppaa motivet: en hvit skive under. Ren #fff er en
-     av panelets seks farger, saa den blir like skarp som teksten. */
-  .markoer.flate {{ background:var(--papir); border-radius:50%; }}
+              font-size:21px; line-height:1; border-radius:50%;
+              background:var(--blekk); color:var(--papir); }}
   .art {{ padding:11px 0; border-bottom:1px solid var(--blekk); }}
   .art .l1 {{ display:flex; justify-content:space-between; align-items:baseline;
               font-size:26px; line-height:1.15; }}
