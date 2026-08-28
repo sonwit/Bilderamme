@@ -31,10 +31,9 @@ import os
 import sys
 import tempfile
 
-import numpy as np
-import soundfile as sf
-from birdnetlib import Recording
-from birdnetlib.analyzer import Analyzer
+# numpy, soundfile og birdnetlib lastes foerst naar de trengs. --dag bygger
+# bare en birds.json ut av observasjonsloggen -- ren tekst, ingen lyd -- og
+# skal kunne kjoeres fra bildemiljoeet, som ikke har lydavhengighetene.
 
 # Samme koordinater som generate_daily_image.py (her).
 # Kartverket-koordinater for hagen. Se generate_daily_image.py.
@@ -65,6 +64,9 @@ def audio_metrics(wav_path: str) -> dict:
     """Nivaamaal for opptaket. Brukes til aa se om mikrofonplasseringen og
     forsterkningen er fornuftig: for lavt => fuglene drukner i stoeygulvet,
     klipping => for hoyt/vind paa membranen."""
+    import numpy as np
+    import soundfile as sf
+
     data, sr = sf.read(wav_path, dtype="float64")
     if data.ndim > 1:
         data = data.mean(axis=1)
@@ -95,6 +97,8 @@ def _maybe_normalize(wav_path: str, peak: float) -> str:
     if peak <= 0 or peak >= NORMALIZE_BELOW_PEAK:
         return wav_path
     try:
+        import soundfile as sf
+
         data, sr = sf.read(wav_path)
         data = data * (0.89 / peak)
         fd, tmp = tempfile.mkstemp(suffix=".wav", prefix="norm_")
@@ -117,6 +121,9 @@ def analyze(wav_path: str, peak: float) -> list[dict]:
     dedupet paa navn, med beste konfidens og antall 3-sekunders vinduer arten
     ble hoert i (`detections` -- en grov aktivitets-/naerhetsindikator)."""
     norm_path = _maybe_normalize(wav_path, peak)
+    from birdnetlib import Recording
+    from birdnetlib.analyzer import Analyzer
+
     analyzer = Analyzer()
     rec = Recording(
         analyzer, norm_path,
@@ -207,17 +214,23 @@ def _iter_observations():
         return
 
 
-def write_todays_birds() -> dict:
-    """Aggreger ALLE dagens oekter til birds.json (det generate_daily_image.py
-    leser). En fugl hoert kl. 05 skal fortsatt telle for bildet kl. 07."""
-    today = datetime.date.today().isoformat()
+def aggregate_day(dag: str) -> dict:
+    """Aggreger ALLE oektene paa én dato til formatet birds.json har.
+
+    En fugl hoert kl. 05 skal fortsatt telle for bildet kl. 07. Datoen er et
+    argument fordi frokostsida tegner GAARSDAGEN: kl. 07 er bare aatte av
+    doegnets 20-30 opptak gjort, og de fanget 22 % av dagens sikre arter --
+    paa halvparten av dagene ingen i det hele tatt."""
     agg: dict[str, dict] = {}
     sessions = 0
+    tider: list[str] = []
     for obs in _iter_observations():
-        if obs.get("date") != today:
+        if obs.get("date") != dag:
             continue
         sessions += 1
         t = obs.get("recorded_at", "")[11:16]
+        if t:
+            tider.append(t)
         for s in obs.get("species", []):
             name = s["common_name"]
             a = agg.setdefault(name, {
@@ -240,18 +253,32 @@ def write_todays_birds() -> dict:
     species = sorted(agg.values(),
                      key=lambda s: (-s["sessions"], -s["detections"], -s["confidence"]))
 
-    payload = {
+    # Opptaksvinduet, ikke deteksjonsvinduet: sida skal kunne si hvilken
+    # periode lista faktisk dekker. Tegnes dagen mens den paagaar, slutter
+    # vinduet ved siste opptak -- og da er «03:45-15:58» det aerlige svaret.
+    periode = f"{min(tider)}–{max(tider)}" if tider else ""
+
+    return {
         "timestamp": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-        "date": today,
+        "date": dag,
         "sessions_today": sessions,
+        "periode": periode,
         "species": species,
     }
-    # Atomisk skriving saa generate_daily_image.py aldri leser en halvskrevet fil.
-    tmp = BIRDS_JSON + ".tmp"
+
+
+def skriv_birds(payload: dict, sti: str) -> dict:
+    """Atomisk skriving saa ingen leser en halvskrevet fil."""
+    tmp = sti + ".tmp"
     with open(tmp, "w") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
-    os.replace(tmp, BIRDS_JSON)
+    os.replace(tmp, sti)
     return payload
+
+
+def write_todays_birds() -> dict:
+    return skriv_birds(aggregate_day(datetime.date.today().isoformat()),
+                       BIRDS_JSON)
 
 
 def prune_old_audio(wav_path: str) -> None:
@@ -274,7 +301,29 @@ def prune_old_audio(wav_path: str) -> None:
         print(f"ADVARSEL: opprydding i audio/ feilet: {e}", file=sys.stderr)
 
 
+def loes_dag(dag: str) -> str:
+    if dag == "i-gaar":
+        return (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+    if dag == "i-dag":
+        return datetime.date.today().isoformat()
+    return dag
+
+
 def main() -> int:
+    # Egen modus: bygg en birds.json for en valgt dato uten aa analysere lyd.
+    # daily_panel.py bruker den til frokostsida.
+    if len(sys.argv) >= 2 and sys.argv[1] == "--dag":
+        if len(sys.argv) != 4:
+            print("Bruk: birdnet_analyze.py --dag i-gaar|i-dag|YYYY-MM-DD UT.json",
+                  file=sys.stderr)
+            return 2
+        dag = loes_dag(sys.argv[2])
+        p = skriv_birds(aggregate_day(dag), sys.argv[3])
+        print(f"{dag}: {len(p['species'])} arter paa {p['sessions_today']} "
+              f"opptak ({p['periode'] or 'ingen'}) -> {sys.argv[3]}")
+        # Ingen opptak den dagen: si fra, saa cron kan falle tilbake.
+        return 0 if p["sessions_today"] else 1
+
     if len(sys.argv) != 2:
         print("Bruk: birdnet_analyze.py <fil.wav>", file=sys.stderr)
         return 2

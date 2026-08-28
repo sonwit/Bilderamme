@@ -363,6 +363,19 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
     sure, unsure = split_species(birds.get("species", []),
                                  OVERLAY_ROWS if bg_meta else None, sortering)
     sessions = birds.get("sessions_today", 0)
+    # Sida kan tegne en annen dag enn i dag: frokostsida viser gaarsdagen
+    # ferdig, fordi kl. 07 er bare aatte av doegnets 20-30 opptak gjort.
+    # Da maa overskriften si hvilken dag det er.
+    i_dag = datetime.date.today()
+    naar = ("i dag" if date == i_dag
+            else "i går" if date == i_dag - datetime.timedelta(days=1)
+            else dato)
+    kicker = "Hagen " + naar if date >= i_dag - datetime.timedelta(days=1) else "Hagen"
+    # Underoverskrift: hvilken periode lista faktisk dekker. Tegnes dagen mens
+    # den paagaar, slutter vinduet ved siste opptak -- «03:45–15:58» sier at
+    # kvelden ikke er med.
+    periode = birds.get("periode", "")
+    dekning = f"{periode} · {sessions} opptak" if periode else f"{sessions} opptak"
 
     hero_meta = None if bg_meta else todays_hero(birds.get("date", ""))
     hero = sure[0] if sure else None
@@ -470,26 +483,26 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
     # ingen illustrasjon bak teksten, saa de trenger ikke holde sammen.
     if bg_meta:
         topptekst = f"""<section class="info{pute_venstre}">
-    <div class="kicker">Hagen i dag</div>
+    <div class="kicker">{kicker}</div>
     <h1>{ukedag}</h1>
     <div class="dato">{dato}</div>
+    <div class="periode">{dekning}</div>
     <div class="vaerlinje">
       <span class="sted">Hagen</span><br>
-      {html.escape(vaer)}<br>
-      {sessions} opptak i dag
+      {html.escape(vaer)}
     </div>
   </section>"""
     else:
         topptekst = f"""<header class="tittel">
-    <div class="kicker">Hagen i dag</div>
+    <div class="kicker">{kicker}</div>
     <h1>{ukedag}</h1>
     <div class="dato">{dato}</div>
+    <div class="periode">{dekning}</div>
   </header>
 
   <div class="vaer">
     <div class="sted">Hagen</div>
     <div>{html.escape(vaer)}</div>
-    <div>{sessions} opptak</div>
   </div>"""
 
     if bg_meta:
@@ -543,6 +556,9 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
   .kicker {{ font-size:20px; letter-spacing:.42em; text-transform:uppercase; }}
   .tittel h1 {{ font-size:64px; line-height:1.02; font-weight:600; margin-top:6px; }}
   .tittel .dato {{ font-size:30px; margin-top:2px; }}
+  /* Underoverskrift: perioden lista dekker. Liten og sperret, saa den leses
+     som en bildetekst til datoen og ikke som enda en linje med innhold. */
+  .periode {{ font-size:18px; letter-spacing:.05em; margin-top:6px; }}
 
   .vaer {{ grid-column:9/13; grid-row:1/3; align-self:start; text-align:right;
            font-size:24px; line-height:1.35; padding-top:10px; }}
@@ -636,6 +652,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
   .info .kicker {{ font-size:19px; }}
   .info h1 {{ font-size:60px; line-height:1.04; font-weight:600; margin-top:8px; }}
   .info .dato {{ font-size:29px; margin-top:2px; }}
+  .info .periode {{ font-size:18px; margin-top:6px; }}
   .info .vaerlinje {{ font-size:23px; margin-top:16px; padding-top:14px;
                       border-top:2px solid var(--blekk); line-height:1.45; }}
   .info .vaerlinje .sted {{ letter-spacing:.16em; text-transform:uppercase;
@@ -691,7 +708,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
   {midtdel}
 
   <section class="liste{pute_venstre}">
-    <h3>Hørt i dag</h3>
+    <h3>Hørt {naar}</h3>
     {liste_innhold}
     {fotnote}
     {kildeblokk}

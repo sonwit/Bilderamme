@@ -19,6 +19,7 @@ henger det gamle AI-bildet paa veggen i stedet for ingenting.
 
 from __future__ import annotations
 
+import argparse
 import datetime
 import os
 import shutil
@@ -46,8 +47,25 @@ def kjoer(navn: str, *args: str) -> None:
 
 
 def main() -> int:
+    ap = argparse.ArgumentParser(description="Tegn dagens fugleside.")
+    # Frokostsida tegner GAARSDAGEN. Kl. 07 er bare aatte av doegnets 20-30
+    # opptak gjort, og de fanget 22 % av dagens sikre arter -- paa halvparten
+    # av dagene ingen i det hele tatt, og da falt cron tilbake paa AI-bildet.
+    # Ettermiddagskjoeringa tegner dagen som paagaar.
+    ap.add_argument("--dag", default=os.environ.get("DAG", "i-dag"),
+                    help="i-dag (standard) | i-gaar | YYYY-MM-DD")
+    args = ap.parse_args()
+
     os.makedirs(WWW, exist_ok=True)
-    kjoer("compose_branch.py", "--birds", BIRDS, "--retusj", RETUSJ)
+    birds = BIRDS
+    if args.dag != "i-dag":
+        # birds.json paa disk er alltid DAGENS -- analysatoren skriver den om
+        # ved hver opplasting. En annen dato maa aggregeres fram fra
+        # observasjonsloggen foerst.
+        birds = os.path.join(WWW, "birds-valgt.json")
+        kjoer("birdnet_analyze.py", "--dag", args.dag, birds)
+
+    kjoer("compose_branch.py", "--birds", birds, "--retusj", RETUSJ)
     # Puta avgjoeres av om teksten FAKTISK kolliderer med illustrasjonen, ikke
     # av hvor mye blekk som ligger i et rektangel. Sida tegnes derfor én gang
     # uten bakgrunn foerst: alt som ikke er hvitt der er tekst, og da kan vi
@@ -58,13 +76,13 @@ def main() -> int:
     bg_json = os.path.join(os.path.dirname(WWW), "plates", "dagens-bakgrunn.json")
     bg_png = os.path.join(os.path.dirname(WWW), "plates", "dagens-bakgrunn.png")
     if os.path.exists(bg_json) and os.path.exists(bg_png):
-        kjoer("render_daily_panel.py", "--birds", BIRDS, "--out", maske_html,
+        kjoer("render_daily_panel.py", "--birds", birds, "--out", maske_html,
               "--uten-bakgrunn")
         kjoer("render_panel_png.py", "--html", maske_html, "--bare-png", maske_png)
         kjoer("tekstkollisjon.py", "--maske", maske_png,
               "--bakgrunn", bg_png, "--json", bg_json)
 
-    kjoer("render_daily_panel.py", "--birds", BIRDS, "--out", HTML)
+    kjoer("render_daily_panel.py", "--birds", birds, "--out", HTML)
     kjoer("render_panel_png.py", "--html", HTML, "--out-dir", WWW)
 
     frame = os.path.join(WWW, "frame.bin")
