@@ -370,7 +370,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
     naar = ("i dag" if date == i_dag
             else "i går" if date == i_dag - datetime.timedelta(days=1)
             else dato)
-    kicker = "Hagen " + naar if date >= i_dag - datetime.timedelta(days=1) else "Hagen"
+    kicker = "Fugler " + naar if date >= i_dag - datetime.timedelta(days=1) else "Fugler"
     # Underoverskrift: hvilken periode lista faktisk dekker. Tegnes dagen mens
     # den paagaar, slutter vinduet ved siste opptak -- «03:45–15:58» sier at
     # kvelden ikke er med.
