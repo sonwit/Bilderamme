@@ -111,12 +111,24 @@ def last_maler() -> list[dict]:
             with open(os.path.join(MAL_DIR, f)) as fh:
                 m = json.load(fh)
                 raa[m["navn"]] = m
-    for m in raa.values():
+    # Arven loeses REKURSIVT: snoemalen arver fra grankvisten, som selv arver
+    # fra grunngreina. Én runde gjennom lista holdt bare saa lenge filnavnene
+    # tilfeldigvis kom i riktig rekkefoelge alfabetisk.
+    def loes(m, sett=None):
+        sett = sett or set()
+        navn = m["navn"]
+        if navn in sett:
+            raise SystemExit(f"Sirkulaer arv i malene rundt {navn}")
         base = raa.get(m.get("basert_paa"))
         if base:
+            loes(base, sett | {navn})
             if not m.get("plasser"):
                 m["plasser"] = base["plasser"]
             m.setdefault("habitat", base.get("habitat", []))
+        return m
+
+    for m in list(raa.values()):
+        loes(m)
     return list(raa.values())
 
 
@@ -569,6 +581,8 @@ def puss_prompt(plassert: list[dict]) -> str:
         "new branch, perch, stump, twig, plant, ground or shadow. Do not add "
         "or remove birds. Do not change any bird's size, do not move a bird "
         "somewhere else, and do not change which species is where. "
+        "Do not change any bird's plumage or markings — colours, patterns and "
+        "field marks must stay exactly as drawn. "
         "Leave the empty white area alone — the left 48% of the width from "
         "the top down to 72% of the height must stay completely empty white "
         "paper. "

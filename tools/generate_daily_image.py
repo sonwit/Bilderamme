@@ -372,8 +372,19 @@ GEMINI_RETRIES = int(os.environ.get("GEMINI_RETRIES", "5"))
 GEMINI_BACKOFF = int(os.environ.get("GEMINI_BACKOFF", "10"))  # sekunder * forsoeksnr
 
 
+# 429 er normalt forbigaaende (rate limit) -- men IKKE naar den kommer av at
+# prosjektet har naadd beloepsgrensen sin. Da hjelper ingen venting, og med
+# 5 forsoek x voksende backoff brenner hvert kall halvannet minutt paa
+# ingenting. Disse gaar rett i feil.
+_ENDELIGE_MARKERS = ("spending cap", "exceeded its monthly", "billing",
+                     "quota exceeded for quota metric", "permission_denied",
+                     "api key not valid", "invalid_argument")
+
+
 def _is_transient(err: Exception) -> bool:
     m = str(err).lower()
+    if any(t in m for t in _ENDELIGE_MARKERS):
+        return False
     return any(t in m for t in _TRANSIENT_MARKERS)
 
 
