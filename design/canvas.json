@@ -1,0 +1,61 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1200,
+      "h": 1600,
+      "title": "A — Spalte"
+    },
+    {
+      "file": "Kolofon.dc.html",
+      "x": 1320,
+      "y": 0,
+      "w": 1200,
+      "h": 1600,
+      "title": "B — Kolofon"
+    },
+    {
+      "file": "Kapittel.dc.html",
+      "x": 2640,
+      "y": 0,
+      "w": 1200,
+      "h": 1600,
+      "title": "C — Kapittel"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "brief",
+      "x": 0,
+      "y": -280,
+      "w": 520,
+      "text": "Fugleramme — dagens fugleside\n1200×1600, 13,3\" e-ink.\n\nBare seks farger: svart, hvit, gul, rød, blå, grønn. Ingen gråtoner og ingen gjennomsiktighet — alt annet dithres til støy.\n\nProblemet i dagens versjon: all teksten oppe til venstre, fuglene på midten til høyre, og et stort tomt felt nederst.\n\nStatus: den faktiske sida bruker nå en fast gren med fuglene limt på lokalt, så tekstsonen er garantert tom. Disse tre er forslag til hvordan flaten kan disponeres bedre."
+    },
+    {
+      "id": "note-a",
+      "x": 0,
+      "y": 1680,
+      "w": 520,
+      "text": "A — SPALTE\n\nVenstrespalten går helt fra topp til bunn, og radene fordeles med space-between. Det tomme feltet nederst forsvinner fordi lista bruker hele høyden.\n\nFor: minst endring fra dagens, og loddrett skillestrek gir sida ryggrad. Plansjen får en høy, stående flate som passer gamle fuglebok-format.\n\nMot: strengest krav til Gemini — hele venstre spalte må holdes tom i full høyde.\n\nMålt i praksis: med bare 8 arter blir radene liggende for langt fra hverandre — retningen forutsetter at lista viser 10–12 arter, ellers mister den sammenhengen."
+    },
+    {
+      "id": "note-b",
+      "x": 1320,
+      "y": 1680,
+      "w": 520,
+      "text": "B — KOLOFON\n\nPlansjen tar toppen som et helt bilde. Dato, vær og artsliste ligger som en tung blokk nederst, i to spalter.\n\nFor: mest plass til fuglene, og de får en rolig flate uten tekst i nærheten. Tyngden nederst balanserer sida som en bokside med bildetekst.\n\nMot: datoen mister førsteplassen — du ser fuglene før du ser dagen. Krever at Gemini holder nederste tredel helt tom."
+    },
+    {
+      "id": "note-c",
+      "x": 2640,
+      "y": 1680,
+      "w": 520,
+      "text": "C — KAPITTEL\n\nTre vannrette bånd: tittel over hele bredden, plansje i midten, artsliste i to spalter nederst.\n\nFor: klarest hierarki — dagen først, fuglen som hovedsak, dataene til slutt. Symmetrisk og rolig.\n\nMot: plansjen får et liggende felt, og gamle fugleplansjer er stående. Den midterste sonen må være bred og lav, som er det formatet Gemini treffer dårligst."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

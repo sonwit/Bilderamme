@@ -22,3 +22,14 @@ __deltest__
 tools/test*.png
 tools/test*.jpg
 tools/forhaandsvisning.png
+
+# Fuglesida
+# Avledet av plates/*.jpg via prepare_plates.py — kan lages paa nytt naar som helst.
+plates/vasket/
+# Dagens output, byttes hver morgen.
+plates/dagens-*
+# Rendret forhaandsvisning og generert HTML fra testkjoeringer.
+test/out/
+test/*.html
+# Seedet designcanvas — bygges av design/*.dc.html med skill-hjelperen.
+fugleramme-layoutretninger.html
