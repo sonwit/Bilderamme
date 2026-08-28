@@ -377,23 +377,37 @@ def _is_transient(err: Exception) -> bool:
     return any(t in m for t in _TRANSIENT_MARKERS)
 
 
-def generate_image(prompt: str, ref_images: list | None = None) -> Image.Image:
+# Bildemodellen. gemini-2.5-flash-image har vaert standarden her siden
+# starten; nyere generasjoner finnes (se `client.models.list()`) og er
+# betydelig flinkere til aa foelge komposisjonsinstrukser. Overstyres per
+# kall eller med IMAGE_MODEL i miljoet, saa det daglige bildet ikke endrer
+# oppfoersel uten at noen har bestemt det.
+IMAGE_MODEL = os.environ.get("IMAGE_MODEL", "gemini-2.5-flash-image")
+
+
+def generate_image(prompt: str, ref_images: list | None = None,
+                   aspect_ratio: str = "3:4",
+                   model: str | None = None) -> Image.Image:
     """Generer et bilde. ref_images (liste med PIL.Image) sendes med som
     referanse/seed for bilde-til-bilde — modellen (Nano Banana) tar imot bilder
-    i tillegg til teksten. Proever paa nytt ved forbigaaende feil (503/overbelastet)."""
+    i tillegg til teksten. Proever paa nytt ved forbigaaende feil (503/overbelastet).
+
+    aspect_ratio er 3:4 (portrett, hele panelet) for alt som fyller skjermen.
+    compose_hero.py ber om 16:9, som er formatet paa hero-ramma inne i
+    fuglesida — se den for hvorfor."""
     client = genai.Client()  # leser GEMINI_API_KEY fra miljoet
     contents = [prompt]
     if ref_images:
         contents.extend(ref_images)  # google-genai godtar PIL.Image direkte i contents
     cfg = types.GenerateContentConfig(
-        image_config=types.ImageConfig(aspect_ratio="3:4"),  # portrett, matcher panelet
+        image_config=types.ImageConfig(aspect_ratio=aspect_ratio),
     )
 
     last_err = None
     for attempt in range(1, GEMINI_RETRIES + 1):
         try:
             resp = client.models.generate_content(
-                model="gemini-2.5-flash-image", contents=contents, config=cfg)
+                model=model or IMAGE_MODEL, contents=contents, config=cfg)
             for part in resp.candidates[0].content.parts:
                 if part.inline_data is not None:
                     return Image.open(BytesIO(part.inline_data.data)).convert("RGB")
