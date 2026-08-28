@@ -96,6 +96,29 @@ def passer(plass: dict, sci: str) -> bool:
     return habitat(sci) in PLASS_TAR_IMOT.get(plass.get("type", "gren"), set())
 
 
+def velg_arter(kandidater: list[dict], mal: dict) -> list[dict]:
+    """Fyll plassene med de sikreste artene hver enkelt plass kan ta imot.
+
+    Kandidatene ligger allerede med sikreste foerst. Vi gaar plass for plass
+    og gir hver den beste arten som faktisk kan staa der.
+
+    Det gamle grepet -- malens habitat foerst, resten etterpaa, kutt ved antall
+    plasser -- saa paa malen under ett, og da ble myrriksa aldri tegnet. Den er
+    nesten daglig blant de sikreste artene, men grenmalen har bare
+    gren-plasser, og de tar bare trefugler: seks trefugler fylte lista foer
+    myrriksa kom til orde. Ser vi paa hver plass for seg, tar luftplassen --
+    som staar sist -- den beste som er igjen naar greinene er fulle."""
+    igjen = list(kandidater)
+    valgt = []
+    for plass in mal["plasser"]:
+        for s in igjen:
+            if passer(plass, s.get("scientific_name", "")):
+                valgt.append(s)
+                igjen.remove(s)
+                break
+    return valgt
+
+
 def last_maler() -> list[dict]:
     """Alle maler, med arv loest opp.
 
@@ -975,13 +998,10 @@ def main() -> int:
         kart(mal)
         return 0
 
-    # Artene som hoerer hjemme i malen foerst. Uten dette faller
-    # enkeltbekkasinen ut av myrmalen fordi den ligger paa aattendeplass i
-    # lista, mens en groennsisik som ikke kan staa i siv tar plassen.
-    h = set(mal.get("habitat", []))
-    species = ([s for s in kandidater if habitat(s["scientific_name"]) in h]
-               + [s for s in kandidater if habitat(s["scientific_name"]) not in h]
-               )[:len(mal["plasser"])]
+    # Plass for plass, sikreste art foerst. Uten dette faller enkeltbekkasinen
+    # ut av myrmalen fordi den ligger paa aattendeplass i lista, mens en
+    # groennsisik som ikke kan staa i siv tar plassen.
+    species = velg_arter(kandidater, mal)
     print("Arter: " + ", ".join(
         norwegian_name(s["scientific_name"], s["common_name"]) for s in species))
 
