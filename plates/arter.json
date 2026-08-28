@@ -1,0 +1,20 @@
+{
+  "chloris chloris": {
+    "norsk": "Grønnfink",
+    "engelsk": "European greenfinch",
+    "lengde_cm": 15.0,
+    "habitat": "tre",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-08-28"
+  },
+  "parus major": {
+    "norsk": "Kjøttmeis",
+    "engelsk": "Great tit",
+    "lengde_cm": 14.0,
+    "habitat": "tre",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-08-28"
+  }
+}

@@ -47,5 +47,19 @@
     "side": "https://commons.wikimedia.org/wiki/File%3AA_history_of_British_birds_%286009018942%29.jpg",
     "lisens": "Public domain",
     "opphav": "Morris, F. O."
+  },
+  "Chloris chloris": {
+    "fil": "chloris-chloris.jpg",
+    "commons": "File:A natural history of birds (Numb. LVIII) (9241173180).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AA_natural_history_of_birds_%28Numb._LVIII%29_%289241173180%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Albin, Eleazar; Derham, W."
+  },
+  "Parus major": {
+    "fil": "parus-major.jpg",
+    "commons": "File:British ornithology (18964485341).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_%2818964485341%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
   }
 }

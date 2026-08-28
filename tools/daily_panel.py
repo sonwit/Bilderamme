@@ -38,12 +38,29 @@ HTML = os.path.join(WWW, "panel.html")
 # de griper.
 RETUSJ = os.environ.get("RETUSJ", "2")
 
+# Ferske arter gjoeres klare FOER sida tegnes: kildeplansje fra Commons,
+# 1:1-fugler, fotpunkt og metadata. Uten dette sto en ny art i lista uten aa
+# bli tegnet til noen oppdaget det for haand -- groennfinken laa slik i ukevis
+# paa 96 %. Taket er lavt med vilje: hver art koster to bildekall, og en dag
+# med mange gjester skal ikke kunne tygge seg gjennom kvota ubemerket.
+# NYE_ARTER=0 slaar det av.
+NYE_ARTER = int(os.environ.get("NYE_ARTER", "2"))
+
 
 def kjoer(navn: str, *args: str) -> None:
     print(f"\n--- {navn} ---", flush=True)
     r = subprocess.run([PY, os.path.join(HERE, navn), *args])
     if r.returncode != 0:
         raise SystemExit(f"FEIL: {navn} gikk ut med kode {r.returncode}")
+
+
+def kjoer_mykt(navn: str, *args: str) -> None:
+    """Som kjoer(), men en feil stopper ikke dagen."""
+    print(f"\n--- {navn} ---", flush=True)
+    r = subprocess.run([PY, os.path.join(HERE, navn), *args])
+    if r.returncode != 0:
+        print(f"ADVARSEL: {navn} gikk ut med kode {r.returncode} — fortsetter",
+              file=sys.stderr)
 
 
 def main() -> int:
@@ -64,6 +81,13 @@ def main() -> int:
         # observasjonsloggen foerst.
         birds = os.path.join(WWW, "birds-valgt.json")
         kjoer("birdnet_analyze.py", "--dag", args.dag, birds)
+
+    # Foer sammensettingen, ikke etter: compose_branch leser bird_names ved
+    # import, og ny_art skriver metadataene til plates/arter.json. At det er en
+    # egen prosess er nettopp det som gjoer at den nye arten er med med én gang.
+    if NYE_ARTER > 0:
+        kjoer_mykt("ny_art.py", "--mangler", "--birds", birds,
+                   "--maks", str(NYE_ARTER))
 
     kjoer("compose_branch.py", "--birds", birds, "--retusj", RETUSJ)
     # Puta avgjoeres av om teksten FAKTISK kolliderer med illustrasjonen, ikke

@@ -17,6 +17,39 @@ at arten boer legges inn her.
     norwegian_name("Pica pica", "Eurasian Magpie")  -> "Skjære"
 """
 
+import json
+import os
+
+# ----------------------------------------------------------------------
+# Arter som er kommet til underveis
+# ----------------------------------------------------------------------
+# ny_art.py skriver hit naar den klargjoer en art som ikke stod i tabellene
+# under: norsk navn, lengde, habitat og overvintring, hentet fra modellen.
+#
+# Tabellene i denne fila er haandsjekket og vinner ALLTID -- fila fyller bare
+# hull. Ser et modellsvar feil ut paa veggen, er rettelsen aa skrive arten inn
+# her, ikke aa redigere JSON-en: da staar den riktige verdien i koden, og
+# neste kjoering av ny_art.py kan ikke overskrive den.
+_HER = os.path.dirname(os.path.abspath(__file__))
+_PLATES = (os.path.join(_HER, "plates") if os.path.isdir(os.path.join(_HER, "plates"))
+           else os.path.join(_HER, "..", "plates"))
+ARTER_JSON = os.environ.get("FUGLE_ARTER_JSON",
+                            os.path.join(_PLATES, "arter.json"))
+
+
+def _last_ekstra() -> dict:
+    """Leses én gang ved import. Fila skrives sjelden -- én gang per ny art --
+    og de som leser den er kortlivede kjoeringer."""
+    try:
+        with open(ARTER_JSON) as f:
+            return {k.strip().lower(): v for k, v in json.load(f).items()}
+    except (OSError, ValueError):
+        return {}
+
+
+EKSTRA = _last_ekstra()
+
+
 # Vitenskapelig navn (lowercase) -> norsk navn.
 NORWEGIAN = {
     # --- Meiser og smaafugl i hagen ---
@@ -184,6 +217,9 @@ def norwegian_name(scientific_name: str, common_name: str = "") -> str:
     key = (scientific_name or "").strip().lower()
     if key in NORWEGIAN:
         return NORWEGIAN[key]
+    # Et navn for akkurat denne arten slaar et gjett ut fra slekten.
+    if EKSTRA.get(key, {}).get("norsk"):
+        return EKSTRA[key]["norsk"]
     genus = key.split(" ")[0] if key else ""
     if genus:
         hits = {v for k, v in NORWEGIAN.items() if k.startswith(genus + " ")}
@@ -195,7 +231,8 @@ def norwegian_name(scientific_name: str, common_name: str = "") -> str:
 def is_translated(scientific_name: str) -> bool:
     """True hvis arten har et norsk navn i lista. Panelet bruker dette til aa
     sette det engelske navnet i kursiv, saa hull i lista er lette aa se."""
-    return (scientific_name or "").strip().lower() in NORWEGIAN
+    key = (scientific_name or "").strip().lower()
+    return key in NORWEGIAN or bool(EKSTRA.get(key, {}).get("norsk"))
 
 
 # ----------------------------------------------------------------------
@@ -282,6 +319,8 @@ def length_cm(scientific_name: str) -> float:
     key = (scientific_name or "").strip().lower()
     if key in LENGDE_CM:
         return float(LENGDE_CM[key])
+    if EKSTRA.get(key, {}).get("lengde_cm"):
+        return float(EKSTRA[key]["lengde_cm"])
     genus = key.split(" ")[0] if key else ""
     if genus:
         treff = [v for k, v in LENGDE_CM.items() if k.startswith(genus + " ")]
@@ -366,15 +405,18 @@ OVERVINTRER = {
 
 def habitat(scientific_name: str) -> str:
     """Grovkategori for hvilken mal arten passer i."""
-    return HABITAT.get((scientific_name or "").strip().lower(), STANDARD_HABITAT)
+    key = (scientific_name or "").strip().lower()
+    if key in HABITAT:
+        return HABITAT[key]
+    return EKSTRA.get(key, {}).get("habitat", STANDARD_HABITAT)
 
 
 def overvintrer(scientific_name: str) -> bool:
-    return (scientific_name or "").strip().lower() in OVERVINTRER
+    key = (scientific_name or "").strip().lower()
+    return key in OVERVINTRER or bool(EKSTRA.get(key, {}).get("overvintrer"))
 
 
 if __name__ == "__main__":
-    import json
     import sys
     src = sys.argv[1] if len(sys.argv) > 1 else "test/data/birds-2026-08-28.json"
     data = json.load(open(src))
