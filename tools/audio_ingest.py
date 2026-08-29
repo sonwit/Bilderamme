@@ -15,6 +15,7 @@ Endepunkter:
        saa ESP-en slipper aa holde radioen paa mens BirdNET tenker).
   GET  /status                                      hva som skjer / sist skjedde
   GET  /config                                      fjernkonfig til utedelen
+                                                    (planen regnes ut her, se under)
   POST /config   body = JSON                        oppdater fjernkonfigen
 
 Fjernkonfig: ESP-en henter GET /config etter hver opplasting og tar verdiene
@@ -40,6 +41,9 @@ Miljoevariabler:
 
 Kjoer som systemd-tjeneste, se deploy/fugleramme-audio-ingest.service.
 """
+from __future__ import annotations
+
+import datetime
 import json
 import os
 import queue
@@ -54,6 +58,13 @@ BASE_DIR = os.environ.get("FUGLE_DIR", "/opt/fugleramme")
 AUDIO_DIR = os.path.join(BASE_DIR, "audio")
 CONFIG_PATH = os.path.join(BASE_DIR, "esp_config.json")
 ANALYZE = os.path.join(BASE_DIR, "birdnet_analyze.py")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    import lytteplan
+except Exception as _e:  # noqa: BLE001
+    lytteplan = None
+    print(f"ADVARSEL: lytteplan utilgjengelig ({_e}) — /config svarer bare med fila",
+          file=sys.stderr)
 ANALYZE_PY = os.environ.get("ANALYZE_PY", sys.executable)
 PORT = int(os.environ.get("INGEST_PORT", "8091"))
 TOKEN = os.environ.get("INGEST_TOKEN")
@@ -90,6 +101,25 @@ def _worker():
             _jobs.task_done()
 
 
+def siste_volt() -> float | None:
+    """Batterispenningen fra den ferskeste helse-sidecaren.
+
+    Utedelen sender den i X-Fugl-Health ved hver opplasting, saa den nyeste
+    fila er aldri mer enn én oekt gammel. Finner vi ingen, returnerer vi None
+    -- og lytteplanen velger da den forsiktigste trappa. Ukjent batteri skal
+    aldri gi den tetteste planen."""
+    try:
+        filer = [f for f in os.listdir(AUDIO_DIR) if f.endswith(".json")]
+        if not filer:
+            return None
+        nyest = max(filer)          # fugl_YYYYmmdd_HHMMSS.json sorterer kronologisk
+        with open(os.path.join(AUDIO_DIR, nyest)) as f:
+            v = json.load(f).get("volt")
+        return float(v) if v else None
+    except Exception:  # noqa: BLE001
+        return None
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = "FugleIngest/1.0"
 
@@ -112,13 +142,24 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/config":
             if TOKEN and parse_qs(parsed.query).get("token", [None])[0] != TOKEN:
                 return self._reply(401, {"ok": False, "message": "Mangler eller feil token."})
+            cfg = {}
+            # Planen foerst, saa den manuelle fila oppaa. Feiler utregningen,
+            # skal brikka fortsatt faa et svar -- den er ute i hagen og har
+            # ingen annen kilde til en plan.
+            if lytteplan is not None:
+                try:
+                    cfg = lytteplan.plan(datetime.datetime.now(), siste_volt())
+                except Exception as e:  # noqa: BLE001
+                    print(f"ADVARSEL: lytteplanen feilet ({e}) — bruker bare fila",
+                          file=sys.stderr)
             try:
                 with open(CONFIG_PATH) as f:
-                    return self._reply(200, json.load(f))
+                    cfg.update(json.load(f))
             except FileNotFoundError:
-                return self._reply(200, {})
+                pass
             except ValueError:
                 return self._reply(500, {"ok": False, "message": "esp_config.json er ugyldig JSON."})
+            return self._reply(200, cfg)
         return self._reply(404, {"ok": False, "message": "Ukjent endepunkt."})
 
     def do_POST(self):
