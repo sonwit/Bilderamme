@@ -122,8 +122,24 @@ static bool ntp_sync(uint32_t timeout_ms = 10000) {
 
 // ---------------------------------------------------------------- opptaksplan
 
-// Neste opptaksslot STRENGT etter `now` (lokaltid): 04:00–08:30 hvert 30. min,
-// 09:00–21:00 hver hele time, ellers neste morgen 04:00.
+// Neste opptaksslot etter `now` (lokaltid), etter planen i cfg.
+//
+// Slottet maa ligge et stykke fram, ikke bare i framtida. Deep-sleep-timeren
+// gaar paa en intern RC-oscillator som bommer 2-7 % og UFORUTSIGBART: fire
+// naesten like lange soevner 29. august bommet 28, 38, 84 og 87 sekunder for
+// tidlig. Naar brikka vaakner mer enn en oektlengde for tidlig, er den ferdig
+// FOER slottet -- og med den gamle testen (t > now) siktet den da paa slottet
+// den nettopp hadde dekket, sov noen sekunder, og tok opp én gang til.
+//
+//   13:18:33  vaakner 87 s for tidlig
+//   13:19:38  ferdig, 22 s foer slottet 13:20
+//   13:20:01  samme slott én gang til        <- dublett
+//
+// Halvparten av dagene i timesplanen gikk slik, og to av fire slott i
+// tjueminuttersplanen. Marginen er halve intervallet, men aldri mer enn fire
+// minutter: halve intervallet alene ville faatt en treg oekt (wifi-retry) til
+// aa hoppe over en hel time, og en fast margin ville stjaalet annethvert
+// slott ved fem minutters intervall.
 static time_t next_slot(time_t now) {
   struct tm lt;
   localtime_r(&now, &lt);
@@ -141,7 +157,9 @@ static time_t next_slot(time_t now) {
         slot.tm_sec = 0;
         slot.tm_isdst = -1; // la mktime avgjoere sommertid
         time_t t = mktime(&slot);
-        if (t > now) return t;
+        long margin = step * 30L;              // halve intervallet, i sekunder
+        if (margin > SLOT_MARGIN_MAX_S) margin = SLOT_MARGIN_MAX_S;
+        if (t > now + margin) return t;
       }
     }
   }

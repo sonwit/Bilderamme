@@ -56,3 +56,9 @@
 // Benketesting: > 0 = ignorer planen og kjoer en oekt saa ofte (sekunder).
 // 0 = normal drift etter planen over.
 #define TEST_INTERVAL_S    0
+
+// Naermeste slott vi godtar aa sikte paa, i sekunder. Se next_slot(): under
+// dette regner vi slottet som allerede dekket av oekta vi nettopp tok, og
+// hopper til det neste. Fire minutter dekker den maalte klokkedriften (opptil
+// 119 s) med god margin, og er kort nok til at ingen ekte slott gaar tapt.
+#define SLOT_MARGIN_MAX_S  240
