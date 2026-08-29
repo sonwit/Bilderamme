@@ -381,9 +381,15 @@ GEMINI_BACKOFF = int(os.environ.get("GEMINI_BACKOFF", "10"))  # sekunder * forso
 # prosjektet har naadd beloepsgrensen sin. Da hjelper ingen venting, og med
 # 5 forsoek x voksende backoff brenner hvert kall halvannet minutt paa
 # ingenting. Disse gaar rett i feil.
+# 429 er som regel forbigaaende, men ikke naar den betyr at kontoen er tom:
+# «Your prepayment credits are depleted» kom 29. august, og da brukte bade
+# retusjen og ny_art full backoff-runde paa noe som ikke kan bli bedre av aa
+# vente. Sida ble riktig uansett -- den faller tilbake paa den lokale
+# sammensettingen -- men den brukte et par minutter paa aa gi opp.
 _ENDELIGE_MARKERS = ("spending cap", "exceeded its monthly", "billing",
                      "quota exceeded for quota metric", "permission_denied",
-                     "api key not valid", "invalid_argument")
+                     "api key not valid", "invalid_argument",
+                     "prepayment credits", "credits are depleted")
 
 
 def _is_transient(err: Exception) -> bool:

@@ -173,6 +173,7 @@ NORWEGIAN = {
     "anas platyrhynchos": "Stokkand",
     "anas crecca": "Krikkand",
     "mareca penelope": "Brunnakke",
+    "mareca strepera": "Snadderand",
     "aythya fuligula": "Toppand",
     "bucephala clangula": "Kvinand",
     "mergus merganser": "Laksand",
