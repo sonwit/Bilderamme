@@ -721,6 +721,38 @@ def _god_nok(soner: dict, basis: dict) -> bool:
     return True
 
 
+# Hvor mye av blekket i en fugls boks som maa vaere igjen etter retusjen.
+# Under dette har modellen flyttet eller slettet fuglen i stedet for aa feste
+# foettene dens.
+BLIR_STAAENDE = float(os.environ.get("RETUSJ_BLIR_STAAENDE", "0.45"))
+
+
+def _fuglene_staar(kandidat: Image.Image, foer: Image.Image,
+                   plassert: list[dict]) -> str | None:
+    """Navnet paa foerste fugl som er blitt borte, eller None hvis alle staar.
+
+    Retusjen skal bare feste foetter. 29. august slettet den i stedet
+    groennsisiken fra plassen sin og tegnet to fugler et annet sted paa arket
+    -- boksen sto igjen med bar kvist, og merket pekte paa ingenting.
+    Sonemaalingen fanget det ikke, for den ser bare paa tekstfeltet.
+
+    Vi teller blekk i hver fugls boks foer og etter. En fugl som fester
+    foettene flytter noen piksler; en fugl som er fjernet tar med seg det
+    meste av blekket sitt."""
+    a = np.asarray(foer.convert("L"), dtype=np.float32)
+    b = np.asarray(kandidat.convert("L"), dtype=np.float32)
+    if a.shape != b.shape:
+        return None                        # ulik stoerrelse -- ikke sammenlignbart
+    for s in plassert:
+        x0, y0, x1, y1 = s["boks"]
+        fer = float((a[y0:y1, x0:x1] < KUTT).sum())
+        etter = float((b[y0:y1, x0:x1] < KUTT).sum())
+        if fer > 0 and etter / fer < BLIR_STAAENDE:
+            return (f"{norwegian_name(s['scientific_name'], s.get('common_name', ''))}"
+                    f" ({etter / fer * 100:.0f} % av blekket igjen)")
+    return None
+
+
 def retusjer(ark: Image.Image, tries: int,
            plassert: list[dict]) -> tuple[Image.Image, dict, bool]:
     """Send arket tilbake for aa faa foettene til aa gripe. Returnerer
@@ -742,12 +774,18 @@ def retusjer(ark: Image.Image, tries: int,
         status = " ".join(f"{n}={v['blekk']*100:.1f}%/verst {v['verst']*100:.1f}%"
                           for n, v in soner.items())
         ren = _god_nok(soner, basis)
-        print(f"  retusj {forsoek}/{tries}: {status}  "
-              f"{'godtatt' if ren else 'FORKASTET — rotet i tekstsonen'}")
-        if ren:
+        borte = _fuglene_staar(kandidat, ark, plassert) if ren else None
+        if not ren:
+            dom = "FORKASTET — rotet i tekstsonen"
+        elif borte:
+            dom = f"FORKASTET — flyttet paa {borte}"
+        else:
+            dom = "godtatt"
+        print(f"  retusj {forsoek}/{tries}: {status}  {dom}")
+        if ren and not borte:
             return kandidat, soner, True
-    print("  ingen retusjforsoek holdt tekstsonen ren — beholder den lokale "
-          "sammensettingen", file=sys.stderr)
+    print("  ingen retusjforsoek besto — beholder den lokale sammensettingen",
+          file=sys.stderr)
     return ark, zone_report(ark), False
 
 
