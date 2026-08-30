@@ -93,6 +93,29 @@ def _les(sti: str) -> dict | None:
         return None
 
 
+def _vakt(naa: datetime.datetime) -> tuple[list[str], list[str]]:
+    """(aktive advarsler, siste linjer fra vaktloggen).
+
+    Vakten kjoerer fra cron hvert kvarter og skriver bare til logg. Uten dette
+    maatte man SSH-e inn for aa se hva den har sagt -- og da blir den ikke
+    lest. Advarslene regnes ut paa nytt her, saa de er ferske, mens loggen
+    viser historikken."""
+    aktive, logg = [], []
+    try:
+        import sys
+        sys.path.insert(0, HERE)
+        import vakt
+        aktive = [m for _, m in vakt.sjekk(naa)]
+    except Exception as e:  # noqa: BLE001
+        aktive = [f"vakt.py kunne ikke kjøres: {e}"]
+    try:
+        with open(os.path.join(BASE, "logs", "vakt.log")) as f:
+            logg = [r.rstrip() for r in f.readlines()[-8:] if r.strip()]
+    except OSError:
+        pass
+    return aktive, logg
+
+
 def samle(dager: int = 21) -> dict:
     naa = datetime.datetime.now()
     helse = _sidecars(dager)
@@ -144,8 +167,11 @@ def samle(dager: int = 21) -> dict:
     # --- sida og ramma ---
     bg = _les(os.path.join(PLATES, "dagens-bakgrunn.json")) or {}
     frame = os.path.join(WWW, "frame.bin")
+    vakt_aktive, vakt_logg = _vakt(naa)
     return {
         "naa": naa,
+        "vakt": vakt_aktive,
+        "vaktlogg": vakt_logg,
         "utedel": {
             "sist": siste["t"] if siste else None,
             "stille_min": stille_min,
@@ -261,6 +287,11 @@ STIL = """
   .merke{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem}
   .merke.ok{background:rgba(46,125,82,.14);color:var(--ok)}
   .merke.feil{background:rgba(178,58,58,.14);color:var(--err)}
+  .helse.varsel{border-color:var(--err)}
+  .helse .advarsel{margin:0 0 6px;color:var(--err);font-weight:600}
+  .helse .logg{margin:8px 0 0;padding:10px 12px;background:var(--bg);
+    border:1px solid var(--line);border-radius:10px;font-size:.8rem;
+    line-height:1.5;white-space:pre-wrap;color:var(--muted);overflow-x:auto}
 """
 
 
@@ -326,7 +357,22 @@ def side(d: dict) -> str:
         for sci, n, b in d["mangler"][:10]) or \
         '<tr><td class="tom">alle hørte arter kan tegnes</td></tr>'
 
+    if d["vakt"]:
+        vaktboks = ('<section class="card helse varsel"><h2>Vakten sier fra</h2>'
+                    + "".join(f'<p class="advarsel">{html.escape(m)}</p>'
+                              for m in d["vakt"]))
+    else:
+        vaktboks = ('<section class="card helse"><h2>Vakten '
+                    '<span class="merke ok">alt i orden</span></h2>')
+    if d["vaktlogg"]:
+        vaktboks += ('<pre class="logg">'
+                     + html.escape("\n".join(d["vaktlogg"])) + "</pre>")
+    else:
+        vaktboks += '<p class="tom">Ingenting i vaktloggen. Den skriver bare når noe er galt.</p>'
+    vaktboks += "</section>"
+
     return f"""
+{vaktboks}
 <section class="card helse">
   <h2>Utedelen {stempel}</h2>
   <div class="rad">
