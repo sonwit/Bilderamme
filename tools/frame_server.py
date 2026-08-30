@@ -281,6 +281,28 @@ class Handler(BaseHTTPRequestHandler):
             return self._reply(401, "Mangler eller feil token.")
         if path == "/":
             return self._reply(200, WEBUI_HTML, "text/html; charset=utf-8")
+        if path == "/helse":
+            # Helsesida bygges av helse.py, som ogsaa kan kjoeres frittstaaende.
+            # Feiler den, skal resten av serveren staa: dette er en side som
+            # skal FORTELLE om feil, ikke skape dem.
+            try:
+                import helse
+                return self._reply(200, _helse_side(helse), "text/html; charset=utf-8")
+            except Exception as e:  # noqa: BLE001
+                return self._reply(500, f"Helsesida feilet: {e}")
+        if path == "/api/helse":
+            try:
+                import helse
+                d = helse.samle()
+                d["naa"] = d["naa"].isoformat()
+                for k in ("sist",):
+                    if d["utedel"].get(k):
+                        d["utedel"][k] = d["utedel"][k].isoformat()
+                if d["side"].get("frame_tid"):
+                    d["side"]["frame_tid"] = d["side"]["frame_tid"].isoformat()
+                return self._reply_json(200, d)
+            except Exception as e:  # noqa: BLE001
+                return self._reply_json(500, {"ok": False, "message": str(e)})
         if path == "/api/images":
             return self._reply_json(200, {"images": _archive_list(), "status": _state["status"], "last": _state["last"]})
         if path == "/status":
@@ -295,7 +317,7 @@ class Handler(BaseHTTPRequestHandler):
                 "Fugleramme frame-server.\n"
                 "Web: GET /   |  POST /api/generate {emne,stil,seeds[]}  |  POST /api/send {name}\n"
                 "Siri: POST /generate (emne i body)  |  GET /generate?emne=...\n"
-                "GET /daily   GET /status   GET /api/images\n")
+                "GET /daily   GET /status   GET /api/images   GET /helse\n")
         return self._reply(404, "Ukjent endepunkt.")
 
     # --- POST ---
@@ -389,6 +411,19 @@ def main():
 # ----------------------------------------------------------------------
 # Web-appen (én selvstendig HTML-side)
 # ----------------------------------------------------------------------
+
+def _helse_side(helse) -> str:
+    """Helsesida i web-appens drakt: samme palett, samme kort."""
+    stil = WEBUI_HTML.split("<style>", 1)[1].split("</style>", 1)[0]
+    return ("<!doctype html><html lang=no><head><meta charset=utf-8>"
+            "<meta name=viewport content='width=device-width, initial-scale=1'>"
+            "<title>Fugleramme — helse</title><style>"
+            + stil + helse.STIL +
+            "</style></head><body>"
+            "<header><h1>Helse</h1>"
+            "<div class=status><a href='/'>← tilbake til bildene</a></div>"
+            "</header><main>" + helse.side(helse.samle()) + "</main></body></html>")
+
 
 WEBUI_HTML = r"""<!doctype html>
 <html lang="no">
