@@ -81,6 +81,10 @@ NY_FUGL: set = set()
 # hvor sikker BirdNET var.
 MAL_DIR = os.path.join(PLATES_DIR, "maler")
 
+# Hvor mange oekter en art maa vaere hoert i for aa bli tegnet. Se
+# begrunnelsen der den brukes -- kort sagt: havhesten.
+MIN_OEKTER = int(os.environ.get("TEGN_MIN_OEKTER", "2"))
+
 # Hvilke arter en plass tar imot. En skjaere kan ikke staa i siv, og en
 # myrrikse hoerer ikke hjemme paa en kvist -- men ALLE fugler kan fly, saa
 # luftplassene tar imot hvem som helst. Det er ogsaa det som gjoer at
@@ -1065,6 +1069,21 @@ def main() -> int:
     # kutter etterpaa.
     kandidater, _ = split_species(birds.get("species", []), 12)
     kandidater = [s for s in kandidater if plate_path(s.get("scientific_name", ""))]
+    # Én enkelt oekt er for tynt grunnlag til aa tegne en fugl paa veggen.
+    # 30. august ga BirdNET 68 % paa en HAVHEST -- en havfugl fra Runde, tjue
+    # kilometer fra naermeste sjoe -- hoert i ett minutt og aldri igjen. Den
+    # ble tegnet seilende over bjoerka. Samme dag: en sangsvane paa 67 %, ogsaa
+    # ett minutt. Stedsfilteret redder oss ikke her, for begge hekker i Norge.
+    #
+    # Maalt over tolv dager koster kravet 49 -> 26 tegnede fugler, og fire
+    # dager mister alt. Men de dagene hadde bare ÉN art hoert i hele doegnet,
+    # og de er fra den gamle tynne lytteplanen. Paa den tetteste dagen gaar 10
+    # ned til 8. Med 60 opptak i doegnet er to oekter en lav terskel.
+    foer = len(kandidater)
+    kandidater = [s for s in kandidater if s.get("sessions", 1) >= MIN_OEKTER]
+    if len(kandidater) < foer:
+        print(f"  {foer - len(kandidater)} art(er) utelatt: hoert i faerre enn "
+              f"{MIN_OEKTER} oekter")
     if not kandidater:
         print("Ingen av dagens arter har en plansje ennaa.", file=sys.stderr)
         return 1
