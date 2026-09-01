@@ -8,6 +8,69 @@
     "kilde": "modell",
     "lagt_til": "2026-08-28"
   },
+  "coturnix coturnix": {
+    "norsk": "Vaktel",
+    "engelsk": "Common quail",
+    "lengde_cm": 17.0,
+    "habitat": "bakke",
+    "overvintrer": false,
+    "kilde": "modell",
+    "lagt_til": "2026-09-01"
+  },
+  "cyanistes caeruleus": {
+    "norsk": "Blåmeis",
+    "engelsk": "Eurasian blue tit",
+    "lengde_cm": 12.0,
+    "habitat": "tre",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-08-31"
+  },
+  "cygnus cygnus": {
+    "norsk": "Sangsvane",
+    "engelsk": "Whooper swan",
+    "lengde_cm": 150.0,
+    "habitat": "vaatmark",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-08-30"
+  },
+  "dryobates minor": {
+    "norsk": "Dvergspett",
+    "engelsk": "Lesser spotted woodpecker",
+    "lengde_cm": 15.0,
+    "habitat": "tre",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-08-31"
+  },
+  "fringilla coelebs": {
+    "norsk": "Bokfink",
+    "engelsk": "Common chaffinch",
+    "lengde_cm": 15.0,
+    "habitat": "tre",
+    "overvintrer": false,
+    "kilde": "modell",
+    "lagt_til": "2026-09-01"
+  },
+  "fulmarus glacialis": {
+    "norsk": "Havhest",
+    "engelsk": "Northern fulmar",
+    "lengde_cm": 48.0,
+    "habitat": "luft",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-08-30"
+  },
+  "mareca strepera": {
+    "norsk": "Snadderand",
+    "engelsk": "Gadwall",
+    "lengde_cm": 51.0,
+    "habitat": "vaatmark",
+    "overvintrer": false,
+    "kilde": "modell",
+    "lagt_til": "2026-08-29"
+  },
   "parus major": {
     "norsk": "Kjøttmeis",
     "engelsk": "Great tit",
@@ -25,5 +88,14 @@
     "overvintrer": false,
     "kilde": "modell",
     "lagt_til": "2026-08-28"
+  },
+  "turdus pilaris": {
+    "norsk": "Gråtrost",
+    "engelsk": "Fieldfare",
+    "lengde_cm": 25.0,
+    "habitat": "tre",
+    "overvintrer": false,
+    "kilde": "modell",
+    "lagt_til": "2026-08-29"
   }
 }

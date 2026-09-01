@@ -68,5 +68,54 @@
     "side": "https://commons.wikimedia.org/wiki/File%3AAtlas_de_poche_des_oiseaux_de_France%2C_Suisse%2C_et_Belgique%2C_utiles_ou_nuisibles_%28Pl._37%29_%286388888223%29.jpg",
     "lisens": "Public domain",
     "opphav": "Hamonville, Jean Charles Louis Tardif"
+  },
+  "Turdus pilaris": {
+    "fil": "turdus-pilaris.jpg",
+    "commons": "File:Meyer Zeit-Vertreib 2 Tafel 065.jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AMeyer_Zeit-Vertreib_2_Tafel_065.jpg",
+    "lisens": "Public domain",
+    "opphav": "<bdi><a href=\"https://www.wikidata.org/wiki/Q18508384\" class=\"extiw\" title=\"d:Q18508384\"><span title=\"Maler, Kupferstecher\">Johann Daniel Meyer</span></a></bdi>"
+  },
+  "Mareca strepera": {
+    "fil": "mareca-strepera.jpg",
+    "commons": "File:A history of British birds (10422088933).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AA_history_of_British_birds_%2810422088933%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Morris, F. O."
+  },
+  "Fulmarus glacialis": {
+    "fil": "fulmarus-glacialis.jpg",
+    "commons": "File:264 Fulmar Petrel.jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3A264_Fulmar_Petrel.jpg",
+    "lisens": "Public domain",
+    "opphav": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:John_James_Audubon\" class=\"extiw\" title=\"w:en:John James Audubon\"><span title=\"French-American ornithologist, naturalist, and painter (1785–1851)\">John J"
+  },
+  "Dryobates minor": {
+    "fil": "dryobates-minor.jpg",
+    "commons": "File:Dendrocopos minor male.jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ADendrocopos_minor_male.jpg",
+    "lisens": "Public domain",
+    "opphav": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:Johann_Friedrich_Naumann\" class=\"extiw\" title=\"w:en:Johann Friedrich Naumann\"><span title=\"German ornithologist, engraver and editor (1780-1857)\">Johann "
+  },
+  "Cyanistes caeruleus": {
+    "fil": "cyanistes-caeruleus.jpg",
+    "commons": "File:British ornithology (18773870638).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_%2818773870638%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
+  },
+  "Fringilla coelebs": {
+    "fil": "fringilla-coelebs.jpg",
+    "commons": "File:British ornithology (18339009534).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_%2818339009534%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
+  },
+  "Coturnix coturnix": {
+    "fil": "coturnix-coturnix.jpg",
+    "commons": "File:A natural history of birds (Numb. XXX) (9241132516).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AA_natural_history_of_birds_%28Numb._XXX%29_%289241132516%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Albin, Eleazar; Derham, W."
   }
 }
