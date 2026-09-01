@@ -67,13 +67,27 @@ ssh -t "$SERVER" '
   # Stopp tjenesten rent foerst (unngaar auto-restart-kapploep), ...
   sudo systemctl stop fugleramme-frame-server 2>/dev/null || true
   # ... og drep en evt. MANUELT startet server som ellers holder gammel kode + port 8090.
-  # [f]-trikset gjoer at pkill ikke treffer sitt eget deploy-skall.
-  if pkill -f "[f]rame_server\.py" 2>/dev/null; then
+  # NB: pkill -f matcher mot hele kommandolinja, og HELE dette skriptet er
+  # kommandolinja til skallet som kjoerer det. [f]-trikset skjuler moensteret,
+  # men meldingen under inneholdt det samme navnet uforkledd -- saa pkill drepte
+  # sitt eget deploy-skall, rett etter «systemctl stop» og foer «start».
+  # Deployen doede der hver gang, og lot frame-serveren ligge nede (sist
+  # 1. september 21:46). Derfor: finn PID-ene, hopp over vaart eget skall, drep
+  # resten. Da kan meldingene si hva de vil.
+  drept=""
+  for pid in $(pgrep -f "[f]rame_server\.py" 2>/dev/null); do
+    if [ "$pid" != "$$" ] && [ "$pid" != "$PPID" ]; then kill "$pid" 2>/dev/null && drept=ja || true; fi
+  done
+  if [ -n "$drept" ]; then
     echo "  (stoppet en manuelt startet frame_server.py)"; sleep 1
   fi
 
   # Drep en evt. manuelt startet audio_ingest som ellers holder port 8091.
-  if pkill -f "[a]udio_ingest\.py" 2>/dev/null; then
+  drept=""
+  for pid in $(pgrep -f "[a]udio_ingest\.py" 2>/dev/null); do
+    if [ "$pid" != "$$" ] && [ "$pid" != "$PPID" ]; then kill "$pid" 2>/dev/null && drept=ja || true; fi
+  done
+  if [ -n "$drept" ]; then
     echo "  (stoppet en manuelt startet audio_ingest.py)"; sleep 1
   fi
 
