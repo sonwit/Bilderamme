@@ -20,7 +20,36 @@
     12
   ],
   "prompt": "A single bare tree branch, drawn as a 19th-century engraved book plate: fine linework, muted brown bark, no leaves. The branch enters at the bottom-right corner, runs along the BOTTOM edge and up the RIGHT edge, forming an L that frames the lower and right margins of the page, with a few small side twigs reaching inward. The upper-left region — the left 48% of the width, from the very top down to 75% of the height — must be completely empty white paper: nothing at all there. Keep the bottom 6% empty white paper across the full width. Pure white background, no paper texture, no border, no frame, no shading behind the branch. No birds, no text, no signature. Tall vertical composition.",
+  "_om_plassene": "Stammeplassene staar FOERST med vilje. compose() gir hver fugl den foerste ledige plassen den passer paa, saa en spett som stod etter grenplassene ville tatt en kvist i stedet for stammen den hoerer hjemme paa. Ingen andre enn klatrerne slipper inn paa dem, saa de koster ingenting for resten. Deretter kommer gren- og luftplassene NEDENFRA OG OPP som foer.",
   "plasser": [
+    {
+      "x": 1040,
+      "y": 1240,
+      "h": 200,
+      "speil": false,
+      "type": "stamme",
+      "bare_i": [
+        "gren",
+        "gren-vaar",
+        "gren-sommer",
+        "gren-host",
+        "rogn"
+      ]
+    },
+    {
+      "x": 1050,
+      "y": 980,
+      "h": 170,
+      "speil": true,
+      "type": "stamme",
+      "bare_i": [
+        "gren",
+        "gren-vaar",
+        "gren-sommer",
+        "gren-host",
+        "rogn"
+      ]
+    },
     {
       "x": 700,
       "y": 1364,

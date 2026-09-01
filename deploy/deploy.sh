@@ -42,6 +42,13 @@ if [ -d "$HERE/plates" ]; then
   scp "$HERE"/plates/*.jpg "$HERE"/plates/gren.png "$HERE"/plates/plates.json \
       "$SERVER:$DEST/plates/" 2>/dev/null || true
   scp "$HERE"/plates/fugler/* "$SERVER:$DEST/plates/fugler/" 2>/dev/null || true
+  # Malenes JSON, men ikke bildene deres. Plassene i JSON-en er haandsatt og
+  # hoerer sammen med koden -- en ny plass-type i compose_branch.py er
+  # verdiloes hvis malen som bruker den blir liggende igjen paa Macen.
+  # Bakgrunnsbildene lages derimot én gang med --lag-mal og skal ikke sendes
+  # fram og tilbake for hver deploy.
+  ssh "$SERVER" "mkdir -p $DEST/plates/maler"
+  scp "$HERE"/plates/maler/*.json "$SERVER:$DEST/plates/maler/" 2>/dev/null || true
 fi
 
 echo "→ Kopierer systemd-tjenestefiler ..."

@@ -404,6 +404,28 @@ OVERVINTRER = {
 }
 
 
+# Arter som klatrer paa stammen i stedet for aa sitte paa en kvist. Spettene
+# stoetter seg paa stive halefjaer og gaar oppover; spettmeisa er den eneste
+# som ogsaa gaar NEDOVER med hodet foerst; trekryperen spiraler oppover en
+# stamme om gangen. Alle tre ser feil ut sittende paa tvers av en tynn kvist,
+# og bare de kan staa paa en "stamme"-plass i malene.
+#
+# Vendehalsen (Jynx torquilla) er en spett, men den mangler de stive
+# halefjaerene og sitter paa tvers som en spurvefugl. Den staar derfor ikke
+# her -- «spettefamilien» er feil kriterium, «klatrer paa loddrett ved» er
+# det riktige.
+KLATRER = {
+    "dendrocopos major", "dryobates minor", "dendrocopos leucotos",
+    "picoides tridactylus", "dryocopus martius", "picus viridis",
+    "picus canus", "sitta europaea", "certhia familiaris",
+}
+
+
+def klatrer(scientific_name: str) -> bool:
+    key = (scientific_name or "").strip().lower()
+    return key in KLATRER or bool(EKSTRA.get(key, {}).get("klatrer"))
+
+
 def habitat(scientific_name: str) -> str:
     """Grovkategori for hvilken mal arten passer i."""
     key = (scientific_name or "").strip().lower()

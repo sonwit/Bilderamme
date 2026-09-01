@@ -36,7 +36,8 @@ from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from bird_names import habitat, length_cm, norwegian_name  # noqa: E402
+from bird_names import (habitat, klatrer, length_cm,  # noqa: E402
+                        norwegian_name)
 from generate_daily_image import generate_image  # noqa: E402
 from prepare_plates import whiten              # noqa: E402
 from compose_hero import (BG_JSON, BG_PNG, REF_MAX,  # noqa: E402
@@ -75,6 +76,9 @@ NY_FUGL: set = set()
 #   "bakke"  staar paa mark/siv -- y er bakkelinja, ingen snapping
 #   "luft"   flyr -- ingen fotpunkt, fuglen sentreres paa punktet, og den
 #            tegnes i FLYGENDE positur (egen 1:1-fil per art)
+#   "stamme" klorer seg fast paa loddrett ved -- x snappes til stammen, y er
+#            slottets egen, og fuglen tegnes i KLATRENDE positur. Bare
+#            klatrefuglene slipper til (se klatrer() i bird_names).
 #
 # Plassene staar NEDENFRA OG OPP for gren/bakke: stoerste fugl faar den
 # tykkeste greina nederst. En skjaere paa en topp-kvist ser feil ut uansett
@@ -94,11 +98,19 @@ PLASS_TAR_IMOT = {
     "gren": {"tre"},
     "bakke": {"vaatmark", "bakke"},
     "luft": {"tre", "vaatmark", "bakke", "luft"},
+    "stamme": {"tre"},
 }
 
 
 def passer(plass: dict, sci: str) -> bool:
-    return habitat(sci) in PLASS_TAR_IMOT.get(plass.get("type", "gren"), set())
+    typ = plass.get("type", "gren")
+    if habitat(sci) not in PLASS_TAR_IMOT.get(typ, set()):
+        return False
+    # Habitatet sier bare «trefugl», og det er en kjoettmeis ogsaa. Stammen
+    # krever mer: fuglen maa faktisk klatre paa loddrett ved. En meis limt
+    # opp etter bjoerkestammen ser like feil ut som dvergspetten gjorde paa
+    # tvers av en vannrett kvist -- bare motsatt vei.
+    return typ != "stamme" or klatrer(sci)
 
 
 def velg_arter(kandidater: list[dict], mal: dict) -> list[dict]:
@@ -273,6 +285,20 @@ def bird_prompt(common: str, sci: str, positur: str = "sittende") -> str:
         return (f"A single {common} ({sci}) in flight, {felles} "
                 "Side view, wings fully spread, body level, as in a plate "
                 "showing the bird on the wing. Feet tucked, not extended.")
+    if positur == "klatrende":
+        # «NO branch» i fellesteksten gjelder ogsaa her: stammen finnes
+        # allerede i malen, og tegner modellen sin egen ved rundt fuglen faar
+        # vi to stammer oppaa hverandre. Derfor beskrives stillingen -- kropp
+        # loddrett, hale ned som stoette, taer ut til hver side -- uten aa gi
+        # den noe aa henge i.
+        return (f"A single {common} ({sci}) clinging to a vertical tree "
+                f"trunk, {felles} "
+                "Body vertical and head up, seen from the side and slightly "
+                "behind, pressed close against the (invisible) bark. The "
+                "stiff tail points straight DOWN below the body and is "
+                "braced against the bark as a third support. Both feet grip "
+                "at the same height, toes spread wide to each side, clearly "
+                "visible. Do not draw the trunk itself.")
     return (f"A single {common} ({sci}), {felles} "
             "Side profile, perched upright, legs and feet clearly visible "
             "below the body.")
@@ -284,8 +310,8 @@ def ensure_bird(s: dict, positur: str = "sittende",
     arten dukker opp — det er derfor biblioteket vokser med arter, ikke dager."""
     sci = s["scientific_name"]
     navn = sci.strip().lower().replace(" ", "-")
-    if positur == "flyvende":
-        navn += "-flyvende"
+    if positur in ("flyvende", "klatrende"):
+        navn += "-" + positur
     dest = os.path.join(FUGL_DIR, navn + ".png")
     if sci.strip().lower() in NY_FUGL:
         force = True
@@ -357,18 +383,35 @@ FOT_PROMPT = (
 )
 
 
+# Standardspoersmaalet leter etter foettene UNDER kroppen. Det er feil for
+# en klatrer: der er halespissen, og et fotpunkt paa halen ville limt spetten
+# fast etter halen med foettene ute i lufta. Her spoer vi om grepet i stedet.
+FOT_PROMPT_KLATRENDE = (
+    "This image shows a single bird illustration on a plain white background. "
+    "The bird is clinging to a vertical tree trunk, body upright, tail "
+    "pointing down. Find the point where its TOES GRIP the bark — midway "
+    "between the two feet, at the height of the feet, NOT at the tip of the "
+    "tail and NOT below the tail. If the feet are hidden, give the point on "
+    "the belly side of the body where they would grip. "
+    'Answer with ONLY a JSON object: {"x": <int>, "y": <int>} in coordinates '
+    "normalized to 0-1000, where (0,0) is the top-left corner of the image and "
+    "(1000,1000) the bottom-right. No explanation, no other text."
+)
+
+
 def _meta_path(bird_path: str) -> str:
     return os.path.splitext(bird_path)[0] + ".json"
 
 
-def probe_feet(img: Image.Image) -> tuple[int, int] | None:
+def probe_feet(img: Image.Image,
+               prompt: str = FOT_PROMPT) -> tuple[int, int] | None:
     """Spoer modellen hvor foettene er. Returnerer (x, y) i bildets piksler,
     eller None hvis svaret ikke lot seg lese."""
     try:
         from google import genai
         client = genai.Client()
         resp = client.models.generate_content(
-            model=VISION_MODEL, contents=[FOT_PROMPT, img])
+            model=VISION_MODEL, contents=[prompt, img])
         tekst = (resp.text or "").strip()
         tekst = tekst.removeprefix("```json").removeprefix("```").removesuffix("```")
         d = json.loads(tekst.strip())
@@ -413,9 +456,16 @@ def foot_point(bird_path: str, fugl: Image.Image, force: bool = False) -> tuple[
         except Exception:  # noqa: BLE001
             pass
 
-    punkt, kilde = probe_feet(fugl), "modell"
+    klatre = os.path.basename(bird_path).endswith("-klatrende.png")
+    punkt, kilde = probe_feet(
+        fugl, FOT_PROMPT_KLATRENDE if klatre else FOT_PROMPT), "modell"
     if punkt is None:
-        punkt, kilde = (fugl.width // 2, foot_row(fugl)), "heuristikk"
+        # Reserven for en klatrer kan ikke vaere «nederste blekk»: det er
+        # halespissen. Foettene sitter omtrent der kroppen er paa det
+        # bredeste, saa vi tar midt paa bildet i hoeyden i stedet.
+        punkt = ((fugl.width // 2, fugl.height // 2) if klatre
+                 else (fugl.width // 2, foot_row(fugl)))
+        kilde = "heuristikk"
     with open(meta_p, "w") as f:
         json.dump({"fot": list(punkt), "kilde": kilde,
                    "bilde": [fugl.width, fugl.height]}, f, indent=2)
@@ -526,6 +576,60 @@ def perch_y(ark: Image.Image, x: int, y_hint: int, vindu: int = 150) -> int:
     return min(topper, key=lambda t: abs(t - y_hint)) if topper else y_hint
 
 
+# Hvor langt til hver side vi leter etter stammen. Bevisst kort: proevde vi
+# hele bredden, slo bladklasene paa hoestmalen seg sammen med stammen til ett
+# felt fra x=493 til x=1091, og «midt paa stammen» havnet ute i bladverket.
+# Plassen er maalt for haand med --kart; snappingen skal bare ta opp driften
+# mellom aarstidene.
+STAMME_SOEK = int(os.environ.get("STAMME_SOEK", "70"))
+
+
+def stamme_ved(ark: Image.Image, x_hint: int, y: int,
+               vindu: int = 60) -> tuple[int, int]:
+    """Venstre og hoeyre kant av stammen ved y, naermest x_hint.
+
+    Motstykket til perch_y: der snapper vi NEDOVER til en overflate aa staa
+    paa, her snapper vi SIDEVEIS til veden aa klore seg fast i.
+
+    Aarstidsvariantene tegnes oppaa det samme skjelettet, men modellen flytter
+    stammen noen titalls piksler hver gang -- maalt over de fem grenmalene
+    ligger den samme stammen mellom x=1022 og x=1084. Ett haandsatt tall ville
+    truffet én av dem.
+
+    Vi ser paa et baand rader rundt y og teller hvor stor del av baandet hver
+    kolonne har blekk i. En stamme gaar gjennom hele baandet og faar hoey
+    dekning; en kvist paa tvers krysser bare et par rader og faar lav. Det som
+    er igjen over halve toppdekningen er veden, og ytterpunktene er kantene.
+
+    Vi gir KANTENE og ikke midtlinja, fordi det er kanten fuglen skal gripe.
+    Legger vi klørne midt paa stammen, havner kroppen -- som henger ut til én
+    side av foten -- helt utenfor veden, og spetten ser ut til aa klore seg
+    fast i lufta like ved barken. Griper den derimot den kanten den vender
+    ryggen til, dekker kroppen stammen slik den skal.
+
+    Finner vi ingenting, blir plassens egen x staaende -- samme forsiktige
+    reserve som perch_y har."""
+    a = np.asarray(ark.convert("RGB")).mean(axis=2)
+    y0, y1 = max(0, y - vindu), min(a.shape[0], y + vindu)
+    x0, x1 = max(0, x_hint - STAMME_SOEK), min(a.shape[1], x_hint + STAMME_SOEK)
+    dekning = (a[y0:y1, x0:x1] < 225).mean(axis=0)
+    if not len(dekning) or dekning.max() < 0.15:
+        return x_hint, x_hint
+    ved = np.where(dekning >= dekning.max() * 0.5)[0]
+    return int(x0 + ved[0]), int(x0 + ved[-1])
+
+
+def stamme_x(ark: Image.Image, x_hint: int, y: int, fx: int, bredde: int) -> int:
+    """Der klørne skal settes paa stammen.
+
+    fx er fotpunktet i fuglens eget utsnitt: ligger det til venstre i
+    utsnittet, henger kroppen mot hoeyre, og da maa grepet ligge paa stammens
+    VENSTRE kant for at kroppen skal legge seg over veden. Speilvendes fuglen,
+    speiles fotpunktet med den, saa dette foelger av seg selv."""
+    venstre, hoeyre = stamme_ved(ark, x_hint, y)
+    return venstre if fx * 2 < bredde else hoeyre
+
+
 # Hvor mye to fugler faar overlappe. Litt er helt greit -- retusjtrinnet
 # fletter dem pent sammen, og en flokk paa samme grein SKAL staa taett. Men
 # to store fugler paa naesten samme punkt (kattugla landet oppaa skjaera da
@@ -569,7 +673,8 @@ def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
             typ = plass.get("type", "gren")
             if not passer(plass, sci):
                 continue
-            positur = "flyvende" if typ == "luft" else "sittende"
+            positur = {"luft": "flyvende",
+                       "stamme": "klatrende"}.get(typ, "sittende")
             sti = ensure_bird(s, positur, force=False)
             if not sti:
                 break                      # ingen plansje aa tegne etter
@@ -593,9 +698,13 @@ def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
                 fugl = fugl.transpose(Image.FLIP_LEFT_RIGHT)
                 fx = fugl.width - fx       # fotpunktet speiles med bildet
 
-            # Bare gren-plasser snapper til ved. Bakke- og luftplasser er
-            # satt der de skal vaere.
-            x, y = ax, perch_y(ark, ax, ay) if typ == "gren" else ay
+            # Gren-plasser snapper NEDOVER til en overflate, stamme-plasser
+            # SIDEVEIS til veden. Bakke- og luftplasser er satt der de skal
+            # vaere og snapper ingen vei.
+            if typ == "stamme":
+                x, y = stamme_x(ark, ax, ay, fx, fugl.width), ay
+            else:
+                x, y = ax, perch_y(ark, ax, ay) if typ == "gren" else ay
 
             # Kom klar av tekstfeltet. Kantene regnes fra FESTEPUNKTET, ikke
             # fra bildets midte: det er der fuglen faktisk kommer til aa staa.
@@ -604,6 +713,8 @@ def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
                 x = SPERRE_X + fx + 8
                 if typ == "gren":
                     y = perch_y(ark, x, y)
+                elif typ == "stamme":
+                    x = stamme_x(ark, x, y, fx, fugl.width)
                 flyttet = True
                 if (x - fx + fugl.width) > 1180:
                     ny_h = max(90, round(h * (1180 - SPERRE_X) / fugl.width))
@@ -613,6 +724,8 @@ def compose(species: list[dict], mal: dict) -> tuple[Image.Image, list[dict]]:
                     x = SPERRE_X + fx + 8
                     if typ == "gren":
                         y = perch_y(ark, x, y)
+                    elif typ == "stamme":
+                        x = stamme_x(ark, x, y, fx, fugl.width)
 
             boks = (x - fx, y - fy + 4, x - fx + fugl.width, y - fy + 4 + fugl.height)
             # Plassen kan tillate mer overlapp enn standarden. Paa myrkanten
@@ -672,6 +785,15 @@ def retusj_prompt(plassert: list[dict]) -> str:
             "The birds standing on the ground: plant their feet properly on "
             "the mud or among the stems, so they stand in the vegetation "
             "rather than on top of it.")
+    if "stamme" in typer:
+        oppgaver.append(
+            "The birds clinging to the trunk: they must STAY vertical "
+            "against the bark, each one facing the way it already faces. "
+            "Make their claws dig into the bark, and where a bird's tail "
+            "points down along the trunk, let it press against the bark as a "
+            "third support. Do not turn them sideways, do not turn one "
+            "upside down, do not perch them on a twig, and do not draw a new "
+            "branch under them.")
     if "luft" in typer:
         oppgaver.append(
             "The birds in flight: they must STAY in flight, wings spread, "
@@ -757,6 +879,64 @@ def _fuglene_staar(kandidat: Image.Image, foer: Image.Image,
     return None
 
 
+# Hvor stor en sammenhengende klatt med NYTT blekk maa vaere foer den regnes
+# som noe modellen har funnet paa. En dvergspett paa arket er ~140 px hoey og
+# legger flere tusen piksler; en strek som har flyttet seg to piksler legger
+# ingen etter aapningen under.
+NY_KLUMP = int(os.environ.get("RETUSJ_NY_KLUMP", "1200"))
+
+# Hvor langt fra gammelt blekk noe maa ligge for aa telle som nytt. Retusjen
+# tegner HELE arket paa nytt, saa hver kvist og hvert blad havner noen piksler
+# ved siden av seg selv. Det er ikke nye motiver, det er samme motiv i ny
+# strek -- og innenfor denne avstanden ser vi bort fra det.
+NY_NAER = int(os.environ.get("RETUSJ_NY_NAER", "12"))
+
+# Slakk rundt hver fugleboks. En fugl SKAL kunne rette seg opp, faa ny hale
+# eller flytte seg noen piksler -- det er hele poenget med retusjen -- saa
+# alt like ved en fugl vi selv har satt er per definisjon ikke nytt.
+NY_BOKS_SLAKK = int(os.environ.get("RETUSJ_NY_SLAKK", "30"))
+
+
+def _noe_nytt(kandidat: Image.Image, foer: Image.Image,
+              plassert: list[dict]) -> str | None:
+    """Beskrivelse av det stoerste modellen har tegnet inn selv, eller None.
+
+    _fuglene_staar teller blekk INNE i hver fugls boks og fanger dermed at en
+    fugl blir borte. Den ser ikke den motsatte feilen: 1. september tegnet
+    retusjen en bokfink nummer to oppe til hoeyre. Alle fem fuglene sto der de
+    skulle, tekstsonen var ren, og forsoeket ble godtatt -- arket fikk en
+    fugl som ikke stod i lista og ikke hadde noe tall.
+
+    «Do not add or remove birds» staar i prompten. Det holder aapenbart ikke,
+    saa her maales det i stedet: alt blekk som er langt fra baade gammelt
+    blekk og fra fuglene vaare, aapnet for aa bli kvitt kantstoey. Blir det
+    som staar igjen stoerre enn en liten fugl, har modellen laget noe."""
+    from scipy import ndimage
+
+    a = np.asarray(foer.convert("L"), dtype=np.float32) < KUTT
+    b = np.asarray(kandidat.convert("L"), dtype=np.float32) < KUTT
+    if a.shape != b.shape:
+        return None                        # ulik stoerrelse -- ikke sammenlignbart
+
+    kjent = ndimage.binary_dilation(a, iterations=NY_NAER)
+    for sp in plassert:
+        x0, y0, x1, y1 = sp["boks"]
+        kjent[max(0, y0 - NY_BOKS_SLAKK):y1 + NY_BOKS_SLAKK,
+              max(0, x0 - NY_BOKS_SLAKK):x1 + NY_BOKS_SLAKK] = True
+
+    nytt = ndimage.binary_opening(b & ~kjent, structure=np.ones((3, 3)))
+    merket, n = ndimage.label(nytt)
+    if not n:
+        return None
+    areal = ndimage.sum(nytt, merket, range(1, n + 1))
+    i = int(np.argmax(areal))
+    if areal[i] < NY_KLUMP:
+        return None
+    ys, xs = np.where(merket == i + 1)
+    return (f"{int(areal[i])} px nytt blekk ved "
+            f"({int(xs.mean())}, {int(ys.mean())})")
+
+
 def retusjer(ark: Image.Image, tries: int,
            plassert: list[dict]) -> tuple[Image.Image, dict, bool]:
     """Send arket tilbake for aa faa foettene til aa gripe. Returnerer
@@ -779,14 +959,17 @@ def retusjer(ark: Image.Image, tries: int,
                           for n, v in soner.items())
         ren = _god_nok(soner, basis)
         borte = _fuglene_staar(kandidat, ark, plassert) if ren else None
+        nytt = _noe_nytt(kandidat, ark, plassert) if ren and not borte else None
         if not ren:
             dom = "FORKASTET — rotet i tekstsonen"
         elif borte:
             dom = f"FORKASTET — flyttet paa {borte}"
+        elif nytt:
+            dom = f"FORKASTET — tegnet inn noe selv: {nytt}"
         else:
             dom = "godtatt"
         print(f"  retusj {forsoek}/{tries}: {status}  {dom}")
-        if ren and not borte:
+        if ren and not borte and not nytt:
             return kandidat, soner, True
     print("  ingen retusjforsoek besto — beholder den lokale sammensettingen",
           file=sys.stderr)
@@ -872,9 +1055,10 @@ def label_spots(ark: Image.Image, plassert: list[dict]) -> None:
     for sp in plassert:
         x0, y0, x1, y1 = sp["boks"]
         fx, fy = sp["fot"]
-        if sp.get("type") == "luft":
+        if sp.get("type") in ("luft", "stamme"):
             # En flygende fugl har ingen foetter aa staa paa: «fot» er midt
-            # paa kroppen, saa merket maa utenfor silhuetten i stedet.
+            # paa kroppen. Og rett under en klatrer ligger halen, som stoetter
+            # seg mot barken. Begge trenger merket utenfor silhuetten.
             kand = [(x0 - MERKE_UT, y1), (x1 + MERKE_UT, y1),
                     (x0 - MERKE_UT, y0), (x1 + MERKE_UT, y0)]
         else:
