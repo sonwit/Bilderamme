@@ -392,7 +392,15 @@ _ENDELIGE_MARKERS = ("spending cap", "exceeded its monthly", "billing",
                      "prepayment credits", "credits are depleted")
 
 
+class BildeAvvist(RuntimeError):
+    """Modellen svarte, men uten bilde: den ville ikke tegne motivet. Samme
+    prompt gir samme svar, saa dette er en endelig feil -- ikke noe aa vente
+    paa."""
+
+
 def _is_transient(err: Exception) -> bool:
+    if isinstance(err, BildeAvvist):
+        return False
     m = str(err).lower()
     if any(t in m for t in _ENDELIGE_MARKERS):
         return False
@@ -405,6 +413,43 @@ def _is_transient(err: Exception) -> bool:
 # kall eller med IMAGE_MODEL i miljoet, saa det daglige bildet ikke endrer
 # oppfoersel uten at noen har bestemt det.
 IMAGE_MODEL = os.environ.get("IMAGE_MODEL", "gemini-2.5-flash-image")
+
+
+# Naar modellen ikke vil tegne motivet, kommer det ikke noen feilkode: den
+# svarer 200 med en kandidat uten innhold, og en finish_reason som sier hvorfor.
+# «kong harald V» 1. september gav IMAGE_OTHER — modellen tegner ikke navngitte
+# virkelige personer — og sida viste «'NoneType' object has no attribute
+# 'parts'», som ikke hjelper noen. Derfor oversettes grunnene her.
+_AVVISNINGER = {
+    "IMAGE_SAFETY": "sikkerhetsfilteret stoppet bildet.",
+    "IMAGE_PROHIBITED_CONTENT": "motivet er ikke tillatt å tegne.",
+    "PROHIBITED_CONTENT": "motivet er ikke tillatt å tegne.",
+    "SAFETY": "sikkerhetsfilteret stoppet svaret.",
+    "IMAGE_RECITATION": "motivet ligger for tett på et opphavsrettsbeskyttet bilde.",
+    "RECITATION": "svaret lå for tett på et opphavsrettsbeskyttet verk.",
+    "BLOCKLIST": "prompten inneholder et sperret ord.",
+    "SPII": "prompten ser ut til å inneholde personopplysninger.",
+    "IMAGE_OTHER": ("modellen ville ikke tegne dette motivet. Den nekter som "
+                    "regel når motivet er en navngitt, virkelig person."),
+    "MAX_TOKENS": "svaret ble avkortet før bildet var ferdig.",
+}
+
+
+def _avvist(resp, parts) -> BildeAvvist:
+    """Bygg en lesbar feil av et svar uten bilde."""
+    cands = getattr(resp, "candidates", None) or []
+    grunn = getattr(cands[0], "finish_reason", None) if cands else None
+    if grunn is None:
+        grunn = getattr(getattr(resp, "prompt_feedback", None), "block_reason", None)
+    navn = getattr(grunn, "name", None) or (str(grunn) if grunn else "")
+    forklaring = _AVVISNINGER.get(navn.upper()) if navn else None
+    if not forklaring:
+        forklaring = f"modellen svarte uten bilde ({navn or 'ingen grunn oppgitt'})."
+    # Modellen legger av og til ved en tekstlig forklaring i stedet for bildet.
+    tekst = " ".join((p.text or "").strip() for p in (parts or []) if getattr(p, "text", None))
+    if tekst:
+        forklaring += f" Modellen sier: {tekst.strip()[:200]}"
+    return BildeAvvist(f"Gemini tegnet ikke bildet: {forklaring}")
 
 
 def generate_image(prompt: str, ref_images: list | None = None,
@@ -430,10 +475,13 @@ def generate_image(prompt: str, ref_images: list | None = None,
         try:
             resp = client.models.generate_content(
                 model=model or IMAGE_MODEL, contents=contents, config=cfg)
-            for part in resp.candidates[0].content.parts:
+            cands = resp.candidates or []
+            innhold = cands[0].content if cands else None
+            parts = getattr(innhold, "parts", None)
+            for part in parts or []:
                 if part.inline_data is not None:
                     return Image.open(BytesIO(part.inline_data.data)).convert("RGB")
-            raise RuntimeError("Gemini returnerte ikke noe bilde")
+            raise _avvist(resp, parts)
         except Exception as e:  # noqa: BLE001
             last_err = e
             if _is_transient(e) and attempt < GEMINI_RETRIES:
