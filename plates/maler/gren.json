@@ -111,7 +111,14 @@
       "y": 640,
       "h": 110,
       "speil": false,
-      "type": "luft"
+      "type": "luft",
+      "bare_i": [
+        "gren",
+        "gren-vaar",
+        "gran",
+        "gren-vinter"
+      ],
+      "_hvorfor": "Ligger midt i bladverket paa sommer- og hoestbjoerka: 2. sep 2026 fikk graahegra denne plassen, tegnet mindre enn skjaera (luft = langt unna) og foran loevet -- den saa ut som om den satt i treet. Bare paa de bare malene, der det er aapen luft rundt plassen."
     },
     {
       "x": 740,
