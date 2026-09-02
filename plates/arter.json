@@ -1,4 +1,13 @@
 {
+  "ardea cinerea": {
+    "norsk": "Gråhegre",
+    "engelsk": "Grey heron",
+    "lengde_cm": 90.0,
+    "habitat": "vaatmark",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-09-02"
+  },
   "chloris chloris": {
     "norsk": "Grønnfink",
     "engelsk": "European greenfinch",
@@ -79,6 +88,15 @@
     "overvintrer": true,
     "kilde": "modell",
     "lagt_til": "2026-08-28"
+  },
+  "periparus ater": {
+    "norsk": "Svartmeis",
+    "engelsk": "Coal tit",
+    "lengde_cm": 11.0,
+    "habitat": "tre",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-09-02"
   },
   "phoenicurus phoenicurus": {
     "norsk": "Rødstjert",
