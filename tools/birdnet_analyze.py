@@ -55,10 +55,43 @@ AUDIO_KEEP_DAYS = int(os.environ.get("AUDIO_KEEP_DAYS", "21"))
 # treffer mye bedre paa normalisert signal (verifisert: 0 treff -> treff).
 NORMALIZE_BELOW_PEAK = float(os.environ.get("BIRDNET_NORM_PEAK", "0.5"))
 
+# Smellet i starten. 233 av 293 opptak siden 19.08.2026 begynner med et
+# klippet smell paa opptil ett sekund (maalt 02.09), og alle opptak under
+# 22 °C i boksen har det. Mest sannsynlig mikrofonen som ikke er vaaken --
+# eller fuktig -- naar I2S starter. Smellet gir ingen BirdNET-treff i seg
+# selv, men det oedelegger nivaamaalingene: peak, klipping og RMS beskriver
+# smellet, ikke opptaket. Klipper foerste sekund mer enn terskelen, kuttes
+# de foerste SMELL_KUTT_S sekundene foer maaling og analyse. Rene opptak
+# roeres ikke, saa dette virker likt foer og etter at firmwaren kaster mer
+# ved start.
+SMELL_TERSKEL_PCT = float(os.environ.get("BIRDNET_SMELL_PCT", "0.05"))
+SMELL_KUTT_S = float(os.environ.get("BIRDNET_SMELL_KUTT_S", "1.0"))
+
 
 # ----------------------------------------------------------------------
 # Lyd: maal nivaa og normaliser svake opptak
 # ----------------------------------------------------------------------
+
+def kutt_smell(wav_path: str) -> tuple[str, float]:
+    """Kutt smellet i starten om det er der. Returnerer (sti som skal
+    maales og analyseres, klipping i foerste sekund i prosent). Stien er en
+    midlertidig fil naar noe ble kuttet -- den som kaller, rydder."""
+    import numpy as np
+    import soundfile as sf
+
+    data, sr = sf.read(wav_path, dtype="float64")
+    if data.ndim > 1:
+        data = data.mean(axis=1)
+    forste = np.abs(data[:sr]) if len(data) else np.zeros(0)
+    smell = float((forste > 0.99).mean() * 100) if len(forste) else 0.0
+    kutt = int(SMELL_KUTT_S * sr)
+    if smell <= SMELL_TERSKEL_PCT or len(data) <= kutt:
+        return wav_path, round(smell, 3)
+    fd, tmp = tempfile.mkstemp(suffix=".wav", prefix="kutt_")
+    os.close(fd)
+    sf.write(tmp, data[kutt:], sr)
+    return tmp, round(smell, 3)
+
 
 def audio_metrics(wav_path: str) -> dict:
     """Nivaamaal for opptaket. Brukes til aa se om mikrofonplasseringen og
@@ -332,15 +365,27 @@ def main() -> int:
         print(f"Finner ikke fila: {wav_path}", file=sys.stderr)
         return 1
 
-    audio = audio_metrics(wav_path)
-    species = analyze(wav_path, audio["peak999"])
+    kilde, smell = kutt_smell(wav_path)
+    try:
+        audio = audio_metrics(kilde)
+        # Smellet loggfoeres selv om det er kuttet: det er selve sporet etter
+        # en mikrofon som ikke var klar, og det vi vil se mot temperatur og
+        # doegn i statistikken.
+        audio["smell_pct"] = smell
+        audio["kuttet_s"] = SMELL_KUTT_S if kilde != wav_path else 0.0
+        species = analyze(kilde, audio["peak999"])
+    finally:
+        if kilde != wav_path:
+            os.remove(kilde)
     health = read_health_sidecar(wav_path)
     append_observation(wav_path, species, audio, health)
     today = write_todays_birds()
 
     print(f"=== {len(species)} arter i {os.path.basename(wav_path)} "
           f"({audio['duration_s']}s, RMS {audio['rms_dbfs']} dBFS, "
-          f"peak {audio['peak']:.3f}) ===")
+          f"peak {audio['peak']:.3f}"
+          + (f", smell {smell:.2f} % -> kuttet {audio['kuttet_s']:.0f} s"
+             if audio["kuttet_s"] else "") + ") ===")
     for s in species:
         print(f"  {s['common_name']:30s} ({s['scientific_name']})  "
               f"{s['confidence']:.2f}  x{s['detections']}")

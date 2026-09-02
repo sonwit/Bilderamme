@@ -200,6 +200,7 @@ def summarize(obs: list[dict]) -> dict:
     per_hour: defaultdict = defaultdict(lambda: {"sessions": 0, "detections": 0, "species": set()})
 
     levels, quiet, loud, clipped, silent_sessions = [], 0, 0, 0, 0
+    smell = 0  # opptak som begynte med et klippet smell (se birdnet_analyze)
     undervolt, throttled_now, temps, volts = 0, 0, [], []
     hosts: Counter = Counter()
 
@@ -241,6 +242,8 @@ def summarize(obs: list[dict]) -> dict:
                 loud += 1
         if (a.get("clipped_pct") or 0) > 0.1:
             clipped += 1
+        if (a.get("smell_pct") or 0) > 0.05:
+            smell += 1
 
         p = o.get("pi") or {}
         if p:
@@ -334,6 +337,7 @@ def summarize(obs: list[dict]) -> dict:
             "quiet_sessions": quiet,
             "loud_sessions": loud,
             "clipped_sessions": clipped,
+            "smell_sessions": smell,
         },
         "coverage": coverage,
         "power": {
@@ -395,6 +399,8 @@ def report(s: dict) -> None:
     print(f"  For stille (< {QUIET_DBFS} dBFS): {a['quiet_sessions']} opptak")
     print(f"  For hoyt   (> {LOUD_DBFS} dBFS): {a['loud_sessions']} opptak")
     print(f"  Med klipping:               {a['clipped_sessions']} opptak")
+    print(f"  Smell i starten:            {a.get('smell_sessions', 0)} opptak"
+          "  (mikrofonen ikke klar -- kald/fuktig?)")
     if a["median_rms_dbfs"] < QUIET_DBFS:
         print("  ⚠ Nivaaet er gjennomgaaende svaert lavt — vurder aa flytte "
               "mikrofonen naermere foringsplass/busker, eller oeke forsterkning.")
