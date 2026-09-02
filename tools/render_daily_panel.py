@@ -369,6 +369,24 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
     bg_meta = todays_background(birds.get("date", ""))
     sure, unsure = split_species(birds.get("species", []),
                                  OVERLAY_ROWS if bg_meta else None, sortering)
+    if bg_meta:
+        # En tegnet fugl skal ALLTID staa i lista. compose_branch velger blant
+        # de tolv sikreste, lista viser aatte: 1. september 2026 sto bokfinken
+        # som nummer ti (36 %, to oekter), ble tegnet nederst paa greina -- og
+        # fantes verken i lista eller i fotnoten. En fugl paa arket uten linje
+        # aa slaa opp er verre enn en linje uten fugl. Tegnede arter holdes
+        # inne, og de svakeste u-tegnede viker for dem.
+        tegnet_sci = {sp["scientific_name"] for sp in bg_meta.get("species", [])
+                      if sp.get("merke")}
+        # None betyr MAX_ROWS (sju), ikke «alle» -- derfor tallet.
+        alle = birds.get("species", [])
+        alle_sure, unsure = split_species(alle, len(alle), sortering)
+        med = [s for s in alle_sure if s.get("scientific_name") in tegnet_sci]
+        resten = [s for s in alle_sure if s not in med]
+        plass = max(OVERLAY_ROWS - len(med), 0)
+        valgt = med + resten[:plass]
+        sure = [s for s in alle_sure if s in valgt]
+        unsure = unsure + resten[plass:]
     sessions = birds.get("sessions_today", 0)
     # Sida kan tegne en annen dag enn i dag: frokostsida viser gaarsdagen
     # ferdig, fordi kl. 07 er bare aatte av doegnets 20-30 opptak gjort.
