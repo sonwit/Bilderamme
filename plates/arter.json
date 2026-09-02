@@ -107,6 +107,15 @@
     "kilde": "modell",
     "lagt_til": "2026-08-28"
   },
+  "turdus merula": {
+    "norsk": "Svarttrost",
+    "engelsk": "Common blackbird",
+    "lengde_cm": 25.0,
+    "habitat": "tre",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-09-02"
+  },
   "turdus pilaris": {
     "norsk": "Gråtrost",
     "engelsk": "Fieldfare",
