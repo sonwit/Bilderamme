@@ -275,7 +275,11 @@ def main() -> int:
     if args.mangler:
         with open(args.birds) as f:
             birds = json.load(f)
-        sure, _ = split_species(birds.get("species", []), None)
+        # Samme tolv som compose_branch velger blant. Med standardgrensa (sju
+        # rader) saa vi bare topplista: 1. september sto svarttrosten som
+        # nummer ni med to oekter, ble aldri klargjort, og kunne dermed aldri
+        # tegnes -- selv om den var sikker nok.
+        sure, _ = split_species(birds.get("species", []), 12)
         for s in sure:
             sci = s.get("scientific_name", "")
             if sci and not plate_path(sci) and sci not in arter:
