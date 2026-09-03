@@ -1269,7 +1269,18 @@ def main() -> int:
         print(f"  {foer - len(kandidater)} art(er) utelatt: hoert i faerre enn "
               f"{MIN_OEKTER} oekter")
     if not kandidater:
-        print("Ingen av dagens arter har en plansje ennaa.", file=sys.stderr)
+        # Si hvorfor lista er tom. 3. sep 2026 sto det «ingen plansje» om en
+        # dag der de to artene med plansje var strøket av oekt-kravet -- og
+        # det saa ut som en feil i biblioteket, ikke som en stille dag.
+        if foer:
+            print(f"Ingen av dagens arter er hoert i {MIN_OEKTER} oekter "
+                  f"(TEGN_MIN_OEKTER) -- de {foer} med plansje var alle "
+                  "hoert én gang.", file=sys.stderr)
+        elif birds.get("species"):
+            print("Ingen av dagens sikre arter har en plansje ennaa.",
+                  file=sys.stderr)
+        else:
+            print("Ingen arter hoert ennaa.", file=sys.stderr)
         return 1
 
     vaer = None if args.mal else get_weather()
