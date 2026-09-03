@@ -87,6 +87,7 @@ STANDARD = {
     # opploesning: materen er 8-10 m unna og 60 px bred i et 2304-bilde, saa
     # en meis blir 25 px. Med 4608 blir den 50, og det er utsnittet som
     # sendes, ikke hele bildet.
+    # Camera Module 3 Wide: [4608, 2592]. HQ-kameraet: [4056, 3040].
     "bilde": [4608, 2592],
     # Den lille stroemmen bevegelsen maales i. 640x360 var for grovt paa
     # den avstanden: en meis ble 5 px og druknet i stoey.
@@ -132,15 +133,17 @@ def start_kamera(cfg: dict):
         buffer_count=2)
     cam.configure(konf)
     cam.start()
-    if cfg["fokus_m"]:
+    # Bare Camera Module 3 har autofokus. HQ-kameraet har fokusring paa
+    # linsa (se fokus.py), og aa sette AfMode paa det gir feil.
+    if "AfMode" in cam.camera_controls:
         from libcamera import controls
-        # LensPosition er i dioptrier (1/m). Fast fokus slaar autofokusen,
-        # som ellers gjerne finner vindusglasset mer interessant enn materen.
-        cam.set_controls({"AfMode": controls.AfModeEnum.Manual,
-                          "LensPosition": 1.0 / float(cfg["fokus_m"])})
-    else:
-        from libcamera import controls
-        cam.set_controls({"AfMode": controls.AfModeEnum.Continuous})
+        if cfg["fokus_m"]:
+            # LensPosition er i dioptrier (1/m). Fast fokus slaar autofokusen,
+            # som ellers gjerne finner vindusglasset mer interessant enn materen.
+            cam.set_controls({"AfMode": controls.AfModeEnum.Manual,
+                              "LensPosition": 1.0 / float(cfg["fokus_m"])})
+        else:
+            cam.set_controls({"AfMode": controls.AfModeEnum.Continuous})
     time.sleep(1.5)  # eksponering og hvitbalanse trenger noen rammer
     return cam
 
