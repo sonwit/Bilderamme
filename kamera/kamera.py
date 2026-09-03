@@ -58,10 +58,18 @@ STANDARD = {
     "roi": [0.0, 0.0, 1.0, 1.0],
     # Hvor mye en piksel (0-255) maa endre seg for aa telle som endret ...
     "diff_terskel": 28,
-    # ... og hvor stor andel av utsnittet som maa ha endret seg. 0,4 % av
-    # 640x360 er ~900 piksler -- en meis paa tre meter er stoerre enn det,
-    # sensorstoey er mindre.
-    "bevegelse_andel": 0.004,
+    # ... og hvor stor andel av utsnittet som maa ha endret seg. Med
+    # utsnittet rundt materen (ca 230x180 px i 1152x648) er 0,3 % ~120
+    # piksler -- en meis paa ni meter er ~10x10 der. Sensorstoey er mindre,
+    # men greiner i vind er stoerre: se --vis foer terskelen settes.
+    "bevegelse_andel": 0.003,
+    # Blokkmaalet (se bevegelse()): blokkstoerrelse i px i den lille
+    # stroemmen, hvor stor del av blokka som maa ha endret seg, og hvor mange
+    # tette blokker som utloeser. En meis paa 7 m er ~12x12 px i 1152x648,
+    # altsaa 2-4 blokker paa 6 px.
+    "blokk": 5,
+    "blokk_andel": 0.5,
+    "blokker_min": 3,
     # Sekunder mellom to bilder, og mellom to rammer i overvaakingen.
     "pause_s": 12,
     "ramme_s": 0.5,
@@ -70,10 +78,19 @@ STANDARD = {
     # Fast fokusavstand i meter til materen. 0 = kontinuerlig autofokus, som
     # gjerne laaser seg paa vindusglasset.
     "fokus_m": 0,
-    # Stort bilde og hvor mye ekstra rundt utsnittet som sendes med.
-    "bilde": [2304, 1296],
+    # Stort bilde og hvor mye ekstra rundt utsnittet som sendes med. Full
+    # opploesning: materen er 8-10 m unna og 60 px bred i et 2304-bilde, saa
+    # en meis blir 25 px. Med 4608 blir den 50, og det er utsnittet som
+    # sendes, ikke hele bildet.
+    "bilde": [4608, 2592],
+    # Den lille stroemmen bevegelsen maales i. 640x360 var for grovt paa
+    # den avstanden: en meis ble 5 px og druknet i stoey.
+    "lores": [1152, 648],
     "margin": 0.08,
     "jpeg_kvalitet": 88,
+    # 0 eller 180. Kameraet staar gjerne opp ned naar kabelen skal ut av
+    # bildet -- 3. sep 2026 kom foerste bilde fra vinduet med gresset oeverst.
+    "roter": 0,
 }
 
 
@@ -100,9 +117,13 @@ def start_kamera(cfg: dict):
 
     cam = Picamera2()
     w, h = cfg["bilde"]
+    _LORES[:] = [int(cfg["lores"][0]), int(cfg["lores"][1])]
+    from libcamera import Transform
+    snu = int(cfg["roter"]) == 180
     konf = cam.create_still_configuration(
         main={"size": (w, h)},
-        lores={"size": (640, 360), "format": "YUV420"},
+        lores={"size": tuple(cfg["lores"]), "format": "YUV420"},
+        transform=Transform(hflip=snu, vflip=snu),
         buffer_count=2)
     cam.configure(konf)
     cam.start()
@@ -119,10 +140,14 @@ def start_kamera(cfg: dict):
     return cam
 
 
+_LORES = [640, 360]
+
+
 def graa(cam) -> np.ndarray:
     """Y-planet fra den lille stroemmen, som float for differansen."""
     arr = cam.capture_array("lores")
-    return arr[:360, :640].astype(np.float32)
+    w, h = _LORES
+    return arr[:h, :w].astype(np.float32)
 
 
 def utsnitt(a: np.ndarray, roi: list[float]) -> np.ndarray:
@@ -131,10 +156,24 @@ def utsnitt(a: np.ndarray, roi: list[float]) -> np.ndarray:
     return a[int(y0 * h):int(y1 * h), int(x0 * w):int(x1 * w)]
 
 
-def bevegelse(forrige: np.ndarray, naa: np.ndarray, cfg: dict) -> float:
-    """Andel piksler i utsnittet som endret seg mer enn terskelen."""
+def bevegelse(forrige: np.ndarray, naa: np.ndarray, cfg: dict) -> tuple[float, int]:
+    """(andel endrede piksler i utsnittet, antall tette blokker).
+
+    Andelen alene skiller ikke fugl fra vind: 3. sep 2026 laa den paa 1-8 %
+    i granbaret uten en fugl i naerheten. Vind flytter tusen bladkanter litt
+    hver; en fugl flytter ett sammenhengende omraade mye. Derfor deles
+    utsnittet i blokker paa `blokk` px, og en blokk teller som tett naar mer
+    enn halvparten av pikslene i den endret seg. Bladverk gir null tette
+    blokker, en meis paa materen gir noen."""
     d = np.abs(utsnitt(naa, cfg["roi"]) - utsnitt(forrige, cfg["roi"]))
-    return float((d > cfg["diff_terskel"]).mean())
+    endret = d > cfg["diff_terskel"]
+    b = int(cfg["blokk"])
+    h, w = endret.shape
+    h2, w2 = h - h % b, w - w % b
+    if h2 < b or w2 < b:
+        return float(endret.mean()), 0
+    blokker = endret[:h2, :w2].reshape(h2 // b, b, w2 // b, b).mean(axis=(1, 3))
+    return float(endret.mean()), int((blokker > cfg["blokk_andel"]).sum())
 
 
 def ta_bilde(cam, cfg: dict) -> bytes:
@@ -236,16 +275,16 @@ def main() -> int:
             time.sleep(60)
             forrige = graa(cam)
             continue
-        andel = bevegelse(forrige, naa, cfg)
+        andel, tette = bevegelse(forrige, naa, cfg)
         forrige = naa
         if args.vis:
-            logg(f"bevegelse {andel:.3%}  lys {lys:.0f}")
+            logg(f"bevegelse {andel:.3%}  tette blokker {tette:3d}  lys {lys:.0f}")
             continue
-        if andel < cfg["bevegelse_andel"]:
+        if andel < cfg["bevegelse_andel"] or tette < cfg["blokker_min"]:
             continue
         if time.time() - sist_bilde < cfg["pause_s"]:
             continue
-        logg(f"bevegelse {andel:.2%} — tar bilde")
+        logg(f"bevegelse {andel:.2%}, {tette} tette blokker — tar bilde")
         jpeg = ta_bilde(cam, cfg)
         last_opp(cfg, jpeg, meta_for(cam, andel, lys, cfg))
         sist_bilde = time.time()
