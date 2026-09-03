@@ -121,6 +121,13 @@ def les_konfig() -> dict:
     return cfg
 
 
+def _mtime(sti: str) -> float:
+    try:
+        return os.path.getmtime(sti)
+    except OSError:
+        return 0.0
+
+
 def logg(msg: str) -> None:
     print(f"{datetime.datetime.now():%H:%M:%S} {msg}", flush=True)
 
@@ -311,10 +318,11 @@ def main() -> int:
     args = ap.parse_args()
 
     cfg = les_konfig()
-    logg(f"starter: server {cfg['server']}, roi {cfg['roi']}, "
-         f"terskel {cfg['bevegelse_andel']:.3%}, fokus "
-         f"{cfg['fokus_m'] or 'auto'}")
+    logg(f"starter: server {cfg['server']}, utsnitt {utsnittene(cfg)}, "
+         f"blokker >= {cfg['blokker_min']} i {cfg['varighet']} rammer, "
+         f"rotasjon {cfg['roter']}")
     cam = start_kamera(cfg)
+    konfig_mtime = _mtime(KONFIG)
 
     if args.en:
         g = graa(cam)
@@ -328,6 +336,18 @@ def main() -> int:
     paa_rad = 0
     while True:
         time.sleep(cfg["ramme_s"])
+        # Konfigurasjonen leses paa nytt naar fila endres, saa felt og
+        # terskler kan justeres uten aa restarte tjenesten (som krever sudo).
+        # Bildestoerrelse og rotasjon gjelder foerst ved neste start.
+        m = _mtime(KONFIG)
+        if m != konfig_mtime:
+            konfig_mtime = m
+            ny = les_konfig()
+            for k in ("bilde", "lores", "roter"):
+                ny[k] = cfg[k]
+            cfg = ny
+            logg(f"konfig lest paa nytt: utsnitt {utsnittene(cfg)}, "
+                 f"blokker >= {cfg['blokker_min']} i {cfg['varighet']} rammer")
         naa = graa(cam)
         lys = float(np.mean([utsnitt(naa, r).mean() for r in utsnittene(cfg)]))
         if lys < cfg["lys_min"]:
