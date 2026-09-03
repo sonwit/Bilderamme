@@ -13,6 +13,9 @@ Endepunkter:
        (samme rolle som Pi-ens <opptak>.json).
        Svarer 200 umiddelbart; analysen kjoeres i bakgrunnen (én om gangen,
        saa ESP-en slipper aa holde radioen paa mens BirdNET tenker).
+  POST /bilde?stamp=YYYYmmdd_HHMMSS[&token=...]    body = JPEG fra kameraet i
+       vinduet (kamera/kamera.py). Meta-JSON i header X-Fugl-Meta -> sidecar.
+       Lagres i bilder/ og analyseres av bilde_analyze.py (samme koe).
   GET  /status                                      hva som skjer / sist skjedde
   GET  /config                                      fjernkonfig til utedelen
                                                     (planen regnes ut her, se under)
@@ -56,8 +59,10 @@ from urllib.parse import urlparse, parse_qs
 
 BASE_DIR = os.environ.get("FUGLE_DIR", "/opt/fugleramme")
 AUDIO_DIR = os.path.join(BASE_DIR, "audio")
+BILDER_DIR = os.path.join(BASE_DIR, "bilder")
 CONFIG_PATH = os.path.join(BASE_DIR, "esp_config.json")
 ANALYZE = os.path.join(BASE_DIR, "birdnet_analyze.py")
+BILDE_ANALYZE = os.path.join(BASE_DIR, "bilde_analyze.py")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
     import lytteplan
@@ -66,14 +71,18 @@ except Exception as _e:  # noqa: BLE001
     print(f"ADVARSEL: lytteplan utilgjengelig ({_e}) — /config svarer bare med fila",
           file=sys.stderr)
 ANALYZE_PY = os.environ.get("ANALYZE_PY", sys.executable)
+# Bildeanalysen trenger google-genai og Pillow, som ligger i den vanlige
+# venv-en -- ikke i venv-birdnet der denne tjenesten kjoerer.
+BILDE_PY = os.environ.get("BILDE_PY", os.path.join(BASE_DIR, "venv", "bin", "python3"))
 PORT = int(os.environ.get("INGEST_PORT", "8091"))
 TOKEN = os.environ.get("INGEST_TOKEN")
 
 MAX_BYTES = 64 * 1024 * 1024          # 60 s / 48 kHz / 16-bit er ~5,8 MB
+MAX_BILDE = 12 * 1024 * 1024          # et 12 MP-JPEG er 2-4 MB
 STAMP_RE = re.compile(r"^\d{8}_\d{6}$")
 
 _jobs: "queue.Queue[str]" = queue.Queue()
-_state = {"last": "", "received": 0, "analyzed": 0, "failed": 0}
+_state = {"last": "", "received": 0, "analyzed": 0, "failed": 0, "bilder": 0}
 
 
 def _worker():
@@ -82,8 +91,13 @@ def _worker():
     while True:
         wav = _jobs.get()
         try:
-            r = subprocess.run([ANALYZE_PY, ANALYZE, wav],
-                               capture_output=True, text=True, timeout=600)
+            # Samme koe for lyd og bilde: ett av gangen, saa modellen for lyd
+            # og modellkallet for bilde ikke slaass om minnet paa serveren.
+            if wav.lower().endswith(".jpg"):
+                kmd = [BILDE_PY, BILDE_ANALYZE, wav]
+            else:
+                kmd = [ANALYZE_PY, ANALYZE, wav]
+            r = subprocess.run(kmd, capture_output=True, text=True, timeout=600)
             for line in (r.stdout or "").splitlines():
                 print(f"  {line}", flush=True)
             if r.returncode == 0:
@@ -184,6 +198,9 @@ class Handler(BaseHTTPRequestHandler):
             return self._reply(200, {"ok": True, "config": new_cfg,
                                      "message": "ESP-en plukker den opp etter neste oekt."})
 
+        if parsed.path.rstrip("/") == "/bilde":
+            return self._motta_bilde(query)
+
         if parsed.path.rstrip("/") != "/upload":
             return self._reply(404, {"ok": False, "message": "Ukjent endepunkt."})
 
@@ -230,6 +247,47 @@ class Handler(BaseHTTPRequestHandler):
               flush=True)
         return self._reply(200, {"ok": True, "file": os.path.basename(wav_path),
                                  "queue": _jobs.qsize()})
+
+    def _motta_bilde(self, query):
+        """Et bilde fra kameraet i vinduet. Samme moenster som lyden: lagre,
+        sidecar, koe. Filnavnet baerer tidspunktet, kamera_YYYYmmdd_HHMMSS.jpg."""
+        stamp = query.get("stamp", [""])[0]
+        if not STAMP_RE.match(stamp):
+            return self._reply(400, {"ok": False, "message": "stamp maa vaere YYYYmmdd_HHMMSS."})
+        length = int(self.headers.get("Content-Length", 0) or 0)
+        if not 1024 < length <= MAX_BILDE:
+            return self._reply(400, {"ok": False, "message": f"Urimelig stoerrelse: {length} byte."})
+        data = b""
+        while len(data) < length:
+            chunk = self.rfile.read(min(1 << 20, length - len(data)))
+            if not chunk:
+                break
+            data += chunk
+        if len(data) != length or data[:3] != b"\xff\xd8\xff":
+            return self._reply(400, {"ok": False, "message": "Ufullstendig eller ikke en JPEG."})
+
+        os.makedirs(BILDER_DIR, exist_ok=True)
+        sti = os.path.join(BILDER_DIR, f"kamera_{stamp}.jpg")
+        tmp = sti + ".tmp"
+        with open(tmp, "wb") as f:
+            f.write(data)
+        os.replace(tmp, sti)
+
+        meta = self.headers.get("X-Fugl-Meta")
+        if meta:
+            try:
+                with open(os.path.join(BILDER_DIR, f"kamera_{stamp}.json"), "w") as f:
+                    json.dump(json.loads(meta), f, ensure_ascii=False)
+            except ValueError:
+                print(f"ADVARSEL: ugyldig X-Fugl-Meta ignorert ({stamp})",
+                      file=sys.stderr, flush=True)
+
+        _state["bilder"] += 1
+        _jobs.put(sti)
+        print(f"Mottatt kamera_{stamp}.jpg ({length // 1024} kB) — koe: {_jobs.qsize()}",
+              flush=True)
+        return self._reply(200, {"ok": True, "file": os.path.basename(sti),
+                                 "queue": _jobs.qsize(), "message": "mottatt, analyseres"})
 
     def log_message(self, fmt, *args):
         pass  # vi logger selv — én linje per mottak, ikke per HTTP-detalj

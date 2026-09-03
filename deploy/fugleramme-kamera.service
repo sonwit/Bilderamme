@@ -1,0 +1,25 @@
+# Fuglekameraet i vinduet — kjoerer paa Pi-en (fugleramme-kamera), ikke paa
+# serveren. Installeres slik, paa Pi-en:
+#
+#   sudo cp ~/kamera/fugleramme-kamera.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now fugleramme-kamera
+#   journalctl -u fugleramme-kamera -f
+#
+# Scriptet ligger i ~/kamera/ sammen med kamera.json.
+
+[Unit]
+Description=Fugleramme kamera (bevegelse -> bilde -> server)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=bruker
+WorkingDirectory=/home/bruker/kamera
+ExecStart=/usr/bin/python3 /home/bruker/kamera/kamera.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

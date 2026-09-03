@@ -1,0 +1,10 @@
+{
+  "server": "http://192.168.1.38:8091",
+  "token": "",
+  "roi": [0.0, 0.0, 1.0, 1.0],
+  "diff_terskel": 28,
+  "bevegelse_andel": 0.004,
+  "pause_s": 12,
+  "lys_min": 25,
+  "fokus_m": 0
+}
