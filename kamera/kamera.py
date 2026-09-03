@@ -56,6 +56,14 @@ STANDARD = {
     # Hele bildet til aa begynne med; snevres inn til materen naar kameraet
     # staar der det skal, saa greiner i vind utenfor ikke utloeser.
     "roi": [0.0, 0.0, 1.0, 1.0],
+    # Flere utsnitt: ett lite felt rundt hver mater. Bevegelse maales i hvert
+    # for seg, og bildet som sendes dekker alle. Er lista tom, brukes roi.
+    # Innfoert 3. sep 2026: ett stort utsnitt rundt to matere tok med saa mye
+    # loev at vinden utloeste hvert kvarter.
+    "roier": [],
+    # Bevegelsen maa vare saa mange rammer paa rad. Et vindkast er borte paa
+    # neste ramme; en fugl blir sittende.
+    "varighet": 2,
     # Hvor mye en piksel (0-255) maa endre seg for aa telle som endret ...
     "diff_terskel": 28,
     # ... og hvor stor andel av utsnittet som maa ha endret seg. Med
@@ -94,8 +102,11 @@ STANDARD = {
     "lores": [1152, 648],
     "margin": 0.08,
     "jpeg_kvalitet": 88,
-    # 0 eller 180. Kameraet staar gjerne opp ned naar kabelen skal ut av
-    # bildet -- 3. sep 2026 kom foerste bilde fra vinduet med gresset oeverst.
+    # 0, 90, 180 eller 270 grader med klokka. Kameraet staar gjerne opp ned
+    # eller paa siden naar kabelen skal ut av bildet -- 3. sep 2026 kom foerste
+    # bilde med gresset oeverst, og HQ-kameraet med stammen vannrett. 180 tas
+    # av sensoren; 90 og 270 snus i numpy, og utsnittet (roi) gjelder det
+    # snudde bildet.
     "roter": 0,
 }
 
@@ -126,6 +137,7 @@ def start_kamera(cfg: dict):
     _LORES[:] = [int(cfg["lores"][0]), int(cfg["lores"][1])]
     from libcamera import Transform
     snu = int(cfg["roter"]) == 180
+    _ROT[0] = int(cfg["roter"]) % 360
     konf = cam.create_still_configuration(
         main={"size": (w, h)},
         lores={"size": tuple(cfg["lores"]), "format": "YUV420"},
@@ -149,13 +161,23 @@ def start_kamera(cfg: dict):
 
 
 _LORES = [640, 360]
+_ROT = [0]
+
+
+def _snu(a: np.ndarray) -> np.ndarray:
+    """90/270 grader med klokka i numpy. 180 tar sensoren selv."""
+    if _ROT[0] == 90:
+        return np.ascontiguousarray(np.rot90(a, -1))
+    if _ROT[0] == 270:
+        return np.ascontiguousarray(np.rot90(a, 1))
+    return a
 
 
 def graa(cam) -> np.ndarray:
     """Y-planet fra den lille stroemmen, som float for differansen."""
     arr = cam.capture_array("lores")
     w, h = _LORES
-    return arr[:h, :w].astype(np.float32)
+    return _snu(arr[:h, :w]).astype(np.float32)
 
 
 def utsnitt(a: np.ndarray, roi: list[float]) -> np.ndarray:
@@ -164,7 +186,22 @@ def utsnitt(a: np.ndarray, roi: list[float]) -> np.ndarray:
     return a[int(y0 * h):int(y1 * h), int(x0 * w):int(x1 * w)]
 
 
+def utsnittene(cfg: dict) -> list[list[float]]:
+    return list(cfg["roier"]) or [cfg["roi"]]
+
+
 def bevegelse(forrige: np.ndarray, naa: np.ndarray, cfg: dict) -> tuple[float, int]:
+    """Stoerste (andel, tette blokker) over alle utsnittene."""
+    beste = (0.0, 0)
+    for roi in utsnittene(cfg):
+        a, t = _bevegelse_i(forrige, naa, cfg, roi)
+        if t > beste[1] or (t == beste[1] and a > beste[0]):
+            beste = (a, t)
+    return beste
+
+
+def _bevegelse_i(forrige: np.ndarray, naa: np.ndarray, cfg: dict,
+                 roi: list[float]) -> tuple[float, int]:
     """(andel endrede piksler i utsnittet, antall tette blokker).
 
     Andelen alene skiller ikke fugl fra vind: 3. sep 2026 laa den paa 1-8 %
@@ -173,7 +210,7 @@ def bevegelse(forrige: np.ndarray, naa: np.ndarray, cfg: dict) -> tuple[float, i
     utsnittet i blokker paa `blokk` px, og en blokk teller som tett naar mer
     enn halvparten av pikslene i den endret seg. Bladverk gir null tette
     blokker, en meis paa materen gir noen."""
-    d = np.abs(utsnitt(naa, cfg["roi"]) - utsnitt(forrige, cfg["roi"]))
+    d = np.abs(utsnitt(naa, roi) - utsnitt(forrige, roi))
     endret = d > cfg["diff_terskel"]
     b = int(cfg["blokk"])
     h, w = endret.shape
@@ -201,9 +238,11 @@ def ta_bilde(cam, cfg: dict) -> bytes:
     """Stort bilde, beskaaret til utsnittet med margin, som JPEG-byte."""
     from PIL import Image
 
-    arr = cam.capture_array("main")
+    arr = _snu(cam.capture_array("main"))
     im = Image.fromarray(arr)
-    x0, y0, x1, y1 = cfg["roi"]
+    alle = utsnittene(cfg)
+    x0 = min(r[0] for r in alle); y0 = min(r[1] for r in alle)
+    x1 = max(r[2] for r in alle); y1 = max(r[3] for r in alle)
     m = cfg["margin"]
     boks = (int(max(0, x0 - m) * im.width), int(max(0, y0 - m) * im.height),
             int(min(1, x1 + m) * im.width), int(min(1, y1 + m) * im.height))
@@ -256,7 +295,7 @@ def meta_for(cam, andel: float, lys: float, cfg: dict) -> dict:
         "lux": round(float(md.get("Lux", 0)), 1) if md.get("Lux") is not None else None,
         "eksponering_us": md.get("ExposureTime"),
         "fokus": md.get("LensPosition"),
-        "roi": cfg["roi"],
+        "roi": utsnittene(cfg),
         "temp_c": temp,
     }
 
@@ -279,17 +318,18 @@ def main() -> int:
 
     if args.en:
         g = graa(cam)
-        lys = float(utsnitt(g, cfg["roi"]).mean())
+        lys = float(utsnitt(g, utsnittene(cfg)[0]).mean())
         jpeg = ta_bilde(cam, cfg)
         ok = last_opp(cfg, jpeg, meta_for(cam, 0.0, lys, cfg) | {"test": True})
         return 0 if ok else 1
 
     forrige = graa(cam)
     sist_bilde = 0.0
+    paa_rad = 0
     while True:
         time.sleep(cfg["ramme_s"])
         naa = graa(cam)
-        lys = float(utsnitt(naa, cfg["roi"]).mean())
+        lys = float(np.mean([utsnitt(naa, r).mean() for r in utsnittene(cfg)]))
         if lys < cfg["lys_min"]:
             if args.vis:
                 logg(f"moerkt ({lys:.0f} < {cfg['lys_min']}), venter")
@@ -301,11 +341,14 @@ def main() -> int:
         if args.vis:
             logg(f"bevegelse {andel:.3%}  tette blokker {tette:3d}  lys {lys:.0f}")
             continue
-        if not (cfg["bevegelse_andel"] <= andel <= cfg["bevegelse_maks"]) \
-                or tette < cfg["blokker_min"]:
+        treff = (cfg["bevegelse_andel"] <= andel <= cfg["bevegelse_maks"]
+                 and tette >= cfg["blokker_min"])
+        paa_rad = paa_rad + 1 if treff else 0
+        if paa_rad < cfg["varighet"]:
             continue
         if time.time() - sist_bilde < cfg["pause_s"]:
             continue
+        paa_rad = 0
         logg(f"bevegelse {andel:.2%}, {tette} tette blokker — tar bilde")
         jpeg = ta_bilde(cam, cfg)
         last_opp(cfg, jpeg, meta_for(cam, andel, lys, cfg))

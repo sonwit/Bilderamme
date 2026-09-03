@@ -9,13 +9,36 @@
   ],
   "diff_terskel": 28,
   "bevegelse_andel": 0.003,
-  "blokk": 5,
+  "blokk": 6,
   "blokk_andel": 0.5,
-  "blokker_min": 3,
+  "blokker_min": 8,
   "pause_s": 15,
   "lys_min": 25,
-  "fokus_m": 7,
-  "roter": 0,
-  "klynge_maks": 0.25,
-  "bevegelse_maks": 0.08
+  "fokus_m": 0,
+  "roter": 270,
+  "klynge_maks": 0.15,
+  "bevegelse_maks": 0.08,
+  "roier": [
+    [
+      0.57,
+      0.18,
+      0.71,
+      0.3
+    ],
+    [
+      0.44,
+      0.29,
+      0.56,
+      0.39
+    ]
+  ],
+  "varighet": 2,
+  "bilde": [
+    4056,
+    3040
+  ],
+  "lores": [
+    1014,
+    760
+  ]
 }
