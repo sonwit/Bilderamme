@@ -293,7 +293,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self._authorized(query):
                 return self._reply(401, "Mangler eller feil token.")
             return self._serve_archive(path[len("/arkiv/"):])
-        if path.startswith("/plansje/") or path.startswith("/lyd/"):
+        if path.startswith("/plansje/") or path.startswith("/lyd/") or path.startswith("/kamerabilde/"):
             # Fuglesidas bilder og lyd: 1:1-fuglen fra plansjebiblioteket og
             # selve opptaket, saa lenge det ligger der (21 dager).
             if not self._authorized(query):
@@ -303,6 +303,8 @@ class Handler(BaseHTTPRequestHandler):
             if path.startswith("/plansje/"):
                 sti = fugler.plansje(navn[:-4].replace("-", " ")) if navn.endswith(".png") else None
                 return self._serve_file(sti, "image/png")
+            if path.startswith("/kamerabilde/"):
+                return self._serve_file(fugler.kamerabilde(navn), "image/jpeg")
             return self._serve_file(fugler.lydfil(navn), "audio/wav")
         path = path.rstrip("/") or "/"
         if not self._authorized(query):

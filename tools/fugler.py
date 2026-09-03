@@ -37,6 +37,8 @@ PLATES = os.path.join(BASE, "plates")
 FUGLER = os.path.join(PLATES, "fugler")
 
 LYDFIL = re.compile(r"^fugl_\d{8}_\d{6}\.wav$")
+BILDEFIL = re.compile(r"^kamera_\d{8}_\d{6}\.jpg$")
+BILDER = os.path.join(BASE, "bilder")
 
 
 # ----------------------------------------------------------------------
@@ -58,6 +60,14 @@ def lydfil(navn: str) -> str | None:
     if not LYDFIL.match(navn):
         return None
     p = os.path.join(AUDIO, navn)
+    return p if os.path.isfile(p) else None
+
+
+def kamerabilde(navn: str) -> str | None:
+    """Sti til et kamerabilde, bare hvis navnet ser ut som ett og fila finnes."""
+    if not BILDEFIL.match(navn):
+        return None
+    p = os.path.join(BILDER, navn)
     return p if os.path.isfile(p) else None
 
 
@@ -115,10 +125,58 @@ def samle() -> dict:
                 })
     except FileNotFoundError:
         pass
+
+    # Kameraet i vinduet (bilde_analyze.py -> data/kamera.jsonl). Bare bilder
+    # med noe paa: f = filstamme, d/t = naar, bilde = om JPEG-en finnes ennaa,
+    # a = [[latinsk navn, sikkerhet, antall], ...]. Arter kameraet ser men
+    # mikrofonen aldri hoerer -- ekorn, for eksempel -- faar ogsaa en
+    # oppfoering i arter, med det norske navnet modellen ga hvis vi ikke har
+    # et selv.
+    kamera, tomme = [], 0
+    try:
+        with open(os.path.join(DATA, "kamera.jsonl")) as f:
+            for rad in f:
+                rad = rad.strip()
+                if not rad:
+                    continue
+                try:
+                    k = json.loads(rad)
+                except ValueError:
+                    continue
+                if not k.get("species"):
+                    tomme += 1
+                    continue
+                fil = k.get("file", "")
+                a_i = []
+                for sp in k["species"]:
+                    sci = sp.get("scientific_name", "").strip()
+                    if not sci:
+                        continue
+                    a_i.append([sci, round(float(sp.get("confidence", 0)), 2),
+                                int(sp.get("antall", 1) or 1)])
+                    if sci not in arter:
+                        eget = norsk(sci, "")
+                        arter[sci] = {
+                            "norsk": eget if eget and eget != sci else (sp.get("norsk") or sp.get("common_name") or sci),
+                            "engelsk": sp.get("common_name", ""),
+                            "habitat": habitat(sci),
+                            "plansje": plansje(sci) is not None,
+                        }
+                kamera.append({
+                    "f": os.path.splitext(fil)[0],
+                    "d": k.get("date", ""),
+                    "t": (k.get("captured_at") or "")[11:16],
+                    "bilde": kamerabilde(fil) is not None,
+                    "a": a_i,
+                })
+    except FileNotFoundError:
+        pass
     return {
         "generert": datetime.datetime.now().isoformat(timespec="seconds"),
         "opptak": opptak,
         "arter": arter,
+        "kamera": kamera,
+        "kamera_tomme": tomme,
     }
 
 
@@ -196,6 +254,14 @@ STIL = r"""
   #tt .mk{display:inline-block;width:10px;height:3px;border-radius:2px;background:var(--serie1);
     vertical-align:middle;margin-right:6px}
   .fugler .fotnote{color:var(--muted);font-size:.8rem;margin:10px 0 0}
+  .fugler .kam{display:flex;gap:10px;flex-wrap:wrap}
+  .fugler .kam a{display:block;width:150px;text-decoration:none;color:var(--ink)}
+  .fugler .kam img{width:150px;height:110px;object-fit:cover;border-radius:10px;border:1px solid var(--line);
+    background:var(--bg);display:block}
+  .fugler .kam .tekst{font-size:.78rem;color:var(--muted);margin-top:3px;line-height:1.3}
+  .fugler .kam .tekst b{color:var(--ink);font-weight:600}
+  .fugler .sett{display:inline-block;padding:1px 7px;border-radius:999px;font-size:.74rem;
+    background:rgba(42,120,214,.14);color:var(--serie1);margin-left:4px;vertical-align:middle}
 """
 
 # JavaScript-en. Alt som kan endre seg (filtre, valgt art, kort/tabell) ligger
@@ -220,6 +286,17 @@ function isoDag(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padSta
 function median(xs){ if(!xs.length) return 0; const s=[...xs].sort((a,b)=>a-b); const m=s.length>>1; return s.length%2 ? s[m] : (s[m-1]+s[m])/2; }
 function dagerMellom(a,b){ const ut=[]; for(let d=new Date(a+'T00:00'); isoDag(d)<=b; d.setDate(d.getDate()+1)) ut.push(isoDag(d)); return ut; }
 function navn(sci){ const a = DATA.arter[sci]; return a ? a.norsk : sci; }
+function kamKort(k, sci){
+  // Ett kamerabilde som miniatyr med tid og hva modellen saa. sci: hvilken
+  // art som skal staa foerst i teksten (i artsvisningen), ellers alle.
+  const arter = k.a.filter(([s,c]) => c >= S.minConf);
+  const tekst = (sci ? arter.filter(([s]) => s === sci).concat(arter.filter(([s]) => s !== sci)) : arter)
+    .map(([s,c,n]) => `<b>${esc(navn(s))}</b> ${Math.round(c*100)} %${n > 1 ? ' ×' + n : ''}`).join(', ');
+  const src = k.bilde ? `/kamerabilde/${encodeURIComponent(k.f)}.jpg${TOKEN}` : '';
+  const img = src ? `<img src="${src}" alt="" loading="lazy">` : `<div class="ingen" style="width:150px;height:110px">📷</div>`;
+  return `<a href="${src || '#'}" ${src ? 'target="_blank"' : ''}>${img}<div class="tekst">${esc(dato(k.d))} kl. ${esc(k.t)}<br>${tekst}</div></a>`;
+}
+
 function bilde(sci, kl){ const a = DATA.arter[sci]; return a && a.plansje
   ? `<img class="${kl||''}" src="/plansje/${encodeURIComponent(sci.toLowerCase().replace(/ /g,'-'))}.png${TOKEN}" alt="" loading="lazy">`
   : `<div class="ingen ${kl||''}" aria-hidden="true">${esc(navn(sci)[0]||'?')}</div>`; }
@@ -258,24 +335,36 @@ function utvalg(){
     a.opptak.push({o, conf, det}); a.dager.add(o.d); a.conf.push(conf); a.det += det;
     a.timer[+o.t.slice(0,2)]++; a.perDag[o.d] = (a.perDag[o.d]||0) + 1;
   }
-  let liste = Object.values(arter).filter(a => a.opptak.length >= S.minOpptak);
+  // Kameraet: samme terskel for sikkerhet. En art som bare er sett, ikke
+  // hoert, faar en oppfoering med null opptak -- den skal ogsaa staa i lista.
+  const kamera = (DATA.kamera || []).filter(k => k.d >= fra && k.d <= til);
+  for (const k of kamera) for (const [sci, conf, antall] of k.a) {
+    if (conf < S.minConf) continue;
+    const a = arter[sci] || (arter[sci] = {sci, opptak:[], dager:new Set(), conf:[], det:0, timer:new Array(24).fill(0), perDag:{}});
+    (a.sett || (a.sett = [])).push({k, conf, antall});
+  }
+  let liste = Object.values(arter).filter(a => a.opptak.length >= S.minOpptak || (a.sett || []).length);
   for (const a of liste) {
-    a.n = a.opptak.length; a.best = Math.max(...a.conf); a.median = median(a.conf);
-    a.sist = a.opptak.map(x => x.o.d + ' ' + x.o.t).sort().pop();
-    a.forst = a.opptak.map(x => x.o.d + ' ' + x.o.t).sort()[0];
+    a.sett = a.sett || [];
+    a.n = a.opptak.length; a.best = a.conf.length ? Math.max(...a.conf) : 0; a.median = median(a.conf);
+    const tider = a.opptak.map(x => x.o.d + ' ' + x.o.t).concat(a.sett.map(x => x.k.d + ' ' + x.k.t)).sort();
+    a.sist = tider[tider.length - 1]; a.forst = tider[0];
+    a.settBest = a.sett.length ? Math.max(...a.sett.map(x => x.conf)) : 0;
+    a.settDager = new Set(a.sett.map(x => x.k.d)).size;
     a.navn = navn(a.sci);
   }
   const sok = S.sok.trim().toLowerCase();
   if (sok) liste = liste.filter(a => a.navn.toLowerCase().includes(sok) || a.sci.toLowerCase().includes(sok));
   const sorter = {
-    opptak: (x,y) => y.n - x.n || y.best - x.best,
-    sikkerhet: (x,y) => y.best - x.best || y.n - x.n,
+    opptak: (x,y) => y.n - x.n || y.sett.length - x.sett.length || y.best - x.best,
+    sikkerhet: (x,y) => Math.max(y.best, y.settBest) - Math.max(x.best, x.settBest) || y.n - x.n,
+    sett: (x,y) => y.sett.length - x.sett.length || y.n - x.n,
     sist: (x,y) => (y.sist > x.sist) - (y.sist < x.sist),
     navn: (x,y) => x.navn.localeCompare(y.navn, 'nb'),
     dager: (x,y) => y.dager.size - x.dager.size || y.n - x.n,
   }[S.sort] || ((x,y) => y.n - x.n);
   liste.sort(sorter);
-  return {fra, til, opptak, arter, liste};
+  return {fra, til, opptak, arter, liste, kamera};
 }
 
 // ------------------------------------------------------------ grafer
@@ -358,21 +447,27 @@ function tegn(){
   const medFugl = u.opptak.filter(o => o.a.some(([s,c]) => c >= S.minConf)).length;
   const det = u.liste.reduce((a,x) => a + x.n, 0);
   const dagerMed = new Set(u.opptak.filter(o => o.a.some(([s,c]) => c >= S.minConf)).map(o => o.d)).size;
+  const sett = u.kamera.filter(k => k.a.some(([s,c]) => c >= S.minConf)).length;
   $('#nokkel').innerHTML = tall(u.liste.length, 'arter') + tall(u.opptak.length, 'opptak') + tall(medFugl, 'opptak med fugl')
-    + tall(det, 'artstreff') + tall(dagerMed + ' av ' + dagerMellom(u.fra, u.til).length, 'dager med fugl');
+    + tall(det, 'artstreff') + tall(dagerMed + ' av ' + dagerMellom(u.fra, u.til).length, 'dager med fugl')
+    + tall(sett, 'sett av kameraet');
+  const kamSiste = [...u.kamera].filter(k => k.a.some(([s,c]) => c >= S.minConf)).sort((x,y) => (y.d + y.t).localeCompare(x.d + x.t)).slice(0, 8);
+  $('#kamera').hidden = !DATA.kamera || !DATA.kamera.length;
+  $('#kamera-liste').innerHTML = kamSiste.length ? '<div class="kam">' + kamSiste.map(k => kamKort(k)).join('') + '</div>'
+    : '<p class="tom">Ingen kamerafunn i perioden.</p>';
   $('#g-dager').replaceChildren(grafDager(u)); $('#g-timer').replaceChildren(grafTimer(u)); $('#g-sikkerhet').replaceChildren(grafSikkerhet(u));
 
   const liste = $('#liste');
   if (!u.liste.length) { liste.innerHTML = '<p class="tom">Ingen arter i utvalget. Senk terskelen eller utvid perioden.</p>'; }
   else if (S.visning === 'tabell') {
-    const kol = [['navn','Art',''],['opptak','Opptak','n'],['dager','Dager','n'],['sikkerhet','Best','n'],['median','Median','n'],['det','Vinduer','n'],['sist','Sist hørt','']];
+    const kol = [['navn','Art',''],['opptak','Opptak','n'],['dager','Dager','n'],['sikkerhet','Best','n'],['median','Median','n'],['det','Vinduer','n'],['sett','Sett','n'],['sist','Sist','']];
     liste.innerHTML = '<table><thead><tr>' + kol.map(([k,t,c]) => `<th class="${c} ${S.sort===k?'sortert':''}" data-sort="${k}">${t}${S.sort===k?' ↓':''}</th>`).join('') + '</tr></thead><tbody>'
       + u.liste.map(a => `<tr><td><button class="art velg" data-sci="${esc(a.sci)}" style="padding:0;border:0;background:none;gap:0">${bilde(a.sci)}<span><span class="navn">${esc(a.navn)}</span> <span class="lat">${esc(a.sci)}</span></span></button></td>`
-        + `<td class="n">${a.n}</td><td class="n">${a.dager.size}</td><td class="n"><span class="sikker" style="width:${Math.round(a.best*40)}px"></span> ${pct(a.best)}</td><td class="n">${pct(a.median)}</td><td class="n">${a.det}</td><td>${esc(dato(a.sist.slice(0,10)))} ${esc(a.sist.slice(11))}</td></tr>`).join('') + '</tbody></table>';
+        + `<td class="n">${a.n}</td><td class="n">${a.dager.size}</td><td class="n">${a.n ? `<span class="sikker" style="width:${Math.round(a.best*40)}px"></span> ` + pct(a.best) : '–'}</td><td class="n">${a.n ? pct(a.median) : '–'}</td><td class="n">${a.det}</td><td class="n">${a.sett.length ? a.sett.length + ' 📷' : '–'}</td><td>${esc(dato(a.sist.slice(0,10)))} ${esc(a.sist.slice(11))}</td></tr>`).join('') + '</tbody></table>';
     liste.querySelectorAll('th[data-sort]').forEach(th => th.onclick = () => { S.sort = th.dataset.sort === 'median' ? 'sikkerhet' : th.dataset.sort; tegn(); });
   } else {
     liste.innerHTML = '<div class="rutenett">' + u.liste.map(a => `<button class="art velg ${S.art===a.sci?'valgt':''}" data-sci="${esc(a.sci)}">${bilde(a.sci)}<div><div class="navn">${esc(a.navn)}</div><div class="lat">${esc(a.sci)}</div>`
-      + `<div class="nk"><b>${a.n}</b> opptak · <b>${a.dager.size}</b> ${a.dager.size===1?'dag':'dager'}<br>best <b>${pct(a.best)}</b> · sist ${esc(dato(a.sist.slice(0,10)))}</div></div></button>`).join('') + '</div>';
+      + `<div class="nk">${a.n ? `<b>${a.n}</b> opptak · <b>${a.dager.size}</b> ${a.dager.size===1?'dag':'dager'}` : 'bare sett, ikke hørt'}${a.sett.length ? `<span class="sett">📷 ${a.sett.length}</span>` : ''}<br>${a.n ? `best <b>${pct(a.best)}</b> · ` : ''}sist ${esc(dato(a.sist.slice(0,10)))}</div></div></button>`).join('') + '</div>';
   }
   liste.querySelectorAll('.velg').forEach(b => b.onclick = () => { S.art = S.art === b.dataset.sci ? '' : b.dataset.sci; tegn(); if (S.art) $('#detalj').scrollIntoView({behavior:'smooth', block:'start'}); });
   tegnDetalj(u);
@@ -382,14 +477,20 @@ function tegnDetalj(u){
   const d = $('#detalj');
   const a = u.arter[S.art];
   if (!S.art || !a) { d.hidden = true; d.innerHTML = ''; return; }
-  a.n = a.opptak.length; a.best = Math.max(...a.conf); a.median = median(a.conf);
+  a.n = a.opptak.length; a.best = a.conf.length ? Math.max(...a.conf) : 0; a.median = median(a.conf);
+  a.sett = a.sett || [];
   const info = DATA.arter[S.art] || {};
+  const settHtml = a.sett.length
+    ? `<h2 style="margin-top:16px">Sett av kameraet <span class="sett">📷 ${a.sett.length}</span></h2><div class="kam">`
+      + [...a.sett].sort((x,y) => (y.k.d + y.k.t).localeCompare(x.k.d + x.k.t)).slice(0, 24).map(x => kamKort(x.k, S.art)).join('') + '</div>'
+    : '';
   const rader = [...a.opptak].sort((x,y) => (y.o.d + y.o.t).localeCompare(x.o.d + x.o.t));
   d.hidden = false;
   d.innerHTML = `<button class="lukk" id="lukk">lukk ×</button><div class="topp">${bilde(S.art)}<div><h2>${esc(navn(S.art))}</h2>
     <div class="lat">${esc(S.art)}${info.engelsk ? ' · ' + esc(info.engelsk) : ''}${info.habitat ? ' · ' + esc(info.habitat) : ''}${info.plansje ? '' : ' · ingen plansje ennå'}</div>
-    <div class="rad" style="margin-top:10px">${tall(a.n, 'opptak')}${tall(a.dager.size, 'dager')}${tall(pct(a.best), 'best')}${tall(pct(a.median), 'median')}${tall(a.det, 'vinduer à 3 s')}</div>
+    <div class="rad" style="margin-top:10px">${tall(a.n, 'opptak')}${tall(a.dager.size, 'dager hørt')}${tall(a.n ? pct(a.best) : '–', 'best')}${tall(a.n ? pct(a.median) : '–', 'median')}${tall(a.det, 'vinduer à 3 s')}${tall(a.sett.length, 'sett av kameraet')}</div>
     <div class="fotnote">Først ${esc(datoLang(a.forst.slice(0,10)))} kl. ${esc(a.forst.slice(11))} · sist ${esc(datoLang(a.sist.slice(0,10)))} kl. ${esc(a.sist.slice(11))}</div></div></div>
+    ${settHtml}
     <div class="grafer" style="margin-top:14px"><div class="card"><h2>Opptak per dag</h2><div id="d-dager"></div></div>
     <div class="card"><h2>Når på døgnet</h2><div id="d-timer"></div></div><div class="card"><h2>Sikkerhet</h2><div id="d-sikkerhet"></div></div></div>
     <h2 style="margin-top:16px">Opptakene</h2><table><thead><tr><th>Når</th><th class="n">Sikkerhet</th><th class="n">Vinduer</th><th class="n">Nivå</th><th>Også i opptaket</th><th></th></tr></thead><tbody>`
@@ -398,7 +499,8 @@ function tegnDetalj(u){
       + `<td>${r.o.a.filter(([s]) => s !== S.art).map(([s,c]) => `${esc(navn(s))} ${Math.round(c*100)}`).join(', ')}</td>`
       + `<td>${r.o.lyd ? `<button class="spill" data-f="${esc(r.o.f)}">▶ spill</button>` : '<span class="lat">lyd slettet</span>'}</td></tr>`).join('')
     + '</tbody></table><p class="fotnote">Lydfilene ligger 21 dager på serveren. «Smell» betyr at opptaket begynte med et klippet smell (mikrofonen ikke klar).</p>';
-  $('#d-dager').replaceChildren(grafDager(u, u.arter, S.art)); $('#d-timer').replaceChildren(grafTimer(u, S.art)); $('#d-sikkerhet').replaceChildren(grafSikkerhet(u, S.art));
+  if (a.n) { $('#d-dager').replaceChildren(grafDager(u, u.arter, S.art)); $('#d-timer').replaceChildren(grafTimer(u, S.art)); $('#d-sikkerhet').replaceChildren(grafSikkerhet(u, S.art)); }
+  else d.querySelectorAll('.grafer, .grafer + h2, .grafer + h2 + table, .grafer + h2 + table + p').forEach(el => el.remove());
   $('#lukk').onclick = () => { S.art = ''; tegn(); };
   d.querySelectorAll('.spill').forEach(b => b.onclick = () => spill(b));
 }
@@ -458,6 +560,7 @@ def side() -> str:
         <option value="2">2 opptak</option><option value="3">3 opptak</option><option value="5">5 opptak</option></select></div>
       <div><label>Sortering</label><select id="sort"><option value="opptak">flest opptak</option>
         <option value="dager">flest dager</option><option value="sikkerhet">sikrest</option>
+        <option value="sett">oftest sett</option>
         <option value="sist">sist hørt</option><option value="navn">navn</option></select></div>
       <div><label>Søk</label><input type="search" id="sok" placeholder="art"></div>
     </div>
@@ -471,6 +574,13 @@ def side() -> str:
     <div class="card"><h2>Sikkerhet på alle treff</h2><div id="g-sikkerhet"></div>
       <p class="fotnote">Treff under terskelen din er tegnet i oransje.</p></div>
   </div>
+
+  <section class="card fugler" id="kamera" hidden>
+    <h2>Sist sett av kameraet</h2>
+    <div id="kamera-liste"></div>
+    <p class="fotnote">Kameraet i kontorvinduet, rettet mot materne. Klikk på et bilde for full størrelse.
+      Arten er modellens tolkning av bildet, med dens egen sikkerhet.</p>
+  </section>
 
   <section class="card fugler">
     <div class="tabellvalg"><h2>Artene</h2><div class="knapper">
