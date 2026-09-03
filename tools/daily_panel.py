@@ -54,6 +54,14 @@ NYE_ARTER = int(os.environ.get("NYE_ARTER", "2"))
 # det den ellers falt tilbake paa. RESERVE_I_GAAR=0 slaar det av.
 RESERVE_I_GAAR = os.environ.get("RESERVE_I_GAAR", "1") != "0"
 
+# Og har heller ikke gaarsdagen noe aa tegne, gaa videre bakover -- til siste
+# dag som faktisk hadde det. 3. sep 2026 hadde verken i dag eller i gaar en
+# art hoert i to oekter (mikrofonen var tett av dugg hele morgenen), og
+# veggen fikk en tegneseriestokkand fra AI-reserven. En fugleside fra i
+# forgaars med datoen tydelig i overskriften er bedre enn det. Saa mange dager
+# bakover den leter; 0 slaar det av.
+RESERVE_DAGER = int(os.environ.get("RESERVE_DAGER", "7"))
+
 
 def kjoer(navn: str, *args: str) -> None:
     print(f"\n--- {navn} ---", flush=True)
@@ -101,10 +109,22 @@ def main() -> int:
     dager = [args.dag]
     if args.dag == "i-dag" and RESERVE_I_GAAR:
         dager.append("i-gaar")
+        i_dag = datetime.date.today()
+        dager += [(i_dag - datetime.timedelta(days=n)).isoformat()
+                  for n in range(2, RESERVE_DAGER + 1)]
 
     birds = BIRDS
     for i, dag in enumerate(dager):
-        birds = forbered(dag)
+        if i >= 2:
+            # Eldre dager kan mangle opptak helt (utedelen laa nede). Det er
+            # ikke en feil, bare en dag til aa hoppe over.
+            sti = os.path.join(WWW, "birds-valgt.json")
+            if kjoer_kode("birdnet_analyze.py", "--dag", dag, sti) != 0:
+                print(f"Ingen opptak {dag} — proever dagen foer.", file=sys.stderr)
+                continue
+            birds = sti
+        else:
+            birds = forbered(dag)
         # Foer sammensettingen, ikke etter: compose_branch leser bird_names ved
         # import, og ny_art skriver metadataene til plates/arter.json. At det
         # er en egen prosess er nettopp det som gjoer at arten er med med én
