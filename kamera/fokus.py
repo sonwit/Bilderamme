@@ -33,8 +33,10 @@ try:
                + m[1:-1, :-2] + m[1:-1, 2:])
         s = float(lap.var())
         beste = max(beste, s)
-        stolpe = "#" * min(60, int(s / max(beste, 1) * 60))
-        print(f"{s:8.0f}  {stolpe}", flush=True)
+        # Logaritmisk stolpe, absolutt skala: 1 = helt uskarpt, 1000 = skarpt.
+        # Da synes smaa bedringer, og stolpen sier noe uten aa se paa tallet.
+        stolpe = "#" * min(60, int(max(0.0, np.log10(max(s, 1.0))) * 20))
+        print(f"{s:9.1f}  {stolpe}", flush=True)
         time.sleep(0.7)
 except KeyboardInterrupt:
     print(f"\nbeste: {beste:.0f}")
