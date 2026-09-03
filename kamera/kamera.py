@@ -48,6 +48,11 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 KONFIG = os.path.join(HERE, "kamera.json")
+# Finnes denne fila, tas et bilde av hele rammen med en gang, lagres som
+# siste.jpg ved siden av scriptet, og fila slettes. Til finjustering fra
+# Macen (titt.sh) uten aa gaa veien om serveren og modellen.
+TA_BILDE = os.path.join(HERE, "TA_BILDE")
+SISTE = os.path.join(HERE, "siste.jpg")
 
 STANDARD = {
     "server": "http://192.168.1.38:8091",
@@ -339,6 +344,20 @@ def main() -> int:
         # Konfigurasjonen leses paa nytt naar fila endres, saa felt og
         # terskler kan justeres uten aa restarte tjenesten (som krever sudo).
         # Bildestoerrelse og rotasjon gjelder foerst ved neste start.
+        if os.path.exists(TA_BILDE):
+            try:
+                from PIL import Image
+                Image.fromarray(_snu(cam.capture_array("main"))).save(
+                    SISTE + ".tmp", "JPEG", quality=int(cfg["jpeg_kvalitet"]))
+                os.replace(SISTE + ".tmp", SISTE)
+                logg("tok bilde av hele rammen -> siste.jpg (TA_BILDE)")
+            finally:
+                try:
+                    os.remove(TA_BILDE)
+                except OSError:
+                    pass
+            forrige = graa(cam)
+            continue
         m = _mtime(KONFIG)
         if m != konfig_mtime:
             konfig_mtime = m
