@@ -263,6 +263,23 @@ class Handler(BaseHTTPRequestHandler):
         except (BrokenPipeError, ConnectionResetError):
             pass
 
+    def _serve_file(self, path, ctype):
+        """Én fil fra disk, eller 404. Stien er allerede vasket av den som
+        kaller -- fugler.plansje/lydfil slipper bare gjennom kjente navn."""
+        if not path or not os.path.isfile(path):
+            return self._reply(404, "ikke funnet")
+        with open(path, "rb") as f:
+            data = f.read()
+        self.send_response(200)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Cache-Control", "public, max-age=86400")
+        self.end_headers()
+        try:
+            self.wfile.write(data)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
+
     def _read_body(self):
         length = int(self.headers.get("Content-Length", 0) or 0)
         return self.rfile.read(length).decode("utf-8", errors="replace") if length else ""
@@ -276,6 +293,17 @@ class Handler(BaseHTTPRequestHandler):
             if not self._authorized(query):
                 return self._reply(401, "Mangler eller feil token.")
             return self._serve_archive(path[len("/arkiv/"):])
+        if path.startswith("/plansje/") or path.startswith("/lyd/"):
+            # Fuglesidas bilder og lyd: 1:1-fuglen fra plansjebiblioteket og
+            # selve opptaket, saa lenge det ligger der (21 dager).
+            if not self._authorized(query):
+                return self._reply(401, "Mangler eller feil token.")
+            import fugler
+            navn = os.path.basename(path)
+            if path.startswith("/plansje/"):
+                sti = fugler.plansje(navn[:-4].replace("-", " ")) if navn.endswith(".png") else None
+                return self._serve_file(sti, "image/png")
+            return self._serve_file(fugler.lydfil(navn), "audio/wav")
         path = path.rstrip("/") or "/"
         if not self._authorized(query):
             return self._reply(401, "Mangler eller feil token.")
@@ -303,6 +331,19 @@ class Handler(BaseHTTPRequestHandler):
                 return self._reply_json(200, d)
             except Exception as e:  # noqa: BLE001
                 return self._reply_json(500, {"ok": False, "message": str(e)})
+        if path == "/fugler":
+            try:
+                import fugler
+                return self._reply(200, _side("Fugler", fugler.STIL, fugler.side()),
+                                   "text/html; charset=utf-8")
+            except Exception as e:  # noqa: BLE001
+                return self._reply(500, f"Fuglesida feilet: {e}")
+        if path == "/api/fugler":
+            try:
+                import fugler
+                return self._reply_json(200, fugler.samle())
+            except Exception as e:  # noqa: BLE001
+                return self._reply_json(500, {"ok": False, "message": str(e)})
         if path == "/api/images":
             return self._reply_json(200, {"images": _archive_list(), "status": _state["status"], "last": _state["last"]})
         if path == "/status":
@@ -317,7 +358,8 @@ class Handler(BaseHTTPRequestHandler):
                 "Fugleramme frame-server.\n"
                 "Web: GET /   |  POST /api/generate {emne,stil,seeds[]}  |  POST /api/send {name}\n"
                 "Siri: POST /generate (emne i body)  |  GET /generate?emne=...\n"
-                "GET /daily   GET /status   GET /api/images   GET /helse\n")
+                "GET /daily   GET /status   GET /api/images   GET /helse   "
+                "GET /fugler   GET /api/fugler\n")
         return self._reply(404, "Ukjent endepunkt.")
 
     # --- POST ---
@@ -412,17 +454,27 @@ def main():
 # Web-appen (én selvstendig HTML-side)
 # ----------------------------------------------------------------------
 
-def _helse_side(helse) -> str:
-    """Helsesida i web-appens drakt: samme palett, samme kort."""
+NAV = ("<a href='/'>Bildene</a> · <a href='/fugler'>Fugler</a> · "
+       "<a href='/helse'>Helse</a>")
+
+
+def _side(tittel: str, ekstra_stil: str, innhold: str) -> str:
+    """En underside i web-appens drakt: samme palett, samme kort, samme
+    lenkerad oeverst. Helsesida og fuglesida bygges av hver sin modul som
+    ogsaa kan kjoeres frittstaaende; her faar de bare ramma rundt."""
     stil = WEBUI_HTML.split("<style>", 1)[1].split("</style>", 1)[0]
     return ("<!doctype html><html lang=no><head><meta charset=utf-8>"
             "<meta name=viewport content='width=device-width, initial-scale=1'>"
-            "<title>Fugleramme — helse</title><style>"
-            + stil + helse.STIL +
+            f"<title>Fugleramme — {tittel.lower()}</title><style>"
+            + stil + ekstra_stil +
             "</style></head><body>"
-            "<header><h1>Helse</h1>"
-            "<div class=status><a href='/'>← tilbake til bildene</a></div>"
-            "</header><main>" + helse.side(helse.samle()) + "</main></body></html>")
+            f"<header><h1>{tittel}</h1>"
+            f"<div class=status>{NAV}</div>"
+            "</header><main>" + innhold + "</main></body></html>")
+
+
+def _helse_side(helse) -> str:
+    return _side("Helse", helse.STIL, helse.side(helse.samle()))
 
 
 WEBUI_HTML = r"""<!doctype html>
@@ -492,6 +544,7 @@ WEBUI_HTML = r"""<!doctype html>
 <header>
   <h1><span class="dot idle" id="dot"></span> Fugleramme</h1>
   <div class="status" id="status">Klar.</div>
+  <div class="status"><a href="/fugler">Fugler</a> · <a href="/helse">Helse</a></div>
 </header>
 <main>
   <section class="card">

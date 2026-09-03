@@ -30,7 +30,10 @@ fremdeles det Siri-kommandoen og «lag nytt bilde» i webappen bruker.
 - ✅ **Webapp + Siri:** `tools/frame_server.py` (systemd-tjeneste, port 8090) —
   galleri over alle genererte bilder, «lag nytt bilde»-skjema, og
   `POST /generate` for Siri-snarveien. Se `docs/Webapp — galleri og
-  generering.md` og `docs/On-demand — Siri-kommando.md`.
+  generering.md` og `docs/On-demand — Siri-kommando.md`. Undersider:
+  `/helse` (`tools/helse.py`, status for hele anlegget) og `/fugler`
+  (`tools/fugler.py`, dashboard over artene: plansje, hvor ofte, hvor
+  sikkert, når på døgnet, med avspilling av opptakene).
 - ✅ **Utedel v2 (XIAO ESP32-S3, fuglelyd):** montert ute og i drift
   2026-08-04. Våkner fra deep sleep etter plan (04:00–08:30 hvert 30. min,
   09–21 hver time), tar opp 60 s fra INMP441, POST-er til serveren og sover
