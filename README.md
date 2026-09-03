@@ -43,7 +43,8 @@ fremdeles det Siri-kommandoen og «lag nytt bilde» i webappen bruker.
   *(v1 med Raspberry Pi 3 B trakk for mye strøm og døde 2026-07-28 —
   historikk og lærdommer i `docs/Utedel — status og neste steg.md`.)*
 - ✅ **Dagens fugleside (hjemmeserver):** `tools/daily_panel.py` kjører hele
-  kjeden 07:07 — `compose_branch.py` (fuglene på grenen) → `render_daily_panel.py`
+  kjeden 07:07, 09:37 og 16:00 (09:37 lagt til 3. sep 2026: kl. 07 hadde
+  bare 5 av 14 dager noe å tegne, kl. 09 hadde 9) — `compose_branch.py` (fuglene på grenen) → `render_daily_panel.py`
   (sida som HTML) → `render_panel_png.py` (rastrer + dithrer) → `push_to_frame.py`.
   Feiler noe, faller cron tilbake på `generate_daily_image.py`. Se «Dagens
   fugleside» under.
