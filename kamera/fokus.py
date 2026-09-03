@@ -32,7 +32,14 @@ except FileNotFoundError:
 roier = cfg.get("roier") or [cfg.get("roi", [0.25, 0.25, 0.75, 0.75])]
 rot = int(cfg.get("roter", 0)) % 360
 
-subprocess.run(["pkill", "-f", "^python3 kamera.py"], check=False)
+# Kameraet kan bare brukes av én. Stopp loekka -- systemd-tjenesten (spoer
+# om sudo-passord) eller en loes nohup-prosess -- og start den igjen til
+# slutt.
+tjeneste = subprocess.run(["systemctl", "is-active", "--quiet", "fugleramme-kamera"]).returncode == 0
+if tjeneste:
+    print("stopper fugleramme-kamera (sudo) ...")
+    subprocess.run(["sudo", "systemctl", "stop", "fugleramme-kamera"], check=False)
+subprocess.run(["pkill", "-f", "kamera\\.py$"], check=False)
 time.sleep(1)
 
 cam = Picamera2()
@@ -73,5 +80,11 @@ try:
         print(f"{s:9.1f}  {stolpe}", flush=True)
         time.sleep(0.7)
 except KeyboardInterrupt:
-    print(f"\nbeste: {beste:.0f}. Start kameraet igjen: cd ~/kamera && nohup python3 kamera.py > kamera.log 2>&1 &")
+    print(f"\nbeste: {beste:.0f}")
+    cam.stop()
+    if tjeneste:
+        print("starter fugleramme-kamera igjen ...")
+        subprocess.run(["sudo", "systemctl", "start", "fugleramme-kamera"], check=False)
+    else:
+        print("Start kameraet igjen: cd ~/kamera && nohup python3 kamera.py > kamera.log 2>&1 &")
     sys.exit(0)
