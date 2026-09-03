@@ -31,11 +31,12 @@ VISION_MODEL = os.environ.get("VISION_MODEL", "gemini-3.5-flash")
 PROMPT = (
     "This photo was taken through a window by a fixed camera pointed at a bird "
     "feeder in a garden in Hagen, just north of Oslo, Norway, in {maaned}. "
-    "Identify every bird visible. Common species here: great tit, blue tit, "
+    "Identify every bird or other animal visible -- a squirrel or a cat goes "
+    "in the same list, with its scientific name. Common species here: great tit, blue tit, "
     "coal tit, magpie, hooded crow, jay, fieldfare, redwing, blackbird, "
     "chaffinch, greenfinch, siskin, bullfinch, tree sparrow, house sparrow, "
     "nuthatch, great spotted woodpecker, lesser spotted woodpecker, robin, "
-    "dunnock, wood pigeon, squirrel (not a bird, but report it).\n\n"
+    "dunnock, wood pigeon, red squirrel (Sciurus vulgaris).\n\n"
     "Answer with JSON only, nothing else:\n"
     '{{"fugler": [{{"scientific_name": "<Genus species>", '
     '"common_name": "<English name>", "norsk": "<Norwegian bokmal name>", '
