@@ -70,8 +70,13 @@ STANDARD = {
     "blokk": 5,
     "blokk_andel": 0.5,
     "blokker_min": 3,
+    # Omrammingen rundt de tette blokkene maa vaere mindre enn denne andelen
+    # av utsnittet -- ellers er det lys eller vind, ikke én fugl.
+    "klynge_maks": 0.25,
+    # Endrer mer enn dette av utsnittet seg paa én gang, er det lyset.
+    "bevegelse_maks": 0.08,
     # Sekunder mellom to bilder, og mellom to rammer i overvaakingen.
-    "pause_s": 12,
+    "pause_s": 15,
     "ramme_s": 0.5,
     # Gjennomsnittlig lysstyrke (0-255) i utsnittet under dette = natt.
     "lys_min": 25,
@@ -173,7 +178,20 @@ def bevegelse(forrige: np.ndarray, naa: np.ndarray, cfg: dict) -> tuple[float, i
     if h2 < b or w2 < b:
         return float(endret.mean()), 0
     blokker = endret[:h2, :w2].reshape(h2 // b, b, w2 // b, b).mean(axis=(1, 3))
-    return float(endret.mean()), int((blokker > cfg["blokk_andel"]).sum())
+    tette = blokker > cfg["blokk_andel"]
+    n = int(tette.sum())
+    if n == 0:
+        return float(endret.mean()), 0
+    # En fugl er én klynge. Ligger de tette blokkene spredt over hele
+    # utsnittet, er det et vindkast eller en sky som gikk for sola (11:26
+    # 3. sep: 50 tette blokker, ingen fugl). Maalet er hvor stor del av
+    # utsnittet klyngens omramming dekker.
+    ys, xs = np.nonzero(tette)
+    boks = (ys.max() - ys.min() + 1) * (xs.max() - xs.min() + 1)
+    spredning = boks / tette.size
+    if spredning > cfg["klynge_maks"]:
+        return float(endret.mean()), 0
+    return float(endret.mean()), n
 
 
 def ta_bilde(cam, cfg: dict) -> bytes:
@@ -280,7 +298,8 @@ def main() -> int:
         if args.vis:
             logg(f"bevegelse {andel:.3%}  tette blokker {tette:3d}  lys {lys:.0f}")
             continue
-        if andel < cfg["bevegelse_andel"] or tette < cfg["blokker_min"]:
+        if not (cfg["bevegelse_andel"] <= andel <= cfg["bevegelse_maks"]) \
+                or tette < cfg["blokker_min"]:
             continue
         if time.time() - sist_bilde < cfg["pause_s"]:
             continue

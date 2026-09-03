@@ -12,8 +12,10 @@
   "blokk": 5,
   "blokk_andel": 0.5,
   "blokker_min": 3,
-  "pause_s": 12,
+  "pause_s": 15,
   "lys_min": 25,
   "fokus_m": 7,
-  "roter": 0
+  "roter": 0,
+  "klynge_maks": 0.25,
+  "bevegelse_maks": 0.08
 }
