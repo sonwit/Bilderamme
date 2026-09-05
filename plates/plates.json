@@ -117,5 +117,12 @@
     "side": "https://commons.wikimedia.org/wiki/File%3AA_natural_history_of_birds_%28Numb._XXX%29_%289241132516%29.jpg",
     "lisens": "Public domain",
     "opphav": "Albin, Eleazar; Derham, W."
+  },
+  "Phylloscopus collybita": {
+    "fil": "phylloscopus-collybita.jpg",
+    "commons": "File:Phylloscopus collybita 1873.jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3APhylloscopus_collybita_1873.jpg",
+    "lisens": "Public domain",
+    "opphav": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:John_Gerrard_Keulemans\" class=\"extiw\" title=\"w:en:John Gerrard Keulemans\"><span title=\"Dutch bird artist (1842-1912)\">John Gerrard Keulemans</span></a></"
   }
 }

@@ -1,4 +1,13 @@
 {
+  "anser anser": {
+    "norsk": "Grågås",
+    "engelsk": "Greylag goose",
+    "lengde_cm": 80.0,
+    "habitat": "vaatmark",
+    "overvintrer": false,
+    "kilde": "modell",
+    "lagt_til": "2026-09-04"
+  },
   "ardea cinerea": {
     "norsk": "Gråhegre",
     "engelsk": "Grey heron",
@@ -16,6 +25,15 @@
     "overvintrer": true,
     "kilde": "modell",
     "lagt_til": "2026-08-28"
+  },
+  "columba palumbus": {
+    "norsk": "Ringdue",
+    "engelsk": "Common wood pigeon",
+    "lengde_cm": 41.0,
+    "habitat": "tre",
+    "overvintrer": false,
+    "kilde": "modell",
+    "lagt_til": "2026-09-03"
   },
   "coturnix coturnix": {
     "norsk": "Vaktel",
@@ -106,6 +124,15 @@
     "overvintrer": false,
     "kilde": "modell",
     "lagt_til": "2026-08-28"
+  },
+  "phylloscopus collybita": {
+    "norsk": "Gransanger",
+    "engelsk": "Common Chiffchaff",
+    "lengde_cm": 11.0,
+    "habitat": "tre",
+    "overvintrer": false,
+    "kilde": "modell",
+    "lagt_til": "2026-09-05"
   },
   "turdus merula": {
     "norsk": "Svarttrost",
