@@ -85,9 +85,11 @@ NY_FUGL: set = set()
 # hvor sikker BirdNET var.
 MAL_DIR = os.path.join(PLATES_DIR, "maler")
 
-# Hvor mange oekter en art maa vaere hoert i for aa bli tegnet. Se
-# begrunnelsen der den brukes -- kort sagt: havhesten.
-MIN_OEKTER = int(os.environ.get("TEGN_MIN_OEKTER", "2"))
+# Hvor mange oekter en art maa vaere hoert i for aa bli tegnet. Kravet om to
+# oekter (30. aug -- 9. sep 2026, se havhesten der det brukes) er skrudd av:
+# Eieren vil ha hele lista paa greina, ogsaa det som bare er hoert én gang.
+# Sett TEGN_MIN_OEKTER=2 i frame_server.env for aa faa kravet tilbake.
+MIN_OEKTER = int(os.environ.get("TEGN_MIN_OEKTER", "1"))
 
 # Hvilke arter en plass tar imot. En skjaere kan ikke staa i siv, og en
 # myrrikse hoerer ikke hjemme paa en kvist -- men ALLE fugler kan fly, saa
@@ -1263,6 +1265,11 @@ def main() -> int:
     # dager mister alt. Men de dagene hadde bare ÉN art hoert i hele doegnet,
     # og de er fra den gamle tynne lytteplanen. Paa den tetteste dagen gaar 10
     # ned til 8. Med 60 opptak i doegnet er to oekter en lav terskel.
+    #
+    # Likevel: 2. sep holdt kravet vaktel, graahegre og kjoettmeis borte fra
+    # veggen, og 9. sep fuglekongen (63 %) og svarttrosten. Eieren valgte
+    # 9. sep aa tegne alt (MIN_OEKTER=1) -- lista oeverst paa sida viser
+    # uansett hvor mange oekter hver art er hoert i.
     foer = len(kandidater)
     kandidater = [s for s in kandidater if s.get("sessions", 1) >= MIN_OEKTER]
     if len(kandidater) < foer:
