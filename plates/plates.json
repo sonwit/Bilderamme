@@ -124,5 +124,12 @@
     "side": "https://commons.wikimedia.org/wiki/File%3APhylloscopus_collybita_1873.jpg",
     "lisens": "Public domain",
     "opphav": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:John_Gerrard_Keulemans\" class=\"extiw\" title=\"w:en:John Gerrard Keulemans\"><span title=\"Dutch bird artist (1842-1912)\">John Gerrard Keulemans</span></a></"
+  },
+  "Regulus regulus": {
+    "fil": "regulus-regulus.jpg",
+    "commons": "File:Atlas de poche des oiseaux de France, Suisse, et Belgique, utiles ou nuisibles (Pl. 33) (10069223396).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AAtlas_de_poche_des_oiseaux_de_France%2C_Suisse%2C_et_Belgique%2C_utiles_ou_nuisibles_%28Pl._33%29_%2810069223396%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Hamonville, Jean Charles Louis Tardif"
   }
 }

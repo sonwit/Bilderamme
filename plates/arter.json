@@ -134,6 +134,15 @@
     "kilde": "modell",
     "lagt_til": "2026-09-05"
   },
+  "regulus regulus": {
+    "norsk": "Fuglekonge",
+    "engelsk": "Goldcrest",
+    "lengde_cm": 9.0,
+    "habitat": "tre",
+    "overvintrer": true,
+    "kilde": "modell",
+    "lagt_til": "2026-09-09"
+  },
   "turdus merula": {
     "norsk": "Svarttrost",
     "engelsk": "Common blackbird",
