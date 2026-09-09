@@ -131,5 +131,54 @@
     "side": "https://commons.wikimedia.org/wiki/File%3AAtlas_de_poche_des_oiseaux_de_France%2C_Suisse%2C_et_Belgique%2C_utiles_ou_nuisibles_%28Pl._33%29_%2810069223396%29.jpg",
     "lisens": "Public domain",
     "opphav": "Hamonville, Jean Charles Louis Tardif"
+  },
+  "Ardea cinerea": {
+    "fil": "ardea-cinerea.jpg",
+    "commons": "File:British ornithology (18775052349).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_%2818775052349%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
+  },
+  "Periparus ater": {
+    "fil": "periparus-ater.jpg",
+    "commons": "File:British ornithology BHL47497593.jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_BHL47497593.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
+  },
+  "Turdus merula": {
+    "fil": "turdus-merula.jpg",
+    "commons": "File:British ornithology BHL47497559.jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_BHL47497559.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
+  },
+  "Anser anser": {
+    "fil": "anser-anser.jpg",
+    "commons": "File:A history of British birds (6008479437).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AA_history_of_British_birds_%286008479437%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Morris, F. O."
+  },
+  "Dendrocopos major": {
+    "fil": "dendrocopos-major.jpg",
+    "commons": "File:British ornithology (18961163525).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_%2818961163525%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
+  },
+  "Corvus cornix": {
+    "fil": "corvus-cornix.jpg",
+    "commons": "File:British ornithology (18340901013).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3ABritish_ornithology_%2818340901013%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Graves, George"
+  },
+  "Pyrrhula pyrrhula": {
+    "fil": "pyrrhula-pyrrhula.jpg",
+    "commons": "File:Atlas de poche des oiseaux de France, Suisse, et Belgique, utiles ou nuisibles (Pl. 24) (6388883701).jpg",
+    "side": "https://commons.wikimedia.org/wiki/File%3AAtlas_de_poche_des_oiseaux_de_France%2C_Suisse%2C_et_Belgique%2C_utiles_ou_nuisibles_%28Pl._24%29_%286388883701%29.jpg",
+    "lisens": "Public domain",
+    "opphav": "Hamonville, Jean Charles Louis Tardif"
   }
 }
