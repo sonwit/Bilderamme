@@ -116,6 +116,15 @@
     "kilde": "modell",
     "lagt_til": "2026-08-30"
   },
+  "loxia curvirostra": {
+    "norsk": "Grankorsnebb",
+    "engelsk": "Red Crossbill",
+    "lengde_cm": 16.5,
+    "habitat": "tre",
+    "overvintrer": true,
+    "kilde": "manuell",
+    "lagt_til": "2026-09-12"
+  },
   "mareca strepera": {
     "norsk": "Snadderand",
     "engelsk": "Gadwall",
