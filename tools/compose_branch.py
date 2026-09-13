@@ -306,6 +306,15 @@ def bird_prompt(common: str, sci: str, positur: str = "sittende") -> str:
             "below the body.")
 
 
+# Modellen som tegner 1:1-fuglene. En engangsjobb per art -- to-tre bilder
+# som gjenbrukes hver dag arten dukker opp -- saa her tar vi den beste:
+# gemini-3-pro-image, 0,134 USD per bilde, rundt 4 kr per ny art. Det
+# daglige reservebildet gaar paa den billige (IMAGE_MODEL i
+# generate_daily_image). Regelen fra 13. sep 2026: dyr til engangs, billig
+# til det som kjoerer hver dag.
+FUGL_MODELL = os.environ.get("FUGL_MODELL", "gemini-3-pro-image")
+
+
 def ensure_bird(s: dict, positur: str = "sittende",
                 force: bool = False) -> str | None:
     """Hent (eller lag) artens 1:1-fugl. Lages én gang og gjenbrukes hver dag
@@ -327,7 +336,8 @@ def ensure_bird(s: dict, positur: str = "sittende",
     ref = Image.open(forelegg).convert("RGB")
     ref.thumbnail((REF_MAX, REF_MAX), Image.LANCZOS)
     img = whiten(generate_image(bird_prompt(s["common_name"], sci, positur),
-                                ref_images=[ref], aspect_ratio="1:1"))
+                                ref_images=[ref], aspect_ratio="1:1",
+                                model=FUGL_MODELL))
     os.makedirs(FUGL_DIR, exist_ok=True)
     img.save(dest)
     stram_til_fuglen(dest)
@@ -1245,9 +1255,9 @@ def main() -> int:
     ap.add_argument("--nye-fotpunkter", action="store_true",
                     help="bestem fotpunktene paa nytt (manuelt satte roeres ikke)")
     # gemini-3-pro-image gjoer retusjtrinnet merkbart bedre enn
-    # gemini-2.5-flash-image: taerne griper faktisk rundt veden, og
-    # streken holder seg renere. Satt som standard KUN her -- det daglige
-    # AI-bildet bruker fortsatt sin egen modell til noen bestemmer noe annet.
+    # flash-image-modellene: taerne griper faktisk rundt veden, og streken
+    # holder seg renere. Retusjen gaar naa én gang per fuglesett per dag, saa
+    # den dyre modellen koster rundt 40 kr i maaneden. RETUSJ_MODELL bytter.
     ap.add_argument("--retusj-modell",
                     default=os.environ.get("RETUSJ_MODELL", "gemini-3-pro-image"),
                     help="bildemodell for retusjtrinnet")

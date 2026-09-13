@@ -367,8 +367,14 @@ RETUSJ=0 venv/bin/python daily_panel.py             # spar et Gemini-kall
 
 `--retusj` sender det ferdige arket tilbake til Gemini for å få tærne til å gripe
 rundt veden. `gemini-3-pro-image` gjør det merkbart bedre enn
-`gemini-2.5-flash-image` og er standard for akkurat det steget; det daglige
-AI-bildet bruker fortsatt sin egen modell.
+flash-image-modellene og er standard for akkurat det steget.
+
+Modellvalget følger én regel (13. sep 2026): **dyr modell til engangsjobbene,
+billig til det som kjører hver dag.** 1:1-fuglene (`FUGL_MODELL`) og retusjen
+(`RETUSJ_MODELL`) bruker `gemini-3-pro-image`; reservebildet, Siri og «lag nytt
+bilde» (`IMAGE_MODEL` i `generate_daily_image.py`) bruker
+`gemini-3.1-flash-image`, som tok over for `gemini-2.5-flash-image` før den
+legges ned 2. oktober 2026.
 
 Retusjen koster 1,27 kr per forsøk, og fra 13. sep 2026 gjøres den **én gang
 per fuglesett per dag**: sidecar-JSON-en husker hvilket sett som ble retusjert
