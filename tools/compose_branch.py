@@ -940,13 +940,15 @@ def _noe_nytt(kandidat: Image.Image, foer: Image.Image,
 
 
 def retusjer(ark: Image.Image, tries: int,
-           plassert: list[dict]) -> tuple[Image.Image, dict, bool]:
+           plassert: list[dict]) -> tuple[Image.Image, dict, str]:
     """Send arket tilbake for aa faa foettene til aa gripe. Returnerer
-    (bilde, soner, ble_retusjert). Faller tilbake paa originalen hvis ingen
-    forsoek holder tekstsonen ren."""
+    (bilde, soner, status), der status er «godtatt», «forkastet» (modellen
+    svarte, men ingen forsoek holdt maal) eller «feilet» (ingen svar, f.eks.
+    429). Faller tilbake paa originalen naar ingen forsoek holder."""
     ref = ark.copy()
     ref.thumbnail((RETUSJ_REF, RETUSJ_REF), Image.LANCZOS)
     basis = zone_report(ark)
+    feil = 0
     for forsoek in range(1, tries + 1):
         try:
             kandidat = fit_to_panel(whiten(
@@ -955,6 +957,7 @@ def retusjer(ark: Image.Image, tries: int,
                                model=RETUSJ_MODELL)))
         except Exception as e:  # noqa: BLE001
             print(f"  retusj {forsoek}/{tries} feilet: {str(e)[:120]}", file=sys.stderr)
+            feil += 1
             continue
         soner = zone_report(kandidat)
         status = " ".join(f"{n}={v['blekk']*100:.1f}%/verst {v['verst']*100:.1f}%"
@@ -972,10 +975,10 @@ def retusjer(ark: Image.Image, tries: int,
             dom = "godtatt"
         print(f"  retusj {forsoek}/{tries}: {status}  {dom}")
         if ren and not borte and not nytt:
-            return kandidat, soner, True
+            return kandidat, soner, "godtatt"
     print("  ingen retusjforsoek besto — beholder den lokale sammensettingen",
           file=sys.stderr)
-    return ark, zone_report(ark), False
+    return ark, zone_report(ark), "feilet" if feil == tries else "forkastet"
 
 
 def sjekk_foetter(ut: str) -> None:
@@ -1200,6 +1203,38 @@ def lag_mal(mal: dict, tries: int = 3) -> None:
     print(f"OK: {ut} ({best.width}x{best.height})")
 
 
+# Ett retusjforsoek per fuglesett per dag. daily_panel kjoerer tre ganger om
+# dagen, og sammensettingen er deterministisk: samme fugler paa samme mal gir
+# samme ark. Likevel gikk hvert av de tre arkene til gemini-3-pro-image, med
+# to forsoek hver -- 58 forsoek paa 13 dager (maalt 12. sep 2026), 1,27 kr
+# stykket, de fleste paa fugler som alt var retusjert i morgenkjoeringen.
+# Sidecar-JSON-en husker hvilket sett forrige kjoering retusjerte, og settet
+# er uendret, gjenbrukes det retusjerte arket uten nytt kall. Et forsoek som
+# ble FORKASTET brukes heller ikke om igjen: det lokale arket er det samme.
+# Bare et forsoek som FEILET (429, nettverk) faar proeve igjen neste kjoering.
+
+def retusj_signatur(dato: str, mal: str, plassert: list[dict]) -> str:
+    """Hva som ble satt hvor. Merkene holdes utenfor -- de settes etterpaa."""
+    import hashlib
+    noekkel = [dato, mal] + sorted(
+        f"{s['scientific_name']}|{s.get('type', 'gren')}|{s['boks']}|{s['fot']}"
+        for s in plassert)
+    return hashlib.sha1("\n".join(noekkel).encode()).hexdigest()[:12]
+
+
+def forrige_retusj(signatur: str) -> dict | None:
+    """Sidecar-en fra forrige kjoering, hvis den gjelder akkurat dette settet
+    og et retusjforsoek alt er brukt paa det. Ellers None."""
+    try:
+        with open(BG_JSON) as f:
+            m = json.load(f)
+    except (OSError, ValueError):
+        return None
+    if m.get("retusj_signatur") != signatur or not m.get("retusj_forsoekt"):
+        return None
+    return m
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Sett dagens fugler paa grenen.")
     ap.add_argument("--birds", default=os.path.join(HERE, "birds.json"))
@@ -1224,9 +1259,10 @@ def main() -> int:
                                   "som passer dagens fugler best)")
     ap.add_argument("--lag-mal", metavar="NAVN",
                     help="generer bakgrunnsbildet for en mal og avslutt")
-    ap.add_argument("--retusj", type=int, default=int(os.environ.get("RETUSJ_TRIES", "2")),
+    ap.add_argument("--retusj", type=int, default=int(os.environ.get("RETUSJ_TRIES", "1")),
                     help="antall forsoek paa aa la Gemini feste foettene til "
-                         "grenen (0 = hopp over)")
+                         "grenen (0 = hopp over). Brukes bare naar fuglesettet "
+                         "er nytt i dag -- ellers gjenbrukes forrige resultat")
     ap.add_argument("--bare-fugler", action="store_true",
                     help="lag manglende 1:1-fugler og stopp")
     args = ap.parse_args()
@@ -1317,11 +1353,28 @@ def main() -> int:
 
     ark, plassert = compose(species, mal)
     ark = fit_to_panel(ark)
-    retusjert = False
-    if args.retusj > 0:
-        ark, soner, retusjert = retusjer(ark, args.retusj, plassert)
+    signatur = retusj_signatur(birds.get("date") or dato.isoformat(),
+                               mal["navn"], plassert)
+    forrige = forrige_retusj(signatur) if args.retusj > 0 else None
+    retusjert, forsoekt = False, False
+    if forrige is not None:
+        # Samme fugler paa samme plasser som sist: ikke bruk et nytt kall.
+        forsoekt = True
+        if forrige.get("retusjert") and os.path.exists(BG_PNG):
+            ark = Image.open(BG_PNG).convert("RGB")
+            retusjert = True
+            utfall = "retusjert (gjenbrukt fra forrige kjoering)"
+        else:
+            utfall = "uretusjert (forsoekt tidligere i dag, ikke godtatt)"
+        soner = zone_report(ark)
+    elif args.retusj > 0:
+        ark, soner, status = retusjer(ark, args.retusj, plassert)
+        retusjert = status == "godtatt"
+        forsoekt = status != "feilet"
+        utfall = "retusjert" if retusjert else f"uretusjert ({status})"
     else:
         soner = zone_report(ark)
+        utfall = "uretusjert"
     for navn, v in soner.items():
         print(f"  sone {navn:9s} {v['blekk']*100:5.1f} % blekk, "
               f"verste baand {v['verst']*100:5.1f} %  "
@@ -1337,6 +1390,9 @@ def main() -> int:
             "soner": soner,
             "date": birds.get("date") or datetime.date.today().isoformat(),
             "mal": mal["navn"],
+            "retusjert": retusjert,
+            "retusj_signatur": signatur,
+            "retusj_forsoekt": forsoekt,
             "metode": (f"{mal['navn']} + 1:1-fugler, satt sammen lokalt"
                        + (" og retusjert av Gemini" if retusjert else "")),
             "species": [{"common_name": s["common_name"],
@@ -1348,7 +1404,7 @@ def main() -> int:
                         for s in plassert],
         }, f, indent=2, ensure_ascii=False)
     print(f"OK: {BG_PNG} — {len(plassert)} fugler paa malen " + mal["navn"]
-          + (", retusjert" if retusjert else ", uretusjert"))
+          + ", " + utfall)
     return 0
 
 

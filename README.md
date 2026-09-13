@@ -111,6 +111,15 @@ fremdeles det Siri-kommandoen og «lag nytt bilde» i webappen bruker.
   anbefaler) for pene resultater. De faktiske daglige Gemini-bildene bør
   allerede være stilt inn på dette via `docs/Prompt-guide — bilder til
   ePaper-rammen.md`.
+- **Gemini-regningen er kameraet, ikke fuglesida.** Målt 12. sep 2026: 1559
+  kamerabilder på åtte dager til `gemini-3.5-flash` i 1280 px med tenking på,
+  anslått 0,05–0,15 kr per bilde og 80–90 % av forbruket; retusjen
+  (`gemini-3-pro-image`, 1,27 kr per forsøk, 4–5 om dagen) var resten. Bremsene
+  ligger i `tools/bilde_analyze.py` (`KAMERA_MODELL`, `KAMERA_BILDE_PX`,
+  `KAMERA_MAKS_PER_TIME`, `KAMERA_PAUSE_429_S`, tokenforbruk i `kamera.jsonl`),
+  i `kamera/kamera.py` (`pause_s`, 60 s) og i retusjen (én gang per fuglesett,
+  se «Kjøre for hånd»). Forbruket per modell står i AI Studio under Usage, ikke
+  på Cloud-fakturaen — den viser bare påfyllingene.
 
 ## Struktur
 
@@ -360,6 +369,13 @@ RETUSJ=0 venv/bin/python daily_panel.py             # spar et Gemini-kall
 rundt veden. `gemini-3-pro-image` gjør det merkbart bedre enn
 `gemini-2.5-flash-image` og er standard for akkurat det steget; det daglige
 AI-bildet bruker fortsatt sin egen modell.
+
+Retusjen koster 1,27 kr per forsøk, og fra 13. sep 2026 gjøres den **én gang
+per fuglesett per dag**: sidecar-JSON-en husker hvilket sett som ble retusjert
+(`retusj_signatur`), og står de samme fuglene på de samme plassene i neste
+kjøring, gjenbrukes arket uten nytt kall. Et forkastet forsøk gjentas heller
+ikke; bare et forsøk som feilet (429, nett) får prøve igjen. Standard er ett
+forsøk (`RETUSJ=1`), tidligere to.
 
 ## Kom i gang / test alt
 

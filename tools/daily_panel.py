@@ -33,10 +33,14 @@ WWW = os.environ.get("FRAME_OUTPUT_DIR", "/opt/fugleramme/www")
 ARKIV = os.environ.get("FRAME_ARCHIVE_DIR", os.path.join(WWW, "arkiv"))
 HTML = os.path.join(WWW, "panel.html")
 
-# Retusjtrinnet koster ett Gemini-kall og kan feile. Sett RETUSJ=0 for aa hoppe
-# over det -- sida blir fortsatt riktig, fuglene ser bare litt mindre ut som
-# de griper.
-RETUSJ = os.environ.get("RETUSJ", "2")
+# Retusjtrinnet koster ett kall til gemini-3-pro-image (1,27 kr) og kan feile.
+# Ett forsoek, og bare naar fuglesettet er nytt for dagen: compose_branch
+# gjenbruker forrige resultat naar de samme fuglene staar paa de samme
+# plassene, saa de tre daglige kjoeringene ikke betaler tre ganger for samme
+# ark (58 forsoek paa 13 dager foer 13. sep 2026). Sett RETUSJ=0 for aa hoppe
+# over det helt -- sida blir fortsatt riktig, fuglene ser bare litt mindre ut
+# som de griper.
+RETUSJ = os.environ.get("RETUSJ", "1")
 
 # Ferske arter gjoeres klare FOER sida tegnes: kildeplansje fra Commons,
 # 1:1-fugler, fotpunkt og metadata. Uten dette sto en ny art i lista uten aa

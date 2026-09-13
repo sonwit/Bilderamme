@@ -143,6 +143,10 @@ def samle() -> dict:
                     k = json.loads(rad)
                 except ValueError:
                     continue
+                if k.get("hoppet_over"):
+                    # Ikke analysert (tak per time, pause etter 429): verken
+                    # fugl eller «ingen fugl».
+                    continue
                 if not k.get("species"):
                     tomme += 1
                     continue

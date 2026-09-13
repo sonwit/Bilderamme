@@ -12,7 +12,7 @@
   "blokk": 6,
   "blokk_andel": 0.5,
   "blokker_min": 8,
-  "pause_s": 15,
+  "pause_s": 60,
   "lys_min": 25,
   "fokus_m": 0,
   "roter": 270,

@@ -89,7 +89,11 @@ STANDARD = {
     # Endrer mer enn dette av utsnittet seg paa én gang, er det lyset.
     "bevegelse_maks": 0.08,
     # Sekunder mellom to bilder, og mellom to rammer i overvaakingen.
-    "pause_s": 15,
+    # 60, ikke 15, fra 13. sep 2026: hvert bilde er et modellkall paa
+    # serveren, og med 15 s kom 808 av 1558 bilder under ett minutt etter
+    # forrige -- samme skjaere eller ekorn om igjen. Artslista for dagen
+    # blir den samme; det er antall kall som blir en fjerdedel.
+    "pause_s": 60,
     "ramme_s": 0.5,
     # Gjennomsnittlig lysstyrke (0-255) i utsnittet under dette = natt.
     "lys_min": 25,
