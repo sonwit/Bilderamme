@@ -407,15 +407,16 @@ def _is_transient(err: Exception) -> bool:
     return any(t in m for t in _TRANSIENT_MARKERS)
 
 
-# Bildemodellen for det som kjoerer daglig eller paa bestilling: reservebildet,
-# Siri og «lag nytt bilde» i webappen. gemini-2.5-flash-image var standarden
-# fra starten, men legges ned 2. oktober 2026; gemini-3.1-flash-image tar over
-# fra 13. sep 2026 (0,067 USD per 1K-bilde mot 0,039). Regelen i prosjektet:
-# billig modell til det som kjoerer hver dag, dyrere til engangsjobbene --
-# 1:1-fuglene og retusjen bruker gemini-3-pro-image (se compose_branch).
-# Overstyres per kall eller med IMAGE_MODEL i miljoet, saa det daglige bildet
-# ikke endrer oppfoersel uten at noen har bestemt det.
-IMAGE_MODEL = os.environ.get("IMAGE_MODEL", "gemini-3.1-flash-image")
+# Bildemodellen for reservebildet, Siri og «lag nytt bilde» i webappen.
+# gemini-2.5-flash-image var standarden fra starten, men legges ned
+# 2. oktober 2026. Fra 13. sep 2026 gemini-3-pro-image (0,134 USD per bilde):
+# dette kjoerer sjelden -- reserven bare naar fuglesida feiler, Siri naar
+# noen ber om det -- og da skal bildet vaere bra. Regelen i prosjektet: dyr
+# modell til det som kjoerer sjelden, billig til det som kjoerer hver dag
+# (kameraanalysen, se bilde_analyze). Overstyres per kall eller med
+# IMAGE_MODEL i miljoet; gemini-3.1-flash-image (0,067 USD) er det billige
+# alternativet om bestillingene blir mange.
+IMAGE_MODEL = os.environ.get("IMAGE_MODEL", "gemini-3-pro-image")
 
 
 # Naar modellen ikke vil tegne motivet, kommer det ikke noen feilkode: den

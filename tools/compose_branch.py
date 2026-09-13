@@ -308,10 +308,9 @@ def bird_prompt(common: str, sci: str, positur: str = "sittende") -> str:
 
 # Modellen som tegner 1:1-fuglene. En engangsjobb per art -- to-tre bilder
 # som gjenbrukes hver dag arten dukker opp -- saa her tar vi den beste:
-# gemini-3-pro-image, 0,134 USD per bilde, rundt 4 kr per ny art. Det
-# daglige reservebildet gaar paa den billige (IMAGE_MODEL i
-# generate_daily_image). Regelen fra 13. sep 2026: dyr til engangs, billig
-# til det som kjoerer hver dag.
+# gemini-3-pro-image, 0,134 USD per bilde, rundt 4 kr per ny art. Regelen
+# fra 13. sep 2026: dyr modell til det som kjoerer sjelden, billig til det
+# som kjoerer hver dag (kameraanalysen).
 FUGL_MODELL = os.environ.get("FUGL_MODELL", "gemini-3-pro-image")
 
 
