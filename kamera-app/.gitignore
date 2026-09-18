@@ -1,0 +1,5 @@
+.gradle/
+.kotlin/
+local.properties
+# Bilder og rapport hentet fra telefonen med kjor.sh hent.
+ut/

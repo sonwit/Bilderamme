@@ -165,6 +165,12 @@ fugleramme/
 ├── design/                 Artboards for designcanvaset (tre layoutretninger).
 ├── pi/                     v1-utedelen (Raspberry Pi 3 B) — pensjonert 2026-08-04,
 │                           beholdt som referanse/reserve.
+├── kamera/                 Fuglekameraet i vinduet på Pi 3 B med HQ-kamera:
+│                           kamera.py (bevegelse -> bilde -> POST /bilde),
+│                           fokus.py og titt.sh.
+├── kamera-app/             Fuglekameraet som Android-app på Pixel 9 Pro. Foreløpig
+│                           en kameratest (linser, zoom 1x/5x/10x). kjor.sh bygger,
+│                           installerer og henter resultatet over USB.
 ├── deploy/                 deploy.sh + systemd-tjenestefiler for hjemmeserveren.
 └── docs/                   Prosjektnotater og guider.
 ```
