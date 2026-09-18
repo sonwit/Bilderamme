@@ -1,5 +1,7 @@
 .gradle/
 .kotlin/
 local.properties
-# Bilder og rapport hentet fra telefonen med kjor.sh hent.
+# Innstillingene som ligger paa telefonen; kan faa token. Mal: kamera.example.json.
+kamera.json
+# Bilder, logg og rapport hentet fra telefonen med kjor.sh.
 ut/

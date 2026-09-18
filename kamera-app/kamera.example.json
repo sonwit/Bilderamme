@@ -1,0 +1,11 @@
+{
+  "server": "http://192.168.1.38:8091",
+  "token": "",
+  "send": false,
+  "roier": [[0.0, 0.0, 1.0, 1.0]],
+  "tele": true,
+  "tele_sone": [0.41, 0.41, 0.59, 0.59],
+  "pause_s": 60,
+  "lukker_maks_s": 0.003,
+  "iso_maks": 1600
+}

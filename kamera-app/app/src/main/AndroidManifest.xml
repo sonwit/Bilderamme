@@ -3,16 +3,30 @@
 
     <uses-feature android:name="android.hardware.camera.any" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Serveren svarer paa vanlig http paa hjemmenettet (192.168.1.38:8091). -->
     <application
         android:allowBackup="false"
-        android:label="Fuglekamera">
+        android:label="Fuglekamera"
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Kan velges som startskjerm, saa appen starter av seg selv etter
+                 en omstart. -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

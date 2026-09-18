@@ -168,9 +168,10 @@ fugleramme/
 ├── kamera/                 Fuglekameraet i vinduet på Pi 3 B med HQ-kamera:
 │                           kamera.py (bevegelse -> bilde -> POST /bilde),
 │                           fokus.py og titt.sh.
-├── kamera-app/             Fuglekameraet som Android-app på Pixel 9 Pro. Foreløpig
-│                           en kameratest (linser, zoom 1x/5x/10x). kjor.sh bygger,
-│                           installerer og henter resultatet over USB.
+├── kamera-app/             Fuglekameraet som Android-app på Pixel 9 Pro: overvåker
+│                           hagen på 1x, tar telebilde (5x) ved materen og sender
+│                           et utsnitt rundt fuglen til POST /bilde. kjor.sh bygger,
+│                           installerer og styrer den over USB eller Wi-Fi.
 ├── deploy/                 deploy.sh + systemd-tjenestefiler for hjemmeserveren.
 └── docs/                   Prosjektnotater og guider.
 ```

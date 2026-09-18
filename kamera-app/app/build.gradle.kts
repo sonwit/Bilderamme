@@ -11,8 +11,8 @@ android {
         // Pixel 9 Pro kom med Android 14.
         minSdk = 34
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1-test"
+        versionCode = 2
+        versionName = "0.2"
     }
 
     compileOptions {
@@ -26,6 +26,5 @@ dependencies {
     implementation("androidx.camera:camera-core:$camerax")
     implementation("androidx.camera:camera-camera2:$camerax")
     implementation("androidx.camera:camera-lifecycle:$camerax")
-    implementation("androidx.camera:camera-view:$camerax")
     implementation("androidx.activity:activity:1.13.0")
 }
