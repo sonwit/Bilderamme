@@ -57,6 +57,17 @@ MET_USER_AGENT = os.environ.get(
 # Hagen er nesten sikkert et feiltreff. Arter under terskelen som bare er hoert
 # i én oekt havner i fotnoten i stedet for aa faa en linje paa veggen.
 SURE_CONF = float(os.environ.get("PANEL_SURE_CONF", "0.5"))
+
+# Arter som aldri faar en linje paa veggen, uansett score og antall oekter.
+# De finnes i Norge, saa BirdNETs stedsfilter slipper dem gjennom -- men ikke
+# i en hage paa Hagen. Myrriksa var i 80 opptak fram til 19. sep 2026 (opptil
+# 0,91) og nesten daglig blant de sikreste; roerdrummen kom paa 0,88. De
+# staar fortsatt i fotnoten. Siden compose_branch og ny_art velger fra samme
+# liste, blir de heller ikke tegnet. Latinske navn, kommaseparert;
+# PANEL_BLOKKERT= (tom) slaar lista av.
+BLOKKERT = {n.strip() for n in os.environ.get(
+    "PANEL_BLOKKERT", "Porzana porzana,Botaurus stellaris").split(",")
+    if n.strip()}
 MAX_ROWS = int(os.environ.get("PANEL_MAX_ROWS", "7"))
 
 # Merket som knytter fuglen paa plansjen til linja i lista. Skiva skal peke,
@@ -154,7 +165,8 @@ def split_species(species: list[dict], max_rows: int | None = None,
                              -s.get("detections", 0))
     ordered = sorted(species, key=noekkel)
     sure = [s for s in ordered
-            if s.get("confidence", 0) >= SURE_CONF or s.get("sessions", 1) >= 2]
+            if s.get("scientific_name") not in BLOKKERT
+            and (s.get("confidence", 0) >= SURE_CONF or s.get("sessions", 1) >= 2)]
     unsure = [s for s in ordered if s not in sure]
     n = MAX_ROWS if max_rows is None else max_rows
     return sure[:n], unsure + sure[n:]
