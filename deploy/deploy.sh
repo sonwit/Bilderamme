@@ -16,6 +16,9 @@ SERVER="${FUGLE_SERVER:-bruker@192.168.1.38}"
 DEST="/opt/fugleramme"
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 
+# Undersidene til webappen (helse.py, fugler.py, dag.py) importeres av
+# frame_server.py ved foerste kall. Blir de liggende igjen paa Macen, svarer
+# /helse, /fugler og /dag med 500 mens resten av serveren ser frisk ut.
 echo "→ Kopierer python-scripts til $SERVER:$DEST ..."
 scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/push_to_frame.py" \
@@ -31,6 +34,9 @@ scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/prepare_plates.py" \
     "$HERE/tools/fetch_plates.py" \
     "$HERE/tools/bird_names.py" \
+    "$HERE/tools/helse.py" \
+    "$HERE/tools/fugler.py" \
+    "$HERE/tools/dag.py" \
     "$SERVER:$DEST/"
 
 # Plansjebiblioteket: kildeskanningene, den faste grenen og 1:1-fuglene med
