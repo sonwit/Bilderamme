@@ -6,8 +6,8 @@ dagens artsliste (birds.json).
 Kjoeres paa hjemmeserveren i BirdNET-venvet (IKKE bilde-venvet):
     /opt/fugleramme/venv-birdnet/bin/python /opt/fugleramme/birdnet_analyze.py <fil.wav>
 
-Med lat/lon + dato filtrerer BirdNET paa arter som er plausible her (Hagen,
-Norge) akkurat naa -- saa vi slipper tropiske feiltreff.
+Med lat/lon + dato filtrerer BirdNET paa arter som er plausible paa denne
+posisjonen akkurat naa -- saa vi slipper tropiske feiltreff.
 
 Skriver TO ting:
 

@@ -7,8 +7,9 @@ Wants=network-online.target
 Type=simple
 # Kjoer som din bruker (ikke root), saa bilder tjenesten lager faar samme eier
 # som de cron/manuelt lager -- da unngaar vi "Permission denied" i www/arkiv/.
-# Bytt "bruker" hvis brukeren din heter noe annet. Krever at /opt/fugleramme
-# eies av samme bruker: sudo chown -R bruker:bruker /opt/fugleramme
+# deploy.sh setter User= til SSH-brukeren (eller FUGLE_USER) idet fila
+# installeres; installerer du for haand, bytt "bruker" selv. Krever at
+# /opt/fugleramme eies av samme bruker: sudo chown -R bruker:bruker /opt/fugleramme
 User=bruker
 WorkingDirectory=/opt/fugleramme
 # Legg GEMINI_API_KEY (og evt. FRAME_HOST / FRAME_SERVER_PORT / FRAME_TOKEN) i denne fila.

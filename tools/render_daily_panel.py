@@ -34,7 +34,7 @@ import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from bird_names import norwegian_name, is_translated  # noqa: E402
-from oppsett import LAT, LON, user_agent               # noqa: E402
+from oppsett import LAT, LON, STEDSNAVN, user_agent    # noqa: E402
 
 WIDTH, HEIGHT = 1200, 1600          # samme som panelet
 # Paa serveren ligger alt flatt i /opt/fugleramme/, i repoet ligger scriptene i
@@ -55,14 +55,14 @@ MET_USER_AGENT = os.environ.get(
     "MET_USER_AGENT", user_agent("fugleramme-epaper/1.0"))
 
 # Hovedlista vs. «ogsaa mulige». BirdNET-konfidens er en score per deteksjon,
-# ikke sannsynligheten for at arten var der -- rørdrum paa 0,41 i en hage paa
-# Hagen er nesten sikkert et feiltreff. Arter under terskelen som bare er hoert
+# ikke sannsynligheten for at arten var der -- rørdrum paa 0,41 i en vanlig
+# villahage er nesten sikkert et feiltreff. Arter under terskelen som bare er hoert
 # i én oekt havner i fotnoten i stedet for aa faa en linje paa veggen.
 SURE_CONF = float(os.environ.get("PANEL_SURE_CONF", "0.5"))
 
 # Arter som aldri faar en linje paa veggen, uansett score og antall oekter.
 # De finnes i Norge, saa BirdNETs stedsfilter slipper dem gjennom -- men ikke
-# i en hage paa Hagen. Myrriksa var i 80 opptak fram til 19. sep 2026 (opptil
+# i denne hagen. Myrriksa var i 80 opptak fram til 19. sep 2026 (opptil
 # 0,91) og nesten daglig blant de sikreste; roerdrummen kom paa 0,88. De
 # staar fortsatt i fotnoten. Siden compose_branch og ny_art velger fra samme
 # liste, blir de heller ikke tegnet. Latinske navn, kommaseparert;
@@ -150,7 +150,7 @@ def norsk_dato(d: datetime.date) -> tuple[str, str]:
 # Det var "belegg" foerst, med den begrunnelsen at en art hoert i flere oekter
 # er mer troverdig enn én med hoey score i én tre-sekunders bit. I praksis ga
 # det feil svar: myrriksa dukket opp i fire oekter paa 58 % og la seg oeverst,
-# selv om en myrrikse i en hage paa Hagen er et av de klassiske
+# selv om en myrrikse i en villahage er et av de klassiske
 # BirdNET-feiltreffene. Fire svake treff paa samme feil art er fortsatt fire
 # svake treff.
 SORTERING = os.environ.get("PANEL_SORTERING", "sikkerhet")
@@ -527,7 +527,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
     <div class="dato">{dato}</div>
     <div class="periode">{dekning}</div>
     <div class="vaerlinje">
-      <span class="sted">Hagen</span><br>
+      <span class="sted">{html.escape(STEDSNAVN)}</span><br>
       {html.escape(vaer)}
     </div>
   </section>"""
@@ -540,7 +540,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
   </header>
 
   <div class="vaer">
-    <div class="sted">Hagen</div>
+    <div class="sted">{html.escape(STEDSNAVN)}</div>
     <div>{html.escape(vaer)}</div>
   </div>"""
 

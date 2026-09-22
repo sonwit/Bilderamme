@@ -62,7 +62,7 @@ PAUSEFIL = os.path.join(DATA_DIR, "kamera.pause")
 
 PROMPT = (
     "This photo was taken through a window by a fixed camera pointed at a bird "
-    "feeder in a garden in Hagen, just north of Oslo, Norway, in {maaned}. "
+    "feeder in a garden near Oslo, Norway, in {maaned}. "
     "Identify every bird or other animal visible -- a squirrel or a cat goes "
     "in the same list, with its scientific name. Common species here: great tit, blue tit, "
     "coal tit, magpie, hooded crow, jay, fieldfare, redwing, blackbird, "

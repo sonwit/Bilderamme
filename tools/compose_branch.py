@@ -1312,8 +1312,8 @@ def main() -> int:
     # ned til 8. Med 60 opptak i doegnet er to oekter en lav terskel.
     #
     # Likevel: 2. sep holdt kravet vaktel, graahegre og kjoettmeis borte fra
-    # veggen, og 9. sep fuglekongen (63 %) og svarttrosten. Eieren valgte
-    # 9. sep aa tegne alt (MIN_OEKTER=1) -- lista oeverst paa sida viser
+    # veggen, og 9. sep fuglekongen (63 %) og svarttrosten. Valget 9. sep
+    # ble aa tegne alt (MIN_OEKTER=1) -- lista oeverst paa sida viser
     # uansett hvor mange oekter hver art er hoert i.
     foer = len(kandidater)
     kandidater = [s for s in kandidater if s.get("sessions", 1) >= MIN_OEKTER]

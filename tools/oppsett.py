@@ -8,6 +8,7 @@ baade cron-jobben og systemd-tjenestene leser:
 
     FUGLERAMME_LAT=59.98
     FUGLERAMME_LON=10.93
+    FUGLERAMME_STED=Hagen
     FUGLERAMME_KONTAKT=https://github.com/sonwit/Bilderamme
 
 Koordinatene styrer vaervarselet (api.met.no), BirdNETs artsfilter (hvilke
@@ -15,6 +16,9 @@ arter som er plausible her akkurat naa) og soloppgangen i lytteplanen.
 Standardverdien er avrundet til to desimaler -- rundt en kilometer -- og det
 holder for alle tre; ingen av dem skiller finere. Hagen selv skal ikke staa
 i koden.
+
+Stedsnavnet er det som staar paa fuglesida over vaeret. Bare et navn, ikke
+en adresse; bunnlinja viser koordinatene.
 
 Kontakten gaar inn i User-Agent mot api.met.no og Wikimedia Commons, som
 begge krever at klienten sier hvem den er. E-post eller URL; standard peker
@@ -29,6 +33,8 @@ import os
 # `or`, ikke bare get(): en tom linje i env-fila skal bety «standard», ikke krasj.
 LAT = float(os.environ.get("FUGLERAMME_LAT") or "59.98")
 LON = float(os.environ.get("FUGLERAMME_LON") or "10.93")
+
+STEDSNAVN = os.environ.get("FUGLERAMME_STED") or "Hagen"
 
 KONTAKT = os.environ.get("FUGLERAMME_KONTAKT") or "https://github.com/sonwit/Bilderamme"
 

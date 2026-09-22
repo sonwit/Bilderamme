@@ -6,7 +6,8 @@
 #   sudo systemctl enable --now fugleramme-kamera
 #   journalctl -u fugleramme-kamera -f
 #
-# Scriptet ligger i ~/kamera/ sammen med kamera.json.
+# Scriptet ligger i ~/kamera/ sammen med kamera.json. Bytt "bruker" i User=
+# og stiene under til brukeren din paa Pi-en.
 
 [Unit]
 Description=Fugleramme kamera (bevegelse -> bilde -> server)

@@ -6,6 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 # Samme bruker som resten av /opt/fugleramme (se fugleramme-frame-server.service).
+# deploy.sh setter User= til SSH-brukeren idet fila installeres.
 User=bruker
 WorkingDirectory=/opt/fugleramme
 # Kjoeres i BirdNET-venvet: analysen bruker samme python som tjenesten

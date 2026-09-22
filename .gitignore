@@ -3,6 +3,10 @@ firmware/indoor_frame/config.h
 firmware/outdoor_sensor/config.h
 secrets.h
 *.local.h
+# Hvor serveren din er (deploy.sh leser den). Se deploy/deploy.env.example.
+deploy/deploy.env
+# Arbeidstrær og lokale innstillinger fra Claude Code.
+.claude/
 
 # Python
 __pycache__/

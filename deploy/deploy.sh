@@ -4,17 +4,26 @@
 # Kjør fra Macen (fra hvor som helst):
 #     ~/workspace/fugleramme/deploy/deploy.sh
 #
-# Overstyr serveren ved behov:
-#     FUGLE_SERVER=bruker@192.168.1.38 ~/workspace/fugleramme/deploy/deploy.sh
+# Serveren er din, ikke repoets: si hvor den er med FUGLE_SERVER=bruker@server,
+# i miljoeet eller i deploy/deploy.env (leses hvis den finnes, ignorert av git):
+#     FUGLE_SERVER=bruker@192.168.1.10 ~/workspace/fugleramme/deploy/deploy.sh
+#
+# Tjenestefilene installeres med User= satt til SSH-brukeren. Overstyr med
+# FUGLE_USER hvis tjenestene skal kjoere som en annen bruker.
 #
 # NB: rører ALDRI /opt/fugleramme/frame_server.env (hemmelighetene dine) eller
 # noe i www/ (bildene). Kun python-scriptene + systemd-tjenesten oppdateres.
 
 set -euo pipefail
 
-SERVER="${FUGLE_SERVER:-bruker@192.168.1.38}"
-DEST="/opt/fugleramme"
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
+if [ -f "$HERE/deploy/deploy.env" ]; then
+  # shellcheck disable=SC1091
+  . "$HERE/deploy/deploy.env"
+fi
+SERVER="${FUGLE_SERVER:?Sett FUGLE_SERVER=bruker@server, i miljoeet eller i deploy/deploy.env}"
+FUGLE_USER="${FUGLE_USER:-${SERVER%@*}}"
+DEST="/opt/fugleramme"
 
 # Undersidene til webappen (helse.py, fugler.py, dag.py) importeres av
 # frame_server.py ved foerste kall. Blir de liggende igjen paa Macen, svarer
@@ -69,9 +78,11 @@ if [ -d "$HERE/plates" ]; then
   scp "$HERE"/plates/maler/*.json "$SERVER:$DEST/plates/maler/" 2>/dev/null || true
 fi
 
-echo "→ Kopierer systemd-tjenestefiler ..."
-scp "$HERE/deploy/fugleramme-frame-server.service" "$SERVER:/tmp/fugleramme-frame-server.service"
-scp "$HERE/deploy/fugleramme-audio-ingest.service" "$SERVER:/tmp/fugleramme-audio-ingest.service"
+echo "→ Kopierer systemd-tjenestefiler (User=$FUGLE_USER) ..."
+for unit in fugleramme-frame-server fugleramme-audio-ingest; do
+  sed "s/^User=.*/User=$FUGLE_USER/" "$HERE/deploy/$unit.service" \
+    | ssh "$SERVER" "cat > /tmp/$unit.service"
+done
 
 echo "→ Installerer tjeneste + restarter (ber om sudo-passord på serveren) ..."
 ssh -t "$SERVER" '
