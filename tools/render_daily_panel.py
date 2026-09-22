@@ -34,6 +34,7 @@ import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from bird_names import norwegian_name, is_translated  # noqa: E402
+from oppsett import LAT, LON, user_agent               # noqa: E402
 
 WIDTH, HEIGHT = 1200, 1600          # samme som panelet
 # Paa serveren ligger alt flatt i /opt/fugleramme/, i repoet ligger scriptene i
@@ -44,13 +45,14 @@ PLATES_DIR = os.environ.get(
     os.path.join(_HERE, "plates") if os.path.isdir(os.path.join(_HERE, "plates"))
     else os.path.join(_HERE, "..", "plates"))
 
-# Kartverket-koordinater for hagen. Se generate_daily_image.py.
-LAT, LON = 59.98, 10.93
+# Hvor hagen er (LAT/LON) og hvem som spoer (user_agent) kommer fra oppsett.py:
+# FUGLERAMME_LAT/LON og FUGLERAMME_KONTAKT i frame_server.env.
 # Bunnteksten leser konstanten i stedet for aa gjenta tallene som
-# streng -- de to sto og kunne drive fra hverandre.
-STED = f"{LAT:.4f}\u00b0N {LON:.4f}\u00b0\u00d8"
+# streng -- de to sto og kunne drive fra hverandre. Skrives med saa mange
+# desimaler som er satt, ikke flere.
+STED = f"{LAT:g}\u00b0N {LON:g}\u00b0\u00d8"
 MET_USER_AGENT = os.environ.get(
-    "MET_USER_AGENT", "fugleramme-epaper/1.0 https://github.com/sonwit/Bilderamme")
+    "MET_USER_AGENT", user_agent("fugleramme-epaper/1.0"))
 
 # Hovedlista vs. «ogsaa mulige». BirdNET-konfidens er en score per deteksjon,
 # ikke sannsynligheten for at arten var der -- rørdrum paa 0,41 i en hage paa

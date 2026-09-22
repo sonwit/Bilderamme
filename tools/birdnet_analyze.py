@@ -35,9 +35,9 @@ import tempfile
 # bare en birds.json ut av observasjonsloggen -- ren tekst, ingen lyd -- og
 # skal kunne kjoeres fra bildemiljoeet, som ikke har lydavhengighetene.
 
-# Samme koordinater som generate_daily_image.py (her).
-# Kartverket-koordinater for hagen. Se generate_daily_image.py.
-LAT, LON = 59.98, 10.93
+# Hvor hagen er: FUGLERAMME_LAT/LON i frame_server.env, se oppsett.py.
+# Samme koordinater som generate_daily_image.py og lytteplan.py.
+from oppsett import LAT, LON  # noqa: E402
 MIN_CONF = float(os.environ.get("BIRDNET_MIN_CONF", "0.25"))
 
 BASE_DIR = os.environ.get("FUGLE_DIR", "/opt/fugleramme")

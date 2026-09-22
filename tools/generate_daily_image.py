@@ -35,12 +35,11 @@ from google.genai import types
 # Konfigurasjon
 # ----------------------------------------------------------------------
 
-# Kartverket-koordinater for hagen (59.98° N,
-# 10.93° E). Stod tidligere som 60.09, 10.93 -- 12 km
-# for langt nord. Det paavirket baade vaervarselet og BirdNETs
-# artsfilter, som bruker posisjon + dato til aa avgjoere hva som er
-# plausibelt her akkurat naa.
-LAT, LON = 59.98, 10.93
+# Hvor hagen er: FUGLERAMME_LAT/LON i frame_server.env, se oppsett.py.
+# Posisjonen styrer baade vaervarselet og BirdNETs artsfilter, som bruker
+# posisjon + dato til aa avgjoere hva som er plausibelt her akkurat naa.
+# Koordinatene stod en gang 12 km for langt nord, og det merktes paa begge.
+from oppsett import LAT, LON, user_agent  # noqa: E402
 OUTPUT_DIR = os.environ.get("FRAME_OUTPUT_DIR", "/opt/fugleramme/www")
 # Arkiv: hvert bilde (full-farge originalen) lagres her med tidsstempel, saa
 # historikken beholdes selv om www/original.png overskrives ved neste bilde.
@@ -251,8 +250,9 @@ WEATHER_SYMBOLS = {
 
 # MET krever en identifiserende User-Agent (sidenavn + kontakt) -- anonyme
 # klienter blir blokkert. Se https://api.met.no/doc/TermsOfService
+# Kontakten kommer fra FUGLERAMME_KONTAKT (frame_server.env), se oppsett.py.
 MET_USER_AGENT = os.environ.get(
-    "MET_USER_AGENT", "fugleramme-epaper/1.0 https://github.com/sonwit/Bilderamme")
+    "MET_USER_AGENT", user_agent("fugleramme-epaper/1.0"))
 
 WEATHER_RETRIES = int(os.environ.get("WEATHER_RETRIES", "3"))
 WEATHER_BACKOFF = int(os.environ.get("WEATHER_BACKOFF", "10"))  # sekunder * forsoeksnr

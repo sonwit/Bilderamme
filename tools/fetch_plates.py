@@ -35,9 +35,10 @@ import urllib.parse
 import urllib.request
 
 API = "https://commons.wikimedia.org/w/api.php"
-# Commons ber om en identifiserende User-Agent, som api.met.no.
-UA = os.environ.get("COMMONS_USER_AGENT",
-                    "fugleramme-plates/1.0 (https://github.com/sonwit/Bilderamme)")
+# Commons ber om en identifiserende User-Agent, som api.met.no. Kontakten
+# kommer fra FUGLERAMME_KONTAKT (frame_server.env), se oppsett.py.
+from oppsett import user_agent  # noqa: E402
+UA = os.environ.get("COMMONS_USER_AGENT", user_agent("fugleramme-plates/1.0"))
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PLATES_DIR = os.environ.get(

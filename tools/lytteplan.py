@@ -40,8 +40,9 @@ from __future__ import annotations
 import datetime
 import math
 
-# Hagen. Samme koordinater som resten av prosjektet (Kartverket).
-LAT, LON = 59.98, 10.93
+# Hagen. Samme koordinater som resten av prosjektet -- FUGLERAMME_LAT/LON i
+# frame_server.env, se oppsett.py.
+from oppsett import LAT, LON  # noqa: E402
 
 # Finvinduet: fra en time FOER soloppgang til fire timer etter. Morgenkoret
 # begynner foer sola er oppe -- roedstrupe og maaltrost gaar i gang i

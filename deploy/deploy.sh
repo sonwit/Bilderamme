@@ -31,6 +31,7 @@ scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/prepare_plates.py" \
     "$HERE/tools/fetch_plates.py" \
     "$HERE/tools/bird_names.py" \
+    "$HERE/tools/oppsett.py" \
     "$SERVER:$DEST/"
 
 # Plansjebiblioteket: kildeskanningene, den faste grenen og 1:1-fuglene med
