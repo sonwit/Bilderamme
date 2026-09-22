@@ -31,9 +31,12 @@ fremdeles det Siri-kommandoen og «lag nytt bilde» i webappen bruker.
   galleri over alle genererte bilder, «lag nytt bilde»-skjema, og
   `POST /generate` for Siri-snarveien. Se `docs/Webapp — galleri og
   generering.md` og `docs/On-demand — Siri-kommando.md`. Undersider:
-  `/helse` (`tools/helse.py`, status for hele anlegget) og `/fugler`
-  (`tools/fugler.py`, dashboard over artene: plansje, hvor ofte, hvor
-  sikkert, når på døgnet, med avspilling av opptakene).
+  `/dag` (`tools/dag.py`, dagsoversikten: hvert opptak på klokkeslettet sitt
+  med artene i det, og en stripe å bla i andre dager med — se
+  `docs/Dagsoversikten — én dag om gangen.md`), `/helse` (`tools/helse.py`,
+  status for hele anlegget) og `/fugler` (`tools/fugler.py`, dashboard over
+  artene: plansje, hvor ofte, hvor sikkert, når på døgnet, med avspilling av
+  opptakene).
 - ✅ **Utedel v2 (XIAO ESP32-S3, fuglelyd):** montert ute og i drift
   2026-08-04. Våkner fra deep sleep etter plan (04:00–08:30 hvert 30. min,
   09–21 hver time), tar opp 60 s fra INMP441, POST-er til serveren og sover
@@ -148,6 +151,12 @@ fugleramme/
 │   ├── birdnet_analyze.py  BirdNET på én WAV -> observations.jsonl + birds.json.
 │   ├── bird_stats.py       Statistikk/rapport: arter, lydnivå, dekning, strøm.
 │   │
+│   │                       — Websidene (serveres av frame_server.py) —
+│   ├── dag.py              /dag — dagsoversikt: opptakene time for time, én dag
+│   │                       om gangen, med bla-stripe til de andre dagene.
+│   ├── fugler.py           /fugler — artene over tid: hvor ofte, hvor sikkert.
+│   ├── helse.py            /helse — virker anlegget? batteri, dekning, siste push.
+│   │
 │   │                       — Dagens fugleside (kjøres i denne rekkefølgen) —
 │   ├── daily_panel.py      Inngangspunktet cron kaller. Kjører de tre under.
 │   ├── compose_branch.py   Dagens fugler limt på den faste grenen, lokalt.
@@ -189,6 +198,7 @@ fugleramme/
 │   └── dagens-bakgrunn.png    dagens ferdige illustrasjon + .json med sonemåling
 ├── generate_daily_image.py   Reserve hvis fuglesida feiler + Siri/webb-bilder.
 ├── frame_server.py            Webapp/Siri (systemd: fugleramme-frame-server, :8090)
+├── dag.py  fugler.py  helse.py  Undersidene webappen serverer (/dag, /fugler, /helse)
 ├── audio_ingest.py            Mottak fra utedelen (systemd: fugleramme-audio-ingest, :8091)
 ├── birdnet_analyze.py         BirdNET-analyse (kjøres av audio_ingest per opptak)
 ├── bird_stats.py              Statistikk (cron 22:00 -> logs/stats.log)

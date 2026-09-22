@@ -10,6 +10,8 @@ To bruksmåter:
 
 Endepunkter:
   GET  /                web-appen (galleri + generer-skjema)
+  GET  /dag             dagsoversikten: opptakene time for time, én dag om gangen
+  GET  /api/dag?dato=   JSON: én dag + indeks over alle dager med opptak
   GET  /api/images      JSON: liste over arkiverte bilder (nyeste først)
   GET  /arkiv/<fil>     serverer et arkivert bilde
   POST /api/generate    JSON {emne, stil?, seeds?[]}  -> generer + send
@@ -333,6 +335,21 @@ class Handler(BaseHTTPRequestHandler):
                 return self._reply_json(200, d)
             except Exception as e:  # noqa: BLE001
                 return self._reply_json(500, {"ok": False, "message": str(e)})
+        if path == "/dag":
+            # Dagsoversikten. Samme regel som de andre undersidene: feiler
+            # modulen, skal resten av serveren staa.
+            try:
+                import dag
+                return self._reply(200, _side("Dagen", dag.STIL, dag.side()),
+                                   "text/html; charset=utf-8")
+            except Exception as e:  # noqa: BLE001
+                return self._reply(500, f"Dagsoversikten feilet: {e}")
+        if path == "/api/dag":
+            try:
+                import dag
+                return self._reply_json(200, dag.samle(query.get("dato", [None])[0]))
+            except Exception as e:  # noqa: BLE001
+                return self._reply_json(500, {"ok": False, "message": str(e)})
         if path == "/fugler":
             try:
                 import fugler
@@ -361,7 +378,7 @@ class Handler(BaseHTTPRequestHandler):
                 "Web: GET /   |  POST /api/generate {emne,stil,seeds[]}  |  POST /api/send {name}\n"
                 "Siri: POST /generate (emne i body)  |  GET /generate?emne=...\n"
                 "GET /daily   GET /status   GET /api/images   GET /helse   "
-                "GET /fugler   GET /api/fugler\n")
+                "GET /fugler   GET /api/fugler   GET /dag   GET /api/dag?dato=YYYY-MM-DD\n")
         return self._reply(404, "Ukjent endepunkt.")
 
     # --- POST ---
@@ -456,8 +473,8 @@ def main():
 # Web-appen (én selvstendig HTML-side)
 # ----------------------------------------------------------------------
 
-NAV = ("<a href='/'>Bildene</a> · <a href='/fugler'>Fugler</a> · "
-       "<a href='/helse'>Helse</a>")
+NAV = ("<a href='/'>Bildene</a> · <a href='/dag'>Dagen</a> · "
+       "<a href='/fugler'>Fugler</a> · <a href='/helse'>Helse</a>")
 
 
 def _side(tittel: str, ekstra_stil: str, innhold: str) -> str:
@@ -546,7 +563,7 @@ WEBUI_HTML = r"""<!doctype html>
 <header>
   <h1><span class="dot idle" id="dot"></span> Fugleramme</h1>
   <div class="status" id="status">Klar.</div>
-  <div class="status"><a href="/fugler">Fugler</a> · <a href="/helse">Helse</a></div>
+  <div class="status"><a href="/dag">Dagen</a> · <a href="/fugler">Fugler</a> · <a href="/helse">Helse</a></div>
 </header>
 <main>
   <section class="card">

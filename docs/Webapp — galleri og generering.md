@@ -40,6 +40,14 @@ Så åpner du `http://192.168.1.38:8090/` i nettleseren.
 > **Tips:** lagre siden som ikon på hjemskjermen (Del → «Legg til på Hjem-skjerm»)
 > på iPhone, så føles den som en app.
 
+## Undersider
+
+- **`/dag`** — dagsoversikten: når opptakene ble tatt og hvilke fugler som var i
+  dem, én dag om gangen, med en stripe å bla i de andre dagene med. Se
+  `docs/Dagsoversikten — én dag om gangen.md`.
+- **`/fugler`** — artene over tid: hvor ofte, hvor sikkert, når på døgnet.
+- **`/helse`** — virker anlegget? Batteri, dekning, siste push.
+
 ## API-et bak (hvis du vil bygge videre)
 
 | Kall | Effekt |
@@ -48,6 +56,7 @@ Så åpner du `http://192.168.1.38:8090/` i nettleseren.
 | `GET /arkiv/<fil>` | serverer et arkivert bilde |
 | `POST /api/generate` | JSON `{emne, stil?, seeds?[]}` (seeds = data-URL/base64) → generer + send |
 | `POST /api/send` | JSON `{name}` → send et arkivbilde til rammen på nytt |
+| `GET /api/dag?dato=` | JSON: én dag + indeks over alle dager med opptak |
 
 Setter du `FRAME_TOKEN` i `frame_server.env`, må du åpne webappen med
 `?token=din-token` i URL-en (den sender token videre på alle kall automatisk).
