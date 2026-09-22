@@ -17,6 +17,12 @@ DEST="/opt/fugleramme"
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "→ Kopierer python-scripts til $SERVER:$DEST ..."
+# Ogsaa det tjenestene henter selv: frame_server.py importerer helse.py og
+# fugler.py (/helse, /fugler, /plansje/), audio_ingest.py importerer
+# lytteplan.py (GET /config) og kjoerer bilde_analyze.py, daily_panel.py
+# kjoerer ny_art.py og tekstkollisjon.py, og vakt.py gaar i crontab-en hvert
+# kvarter og leses av helse.py. De manglet her til 22. sep 2026, saa serveren
+# laa med en eldre lytteplan.py enn oppsett.py den skulle lese fra.
 scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/push_to_frame.py" \
     "$HERE/tools/frame_server.py" \
@@ -32,6 +38,13 @@ scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/fetch_plates.py" \
     "$HERE/tools/bird_names.py" \
     "$HERE/tools/oppsett.py" \
+    "$HERE/tools/lytteplan.py" \
+    "$HERE/tools/bilde_analyze.py" \
+    "$HERE/tools/helse.py" \
+    "$HERE/tools/fugler.py" \
+    "$HERE/tools/vakt.py" \
+    "$HERE/tools/ny_art.py" \
+    "$HERE/tools/tekstkollisjon.py" \
     "$SERVER:$DEST/"
 
 # Plansjebiblioteket: kildeskanningene, den faste grenen og 1:1-fuglene med
