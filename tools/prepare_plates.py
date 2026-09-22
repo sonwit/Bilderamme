@@ -5,7 +5,7 @@ Fugleramme: vask skannede plansjer saa de taaler 6-fargepaletten.
 Problemet: en gammel plansje er skannet med papiret sitt -- kremgult, litt
 flekkete. Den fargen finnes ikke i panelets palett, saa Atkinson-dithringen
 maa gjette den med gule prikker, og hele arket blir en gul stoeyflate rundt
-fuglen. (Se «Grumsete/stoeyete bilde» i README -- samme fenomen som med
+fuglen. (Se «Grumsete bilde» i tools/README.md -- samme fenomen som med
 akvarell.)
 
 Loesningen er hvitpunkt-korreksjon: finn papirtonen, strekk den til rent
