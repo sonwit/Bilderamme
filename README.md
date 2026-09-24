@@ -14,6 +14,11 @@ Alt er bygd for å kjøre uten tilsyn på vanlig maskinvare: to ESP32-brett, en
 gammel PC som hjemmeserver, en Android-telefon. I drift siden juli 2026
 (rammen) og august 2026 (utedelen og fuglesida).
 
+Prosjektet har en enkel nettside på
+[sonwit.github.io/fugleramme](https://sonwit.github.io/fugleramme/), med en
+[personvernerklæring](https://sonwit.github.io/personvern/) for lydopptakene
+i hagen.
+
 ## Slik henger delene sammen
 
 ```

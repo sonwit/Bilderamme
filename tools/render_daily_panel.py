@@ -48,9 +48,10 @@ PLATES_DIR = os.environ.get(
 # Hvor hagen er (LAT/LON) og hvem som spoer (user_agent) kommer fra oppsett.py:
 # FUGLERAMME_LAT/LON og FUGLERAMME_KONTAKT i frame_server.env.
 # Bunnteksten leser konstanten i stedet for aa gjenta tallene som
-# streng -- de to sto og kunne drive fra hverandre. Skrives med saa mange
-# desimaler som er satt, ikke flere.
-STED = f"{LAT:g}\u00b0N {LON:g}\u00b0\u00d8"
+# streng -- de to sto og kunne drive fra hverandre. To desimaler paa veggen
+# og i arkivet uansett hvor presist miljoeet er satt: dagssidene kan bli
+# publisert, og en kilometer er nok for den som ser paa.
+STED = f"{LAT:.2f}\u00b0N {LON:.2f}\u00b0\u00d8"
 MET_USER_AGENT = os.environ.get(
     "MET_USER_AGENT", user_agent("fugleramme-epaper/1.0"))
 
