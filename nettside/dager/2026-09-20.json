@@ -1,0 +1,39 @@
+{
+  "dato": "2026-09-20",
+  "tegnet": "16:00",
+  "periode": "04:45–15:59",
+  "opptak": 42,
+  "vaer": "Lettskyet · 15° · 4 m/s",
+  "antall_arter": 4,
+  "ferdig_side": true,
+  "hoert": [
+    {
+      "nr": 1,
+      "norsk": "Skjære",
+      "latin": "Pica pica",
+      "sikkerhet": 56,
+      "tid": "14:59",
+      "belegg": "6 ggr"
+    },
+    {
+      "nr": 2,
+      "norsk": "Kråke",
+      "latin": "Corvus cornix",
+      "sikkerhet": 52,
+      "tid": "14:59",
+      "belegg": "1 ggr"
+    },
+    {
+      "nr": 3,
+      "norsk": "Dvergspett",
+      "latin": "Dryobates minor",
+      "sikkerhet": 35,
+      "tid": "08:29–08:39",
+      "belegg": "2 økter"
+    }
+  ],
+  "ogsaa": [
+    "Rødstrupe"
+  ],
+  "bilde": "2026-09-20.png"
+}

@@ -1,0 +1,60 @@
+{
+  "dato": "2026-09-22",
+  "tegnet": "16:00",
+  "periode": "04:47–15:39",
+  "opptak": 43,
+  "vaer": "Delvis skyet · 15° · 3 m/s",
+  "antall_arter": 11,
+  "ferdig_side": true,
+  "hoert": [
+    {
+      "nr": 1,
+      "norsk": "Dompap",
+      "latin": "Pyrrhula pyrrhula",
+      "sikkerhet": 98,
+      "tid": "07:59–08:49",
+      "belegg": "3 økter"
+    },
+    {
+      "nr": 2,
+      "norsk": "Skjære",
+      "latin": "Pica pica",
+      "sikkerhet": 94,
+      "tid": "08:19–13:20",
+      "belegg": "5 økter"
+    },
+    {
+      "nr": 3,
+      "norsk": "Gransanger",
+      "latin": "Phylloscopus collybita",
+      "sikkerhet": 81,
+      "tid": "07:49–08:09",
+      "belegg": "2 økter"
+    },
+    {
+      "nr": 4,
+      "norsk": "Grønnfink",
+      "latin": "Chloris chloris",
+      "sikkerhet": 56,
+      "tid": "09:09",
+      "belegg": "1 ggr"
+    },
+    {
+      "nr": 5,
+      "norsk": "Kråke",
+      "latin": "Corvus cornix",
+      "sikkerhet": 32,
+      "tid": "06:59–08:29",
+      "belegg": "2 økter"
+    }
+  ],
+  "ogsaa": [
+    "Myrrikse",
+    "Rødstrupe",
+    "Grønnsisik",
+    "Kjøttmeis",
+    "Svartmeis",
+    "Havhest"
+  ],
+  "bilde": "2026-09-22.png"
+}

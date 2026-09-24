@@ -1,0 +1,65 @@
+{
+  "dato": "2026-09-23",
+  "tegnet": "16:00",
+  "periode": "05:46–15:59",
+  "opptak": 44,
+  "vaer": "Overskyet · 14° · 2 m/s",
+  "antall_arter": 9,
+  "ferdig_side": true,
+  "hoert": [
+    {
+      "nr": 1,
+      "norsk": "Kjøttmeis",
+      "latin": "Parus major",
+      "sikkerhet": 99,
+      "tid": "07:19–13:39",
+      "belegg": "2 økter"
+    },
+    {
+      "nr": 2,
+      "norsk": "Skjære",
+      "latin": "Pica pica",
+      "sikkerhet": 88,
+      "tid": "11:39–14:19",
+      "belegg": "4 økter"
+    },
+    {
+      "nr": 3,
+      "norsk": "Blåmeis",
+      "latin": "Cyanistes caeruleus",
+      "sikkerhet": 58,
+      "tid": "15:19",
+      "belegg": "1 ggr"
+    },
+    {
+      "nr": 4,
+      "norsk": "Gransanger",
+      "latin": "Phylloscopus collybita",
+      "sikkerhet": 55,
+      "tid": "07:19",
+      "belegg": "1 ggr"
+    },
+    {
+      "nr": 5,
+      "norsk": "Rødvingetrost",
+      "latin": "Turdus iliacus",
+      "sikkerhet": 55,
+      "tid": "09:19",
+      "belegg": "1 ggr"
+    },
+    {
+      "nr": 6,
+      "norsk": "Bokfink",
+      "latin": "Fringilla coelebs",
+      "sikkerhet": 42,
+      "tid": "07:19–07:59",
+      "belegg": "2 økter"
+    }
+  ],
+  "ogsaa": [
+    "Grønnfink",
+    "Havhest",
+    "Dvergspett"
+  ],
+  "bilde": "2026-09-23.png"
+}

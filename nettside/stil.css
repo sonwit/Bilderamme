@@ -202,7 +202,17 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 
 .vegg .tekst { text-align: center; max-width: 60ch; }
 .vegg .tekst .kicker { font-size: 16px; letter-spacing: 0.16em; font-weight: 400; }
-.dager { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.hoert-liste { font-size: 16px; max-width: 70ch; }
+.hoert-liste ul { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; }
+.hoert-liste .ogsaa { display: block; margin-top: 8px; }
+/* Stripa med siste dager: én rad, ruller sidelengs naar det er trangt, i
+   stedet for aa brekke pilene ned paa neste linje. */
+.dager { display: flex; align-items: center; gap: 14px; max-width: 100%; overflow-x: auto; padding: 6px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+.dager > * { flex-shrink: 0; scroll-snap-align: center; }
+@media (max-width: 700px) {
+  .dager a img { width: 60px; height: 80px; }
+  .dager a span { font-size: 12px; }
+}
 .dager a { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--blekk); text-decoration: none; padding: 4px; border-radius: 10px; }
 .dager a img { width: 84px; height: 112px; object-fit: cover; object-position: top; display: block; border: 1px solid #d9d9d9; }
 .dager a span { font-size: 14px; letter-spacing: 0.08em; }
@@ -286,6 +296,15 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 .komponent .sti-kode { font-size: 15px; letter-spacing: 0.06em; margin-top: 4px; text-transform: none; padding: 0; }
 .komponent .felt { font-size: 18px; }
 .diagram svg, .graf svg { width: 100%; height: auto; display: block; }
+/* Teksten i diagrammet er HTML inne i SVG-en, saa den bryter selv. */
+.d-boks { font-family: inherit; color: var(--blekk); line-height: 1.1; }
+.d-tittel { font-size: 27px; font-weight: 600; }
+.d-under { font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 8px; line-height: 1.35; overflow-wrap: anywhere; }
+.d-etikett { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 14px; line-height: 1.3; letter-spacing: 0.03em; color: var(--blekk); font-family: inherit; }
+.d-etikett span { background: var(--papir); padding: 0 4px; overflow-wrap: anywhere; }
+.d-etikett.d-venstre { align-items: flex-start; text-align: left; }
+.d-etikett.d-stor { font-size: 17px; letter-spacing: 0; }
+.d-etikett.d-stor span { background: transparent; }
 .plan { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-items: start; }
 @media (max-width: 900px) { .plan { grid-template-columns: minmax(0, 1fr); } }
 .trapper { border-collapse: collapse; font-size: 18px; margin-top: 20px; width: 100%; }

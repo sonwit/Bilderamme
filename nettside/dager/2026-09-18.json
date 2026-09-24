@@ -1,0 +1,47 @@
+{
+  "dato": "2026-09-18",
+  "tegnet": "16:00",
+  "periode": "04:48–15:59",
+  "opptak": 32,
+  "vaer": "Overskyet · 14° · 5 m/s",
+  "antall_arter": 5,
+  "ferdig_side": true,
+  "hoert": [
+    {
+      "nr": 1,
+      "norsk": "Havhest",
+      "latin": "Fulmarus glacialis",
+      "sikkerhet": 61,
+      "tid": "15:29",
+      "belegg": "1 ggr"
+    },
+    {
+      "nr": 2,
+      "norsk": "Toppmeis",
+      "latin": "Lophophanes cristatus",
+      "sikkerhet": 57,
+      "tid": "07:29",
+      "belegg": "1 ggr"
+    },
+    {
+      "nr": 3,
+      "norsk": "Svarttrost",
+      "latin": "Turdus merula",
+      "sikkerhet": 53,
+      "tid": "06:59",
+      "belegg": "1 ggr"
+    },
+    {
+      "nr": 4,
+      "norsk": "Gransanger",
+      "latin": "Phylloscopus collybita",
+      "sikkerhet": 48,
+      "tid": "07:29–14:59",
+      "belegg": "2 økter"
+    }
+  ],
+  "ogsaa": [
+    "Blåmeis"
+  ],
+  "bilde": "2026-09-18.png"
+}

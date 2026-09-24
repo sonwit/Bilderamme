@@ -1,0 +1,31 @@
+{
+  "dato": "2026-09-19",
+  "tegnet": "16:00",
+  "periode": "04:46–15:59",
+  "opptak": 32,
+  "vaer": "Delvis skyet · 17° · 8 m/s",
+  "antall_arter": 3,
+  "ferdig_side": true,
+  "hoert": [
+    {
+      "nr": 1,
+      "norsk": "Skjære",
+      "latin": "Pica pica",
+      "sikkerhet": 79,
+      "tid": "14:59",
+      "belegg": "5 ggr"
+    },
+    {
+      "nr": 2,
+      "norsk": "Rødstjert",
+      "latin": "Phoenicurus phoenicurus",
+      "sikkerhet": 52,
+      "tid": "09:29",
+      "belegg": "1 ggr"
+    }
+  ],
+  "ogsaa": [
+    "Grønnfink"
+  ],
+  "bilde": "2026-09-19.png"
+}

@@ -1,0 +1,58 @@
+{
+  "dato": "2026-09-21",
+  "tegnet": "16:00",
+  "periode": "04:48–15:39",
+  "opptak": 46,
+  "vaer": "Klarvær · 17° · 4 m/s",
+  "antall_arter": 9,
+  "ferdig_side": true,
+  "hoert": [
+    {
+      "nr": 1,
+      "norsk": "Dompap",
+      "latin": "Pyrrhula pyrrhula",
+      "sikkerhet": 95,
+      "tid": "08:09",
+      "belegg": "10 ggr"
+    },
+    {
+      "nr": 2,
+      "norsk": "Kjøttmeis",
+      "latin": "Parus major",
+      "sikkerhet": 92,
+      "tid": "06:59–07:39",
+      "belegg": "2 økter"
+    },
+    {
+      "nr": 3,
+      "norsk": "Flaggspett",
+      "latin": "Dendrocopos major",
+      "sikkerhet": 78,
+      "tid": "07:09",
+      "belegg": "3 ggr"
+    },
+    {
+      "nr": 4,
+      "norsk": "Kattugle",
+      "latin": "Strix aluco",
+      "sikkerhet": 60,
+      "tid": "04:59",
+      "belegg": "1 ggr"
+    },
+    {
+      "nr": 5,
+      "norsk": "Bokfink",
+      "latin": "Fringilla coelebs",
+      "sikkerhet": 57,
+      "tid": "06:59",
+      "belegg": "1 ggr"
+    }
+  ],
+  "ogsaa": [
+    "Skjære",
+    "Kråke",
+    "Løvsanger",
+    "Grønnfink"
+  ],
+  "bilde": "2026-09-21.png"
+}

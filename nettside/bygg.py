@@ -212,6 +212,9 @@ def foto(fil: str, tekst: str, p: str) -> str:
 def ark(d: dict, p: str) -> str:
     v = T.VEGG
     ukedag, dato = dato_tekst(d["dato"])
+    alt = f'{ukedag} {dato}: {", ".join(h["norsk"] for h in d["hoert"])}'
+    if d.get("ferdig_side"):
+        return f'<div class="ark skaaret"><img src="{p}{d["_stor"]}" alt="{E(alt)}" fetchpriority="high"></div>'
     merker, omriss, rader = [], [], []
     for h in d["hoert"]:
         nr = h.get("nr")
@@ -258,19 +261,27 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
         return f'<span class="pil skaaret av" aria-hidden="true">{tegn}</span>'
     stripe = ""
     if len(dager) > 1:
+        slutt = max(i, min(len(dager), 7) - 1) + 1
+        vindu = dager[max(0, slutt - 7):slutt]
         lenker = []
-        for x in dager:
+        for x in vindu:
             u, _ = dato_tekst(x["dato"])
             cur = ' aria-current="page"' if x["dato"] == d["dato"] else ""
             lenker.append(f'<a class="skaaret" href="{p}dag/{x["dato"]}/"{cur}><img src="{p}{x["_liten"]}" alt="" loading="lazy">'
                           f'<span class="tall">{E(u[:3])} {int(x["dato"][-2:])}.</span></a>')
         stripe = (f'<nav class="dager" aria-label="{E(v["dager"])}">{pil(i - 1, v["forrige"], "&lsaquo;")}'
                   f'{"".join(lenker)}{pil(i + 1, v["neste"], "&rsaquo;")}</nav>')
+    liste = ""
+    if d.get("ferdig_side"):
+        # Teksten ligger i bildet; lista gjentas som tekst, for skjermlesere og soek.
+        rader = "".join(f'<li>{E(h["norsk"])} <span class="tall">{h["sikkerhet"]} %</span> <i>{E(h["latin"])}</i> · {E(h["tid"])}</li>' for h in d["hoert"])
+        ogsaa = f' <span class="ogsaa">{E(v["ogsaa"])} {E(", ".join(d["ogsaa"]))}</span>' if d.get("ogsaa") else ""
+        liste = f'<div class="tekst hoert-liste"><span class="kicker liten">{E(v["hoert"])}</span><ul>{rader}</ul>{ogsaa}</div>'
     return f'''<section class="vegg">
   <div class="ramme-ytre">{ark(d, p)}</div>
   <div class="tekst"><div class="kicker tall">{E(ukedag)} {E(dato)}</div>
   <div class="tall">{d["antall_arter"]} {E(v["arter"])} {d["opptak"]} {E(v["opptak"])} · {E(v["tegnet"])} {E(d["tegnet"])}</div></div>
-  {stripe}
+  {stripe}{liste}
   <p class="tekst">{E(T.FORSIDE["under_ramma"])}</p>
 </section>'''
 
@@ -366,37 +377,33 @@ FONT = 'font-family="EB Garamond, Georgia, serif"'
 
 
 def diagram() -> str:
-    """Arkitekturen. Boksene staar med luft mellom seg, og hver pil har en kort
-    etikett i to linjer midt i mellomrommet, med hvit kant bak teksten saa
-    den aldri ligger oppaa en strek."""
+    """Arkitekturen. Boksene og pilene er SVG; all tekst ligger som HTML i
+    foreignObject, saa den bryter paa flere linjer naar det er trangt, og
+    aldri renner utover boksen eller ligger oppaa en strek."""
     h = T.HVORDAN
     d = h["diagram"]; pl = h["piler"]
-    halo = 'stroke="#fff" stroke-width="7" stroke-linejoin="round" paint-order="stroke"'
+    X = 'xmlns="http://www.w3.org/1999/xhtml"'
     def boks(x, y, w, hh, tittel, under):
         return (f'<rect x="{x}" y="{y}" width="{w}" height="{hh}" rx="14" fill="#fff" stroke="#000" stroke-width="2.5"/>'
-                f'<text x="{x + 24}" y="{y + 46}" {FONT} font-size="27" font-weight="600">{E(tittel)}</text>'
-                f'<text x="{x + 24}" y="{y + 76}" {FONT} font-size="14" letter-spacing="2">{E(under.upper())}</text>')
+                f'<foreignObject x="{x + 20}" y="{y + 16}" width="{w - 40}" height="{hh - 28}"><div {X} class="d-boks">'
+                f'<div class="d-tittel">{E(tittel)}</div><div class="d-under">{E(under)}</div></div></foreignObject>')
     def pil(pts, dashed=False):
         dd = ' stroke-dasharray="6 6"' if dashed else ""
         return f'<polyline points="{pts}" fill="none" stroke="#000" stroke-width="2"{dd} marker-end="url(#spiss)"/>'
-    def etikett(x, y, linjer, anker="middle"):
-        return "".join(f'<text x="{x}" y="{y + i * 19}" {FONT} font-size="14" letter-spacing="0.5" text-anchor="{anker}" {halo}>{E(l)}</text>'
-                       for i, l in enumerate(linjer))
+    def etikett(x, y, w, linjer, klasse="d-etikett"):
+        return (f'<foreignObject x="{x}" y="{y}" width="{w}" height="64"><div {X} class="{klasse}">'
+                + "".join(f"<span>{E(l)}</span>" for l in linjer) + "</div></foreignObject>")
     return f'''<svg viewBox="0 0 1312 540" role="img" aria-label="{E(h["delene"])}">
 <defs><marker id="spiss" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
 {boks(20, 60, 280, 140, *d[0])}{boks(516, 40, 320, 200, *d[1])}{boks(1032, 60, 260, 140, *d[2])}{boks(20, 360, 280, 140, *d[3])}
-{pil("300,100 512,100")}{etikett(406, 74, pl["upload"])}
-{pil("516,176 304,176")}{etikett(406, 204, pl["config"])}
-{pil("836,100 1028,100")}{etikett(932, 74, pl["display"])}
-{pil("300,430 440,430 440,208 512,208")}{etikett(370, 404, pl["bilde"])}
+{pil("300,100 512,100")}{pil("516,176 304,176")}{pil("836,100 1028,100")}{pil("300,430 440,430 440,208 512,208")}
+{pil("621,240 621,416", True)}{pil("781,240 781,416", True)}
 <rect x="556" y="420" width="130" height="60" rx="10" fill="#fff" stroke="#000" stroke-width="1.5" stroke-dasharray="5 5"/>
-<text x="621" y="456" {FONT} font-size="17" text-anchor="middle">api.met.no</text>
 <rect x="716" y="420" width="130" height="60" rx="10" fill="#fff" stroke="#000" stroke-width="1.5" stroke-dasharray="5 5"/>
-<text x="781" y="456" {FONT} font-size="17" text-anchor="middle">Gemini</text>
-{pil("621,240 621,416", True)}{etikett(631, 336, [pl["vaer"]], "start")}
-{pil("781,240 781,416", True)}{etikett(791, 336, [pl["gemini"]], "start")}
-<text x="1032" y="236" {FONT} font-size="14" letter-spacing="0.5">{E(pl["rammen"][0])}</text>
-<text x="1032" y="256" {FONT} font-size="14" letter-spacing="0.5">{E(pl["rammen"][1])}</text>
+{etikett(306, 50, 200, pl["upload"])}{etikett(306, 184, 200, pl["config"])}{etikett(842, 50, 180, pl["display"])}
+{etikett(304, 380, 132, pl["bilde"])}{etikett(630, 316, 80, [pl["vaer"]], "d-etikett d-venstre")}
+{etikett(790, 316, 150, [pl["gemini"]], "d-etikett d-venstre")}{etikett(1032, 220, 260, pl["rammen"], "d-etikett d-venstre")}
+{etikett(556, 438, 130, ["api.met.no"], "d-etikett d-stor")}{etikett(716, 438, 130, ["Gemini"], "d-etikett d-stor")}
 </svg>'''
 
 
