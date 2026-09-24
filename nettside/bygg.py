@@ -342,10 +342,15 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
     v = T.VEGG
     ukedag, dato = dato_tekst(d["dato"])
     i = [x["dato"] for x in dager].index(d["dato"])
-    def pil(j, tekst, tegn):
+    def pil(j, tekst, tegn, tegn_foerst):
+        # Ordet vises bare paa smale skjermer, der pila er en knapp i
+        # pagineringa; paa brede er det bare tegnet. Finnes ikke dagen, er
+        # pila et span uten lenke, synlig men ikke trykkbar.
+        deler = [f'<span class="tegn" aria-hidden="true">{tegn}</span>', f'<span class="ord">{E(tekst)}</span>']
+        inni = "".join(deler if tegn_foerst else reversed(deler))
         if 0 <= j < len(dager):
-            return f'<a class="pil skaaret" href="{p}{T.STIER["dag"]}{dager[j]["dato"]}/" aria-label="{E(tekst)}">{tegn}</a>'
-        return f'<span class="pil skaaret av" aria-hidden="true">{tegn}</span>'
+            return f'<a class="pil skaaret" href="{p}{T.STIER["dag"]}{dager[j]["dato"]}/" aria-label="{E(tekst)}">{inni}</a>'
+        return f'<span class="pil skaaret av" aria-disabled="true">{inni}</span>'
     stripe = ""
     if len(dager) > 1:
         slutt = max(i, min(len(dager), 7) - 1) + 1
@@ -357,8 +362,17 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
             kort = T.DAG_KORT.format(u=u[:3], d=int(x["dato"][-2:]))
             lenker.append(f'<a class="skaaret" href="{p}{T.STIER["dag"]}{x["dato"]}/"{cur}><img src="{p}{PRE}{x["_liten"]}" alt="" loading="lazy">'
                           f'<span class="tall">{E(kort)}</span></a>')
-        stripe = (f'<nav class="dager" aria-label="{E(v["dager"])}">{pil(i - 1, v["forrige"], "&lsaquo;")}'
-                  f'{"".join(lenker)}{pil(i + 1, v["neste"], "&rsaquo;")}</nav>')
+        # Paa smale skjermer erstatter denne miniatyrene: dagen som vises, og
+        # en vei tilbake til den nyeste dagen.
+        nyeste = dager[-1]
+        kort_naa = T.DAG_KORT.format(u=ukedag[:3], d=int(d["dato"][-2:]))
+        if d["dato"] == nyeste["dato"]:
+            idag = f'<span aria-current="date">{E(v["idag"])}</span>'
+        else:
+            idag = f'<a href="{p}{T.STIER["dag"]}{nyeste["dato"]}/">{E(v["idag"])}</a>'
+        naa = f'<div class="naa tall"><span>{E(kort_naa)}</span><span aria-hidden="true">·</span>{idag}</div>'
+        stripe = (f'<nav class="dager" aria-label="{E(v["dager"])}">{pil(i - 1, v["forrige"], "&lsaquo;", True)}'
+                  f'<div class="miniatyrer">{"".join(lenker)}</div>{naa}{pil(i + 1, v["neste"], "&rsaquo;", False)}</nav>')
     return f'''<section class="vegg">
   <div class="ramme-ytre">{ark(d, p)}</div>
   <div class="tekst"><div class="kicker tall">{E(ukedag)} {E(dato)}</div>

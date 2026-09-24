@@ -237,24 +237,34 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 
 .vegg .tekst { text-align: center; max-width: 60ch; }
 .vegg .tekst .kicker { font-size: 16px; letter-spacing: 0.16em; font-weight: 400; }
-/* Stripa med siste dager: én rad, ruller sidelengs naar det er trangt, i
-   stedet for aa brekke pilene ned paa neste linje. */
-.dager { display: flex; align-items: center; gap: 14px; max-width: 100%; overflow-x: auto; padding: 6px; scroll-snap-type: x proximity; scrollbar-width: thin; }
-.dager > * { flex-shrink: 0; scroll-snap-align: center; }
-@media (max-width: 700px) {
-  .dager a img { width: 60px; height: 80px; }
-  .dager a span { font-size: 12px; }
-}
-.dager a { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--blekk); text-decoration: none; padding: 4px; border-radius: 10px; }
-.dager a img { width: 84px; height: 112px; object-fit: cover; object-position: top; display: block; border: 1px solid #d9d9d9; }
-.dager a span { font-size: 14px; letter-spacing: 0.08em; }
-.dager a[aria-current="page"] { outline: 2px solid var(--blekk); outline-offset: 2px; }
+/* Stripa med siste dager. Bred skjerm: pilene og sju miniatyrer paa én rad.
+   Under 700 px maatte miniatyrene rulle sidelengs; der blir det ei
+   paginering i stedet: forrige dag og neste dag som knapper, og dagen som
+   vises med en vei til den nyeste. En pil uten dag aa gaa til er synlig,
+   men ikke trykkbar. */
+.dager { display: flex; align-items: center; gap: 14px; max-width: 100%; padding: 6px; }
+.dager .miniatyrer { display: flex; gap: 14px; }
+.dager .miniatyrer a { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--blekk); text-decoration: none; padding: 4px; border-radius: 10px; }
+.dager .miniatyrer img { width: 84px; height: 112px; object-fit: cover; object-position: top; display: block; border: 1px solid #d9d9d9; }
+.dager .miniatyrer span { font-size: 14px; letter-spacing: 0.08em; }
+.dager .miniatyrer a[aria-current="page"] { outline: 2px solid var(--blekk); outline-offset: 2px; }
 .dager .pil {
-  width: 44px; height: 44px; border: 2px solid var(--blekk); border-radius: 10px; font-size: 26px;
+  width: 44px; height: 44px; border: 2px solid var(--blekk); border-radius: 10px; font-size: 26px; color: var(--blekk); text-decoration: none;
   display: flex; align-items: center; justify-content: center; padding: 0;
 }
 .dager .pil.av { opacity: 0.3; }
-@supports (corner-shape: bevel) { .dager a, .dager .pil { corner-shape: bevel; } }
+.dager .ord, .dager .naa { display: none; }
+@supports (corner-shape: bevel) { .dager .miniatyrer a, .dager .pil { corner-shape: bevel; } }
+@media (max-width: 700px) {
+  .dager { flex-wrap: wrap; justify-content: space-between; width: 100%; box-sizing: border-box; padding: 6px 0; gap: 12px; }
+  .dager .miniatyrer { display: none; }
+  .dager .ord { display: inline; }
+  .dager .pil { width: auto; height: auto; gap: 8px; padding: 9px 12px 8px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; }
+  .dager .pil .tegn { font-size: 22px; line-height: 0.7; }
+  .dager .naa { display: flex; order: 3; flex-basis: 100%; justify-content: center; gap: 10px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .dager .naa a { color: var(--blekk); }
+  .dager .naa [aria-current] { border-bottom: 2px solid var(--blekk); padding-bottom: 2px; }
+}
 
 /* Delene */
 .del { display: flex; flex-direction: column; gap: 10px; }

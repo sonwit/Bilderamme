@@ -59,6 +59,7 @@ VEGG = {
     "forrige": "Previous day",
     "neste": "Next day",
     "dager": "Recent days",
+    "idag": "Today",
 }
 UKEDAGER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 MAANEDER = ["January", "February", "March", "April", "May", "June", "July", "August",
