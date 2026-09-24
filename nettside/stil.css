@@ -1,0 +1,328 @@
+/* Fugleramme, nettsida. Samme uttrykk som veggen: hvitt papir, svart blekk,
+   panelets seks farger, EB Garamond. Ingen bibliotek, ingen JavaScript. */
+
+@font-face {
+  font-family: "EB Garamond";
+  src: url("fonter/eb-garamond.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "EB Garamond";
+  src: url("fonter/eb-garamond-kursiv.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --blekk: #000;
+  --papir: #fff;
+  --roed: #b3111f;
+  --roed-moerk: #7a0b15;
+  --groenn: #0b7a3b;
+  --blaa: #1c4fa1;
+  --gul: #d9a400;
+  --ramme: #141414;
+  --hjoerne: 12px;
+  --marg: clamp(16px, 4vw, 64px);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--papir); color: var(--blekk); }
+body {
+  margin: 0;
+  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  line-height: 1.45;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3 { text-wrap: balance; font-weight: 600; line-height: 1.02; margin: 0; }
+h1 { font-size: clamp(38px, 5.4vw, 76px); letter-spacing: -0.01em; }
+h2 { font-size: clamp(26px, 2.6vw, 34px); font-weight: 500; }
+p { margin: 0; }
+a { color: var(--roed); text-decoration-thickness: 1px; text-underline-offset: 0.14em; }
+a:hover { color: var(--roed-moerk); }
+:focus-visible { outline: 3px solid var(--blaa); outline-offset: 3px; }
+img { max-width: 100%; height: auto; }
+figure { margin: 0; }
+.tall { font-variant-numeric: tabular-nums; }
+
+/* Skårne hjørner, som på en passepartout. Nettlesere uten corner-shape
+   får vanlige runde hjørner. */
+.skaaret { border-radius: var(--hjoerne); }
+@supports (corner-shape: bevel) {
+  .skaaret { corner-shape: bevel; }
+}
+
+.hopp {
+  position: absolute; left: -999px; top: 8px; background: var(--blekk); color: var(--papir);
+  padding: 8px 14px; z-index: 10;
+}
+.hopp:focus { left: 8px; }
+
+.side { max-width: 1440px; margin: 0 auto; }
+
+/* Topp: ordmerke, navigasjon, dobbel strek som på veggen. */
+.topp {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  padding: 28px var(--marg) 16px;
+  border-bottom: 5px solid var(--blekk);
+  box-shadow: 0 7px 0 -5px var(--blekk);
+}
+.ordmerke { font-size: 30px; font-weight: 600; letter-spacing: 0.02em; color: var(--blekk); text-decoration: none; }
+.nav { display: flex; gap: clamp(14px, 2.2vw, 32px); align-items: baseline; flex-wrap: wrap; }
+.nav a {
+  font-size: 16px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blekk);
+  text-decoration: none; padding-bottom: 4px; border-bottom: 2px solid transparent;
+}
+.nav a[aria-current="page"] { border-bottom-color: var(--blekk); }
+.nav a.ekstern { color: var(--roed); }
+.spraak { display: flex; gap: 8px; font-size: 14px; letter-spacing: 0.16em; margin-left: 12px; }
+.spraak a { color: var(--blekk); text-decoration: none; padding-bottom: 2px; }
+.spraak a[aria-current="true"] { border-bottom: 2px solid var(--blekk); }
+
+/* Seksjoner */
+section, .seksjon { padding: 24px var(--marg) 44px; }
+.seksjonstopp {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  border-bottom: 2px solid var(--blekk); padding-bottom: 10px; margin-bottom: 28px;
+}
+.kicker { font-size: 16px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; }
+.kicker.liten { font-size: 13px; letter-spacing: 0.2em; }
+.ingress { font-size: clamp(19px, 1.6vw, 22px); max-width: 62ch; }
+
+.rad-2, .rad-3, .rad-4 { display: grid; gap: 40px 32px; }
+.rad-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rad-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rad-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1000px) {
+  .rad-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rad-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .rad-2, .rad-3, .rad-4 { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Forsida */
+.helt {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 40px 64px;
+  align-items: end; padding: 48px var(--marg) 28px;
+}
+.helt .hoeyre { display: flex; flex-direction: column; gap: 20px; }
+@media (max-width: 900px) { .helt { grid-template-columns: minmax(0, 1fr); align-items: start; } }
+.knapper { display: flex; gap: 14px; flex-wrap: wrap; }
+.knapp {
+  display: inline-flex; align-items: center; height: 50px; padding: 0 24px;
+  border: 2px solid var(--blekk); color: var(--blekk); text-decoration: none;
+  font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; border-radius: 10px;
+}
+.knapp.fylt { background: var(--blekk); color: var(--papir); }
+@supports (corner-shape: bevel) { .knapp { corner-shape: bevel; } }
+
+/* Ramma på veggen */
+.vegg { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 16px var(--marg) 48px; }
+.ramme-ytre {
+  width: min(100%, 960px);
+  border: clamp(8px, 1.3vw, 18px) solid var(--ramme);
+  padding: clamp(10px, 2vw, 28px);
+  background: var(--papir);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.22);
+}
+.ark {
+  container-type: inline-size;
+  position: relative; aspect-ratio: 3 / 4; overflow: hidden;
+  background: var(--papir); border: 1px solid #e4e4e4; border-radius: 2.2cqw;
+}
+@supports (corner-shape: bevel) { .ark { corner-shape: bevel; } }
+.ark > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* Alt inne på arket måles i prosent av arkets bredde (1200 = 100cqw), så
+   det skalerer med ramma. Tallene er veggsidas egne pikselmål delt på 12. */
+.spalte { position: absolute; left: 4cqw; top: 3.67cqw; width: 37.25cqw; display: flex; flex-direction: column; }
+.spalte .kicker { font-size: 1.667cqw; letter-spacing: 0.42em; font-weight: 400; line-height: 1.1; }
+.spalte .dag { font-size: 5.333cqw; font-weight: 600; line-height: 1; margin-top: 1.17cqw; }
+.spalte .dato { font-size: 2.5cqw; line-height: 1.1; margin-top: 0.17cqw; }
+.spalte .periode { font-size: 1.5cqw; letter-spacing: 0.05em; line-height: 1.1; margin-top: 0.58cqw; }
+.spalte .strek { border-top: 0.33cqw solid var(--blekk); margin-top: 1.17cqw; }
+.spalte .sted { font-size: 1.5cqw; letter-spacing: 0.16em; text-transform: uppercase; line-height: 1.1; margin-top: 1.42cqw; }
+.spalte .vaer { font-size: 2cqw; line-height: 1.2; margin-top: 0.42cqw; }
+.spalte .hoert {
+  font-size: 1.417cqw; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 600; line-height: 1.1;
+  margin-top: 3.58cqw; padding-bottom: 0.67cqw; border-bottom: 0.17cqw solid var(--blekk);
+}
+.spalte ol { list-style: none; margin: 0; padding: 0; }
+.spalte .rad { display: flex; flex-direction: column; padding: 1.5cqw 0 0.83cqw; border-bottom: 1px solid var(--blekk); }
+.spalte .rad .linje { display: flex; align-items: baseline; }
+.spalte .rad .nr { width: 2.67cqw; font-size: 1.417cqw; }
+.spalte .rad .navn { flex-grow: 1; font-size: 2.5cqw; line-height: 1.05; }
+.spalte .rad .pst { font-size: 1.417cqw; }
+.spalte .rad .detalj { margin-left: 2.67cqw; margin-top: 0.5cqw; font-size: 1.417cqw; line-height: 1.1; }
+.spalte .ogsaa { font-size: 1.417cqw; line-height: 1.25; margin-top: 1.67cqw; }
+.spalte .ogsaa span { font-size: 1.167cqw; letter-spacing: 0.16em; text-transform: uppercase; }
+.spalte .strek2 { border-top: 0.17cqw solid var(--blekk); margin-top: 0.83cqw; }
+.spalte .bunn { font-size: 1.25cqw; line-height: 1.5; margin-top: 1.17cqw; }
+.merke {
+  position: absolute; width: 2.67cqw; height: 2.67cqw; margin: -1.33cqw 0 0 -1.33cqw;
+  border: 0.15cqw solid var(--blekk); border-radius: 50%; background: var(--papir);
+  display: flex; align-items: center; justify-content: center; font-size: 1.5cqw;
+  transition: background 0.15s, color 0.15s;
+}
+.omriss {
+  position: absolute; border: 2px solid var(--blekk); border-radius: 14px; opacity: 0;
+  transition: opacity 0.15s; pointer-events: auto;
+}
+@supports (corner-shape: bevel) { .omriss { corner-shape: bevel; } }
+/* Lista peker på grenen: hold over en rad, og fuglen får et omriss. Og omvendt. */
+.ark:has(.rad[data-nr="1"]:hover) .omriss[data-nr="1"], .ark:has(.omriss[data-nr="1"]:hover) .omriss[data-nr="1"],
+.ark:has(.rad[data-nr="2"]:hover) .omriss[data-nr="2"], .ark:has(.omriss[data-nr="2"]:hover) .omriss[data-nr="2"],
+.ark:has(.rad[data-nr="3"]:hover) .omriss[data-nr="3"], .ark:has(.omriss[data-nr="3"]:hover) .omriss[data-nr="3"],
+.ark:has(.rad[data-nr="4"]:hover) .omriss[data-nr="4"], .ark:has(.omriss[data-nr="4"]:hover) .omriss[data-nr="4"],
+.ark:has(.rad[data-nr="5"]:hover) .omriss[data-nr="5"], .ark:has(.omriss[data-nr="5"]:hover) .omriss[data-nr="5"],
+.ark:has(.rad[data-nr="6"]:hover) .omriss[data-nr="6"], .ark:has(.omriss[data-nr="6"]:hover) .omriss[data-nr="6"],
+.ark:has(.rad[data-nr="7"]:hover) .omriss[data-nr="7"], .ark:has(.omriss[data-nr="7"]:hover) .omriss[data-nr="7"],
+.ark:has(.rad[data-nr="8"]:hover) .omriss[data-nr="8"], .ark:has(.omriss[data-nr="8"]:hover) .omriss[data-nr="8"],
+.ark:has(.rad[data-nr="9"]:hover) .omriss[data-nr="9"], .ark:has(.omriss[data-nr="9"]:hover) .omriss[data-nr="9"] { opacity: 1; }
+.ark:has(.rad[data-nr="1"]:hover) .merke[data-nr="1"], .ark:has(.omriss[data-nr="1"]:hover) .merke[data-nr="1"],
+.ark:has(.rad[data-nr="2"]:hover) .merke[data-nr="2"], .ark:has(.omriss[data-nr="2"]:hover) .merke[data-nr="2"],
+.ark:has(.rad[data-nr="3"]:hover) .merke[data-nr="3"], .ark:has(.omriss[data-nr="3"]:hover) .merke[data-nr="3"],
+.ark:has(.rad[data-nr="4"]:hover) .merke[data-nr="4"], .ark:has(.omriss[data-nr="4"]:hover) .merke[data-nr="4"],
+.ark:has(.rad[data-nr="5"]:hover) .merke[data-nr="5"], .ark:has(.omriss[data-nr="5"]:hover) .merke[data-nr="5"],
+.ark:has(.rad[data-nr="6"]:hover) .merke[data-nr="6"], .ark:has(.omriss[data-nr="6"]:hover) .merke[data-nr="6"],
+.ark:has(.rad[data-nr="7"]:hover) .merke[data-nr="7"], .ark:has(.omriss[data-nr="7"]:hover) .merke[data-nr="7"],
+.ark:has(.rad[data-nr="8"]:hover) .merke[data-nr="8"], .ark:has(.omriss[data-nr="8"]:hover) .merke[data-nr="8"],
+.ark:has(.rad[data-nr="9"]:hover) .merke[data-nr="9"], .ark:has(.omriss[data-nr="9"]:hover) .merke[data-nr="9"] {
+  background: var(--blekk); color: var(--papir);
+}
+.ark:has(.omriss[data-nr="1"]:hover) .rad[data-nr="1"] .navn, .ark:has(.omriss[data-nr="2"]:hover) .rad[data-nr="2"] .navn,
+.ark:has(.omriss[data-nr="3"]:hover) .rad[data-nr="3"] .navn, .ark:has(.omriss[data-nr="4"]:hover) .rad[data-nr="4"] .navn,
+.ark:has(.omriss[data-nr="5"]:hover) .rad[data-nr="5"] .navn, .ark:has(.omriss[data-nr="6"]:hover) .rad[data-nr="6"] .navn,
+.ark:has(.omriss[data-nr="7"]:hover) .rad[data-nr="7"] .navn, .ark:has(.omriss[data-nr="8"]:hover) .rad[data-nr="8"] .navn,
+.ark:has(.omriss[data-nr="9"]:hover) .rad[data-nr="9"] .navn { text-decoration: underline; text-underline-offset: 0.12em; }
+
+.vegg .tekst { text-align: center; max-width: 60ch; }
+.vegg .tekst .kicker { font-size: 16px; letter-spacing: 0.16em; font-weight: 400; }
+.dager { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.dager a { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--blekk); text-decoration: none; padding: 4px; border-radius: 10px; }
+.dager a img { width: 84px; height: 112px; object-fit: cover; object-position: top; display: block; border: 1px solid #d9d9d9; }
+.dager a span { font-size: 14px; letter-spacing: 0.08em; }
+.dager a[aria-current="page"] { outline: 2px solid var(--blekk); outline-offset: 2px; }
+.dager .pil {
+  width: 44px; height: 44px; border: 2px solid var(--blekk); border-radius: 10px; font-size: 26px;
+  display: flex; align-items: center; justify-content: center; padding: 0;
+}
+.dager .pil.av { opacity: 0.3; }
+@supports (corner-shape: bevel) { .dager a, .dager .pil { corner-shape: bevel; } }
+
+/* Delene */
+.del { display: flex; flex-direction: column; gap: 10px; }
+.del .under { font-size: 26px; font-weight: 500; line-height: 1.1; }
+.etiketter { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 4px; }
+.etikett {
+  display: inline-flex; align-items: center; height: 28px; padding: 0 11px; border: 1.5px solid var(--blekk);
+  border-radius: 8px; font-size: 14px; letter-spacing: 0.08em; white-space: nowrap;
+}
+@supports (corner-shape: bevel) { .etikett { corner-shape: bevel; } }
+
+/* Kort med dobbel strek */
+.kort {
+  border: 3px double var(--blekk); padding: 10px; background: var(--papir);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.fuglekort { display: flex; flex-direction: column; gap: 8px; color: var(--blekk); text-decoration: none; }
+.fuglekort .kort { height: 210px; }
+.fuglekort .kort img { max-width: 100%; max-height: 100%; width: auto; object-fit: contain; }
+.fuglekort .navnlinje { display: flex; justify-content: space-between; align-items: baseline; }
+.fuglekort .navn { font-size: 26px; font-weight: 500; }
+.fuglekort .cm { font-size: 16px; }
+.fuglekort .latin { font-size: 17px; font-style: italic; margin-top: -6px; }
+.foto { display: flex; flex-direction: column; gap: 8px; }
+.foto .kort { height: 460px; padding: 8px; }
+.foto .kort img { width: 100%; height: 100%; object-fit: cover; }
+.foto figcaption { font-size: 16px; letter-spacing: 0.04em; }
+.gren { display: flex; flex-direction: column; gap: 8px; }
+.gren .kort { padding: 8px; }
+.gren .kort img { width: 100%; display: block; }
+.gren .navn { font-size: 24px; font-weight: 500; }
+.gren .mnd { font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; }
+.doer {
+  display: flex; flex-direction: column; gap: 10px; padding: 24px 26px 26px; border: 3px double var(--blekk);
+  color: var(--blekk); text-decoration: none; background: var(--papir);
+}
+.doer .tittel { font-size: 32px; font-weight: 500; line-height: 1.05; }
+.doer .les { font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; margin-top: auto; padding-top: 8px; color: var(--roed); }
+
+/* Fuglene */
+.habitat { display: flex; align-items: center; gap: 14px; border-bottom: 2px solid var(--blekk); padding-bottom: 8px; margin-bottom: 20px; }
+.habitat .farge { width: 18px; height: 18px; border-radius: 5px; display: inline-block; }
+@supports (corner-shape: bevel) { .habitat .farge { corner-shape: bevel; } }
+.oppstilling { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 36px 34px; padding: 10px 0 14px; }
+.oppstilling a { display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--blekk); }
+.oppstilling img { width: auto; display: block; }
+.oppstilling .navn { font-size: 22px; font-weight: 500; white-space: nowrap; }
+.oppstilling .latin { font-size: 15px; font-style: italic; white-space: nowrap; margin-top: -4px; }
+.oppstilling .kunstner { font-size: 13px; letter-spacing: 0.06em; white-space: nowrap; margin-top: -2px; }
+
+/* Én art */
+.sti { padding: 28px var(--marg) 0; font-size: 16px; letter-spacing: 0.12em; text-transform: uppercase; }
+.sti a { color: var(--blekk); text-decoration: none; }
+.art { display: grid; grid-template-columns: minmax(0, 620px) minmax(0, 1fr); gap: 40px 64px; align-items: start; }
+@media (max-width: 900px) { .art { grid-template-columns: minmax(0, 1fr); } }
+.art .stor { height: min(560px, 80vw); padding: 24px; }
+.art .stor img, .art .liten img { max-width: 100%; max-height: 100%; width: auto; object-fit: contain; }
+.art .liten { height: 220px; padding: 12px; }
+.art .tekst { display: flex; flex-direction: column; gap: 18px; }
+.art h1 { font-size: clamp(56px, 6.6vw, 96px); line-height: 0.95; }
+.art .latin { font-size: clamp(24px, 2.2vw, 32px); font-style: italic; margin-top: -6px; }
+.fakta { border-collapse: collapse; font-size: 20px; width: 100%; }
+.fakta td { padding: 9px 0; border-bottom: 1px solid var(--blekk); vertical-align: top; }
+.fakta td:first-child { letter-spacing: 0.1em; text-transform: uppercase; font-size: 14px; width: 170px; padding-right: 12px; }
+
+/* Slik virker det */
+.komponent { display: grid; grid-template-columns: 200px minmax(0, 1fr) minmax(0, 1fr) 240px; gap: 32px; padding: 22px 0; border-bottom: 1px solid var(--blekk); align-items: start; }
+@media (max-width: 1000px) { .komponent { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+@media (max-width: 620px) { .komponent { grid-template-columns: minmax(0, 1fr); } }
+.komponent .navn { font-size: 28px; font-weight: 500; }
+.komponent .sti-kode { font-size: 15px; letter-spacing: 0.06em; margin-top: 4px; text-transform: none; padding: 0; }
+.komponent .felt { font-size: 18px; }
+.diagram svg, .graf svg { width: 100%; height: auto; display: block; }
+.plan { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-items: start; }
+@media (max-width: 900px) { .plan { grid-template-columns: minmax(0, 1fr); } }
+.trapper { border-collapse: collapse; font-size: 18px; margin-top: 20px; width: 100%; }
+.trapper td { padding: 8px 10px 8px 0; border-top: 1px solid var(--blekk); }
+.trapper tr:last-child td { border-bottom: 1px solid var(--blekk); }
+.farger { display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap; }
+.farger .rekke { display: flex; gap: 22px; flex-wrap: wrap; }
+.farge-brikke { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.farge-brikke div { width: 92px; height: 92px; border: 1.5px solid var(--blekk); border-radius: 16px; }
+@supports (corner-shape: bevel) { .farge-brikke div { corner-shape: bevel; } }
+.farge-brikke span { font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; }
+
+/* Valgene */
+.valg { display: flex; flex-direction: column; gap: 4px; }
+.valg .tittel { font-size: 30px; font-weight: 500; line-height: 1.1; padding-bottom: 10px; }
+.valg .trinn { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; padding: 8px 0; border-top: 1px solid var(--blekk); }
+.valg .trinn div:first-child { font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; padding-top: 4px; }
+.valg .trinn div:last-child { font-size: 18px; }
+.forkastet { display: flex; flex-direction: column; gap: 6px; border-top: 2px solid var(--blekk); padding-top: 12px; }
+.forkastet .tittel { font-size: 24px; font-weight: 500; line-height: 1.1; }
+.forkastet p { font-size: 17px; }
+
+/* Slik bygde jeg det */
+.deler-liste { display: flex; flex-direction: column; gap: 8px; border-top: 2px solid var(--blekk); padding-top: 12px; }
+.deler-liste .navn { font-size: 24px; font-weight: 500; }
+.deler-liste ul { margin: 0; padding-left: 20px; font-size: 17px; line-height: 1.5; }
+.stroem { border-collapse: collapse; font-size: 19px; width: 100%; }
+.stroem td { padding: 10px 0; border-bottom: 1px solid var(--blekk); }
+.stroem td:last-child { text-align: right; white-space: nowrap; }
+.tidslinje { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 20px; padding: 10px 0; border-bottom: 1px solid var(--blekk); }
+.tidslinje .naar { font-size: 17px; letter-spacing: 0.06em; }
+
+/* Bunn */
+.bunn {
+  margin-top: auto; padding: 28px var(--marg) 36px; border-top: 2px solid var(--blekk);
+  display: flex; justify-content: space-between; gap: 48px; flex-wrap: wrap; font-size: 17px;
+}
+.bunn .venstre { max-width: 720px; display: flex; flex-direction: column; gap: 8px; }
+.bunn .hoeyre { display: flex; flex-direction: column; gap: 6px; text-align: right; }
+@media (max-width: 620px) { .bunn .hoeyre { text-align: left; } }

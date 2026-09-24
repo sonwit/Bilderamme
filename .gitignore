@@ -37,3 +37,6 @@ test/out/
 test/*.html
 # Seedet designcanvas — bygges av design/*.dc.html med skill-hjelperen.
 fugleramme-layoutretninger.html
+
+# Nettsida bygges til nettside/ut/ av nettside/bygg.py.
+nettside/ut/

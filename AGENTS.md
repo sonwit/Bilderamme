@@ -33,6 +33,7 @@ python3 tools/lytteplan.py 3.9                                      # soloppgang
 bash -n deploy/deploy.sh                                            # skallsyntaks
 tools/flash_firmware.sh --sjekk                                     # firmware kompilerer, uten brett
 kamera-app/kjor.sh bygg                                             # Android-appen
+python3 nettside/bygg.py                                            # nettsida -> nettside/ut/
 ```
 
 Det finnes ingen testsuite. `test/data/` har en dags `birds.json`; rendringen
@@ -54,6 +55,9 @@ serveren.
   Grafer tegnes som SVG for hånd. Ikke legg til avhengigheter der.
 - **Seks farger.** Alt som skal på panelet tegnes i svart, hvitt, rødt, gult,
   blått og grønt. Ingen gråtoner, ingen gjennomsiktighet.
+- **Nettsida viser aldri posisjon.** `nettside/` bygges av repoets data og
+  `nettside/dager/`; JSON-en per dag har ingen koordinater, og all tekst
+  ligger i `innhold_<språk>.py`. Ingen JavaScript, ingen eksterne kall.
 - **Mål, ikke håp.** Komposisjon styres av kode, ikke av prompten. Et bilde
   som skal på veggen måles (`tekstkollisjon.py`) før det godtas.
 - **Dyr modell til det sjeldne, billig til det daglige.** Én ny art kan

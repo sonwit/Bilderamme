@@ -1,0 +1,17 @@
+{
+  "dato": "2026-09-24",
+  "tegnet": "16:00",
+  "periode": "05:46–15:59",
+  "opptak": 44,
+  "vaer": "Overskyet · 13° · 3 m/s",
+  "antall_arter": 10,
+  "hoert": [
+    {"nr": 1, "norsk": "Skjære", "latin": "Pica pica", "sikkerhet": 99, "tid": "14:19", "belegg": "1 ggr",
+     "boks": [592, 1144, 964, 1418], "merke": [675, 1386]},
+    {"norsk": "Kaie", "latin": "Corvus monedula", "sikkerhet": 83, "tid": "09:39", "belegg": "5 ggr"},
+    {"nr": 2, "norsk": "Gransanger", "latin": "Phylloscopus collybita", "sikkerhet": 77, "tid": "13:19", "belegg": "1 ggr",
+     "boks": [250, 1287, 407, 1399], "merke": [314, 1409]}
+  ],
+  "ogsaa": ["Myrrikse", "Kjøttmeis", "Sothøne", "Svartmeis", "Bokfink", "Rørdrum"],
+  "bilde": "2026-09-24.png"
+}

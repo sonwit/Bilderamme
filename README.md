@@ -14,10 +14,10 @@ Alt er bygd for å kjøre uten tilsyn på vanlig maskinvare: to ESP32-brett, en
 gammel PC som hjemmeserver, en Android-telefon. I drift siden juli 2026
 (rammen) og august 2026 (utedelen og fuglesida).
 
-Prosjektet har en enkel nettside på
-[sonwit.github.io/fugleramme](https://sonwit.github.io/fugleramme/), med en
-[personvernerklæring](https://sonwit.github.io/personvern/) for lydopptakene
-i hagen.
+Prosjektet har en egen side på
+[sonwit.github.io/Bilderamme](https://sonwit.github.io/Bilderamme/), bygd fra
+dette repoet, og en [personvernerklæring](https://sonwit.github.io/personvern/)
+for lydopptakene i hagen.
 
 ## Slik henger delene sammen
 
@@ -159,6 +159,7 @@ miljøet (`tools/oppsett.py`), så ingenting personlig trenger å stå i koden.
 | `kamera/` | Fuglekameraet på Raspberry Pi, parkert. [README](kamera/README.md) |
 | `pi/` | Utedel v1 på Raspberry Pi, pensjonert. [README](pi/README.md) |
 | `design/` | Artboards for de tre layoutretningene. [README](design/README.md) |
+| `nettside/` | Produktsida på GitHub Pages, bygd fra repoets data. [README](nettside/README.md) |
 | `docs/` | Guider og prosjektnotater, med historikk. [Innhold](docs/README.md) |
 | `test/` | Testdata: en dags `birds.json` til å rendre sida med lokalt. |
 
