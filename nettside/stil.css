@@ -202,9 +202,6 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 
 .vegg .tekst { text-align: center; max-width: 60ch; }
 .vegg .tekst .kicker { font-size: 16px; letter-spacing: 0.16em; font-weight: 400; }
-.hoert-liste { font-size: 16px; max-width: 70ch; }
-.hoert-liste ul { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; }
-.hoert-liste .ogsaa { display: block; margin-top: 8px; }
 /* Stripa med siste dager: én rad, ruller sidelengs naar det er trangt, i
    stedet for aa brekke pilene ned paa neste linje. */
 .dager { display: flex; align-items: center; gap: 14px; max-width: 100%; overflow-x: auto; padding: 6px; scroll-snap-type: x proximity; scrollbar-width: thin; }

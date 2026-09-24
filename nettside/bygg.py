@@ -271,17 +271,11 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
                           f'<span class="tall">{E(u[:3])} {int(x["dato"][-2:])}.</span></a>')
         stripe = (f'<nav class="dager" aria-label="{E(v["dager"])}">{pil(i - 1, v["forrige"], "&lsaquo;")}'
                   f'{"".join(lenker)}{pil(i + 1, v["neste"], "&rsaquo;")}</nav>')
-    liste = ""
-    if d.get("ferdig_side"):
-        # Teksten ligger i bildet; lista gjentas som tekst, for skjermlesere og soek.
-        rader = "".join(f'<li>{E(h["norsk"])} <span class="tall">{h["sikkerhet"]} %</span> <i>{E(h["latin"])}</i> · {E(h["tid"])}</li>' for h in d["hoert"])
-        ogsaa = f' <span class="ogsaa">{E(v["ogsaa"])} {E(", ".join(d["ogsaa"]))}</span>' if d.get("ogsaa") else ""
-        liste = f'<div class="tekst hoert-liste"><span class="kicker liten">{E(v["hoert"])}</span><ul>{rader}</ul>{ogsaa}</div>'
     return f'''<section class="vegg">
   <div class="ramme-ytre">{ark(d, p)}</div>
   <div class="tekst"><div class="kicker tall">{E(ukedag)} {E(dato)}</div>
   <div class="tall">{d["antall_arter"]} {E(v["arter"])} {d["opptak"]} {E(v["opptak"])} · {E(v["tegnet"])} {E(d["tegnet"])}</div></div>
-  {stripe}{liste}
+  {stripe}
   <p class="tekst">{E(T.FORSIDE["under_ramma"])}</p>
 </section>'''
 
