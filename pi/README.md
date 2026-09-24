@@ -7,7 +7,7 @@ solcelledrift og døde 28. juli 2026. Utedel v2 på XIAO ESP32-S3
 
 | Fil | Hva |
 |---|---|
-| `record_and_upload.sh` | Lytteøkta: opptak til tmpfs, opplasting med scp, kø på disk ved feil, fartsgrense på sendingen. |
+| `record_and_upload.sh` | Lytteøkten: opptak til tmpfs, opplasting med scp, kø på disk ved feil, fartsgrense på sendingen. |
 | `crontab.txt` | Planen: hver halvtime 04–08, hver time 09–21, heartbeat hvert kvarter. |
 | `heartbeat.sh` | Et livstegn til serveren, så stillhet kunne skilles fra et dødt brett. |
 | `power_tune.sh` | Strømsparing: HDMI, LED-er og det som ellers kunne skrus av. |

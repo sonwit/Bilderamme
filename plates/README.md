@@ -1,6 +1,6 @@
 # plates/ — plansjebiblioteket
 
-Det som tegnes på fuglesida, lagd én gang per art og gjenbrukt hver dag arten
+Det som tegnes på fuglesiden, lagd én gang per art og gjenbrukt hver dag arten
 dukker opp. Biblioteket vokser med arter, ikke med dager.
 
 ```
@@ -48,7 +48,7 @@ er brukbar, vasker skanningen, skriver metadata til `arter.json`, tegner
 sittende og flygende fugl, og måler fotpunktet. To bildekall og to
 modellkall per art, én gang. Den daglige kjeden kjører den selv for inntil to
 nye arter per kjøring (`NYE_ARTER`), så en ny gjest tegnes samme dag i stedet
-for å stå i lista uten bilde til noen oppdager det.
+for å stå i listen uten bilde til noen oppdager det.
 
 For hånd, trinn for trinn:
 

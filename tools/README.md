@@ -3,7 +3,7 @@
 Alt som kjører på hjemmeserveren ligger her, sammen med verktøyene som kjøres
 fra Macen. På serveren ligger filene flatt i `/opt/fugleramme/`; her ligger
 de i `tools/` og plansjene i `plates/`. Scriptene ser etter begge deler.
-Oppsett av serveren, env-fila, systemd og cron står i
+Oppsett av serveren, env-filen, systemd og cron står i
 [../deploy/README.md](../deploy/README.md).
 
 ## Hva som ligger her
@@ -12,7 +12,7 @@ Oppsett av serveren, env-fila, systemd og cron står i
 — Dagens fugleside, i den rekkefølgen den kjøres —
 daily_panel.py          Inngangspunktet cron kaller. Kjører de tre under.
 compose_branch.py       Dagens fugler limt på den faste grenen, lokalt og deterministisk.
-render_daily_panel.py   Sida som HTML på nøyaktig 1200x1600, i palettfarger.
+render_daily_panel.py   Siden som HTML på nøyaktig 1200x1600, i palettfarger.
 render_panel_png.py     Rastrer HTML -> PNG -> Atkinson-dither -> frame.bin.
 push_to_frame.py        Sender en ferdig frame.bin til rammen. Cron.
 tekstkollisjon.py       Måler om teksten faktisk kolliderer med illustrasjonen.
@@ -62,13 +62,13 @@ push_to_frame.py           POST http://fugleramme.local/display   (~20–35 s å
 ```
 
 Kjeden kjøres tre ganger om dagen fra cron: 07:07, 09:37 og 16:00. Alle tre
-tegner dagen som pågår. 09:37 ble lagt til fordi klokka sju hadde bare 5 av
-14 dager noe å tegne, mens klokka ni hadde 9; klokka 16 er rundt tre
+tegner dagen som pågår. 09:37 ble lagt til fordi klokken sju hadde bare 5 av
+14 dager noe å tegne, mens klokken ni hadde 9; klokken 16 er rundt tre
 firedeler av dagens arter hørt. Headeren teller opptakene, så «Hørt i dag» er
 sant uansett.
 
-**Gårsdagen er første reserve.** Lytteplanen følger sola, og om vinteren har
-utedelen ikke våknet klokka sju. Har dagen ingenting å tegne, tegnes gårsdagen
+**Gårsdagen er første reserve.** Lytteplanen følger solen, og om vinteren har
+utedelen ikke våknet klokken sju. Har dagen ingenting å tegne, tegnes gårsdagen
 ferdig i stedet, og har heller ikke den noe, leter kjeden inntil sju dager
 bakover etter siste dag som hadde det, med datoen tydelig i overskriften
 (`RESERVE_I_GAAR`, `RESERVE_DAGER`). En fugleside fra i forgårs er bedre enn
@@ -76,23 +76,23 @@ en tegneseriestokkand.
 
 **AI-bildet er siste reserve, og bare om morgenen.** `daily_panel.py` går bare
 ut med 0 hvis `frame.bin` faktisk finnes og er 960 000 byte. Feiler den
-klokka 07:07, kjører cron `generate_daily_image.py` i stedet, så det henger et
+klokken 07:07, kjører cron `generate_daily_image.py` i stedet, så det henger et
 bilde på veggen i stedet for ingenting. Kjøringene 09:37 og 16:00 har ingen
 reserve: feiler de, blir forrige side hengende heller enn at et AI-bilde tar
-plassen. Push-steget bryr seg ikke om hvem som lagde fila.
+plassen. Push-steget bryr seg ikke om hvem som lagde filen.
 
 Værfeil stopper ingenting: `get_weather_safe()` prøver tre ganger og
 genererer deretter uten værreferanse. `push_to_frame.py` prøver fire ganger.
 
 ## Dagens fugleside
 
-Sida er ett fast oppsett: infoboks oppe til venstre, artslista under den,
+Siden er ett fast oppsett: infoboks oppe til venstre, artslisten under den,
 bunnlinje, og en fugleplansje som fyller resten av arket. Alt er tegnet i
 panelets seks farger, så teksten dithres ikke.
 
-**Hovedlista og fotnoten.** BirdNET-konfidens er en score per deteksjon, ikke
+**Hovedlisten og fotnoten.** BirdNET-konfidens er en score per deteksjon, ikke
 sannsynligheten for at arten var der. Arter under `PANEL_SURE_CONF` (0,5) som
-bare er hørt i én økt havner i fotnoten «også mulige». Arter på blokklista
+bare er hørt i én økt havner i fotnoten «også mulige». Arter på blokklisten
 (`PANEL_BLOKKERT`, standard myrrikse og rørdrum) tegnes aldri, uansett score,
 men står i fotnoten. Sorteringen er etter sikkerhet, ikke belegg: fire svake
 treff på samme feil art er fortsatt fire svake treff.
@@ -103,7 +103,7 @@ dukker opp igjen, og `ny_art.py` gjør begge i én kjøring. Detaljene står i
 
 **Fotpunkt, ikke bunnkant.** Nederste piksel i bildet av en skjære er
 halespissen. Aligner man på den, lander halen på veden og fuglen henger i
-lufta. Samme vannrett: halen drar tyngdepunktet med seg. Hver fugl har derfor
+luften. Samme vannrett: halen drar tyngdepunktet med seg. Hver fugl har derfor
 et fotpunkt i sidecar-JSON-en sin, satt av modellen og sjekket med
 `compose_branch.py --sjekk-foetter fotpunkter.png`. Ser et feil ut, rett
 `fot` og sett `"kilde": "manuell"`, så rører ingen senere kjøring det.
@@ -117,7 +117,7 @@ skala = (lengde / 21 cm) ** 0,6,   klemt til 0,55–1,60
 ```
 
 Med rødvingetrosten som midtpunkt gir det skjære 1,56× og grønnsisik 0,71×.
-Største art får den tykkeste greina nederst, minste den tynne kvisten øverst.
+Største art får den tykkeste grenen nederst, minste den tynne kvisten øverst.
 
 **Festepunktene.** `ANKRE` i `compose_branch.py` er en liste
 `(x, y, høyde, speilvendt)` sortert nedenfra og opp. `y` snappes til greinas
@@ -129,8 +129,8 @@ første der den får stå i fred, inntil 22 % overlapp.
 står (venstre 48 %, ned til 75 % av høyden). Blir en fugl bred nok til å nå
 inn, flyttes den sidelengs og får ny ved under føttene; er den for bred,
 krymper den. Etterpå måles sonene uansett, i vannrette bånd: en enslig fugl
-midt i artslista ga 1,9 % totalt, under grensen, mens den lå rett oppå fire
-linjer tekst. `tekstkollisjon.py` tegner sida én gang uten illustrasjon og
+midt i artslisten ga 1,9 % totalt, under grensen, mens den lå rett oppå fire
+linjer tekst. `tekstkollisjon.py` tegner siden én gang uten illustrasjon og
 ser bare der bokstavene faktisk er. Sonen som ikke blir ren, får en helt
 ugjennomsiktig hvit pute under teksten.
 
@@ -167,7 +167,7 @@ og `bilde_analyze.py`.
 
 `birdnet_analyze.py` skriver to ting: `data/observations.jsonl`, én linje per
 opptak for godt, med arter, antall deteksjoner, lydnivå og brettets helse, og
-`birds.json`, dagens aggregerte artsliste som sida lages fra. Opptak svakere
+`birds.json`, dagens aggregerte artsliste som siden lages fra. Opptak svakere
 enn `BIRDNET_NORM_PEAK` normaliseres først; INMP441 tar opp lavt, og BirdNET
 treffer mye bedre på normalisert signal. Begynner opptaket med et klippet
 smell (mikrofonen som ikke er våken når I2S starter, målt på 233 av 293
@@ -191,14 +191,14 @@ en bakgrunnstråd, én om gangen. Undersidene svarer på hvert sitt spørsmål:
 
 | Side | Spørsmål |
 |---|---|
-| `/helse` | Virker anlegget? Batteri, WiFi-styrke, dekning, siste push, hva vakta har sagt. |
+| `/helse` | Virker anlegget? Batteri, WiFi-styrke, dekning, siste push, hva vakten har sagt. |
 | `/fugler` | Hva har vi hørt i det hele tatt? Arter over uker og måneder, med avspilling. |
 | `/dag` | Hva skjedde i dag? Døgnet som forløp, opptak for opptak, med bla-stripe. |
 
 Alle tre er ett HTML-dokument hver, ren `stdlib` på serversiden, SVG tegnet
 for hånd. `vakt.py` er det motsatte av en side: den kjører hvert kvarter og
 skriver bare når noe er galt, først og fremst stillhet. Med `VARSEL_URL` (for
-eksempel en ntfy.sh-kanal) sendes meldinga ut av huset.
+eksempel en ntfy.sh-kanal) sendes meldingen ut av huset.
 
 ## Bildekonvertering
 
@@ -244,7 +244,7 @@ gir gode resultater står i `docs/Prompt-guide — bilder til ePaper-rammen.md`.
   `--preview` og se om det er det samme; hold deg til flate, mettede farger.
 - **Gråtoner og gjennomsiktighet finnes ikke.** Se «Valgene» i rot-README-en.
 - **Prompt-styrt komposisjon er ikke til å stole på.** Derfor `compose_branch.py`.
-- **Gemini-regningen er kameraet, ikke fuglesida.** Målt 12. september 2026:
+- **Gemini-regningen er kameraet, ikke fuglesiden.** Målt 12. september 2026:
   1559 kamerabilder på åtte dager var 80–90 % av forbruket. Bremsene ligger i
   `bilde_analyze.py`, i kameraets `pause_s` og i retusjen. Forbruket per
   modell står i AI Studio under Usage, ikke på fakturaen.

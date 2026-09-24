@@ -64,7 +64,7 @@ batteriet via BAT-padene; managerens 5 V-utgang brukes ikke, for
 powerbank-brikken kutter ved µA-last.
 
 Per oppvåkning: ta opp `REC_SECONDS` (60 s) mono 16-bit rett i PSRAM, med
-radioen av så mikrofonen slipper WiFi-støy. Koble til WiFi, synk klokka med
+radioen av så mikrofonen slipper WiFi-støy. Koble til WiFi, synk klokken med
 NTP og regn tidsstempelet bakover fra synket klokke. `POST` WAV-en til
 serverens `/upload` med helse-JSON (spenning, WiFi-styrke, temperatur,
 boot-teller) i `X-Fugl-Health`. Hent `GET /config`, regn ut neste økt og sov.

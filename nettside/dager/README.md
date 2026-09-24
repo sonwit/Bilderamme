@@ -1,10 +1,10 @@
 # nettside/dager/ — én dag om gangen
 
-Hver dag sida skal kunne vise ligger her som to filer med samme navn:
+Hver dag siden skal kunne vise ligger her som to filer med samme navn:
 
 - `YYYY-MM-DD.png`: illustrasjonen uten tekst, slik `compose_branch.py`
   skriver `plates/dagens-bakgrunn.png`. 1200×1600, hvit bakgrunn.
-- `YYYY-MM-DD.json`: det sida trenger for å tegne lista oppå.
+- `YYYY-MM-DD.json`: det siden trenger for å tegne listen oppå.
 
 ```json
 {
@@ -28,9 +28,9 @@ Hver dag sida skal kunne vise ligger her som to filer med samme navn:
 
 `nr`, `boks` og `merke` finnes bare for artene som faktisk står på grenen;
 de kommer fra `dagens-bakgrunn.json` og er i bildets koordinater. Arter uten
-plansje står i lista uten nummer, som på veggen. `ogsaa` er fotnoten.
+plansje står i listen uten nummer, som på veggen. `ogsaa` er fotnoten.
 
-Ingen posisjon. Sida viser aldri koordinater, uansett hva veggen viser.
+Ingen posisjon. Siden viser aldri koordinater, uansett hva veggen viser.
 
 Fase to: serveren skriver disse to filene selv etter hver tegning og pusher
 dem hit, så dagvelgeren oppdaterer seg uten at noen gjør noe. Til det er på

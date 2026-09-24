@@ -1,7 +1,7 @@
 # AGENTS.md
 
 Konvensjonene i dette repoet, for mennesker og kodeagenter. `CLAUDE.md`
-importerer denne fila; andre agenter leser den direkte. Den nærmeste
+importerer denne filen; andre agenter leser den direkte. Den nærmeste
 README-en beskriver hver mappe: start i [README.md](README.md).
 
 ## Hva dette er
@@ -14,6 +14,9 @@ Anlegget er i drift; det du endrer, kjører i en hage neste morgen.
 ## Språk og stil
 
 - Norsk i alt: kode, kommentarer, docs, commit-meldinger.
+- Moderat bokmål: «siden», «listen», «rammen», «solen». Ikke a-former som
+  «sida» og «lista», og ikke «ei». Gjelder alt en leser: nettsiden, README-er,
+  commit-meldinger.
 - Kommentarer og commit-meldinger i `.py`, `.ino` og `.sh` skrives med
   `aa`, `oe`, `ae` i stedet for æøå. Markdown-filer bruker æøå.
 - Kommentarene forklarer *hvorfor*, gjerne med dato og målt tall. Et valg
@@ -28,16 +31,16 @@ Anlegget er i drift; det du endrer, kjører i en hage neste morgen.
 ```bash
 python3 -m py_compile tools/*.py                                   # alt kompilerer?
 python3 tools/render_daily_panel.py --birds test/data/birds-2026-08-28.json \
-        --no-weather --out /tmp/panel.html                         # sida uten nett
+        --no-weather --out /tmp/panel.html                         # siden uten nett
 python3 tools/lytteplan.py 3.9                                      # soloppgang og plan, måned for måned
 bash -n deploy/deploy.sh                                            # skallsyntaks
 tools/flash_firmware.sh --sjekk                                     # firmware kompilerer, uten brett
 kamera-app/kjor.sh bygg                                             # Android-appen
-python3 nettside/bygg.py                                            # nettsida -> nettside/ut/
+python3 nettside/bygg.py                                            # nettsiden -> nettside/ut/
 ```
 
 Det finnes ingen testsuite. `test/data/` har en dags `birds.json`; rendringen
-av sida med den er den raskeste kontrollen på at kjeden ikke er brukket.
+av siden med den er den raskeste kontrollen på at kjeden ikke er brukket.
 Rendring til PNG (`render_panel_png.py`) krever Playwright og kjøres på
 serveren.
 
@@ -55,7 +58,7 @@ serveren.
   Grafer tegnes som SVG for hånd. Ikke legg til avhengigheter der.
 - **Seks farger.** Alt som skal på panelet tegnes i svart, hvitt, rødt, gult,
   blått og grønt. Ingen gråtoner, ingen gjennomsiktighet.
-- **Nettsida viser aldri posisjon.** `nettside/` bygges av repoets data og
+- **Nettsiden viser aldri posisjon.** `nettside/` bygges av repoets data og
   `nettside/dager/`; JSON-en per dag har ingen koordinater, og all tekst
   ligger i `innhold_<språk>.py`. Ingen JavaScript, ingen eksterne kall.
 - **Mål, ikke håp.** Komposisjon styres av kode, ikke av prompten. Et bilde
@@ -63,9 +66,9 @@ serveren.
 - **Dyr modell til det sjeldne, billig til det daglige.** Én ny art kan
   koste noen kroner. Noe som kjører hver dag eller hver time skal koste
   nesten ingenting, ha tak per time og pause etter 429.
-- **Deploy er `deploy/deploy.sh`.** Den kopierer scriptene i lista si og
+- **Deploy er `deploy/deploy.sh`.** Den kopierer scriptene i listen si og
   restarter tjenestene. Et nytt script som en tjeneste importerer må inn i
-  den lista, ellers svarer serveren 500 mens alt ser friskt ut.
+  den listen, ellers svarer serveren 500 mens alt ser friskt ut.
 - **Commit på `main`, push bare når eieren ber om det.** Ingen arbeidsgreiner
   for småting. Aldri force-push.
 

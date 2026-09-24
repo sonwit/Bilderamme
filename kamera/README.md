@@ -14,6 +14,6 @@ videre i appen.
 | `titt.sh` | Ta ett bilde av hele rammen, hent det ned og åpne det på Macen. Til retning og fokus. |
 | `kamera.example.json` | Innstillingene: server, felter, terskler, pause. |
 
-Tjenestefila `deploy/fugleramme-kamera.service` hører til her og installeres
+Tjenestefilen `deploy/fugleramme-kamera.service` hører til her og installeres
 på Pi-en. Ingenting analyseres på Pi-en; den er for svak, og serveren har alt
 den trenger.

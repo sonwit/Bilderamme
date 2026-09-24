@@ -45,7 +45,7 @@ kjører i begge. `headless-shell`, ikke full chromium: den starter uten
 ## frame_server.env
 
 Kopier `frame_server.env.example` til `/opt/fugleramme/frame_server.env` og
-fyll inn. Både systemd-tjenestene og cron-linja leser den.
+fyll inn. Både systemd-tjenestene og cron-linjen leser den.
 
 | Variabel | Hva |
 |---|---|
@@ -54,17 +54,17 @@ fyll inn. Både systemd-tjenestene og cron-linja leser den.
 | `FRAME_SERVER_PORT`, `FRAME_TOKEN` | Webappens port (8090) og valgfri delt hemmelighet. |
 | `INGEST_PORT`, `INGEST_TOKEN` | Mottaket fra utedelen (8091) og valgfri token, samme som i utedelens `config.h`. |
 | `FUGLERAMME_LAT`, `FUGLERAMME_LON` | Hvor hagen er. To desimaler holder. Styrer været, BirdNETs artsfilter og soloppgangen. |
-| `FUGLERAMME_STED` | Stedsnavnet på fuglesida. |
+| `FUGLERAMME_STED` | Stedsnavnet på fuglesiden. |
 | `FUGLERAMME_KONTAKT` | Kontakten i User-Agent mot api.met.no og Commons. E-post eller URL. |
-| `VARSEL_URL` | Hvor vakta sender meldinger, for eksempel en ntfy.sh-kanal. Uten: bare loggen. |
-| `PANEL_SURE_CONF`, `PANEL_BLOKKERT`, `PANEL_SORTERING` | Terskel, blokkliste og sortering på fuglesida. |
+| `VARSEL_URL` | Hvor vakten sender meldinger, for eksempel en ntfy.sh-kanal. Uten: bare loggen. |
+| `PANEL_SURE_CONF`, `PANEL_BLOKKERT`, `PANEL_SORTERING` | Terskel, blokkliste og sortering på fuglesiden. |
 | `TEGN_MIN_OEKTER` | Hvor mange økter en art må være hørt i for å bli tegnet. Standard 1. |
 | `RETUSJ`, `RETUSJ_MODELL`, `FUGL_MODELL`, `VISION_MODEL`, `IMAGE_MODEL` | Modellvalg og antall retusjforsøk. |
 | `KAMERA_MODELL`, `KAMERA_BILDE_PX`, `KAMERA_MAKS_PER_TIME`, `KAMERA_PAUSE_429_S` | Kostnadsbremsene på kameraanalysen. |
 | `BIRDNET_MIN_CONF`, `BIRDNET_NORM_PEAK`, `AUDIO_KEEP_DAYS` | Analysens terskler og hvor lenge lyd beholdes. |
 
 Alle scriptene leser variablene sine med `os.environ.get(..., standard)`, så
-det som ikke står i fila får standardverdien i scriptet.
+det som ikke står i filen får standardverdien i scriptet.
 
 ## deploy.sh
 
@@ -73,14 +73,14 @@ cp deploy/deploy.env.example deploy/deploy.env     # FUGLE_SERVER=bruker@server,
 deploy/deploy.sh
 ```
 
-Scriptet kopierer python-scriptene i lista si, plansjene og malenes JSON,
+Scriptet kopierer python-scriptene i listen si, plansjene og malenes JSON,
 installerer tjenestefilene med `User=` satt til SSH-brukeren (overstyr med
 `FUGLE_USER`), og restarter tjenestene. Det ber om sudo-passordet på
 serveren. Det rører aldri `frame_server.env` eller `www/`.
 
-Et nytt script som en tjeneste importerer må inn i lista i `deploy.sh`.
+Et nytt script som en tjeneste importerer må inn i listen i `deploy.sh`.
 Ellers svarer `/helse`, `/fugler` eller `/dag` med 500 mens resten av
-serveren ser frisk ut, eller `GET /config` faller tilbake til fila.
+serveren ser frisk ut, eller `GET /config` faller tilbake til filen.
 
 ## systemd
 
@@ -109,13 +109,13 @@ Den daglige kjeden kjøres tre ganger om dagen, og bare morgenkjøringen har
 reserven:
 
 ```cron
-# Frokostsida 07:07: hele gårsdagen. Feiler den, faller cron tilbake på AI-bildet.
+# Frokostsiden 07:07: hele gårsdagen. Feiler den, faller cron tilbake på AI-bildet.
 7 7 * * * cd /opt/fugleramme && set -a && . /opt/fugleramme/frame_server.env && set +a && { venv/bin/python3 daily_panel.py || venv/bin/python3 generate_daily_image.py; } >> logs/daily.log 2>&1 && venv/bin/python3 push_to_frame.py >> logs/daily.log 2>&1
 # 09:37: dagens første tegnbare fugler. 16:00: dagen så langt. Ingen reserve her:
 # feiler de, blir forrige side hengende heller enn at et AI-bilde tar plassen.
 37 9 * * * cd /opt/fugleramme && set -a && . /opt/fugleramme/frame_server.env && set +a && venv/bin/python3 daily_panel.py >> logs/daily.log 2>&1 && venv/bin/python3 push_to_frame.py >> logs/daily.log 2>&1
 0 16 * * * cd /opt/fugleramme && set -a && . /opt/fugleramme/frame_server.env && set +a && venv/bin/python3 daily_panel.py >> logs/daily.log 2>&1 && venv/bin/python3 push_to_frame.py >> logs/daily.log 2>&1
-# Statistikk for dagen, og vakta hvert kvarter. Begge er ren stdlib og går på systemets python3.
+# Statistikk for dagen, og vakten hvert kvarter. Begge er ren stdlib og går på systemets python3.
 0 22 * * * cd /opt/fugleramme && python3 bird_stats.py --day $(date +\%F) >> logs/stats.log 2>&1
 */15 * * * * cd /opt/fugleramme && set -a && . /opt/fugleramme/frame_server.env && set +a && python3 vakt.py >> logs/vakt.log 2>&1
 ```
@@ -127,7 +127,7 @@ Tre ting som må være som over, ellers feiler cron stille:
 2. **`. /opt/fugleramme/frame_server.env` med absolutt sti.** Cron kjører
    `/bin/sh` (dash), og dash sin `.` leter bare i `$PATH`. Med relativ sti
    blir det `not found`, kjeden stopper, og Python starter aldri. Den
-   klassiske «virker i bash, feiler i cron»-fella.
+   klassiske «virker i bash, feiler i cron»-fellen.
 3. **`mkdir -p /opt/fugleramme/logs`** må være gjort.
 
 Serveren har ingen e-postserver, så feil *før* log-omdirigeringen forsvinner.
