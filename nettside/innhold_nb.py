@@ -1,16 +1,23 @@
-# Alt som er tekst på nettsida, på norsk. En engelsk utgave er en kopi av
-# denne fila med samme nøkler, ikke en kodejobb. Tallene her har kilde i
+# Alt som er tekst på nettsida, på norsk. Den engelske utgava er innhold_en.py
+# med samme nøkler; begge bygges hver gang. Tallene her har kilde i
 # repoet: README, tools/ og docs/. Ikke legg inn tall som ikke kan forsvares.
 
 SPRAAK = "nb"
+SPRAAK_NAVN = "Norsk"
+SPRAAK_LABEL = "Språk"
+ROT = ""                          # norsk ligger i rota av sida, engelsk under en/
 TITTEL = "Fugleramme"
 BESKRIVELSE = "En bilderamme som viser fuglene som ble hørt i hagen i dag."
 
+# Stiene til sidene på dette språket. bygg.py bruker dem til å lenke mellom
+# sidene og til å finne samme side på det andre språket.
+STIER = {"fuglene": "fuglene/", "hvordan": "slik-virker-det/", "valgene": "valgene/",
+         "bygget": "slik-bygde-jeg-det/", "dag": "dag/"}
 NAV = [
-    ("Fuglene", "fuglene/"),
-    ("Slik virker det", "slik-virker-det/"),
-    ("Valgene", "valgene/"),
-    ("Slik bygde jeg det", "slik-bygde-jeg-det/"),
+    ("Fuglene", STIER["fuglene"]),
+    ("Slik virker det", STIER["hvordan"]),
+    ("Valgene", STIER["valgene"]),
+    ("Slik bygde jeg det", STIER["bygget"]),
 ]
 GITHUB = "https://github.com/sonwit/Bilderamme"
 PROFIL = "https://github.com/sonwit"
@@ -55,6 +62,17 @@ VEGG = {
 UKEDAGER = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"]
 MAANEDER = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august",
             "september", "oktober", "november", "desember"]
+DATO = "{d}. {m} {y}"             # 24. september 2026
+DAG_KORT = "{u} {d}."             # Tor 24., i stripa med siste dager
+DESIMAL = ","
+
+# Dagfilene skrives på norsk av serveren, så her er det ingenting å oversette.
+# Den engelske fila har tabellene som gjør jobben der.
+NAVNFELT = "norsk"                # feltet i plates/arter.json
+NAVN = {}
+VAER = {}
+BELEGG = {}                       # engelsk: {"ggr": ("once", "{n} times"), ...}
+KUNSTNER_FRA = "fra «{t}»"
 
 DELER = [
     ("Utedel", "Lytter i hagen",
@@ -84,11 +102,11 @@ FOTO_BYGGET = [
 
 DOERER = [
     ("Hvordan", "Slik virker det",
-     "Delene, dataflyten og lytteplanen. Hver del med hva den gjør, hvorfor og hvor koden ligger.", "slik-virker-det/"),
+     "Delene, dataflyten og lytteplanen. Hver del med hva den gjør, hvorfor og hvor koden ligger.", STIER["hvordan"]),
     ("Hvorfor", "Valgene",
-     "Hva som ble valgt underveis, hva som ble prøvd, og hva som ble forkastet.", "valgene/"),
+     "Hva som ble valgt underveis, hva som ble prøvd, og hva som ble forkastet.", STIER["valgene"]),
     ("Maskinvaren", "Slik bygde jeg det",
-     "Delelista, strømmen ute og tidslinja fra juli til september.", "slik-bygde-jeg-det/"),
+     "Delelista, strømmen ute og tidslinja fra juli til september.", STIER["bygget"]),
 ]
 LES_MER = "Les mer"
 

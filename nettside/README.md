@@ -15,11 +15,11 @@ grenene og bildene; uten kopieres originalene, og sida blir tung, men riktig.
 | Fil | Hva |
 |---|---|
 | `bygg.py` | Generatoren. Leser `plates/`, `tools/bird_names.py`, `tools/lytteplan.py` og mappene under. |
-| `innhold_nb.py` | All tekst, på norsk. En engelsk utgave er `innhold_en.py` med samme nøkler, og `NETTSIDE_SPRAAK=en`. |
+| `innhold_nb.py`, `innhold_en.py` | All tekst, norsk og engelsk, med samme nøkler. Begge bygges hver gang: norsk i rota, engelsk under `en/`, med samme bilder. Språkvelgeren i toppen peker på samme side på det andre språket. |
 | `stil.css` | Stilarket. Samme uttrykk som veggen: hvitt papir, svart blekk, seks farger, EB Garamond. |
 | `fonter/` | EB Garamond som woff2, subsettet til latin. SIL Open Font License, se `OFL.txt`. |
 | `bilder/` | Bildene på byggesida og forsida. |
-| `dager/` | Dagene sida kan bla i: én PNG og én JSON per dag. Kontrakten står i `dager/README.md`. |
+| `dager/` | Dagene sida kan bla i: én PNG og én JSON per dag. Kontrakten står i `dager/README.md`. JSON-en er på norsk; den engelske sida slår opp artsnavn via latin i `plates/arter.json` og `innhold_en.py`, og oversetter værordene. |
 | `ut/` | Resultatet. Ikke i git. |
 
 Sida henter ingenting fra andre tjenester: fontene ligger her, og det er ingen
@@ -37,5 +37,4 @@ stå på «GitHub Actions» under Settings → Pages. Adressen blir
 
 - Fase to: serveren skriver `dager/<dato>.json` og `.png` selv etter hver
   tegning og pusher dem, så dagvelgeren oppdaterer seg uten at noen gjør noe.
-- Engelsk utgave: `innhold_en.py`.
 - Nye bilder av ramma etter at serveren har fått koden som runder bunnlinja.

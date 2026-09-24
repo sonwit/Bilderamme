@@ -79,9 +79,10 @@ figure { margin: 0; }
 }
 .nav a[aria-current="page"] { border-bottom-color: var(--blekk); }
 .nav a.ekstern { color: var(--roed); }
-.spraak { display: flex; gap: 8px; font-size: 14px; letter-spacing: 0.16em; margin-left: 12px; }
-.spraak a { color: var(--blekk); text-decoration: none; padding-bottom: 2px; }
-.spraak a[aria-current="true"] { border-bottom: 2px solid var(--blekk); }
+/* Spraakvelgeren staar sist i navigasjonen, samme smaa kapiteler som lenkene. */
+.spraak { display: flex; gap: 12px; font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; margin-left: 12px; padding-left: 16px; border-left: 1px solid var(--blekk); }
+.spraak a, .spraak span { color: var(--blekk); text-decoration: none; padding-bottom: 4px; border-bottom: 2px solid transparent; }
+.spraak [aria-current="true"] { border-bottom-color: var(--blekk); }
 
 /* Seksjoner */
 section, .seksjon { padding: 24px var(--marg) 44px; }

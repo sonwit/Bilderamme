@@ -9,7 +9,8 @@ Sida er statisk HTML uten JavaScript. Alt kommer fra det som alt ligger i
 repoet: plates/ (plansjer, fugler, maler), tools/bird_names.py og
 tools/lytteplan.py (soloppgangskurven regnes ut av den ekte koden),
 nettside/dager/ (dagene sida kan vise) og nettside/innhold_<spraak>.py
-(all tekst). Pillow er valgfritt: med Pillow lages nedskalerte WebP-bilder,
+(all tekst). Begge spraak bygges hver gang: norsk i rota, engelsk under en/.
+Bildene deles. Pillow er valgfritt: med Pillow lages nedskalerte WebP-bilder,
 uten kopieres originalene.
 
 GitHub Actions kjoerer dette ved hver push til main og legger nettside/ut/ paa
@@ -30,21 +31,38 @@ import sys
 HER = os.path.dirname(os.path.abspath(__file__))
 ROT = os.path.dirname(HER)
 UT = os.path.join(HER, "ut")
-SPRAAK = os.environ.get("NETTSIDE_SPRAAK", "nb")
-# Absolutt adresse, bare til og:image og lenker som maa vaere absolutte.
+# Absolutt adresse, bare til og:image og hreflang-lenkene, som maa vaere absolutte.
 URL = os.environ.get("NETTSIDE_URL", "https://sonwit.github.io/Bilderamme/").rstrip("/") + "/"
 
 sys.path.insert(0, os.path.join(ROT, "tools"))
 sys.path.insert(0, HER)
 import bird_names as bn  # noqa: E402
 import lytteplan  # noqa: E402
-T = importlib.import_module(f"innhold_{SPRAAK}")
+
+SPRAAKENE = ["nb", "en"]
+MODULER = {s: importlib.import_module(f"innhold_{s}") for s in SPRAAKENE}
+# Settes av velg_spraak() for hvert spraak som bygges. T er innholdsfila,
+# PRE er veien fra spraakets rot til sidas rot (der bildene og stilarket
+# ligger), UT_SIDE er mappa sidene skrives til.
+T = MODULER["nb"]
+SPRAAK = "nb"
+PRE = ""
+UT_SIDE = UT
 
 E = html.escape
 try:
     from PIL import Image
 except ImportError:  # pragma: no cover
     Image = None
+
+
+def velg_spraak(s: str) -> None:
+    global T, SPRAAK, PRE, UT_SIDE
+    T = MODULER[s]
+    SPRAAK = s
+    PRE = "../" * T.ROT.count("/")
+    UT_SIDE = os.path.join(UT, T.ROT)
+
 
 # ---------------------------------------------------------------- bilder
 def bilde(kilde: str, ut_rel: str, maks: int) -> str:
@@ -78,6 +96,12 @@ def les_json(sti):
         return json.load(f)
 
 
+ARTER_JSON = les_json(os.path.join(ROT, "plates", "arter.json"))
+# Norsk navn -> latinsk, til fotnoten i dagfilene, som bare har norske navn.
+NORSK_TIL_SCI = {v: k for k, v in bn.NORWEGIAN.items()}
+NORSK_TIL_SCI.update({v["norsk"]: k for k, v in ARTER_JSON.items() if v.get("norsk")})
+
+
 def skala(cm: float) -> float:
     return max(0.55, min(1.60, (cm / 21) ** 0.6))
 
@@ -88,7 +112,7 @@ def kunstner(opphav: str, commons: str | None) -> str:
     if len(k) < 9 or k in ("John J", "Johann"):
         t = (commons or "").replace("File:", "")
         t = re.sub(r"\s*\(\d+\)\.jpg$", "", t).replace(".jpg", "")
-        return "fra «" + t + "»" if t else ""
+        return T.KUNSTNER_FRA.format(t=t) if t else ""
     if ";" in k:
         k = k.split(";")[0].strip()
     if "," in k and not k.startswith("J and"):
@@ -97,8 +121,38 @@ def kunstner(opphav: str, commons: str | None) -> str:
     return k
 
 
+def artsnavn(sci: str, norsk: str) -> str:
+    """Artens navn paa spraaket som bygges. Norsk er det dagfilene og
+    biblioteket har; engelsk hentes fra arter.json eller innholdsfila, og
+    faller tilbake paa det norske saa lista aldri faar hull."""
+    if T.NAVNFELT == "norsk":
+        return norsk
+    n = ARTER_JSON.get(sci.lower(), {}).get(T.NAVNFELT) or T.NAVN.get(sci.lower())
+    if not n:
+        return norsk
+    return n[:1].upper() + n[1:].lower()      # «Red Crossbill» -> «Red crossbill»
+
+
+def fotnote_navn(norsk: str) -> str:
+    sci = NORSK_TIL_SCI.get(norsk)
+    return artsnavn(sci, norsk) if sci else norsk
+
+
+def vaer_tekst(s: str) -> str:
+    deler = s.split(" · ", 1)
+    deler[0] = T.VAER.get(deler[0], deler[0])
+    return " · ".join(deler)
+
+
+def belegg_tekst(s: str) -> str:
+    m = re.fullmatch(r"(\d+) (\S+)", s)
+    if not m or m.group(2) not in T.BELEGG:
+        return s
+    n = int(m.group(1))
+    return T.BELEGG[m.group(2)][0 if n == 1 else 1].format(n=n)
+
+
 def hent_arter() -> list[dict]:
-    arter = les_json(os.path.join(ROT, "plates", "arter.json"))
     plansjer = les_json(os.path.join(ROT, "plates", "plates.json"))
     fugler = os.path.join(ROT, "plates", "fugler")
     ut = []
@@ -108,7 +162,7 @@ def hent_arter() -> list[dict]:
         slug = fil[:-4]
         slekt, art = slug.split("-", 1)
         sci = f"{slekt.capitalize()} {art}"
-        a = arter.get(sci.lower(), {})
+        a = ARTER_JSON.get(sci.lower(), {})
         p = plansjer.get(sci, {})
         cm = a.get("lengde_cm") or bn.length_cm(sci)
         ut.append({
@@ -117,7 +171,7 @@ def hent_arter() -> list[dict]:
             "cm": cm, "skala": skala(cm),
             "habitat": a.get("habitat") or bn.habitat(sci),
             "overvintrer": a.get("overvintrer"),
-            "kunstner": kunstner(p.get("opphav", ""), p.get("commons")),
+            "opphav": p.get("opphav", ""), "commons": p.get("commons"),
             "side": p.get("side"),
             "flyvende": os.path.exists(os.path.join(fugler, f"{slug}-flyvende.png")),
             "klatrende": os.path.exists(os.path.join(fugler, f"{slug}-klatrende.png")),
@@ -139,19 +193,39 @@ def hent_dager() -> list[dict]:
 
 def dato_tekst(iso: str) -> tuple[str, str]:
     d = datetime.date.fromisoformat(iso)
-    return T.UKEDAGER[d.weekday()], f"{d.day}. {T.MAANEDER[d.month - 1]} {d.year}"
+    return T.UKEDAGER[d.weekday()], T.DATO.format(d=d.day, m=T.MAANEDER[d.month - 1], y=d.year)
 
 
-# ---------------------------------------------------------------- byggeklosser
-def topp(aktiv: str | None, p: str) -> str:
+# ---------------------------------------------------------------- sider og spraak
+def sti_til(L, noekkel: tuple) -> str:
+    """Stien til en side i spraaket L, relativt til spraakets rot."""
+    k = noekkel[0]
+    if k == "forside":
+        return ""
+    if k == "dag":
+        return L.STIER["dag"] + noekkel[1] + "/"
+    if k == "art":
+        return L.STIER["fuglene"] + noekkel[1] + "/"
+    return L.STIER[k]
+
+
+def topp(aktiv: str | None, p: str, noekkel: tuple) -> str:
     lenker = []
     for navn, sti in T.NAV:
         cur = ' aria-current="page"' if sti == aktiv else ""
         lenker.append(f'<a href="{p}{sti}"{cur}>{E(navn)}</a>')
+    valg = []
+    for s in SPRAAKENE:
+        L = MODULER[s]
+        if s == SPRAAK:
+            valg.append(f'<span aria-current="true" lang="{s}">{E(L.SPRAAK_NAVN)}</span>')
+        else:
+            valg.append(f'<a href="{p}{PRE}{L.ROT}{sti_til(L, noekkel)}" lang="{s}" hreflang="{s}">{E(L.SPRAAK_NAVN)}</a>')
     return (f'<a class="hopp" href="#innhold">{E(T.BUNN["hopp"])}</a>\n'
             f'<header class="topp"><a class="ordmerke" href="{p}">{E(T.TITTEL)}</a>'
             f'<nav class="nav" aria-label="Sider">{"".join(lenker)}'
-            f'<a class="ekstern" href="{T.GITHUB}">GitHub</a></nav></header>')
+            f'<a class="ekstern" href="{T.GITHUB}">GitHub</a>'
+            f'<div class="spraak" role="group" aria-label="{E(T.SPRAAK_LABEL)}">{"".join(valg)}</div></nav></header>')
 
 
 def bunn(p: str) -> str:
@@ -161,11 +235,14 @@ def bunn(p: str) -> str:
             f'<a href="{T.PERSONVERN}">{E(b["personvern"])}</a><span>{E(b["sporing"])}</span></div></footer>')
 
 
-def side(tittel: str, innhold: str, dybde: int, aktiv: str | None = None,
+def side(tittel: str, innhold: str, dybde: int, noekkel: tuple, aktiv: str | None = None,
          beskrivelse: str | None = None, og_bilde: str | None = None) -> str:
     p = "../" * dybde
     tittel_full = T.TITTEL if not tittel else f"{tittel} · {T.TITTEL}"
     og = f'<meta property="og:image" content="{URL}{og_bilde}">' if og_bilde else ""
+    alternativer = "".join(f'<link rel="alternate" hreflang="{s}" href="{URL}{L.ROT}{sti_til(L, noekkel)}">'
+                           for s, L in MODULER.items())
+    alternativer += f'<link rel="alternate" hreflang="x-default" href="{URL}{sti_til(MODULER["nb"], noekkel)}">'
     return f"""<!doctype html>
 <html lang="{SPRAAK}">
 <head>
@@ -176,12 +253,13 @@ def side(tittel: str, innhold: str, dybde: int, aktiv: str | None = None,
 <meta property="og:title" content="{E(tittel_full)}">
 <meta property="og:description" content="{E(beskrivelse or T.BESKRIVELSE)}">
 {og}
-<link rel="preload" href="{p}fonter/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="{p}stil.css">
+{alternativer}
+<link rel="preload" href="{p}{PRE}fonter/eb-garamond.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{p}{PRE}stil.css">
 </head>
 <body>
 <div class="side">
-{topp(aktiv, p)}
+{topp(aktiv, p, noekkel)}
 <main id="innhold">
 {innhold}
 </main>
@@ -197,14 +275,14 @@ def seksjonstopp(tittel: str, hoeyre: str = "") -> str:
 
 
 def fuglekort(a: dict, p: str) -> str:
-    return (f'<a class="fuglekort" href="{p}fuglene/{a["slug"]}/">'
-            f'<div class="kort skaaret"><img src="{p}{a["_bilde"]}" alt="{E(a["norsk"])}" loading="lazy"></div>'
-            f'<div class="navnlinje"><span class="navn">{E(a["norsk"])}</span><span class="cm tall">{a["cm"]:g} {T.FUGLENE["cm"]}</span></div>'
+    return (f'<a class="fuglekort" href="{p}{T.STIER["fuglene"]}{a["slug"]}/">'
+            f'<div class="kort skaaret"><img src="{p}{PRE}{a["_bilde"]}" alt="{E(a["navn"])}" loading="lazy"></div>'
+            f'<div class="navnlinje"><span class="navn">{E(a["navn"])}</span><span class="cm tall">{a["cm"]:g} {T.FUGLENE["cm"]}</span></div>'
             f'<div class="latin">{E(a["sci"])}</div></a>')
 
 
 def foto(fil: str, tekst: str, p: str) -> str:
-    return (f'<figure class="foto"><div class="kort skaaret"><img src="{p}bilder/foto/{fil}" alt="{E(tekst)}" loading="lazy"></div>'
+    return (f'<figure class="foto"><div class="kort skaaret"><img src="{p}{PRE}bilder/foto/{fil}" alt="{E(tekst)}" loading="lazy"></div>'
             f'<figcaption>{E(tekst)}</figcaption></figure>')
 
 
@@ -212,11 +290,12 @@ def foto(fil: str, tekst: str, p: str) -> str:
 def ark(d: dict, p: str) -> str:
     v = T.VEGG
     ukedag, dato = dato_tekst(d["dato"])
-    alt = f'{ukedag} {dato}: {", ".join(h["norsk"] for h in d["hoert"])}'
+    navn = [artsnavn(h["latin"], h["norsk"]) for h in d["hoert"]]
+    alt = f'{ukedag} {dato}: {", ".join(navn)}'
     if d.get("ferdig_side"):
-        return f'<div class="ark skaaret"><img src="{p}{d["_stor"]}" alt="{E(alt)}" fetchpriority="high"></div>'
+        return f'<div class="ark skaaret"><img src="{p}{PRE}{d["_stor"]}" alt="{E(alt)}" fetchpriority="high"></div>'
     merker, omriss, rader = [], [], []
-    for h in d["hoert"]:
+    for h, n in zip(d["hoert"], navn):
         nr = h.get("nr")
         if nr and h.get("merke"):
             x, y = h["merke"]
@@ -226,13 +305,14 @@ def ark(d: dict, p: str) -> str:
             omriss.append(f'<div class="omriss" data-nr="{nr}" style="left: {(x0 - 14) / 12:.2f}cqw; top: {(y0 - 14) / 12:.2f}cqw; '
                           f'width: {(x1 - x0 + 28) / 12:.2f}cqw; height: {(y1 - y0 + 28) / 12:.2f}cqw;"></div>')
         rader.append(f'<li class="rad" data-nr="{nr or ""}"><div class="linje"><span class="nr tall">{nr or ""}</span>'
-                     f'<span class="navn">{E(h["norsk"])}</span><span class="pst tall">{h["sikkerhet"]} %</span></div>'
-                     f'<div class="detalj tall"><i>{E(h["latin"])}</i> · {E(h["tid"])} · {E(h["belegg"])}</div></li>')
+                     f'<span class="navn">{E(n)}</span><span class="pst tall">{h["sikkerhet"]} %</span></div>'
+                     f'<div class="detalj tall"><i>{E(h["latin"])}</i> · {E(h["tid"])} · {E(belegg_tekst(h["belegg"]))}</div></li>')
     ogsaa = ""
     if d.get("ogsaa"):
-        ogsaa = f'<div class="ogsaa"><span>{E(v["ogsaa"])}</span> {E(", ".join(d["ogsaa"]))}</div>'
+        ogsaa = f'<div class="ogsaa"><span>{E(v["ogsaa"])}</span> {E(", ".join(fotnote_navn(x) for x in d["ogsaa"]))}</div>'
+    paa_grenen = ", ".join(n for h, n in zip(d["hoert"], navn) if h.get("nr"))
     return f'''<div class="ark skaaret">
-  <img src="{p}{d["_stor"]}" alt="{E(ukedag)} {E(dato)}: {E(", ".join(h["norsk"] for h in d["hoert"] if h.get("nr")))} på grenen" fetchpriority="high">
+  <img src="{p}{PRE}{d["_stor"]}" alt="{E(ukedag)} {E(dato)}: {E(paa_grenen)}" fetchpriority="high">
   {"".join(omriss)}{"".join(merker)}
   <div class="spalte">
     <div class="kicker">{E(v["kicker"])}</div>
@@ -241,7 +321,7 @@ def ark(d: dict, p: str) -> str:
     <div class="periode tall">{E(d["periode"])} · {d["opptak"]} {E(v["opptak"])}</div>
     <div class="strek"></div>
     <div class="sted">{E(v["sted"])}</div>
-    <div class="vaer tall">{E(d["vaer"])}</div>
+    <div class="vaer tall">{E(vaer_tekst(d["vaer"]))}</div>
     <div class="hoert">{E(v["hoert"])}</div>
     <ol>{"".join(rader)}</ol>
     {ogsaa}
@@ -257,7 +337,7 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
     i = [x["dato"] for x in dager].index(d["dato"])
     def pil(j, tekst, tegn):
         if 0 <= j < len(dager):
-            return f'<a class="pil skaaret" href="{p}dag/{dager[j]["dato"]}/" aria-label="{E(tekst)}">{tegn}</a>'
+            return f'<a class="pil skaaret" href="{p}{T.STIER["dag"]}{dager[j]["dato"]}/" aria-label="{E(tekst)}">{tegn}</a>'
         return f'<span class="pil skaaret av" aria-hidden="true">{tegn}</span>'
     stripe = ""
     if len(dager) > 1:
@@ -267,8 +347,9 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
         for x in vindu:
             u, _ = dato_tekst(x["dato"])
             cur = ' aria-current="page"' if x["dato"] == d["dato"] else ""
-            lenker.append(f'<a class="skaaret" href="{p}dag/{x["dato"]}/"{cur}><img src="{p}{x["_liten"]}" alt="" loading="lazy">'
-                          f'<span class="tall">{E(u[:3])} {int(x["dato"][-2:])}.</span></a>')
+            kort = T.DAG_KORT.format(u=u[:3], d=int(x["dato"][-2:]))
+            lenker.append(f'<a class="skaaret" href="{p}{T.STIER["dag"]}{x["dato"]}/"{cur}><img src="{p}{PRE}{x["_liten"]}" alt="" loading="lazy">'
+                          f'<span class="tall">{E(kort)}</span></a>')
         stripe = (f'<nav class="dager" aria-label="{E(v["dager"])}">{pil(i - 1, v["forrige"], "&lsaquo;")}'
                   f'{"".join(lenker)}{pil(i + 1, v["neste"], "&rsaquo;")}</nav>')
     return f'''<section class="vegg">
@@ -290,7 +371,7 @@ def forside(dag: dict | None, dager: list[dict], arter: list[dict], p: str = "")
         for n, u, t, chips in T.DELER)
     bilder = "".join(foto(fil, tekst, p) for fil, tekst in T.FOTO)
     grener = "".join(
-        f'<figure class="gren"><div class="kort skaaret"><img src="{p}bilder/grener/{navn}.webp" alt="{E(t)}" loading="lazy"></div>'
+        f'<figure class="gren"><div class="kort skaaret"><img src="{p}{PRE}bilder/grener/{navn}.webp" alt="{E(t)}" loading="lazy"></div>'
         f'<figcaption><div class="navn">{E(t)}</div><div class="mnd">{E(m)}</div></figcaption></figure>'
         for navn, t, m in T.GRENER)
     doerer = "".join(
@@ -299,14 +380,14 @@ def forside(dag: dict | None, dager: list[dict], arter: list[dict], p: str = "")
     helt = f'''<section class="helt">
   <div><div class="kicker">{E(f["kicker"])}</div><h1 style="margin-top: 18px;">{E(f["tittel"])}</h1></div>
   <div class="hoeyre"><p class="ingress">{E(f["ingress"])}</p>
-  <div class="knapper"><a class="knapp fylt" href="{p}fuglene/">{E(f["knapp_fugler"])}</a><a class="knapp" href="{p}slik-virker-det/">{E(f["knapp_hvordan"])}</a></div></div>
+  <div class="knapper"><a class="knapp fylt" href="{p}{T.STIER["fuglene"]}">{E(f["knapp_fugler"])}</a><a class="knapp" href="{p}{T.STIER["hvordan"]}">{E(f["knapp_hvordan"])}</a></div></div>
 </section>'''
     veggen = vegg(dag, dager, p) if dag else ""
     return f'''{helt}
 {veggen}
-<section>{seksjonstopp(f["deler"], f'<a href="{p}slik-virker-det/">{E(f["deler_lenke"])}</a>')}<div class="rad-4">{deler}</div></section>
-<section>{seksjonstopp(f["bilder"], f'<a href="{p}slik-bygde-jeg-det/">{E(f["bilder_lenke"])}</a>')}<div class="rad-3">{bilder}</div></section>
-<section>{seksjonstopp(f["fugler"], f'<a href="{p}fuglene/">{E(f["fugler_lenke"])}</a>')}<div class="rad-4">{kort}</div></section>
+<section>{seksjonstopp(f["deler"], f'<a href="{p}{T.STIER["hvordan"]}">{E(f["deler_lenke"])}</a>')}<div class="rad-4">{deler}</div></section>
+<section>{seksjonstopp(f["bilder"], f'<a href="{p}{T.STIER["bygget"]}">{E(f["bilder_lenke"])}</a>')}<div class="rad-3">{bilder}</div></section>
+<section>{seksjonstopp(f["fugler"], f'<a href="{p}{T.STIER["fuglene"]}">{E(f["fugler_lenke"])}</a>')}<div class="rad-4">{kort}</div></section>
 <section>{seksjonstopp(f["grener"], f'<span>{E(f["grener_tekst"])}</span>')}<div class="rad-4">{grener}</div></section>
 <section>{seksjonstopp(f["mer"])}<div class="rad-3">{doerer}</div></section>'''
 
@@ -320,8 +401,8 @@ def fuglene(arter: list[dict], p: str) -> str:
         if not liste:
             continue
         figurer = "".join(
-            f'<a href="{p}fuglene/{a["slug"]}/"><img src="{p}{a["_bilde"]}" alt="{E(a["norsk"])}" style="height: {round(150 * a["skala"])}px;" loading="lazy">'
-            f'<span class="navn">{E(a["norsk"])}</span><span class="latin tall">{E(a["sci"])} · {a["cm"]:g} {E(f["cm"])}</span>'
+            f'<a href="{p}{T.STIER["fuglene"]}{a["slug"]}/"><img src="{p}{PRE}{a["_bilde"]}" alt="{E(a["navn"])}" style="height: {round(150 * a["skala"])}px;" loading="lazy">'
+            f'<span class="navn">{E(a["navn"])}</span><span class="latin tall">{E(a["sci"])} · {a["cm"]:g} {E(f["cm"])}</span>'
             f'<span class="kunstner">{E(a["kunstner"])}</span></a>' for a in liste)
         antall = f'{len(liste)} {f["art"] if len(liste) == 1 else f["arter"]}'
         seksjoner.append(f'<section><div class="habitat"><span class="farge" style="background: {farger[key]};"></span>'
@@ -337,7 +418,7 @@ def artside(a: dict, p: str) -> str:
     rader = [(t["lengde"], t["lengde_tekst"].format(cm=f"{a['cm']:g}")), (t["habitat"], T.HABITAT.get(a["habitat"], a["habitat"]))]
     if a["overvintrer"] is not None:
         rader.append((t["overvintrer"], t["ja"] if a["overvintrer"] else t["nei"]))
-    rader.append((t["paa_grenen"], t["paa_grenen_tekst"].format(skala=f"{a['skala']:.2f}".replace(".", ","), plass=plass)))
+    rader.append((t["paa_grenen"], t["paa_grenen_tekst"].format(skala=f"{a['skala']:.2f}".replace(".", T.DESIMAL), plass=plass)))
     forelegg = E(t["forelegg_tekst"].format(kunstner=a["kunstner"]))
     if a["side"]:
         forelegg += f' <a href="{E(a["side"])}">{E(t["se_plansjen"])}</a>'
@@ -346,23 +427,23 @@ def artside(a: dict, p: str) -> str:
     tabell = "".join(f'<tr><td>{E(k)}</td><td>{v if k == t["forelegg"] else E(v)}</td></tr>' for k, v in rader)
     smaa = ""
     if a["flyvende"]:
-        smaa += (f'<figure><div class="kort liten skaaret"><img src="{p}bilder/fugler/{a["slug"]}-flyvende.webp" alt="{E(a["norsk"])}, {E(t["i_lufta"]).lower()}" loading="lazy"></div>'
+        smaa += (f'<figure><div class="kort liten skaaret"><img src="{p}{PRE}bilder/fugler/{a["slug"]}-flyvende.webp" alt="{E(a["navn"])}, {E(t["i_lufta"]).lower()}" loading="lazy"></div>'
                  f'<figcaption class="kicker liten" style="margin-top: 8px;">{E(t["i_lufta"])}</figcaption></figure>')
     if a["klatrende"]:
-        smaa += (f'<figure><div class="kort liten skaaret"><img src="{p}bilder/fugler/{a["slug"]}-klatrende.webp" alt="{E(a["norsk"])}, {E(t["klatrende"]).lower()}" loading="lazy"></div>'
+        smaa += (f'<figure><div class="kort liten skaaret"><img src="{p}{PRE}bilder/fugler/{a["slug"]}-klatrende.webp" alt="{E(a["navn"])}, {E(t["klatrende"]).lower()}" loading="lazy"></div>'
                  f'<figcaption class="kicker liten" style="margin-top: 8px;">{E(t["klatrende"])}</figcaption></figure>')
-    return f'''<div class="sti"><a href="{p}fuglene/">{E(T.FUGLENE["kicker"])}</a> &rsaquo; {E(T.HABITAT.get(a["habitat"], a["habitat"]))} &rsaquo; {E(a["norsk"])}</div>
+    return f'''<div class="sti"><a href="{p}{T.STIER["fuglene"]}">{E(T.FUGLENE["kicker"])}</a> &rsaquo; {E(T.HABITAT.get(a["habitat"], a["habitat"]))} &rsaquo; {E(a["navn"])}</div>
 <section class="art">
   <div style="display: flex; flex-direction: column; gap: 22px;">
-    <div class="kort stor skaaret"><img src="{p}{a["_stor"]}" alt="{E(a["norsk"])}"></div>
+    <div class="kort stor skaaret"><img src="{p}{PRE}{a["_stor"]}" alt="{E(a["navn"])}"></div>
     <div class="rad-2" style="gap: 22px;">{smaa}</div>
   </div>
   <div class="tekst">
     <div class="kicker">{E(T.HABITAT.get(a["habitat"], a["habitat"]))}</div>
-    <h1>{E(a["norsk"])}</h1>
+    <h1>{E(a["navn"])}</h1>
     <div class="latin">{E(a["sci"])}</div>
     <table class="fakta tall">{tabell}</table>
-    <div class="knapper"><a class="knapp" href="{p}fuglene/">{E(t["tilbake"])}</a><a class="knapp" href="{T.GITHUB}/tree/main/plates">{E(t["repo"])}</a></div>
+    <div class="knapper"><a class="knapp" href="{p}{T.STIER["fuglene"]}">{E(t["tilbake"])}</a><a class="knapp" href="{T.GITHUB}/tree/main/plates">{E(t["repo"])}</a></div>
   </div>
 </section>'''
 
@@ -467,7 +548,7 @@ def hvordan(p: str) -> str:
         f'<div><div class="kicker liten">{E(h["kode"])}</div><a href="{T.GITHUB}/blob/main/{lenke}">{E(lenke)}</a></div></div>'
         for n, sti, hva, hvorfor, lenke in T.KOMPONENTER)
     trapper = "".join(
-        f'<tr><td>{E(h["over"]) if v > 0 else E(h["under"])}{f" {v:.2f} V".replace(".", ",") if v > 0 else ""}</td><td>{fin} min</td><td>{dag} min</td></tr>'
+        f'<tr><td>{E(h["over"]) if v > 0 else E(h["under"])}{f" {v:.2f} V".replace(".", T.DESIMAL) if v > 0 else ""}</td><td>{fin} min</td><td>{dag} min</td></tr>'
         for v, fin, dag in lytteplan.TRAPPER)
     farger = "".join(f'<div class="farge-brikke"><div style="background: {hex_};"></div><span>{E(n)}</span></div>' for n, hex_ in T.FARGER)
     return f'''<section><div class="kicker">{E(h["kicker"])}</div><h1 style="margin: 14px 0;">{E(h["tittel"])}</h1><p class="ingress">{E(h["ingress"])}</p></section>
@@ -512,10 +593,32 @@ def bygget(p: str) -> str:
 
 # ---------------------------------------------------------------- bygg
 def skriv(rel: str, tekst: str) -> None:
-    sti = os.path.join(UT, rel)
+    sti = os.path.join(UT_SIDE, rel)
     os.makedirs(os.path.dirname(sti), exist_ok=True)
     with open(sti, "w", encoding="utf-8") as f:
         f.write(tekst)
+
+
+def bygg_spraak(s: str, arter: list[dict], dager: list[dict]) -> int:
+    """Alle sidene paa ett spraak. Bildene er alt laget og ligger i rota."""
+    velg_spraak(s)
+    for a in arter:
+        a["navn"] = artsnavn(a["sci"], a["norsk"])
+        a["kunstner"] = kunstner(a["opphav"], a["commons"])
+    nyeste = dager[-1] if dager else None
+    S = T.STIER
+    skriv("index.html", side("", forside(nyeste, dager, arter), 0, ("forside",), None, None, nyeste["_stor"] if nyeste else None))
+    for d in dager:
+        u, dato = dato_tekst(d["dato"])
+        skriv(f"{S['dag']}{d['dato']}/index.html", side(f"{u} {dato}", vegg(d, dager, "../../"), 2, ("dag", d["dato"]), None, None, d["_stor"]))
+    skriv(f"{S['fuglene']}index.html", side(T.FUGLENE["tittel"], fuglene(arter, "../"), 1, ("fuglene",), S["fuglene"]))
+    for a in arter:
+        skriv(f"{S['fuglene']}{a['slug']}/index.html",
+              side(a["navn"], artside(a, "../../"), 2, ("art", a["slug"]), S["fuglene"], f'{a["navn"]}, {a["sci"]}. {T.BESKRIVELSE}', a["_stor"]))
+    skriv(f"{S['hvordan']}index.html", side(T.HVORDAN["tittel"], hvordan("../"), 1, ("hvordan",), S["hvordan"]))
+    skriv(f"{S['valgene']}index.html", side(T.VALGENE["tittel"], valgene("../"), 1, ("valgene",), S["valgene"]))
+    skriv(f"{S['bygget']}index.html", side(T.BYGGET["tittel"], bygget("../"), 1, ("bygget",), S["bygget"]))
+    return 5 + len(dager) + len(arter)   # forside, fuglene, hvordan, valgene, bygget
 
 
 def main() -> int:
@@ -533,31 +636,22 @@ def main() -> int:
         for variant in ("flyvende", "klatrende"):
             if a[variant]:
                 bilde(os.path.join(fugler, f"{a['slug']}-{variant}.png"), f"bilder/fugler/{a['slug']}-{variant}.webp", 700)
-    for navn, _, _ in T.GRENER:
+    nb = MODULER["nb"]
+    for navn, _, _ in nb.GRENER:
         bilde(os.path.join(ROT, "plates", "maler", navn + ".png"), f"bilder/grener/{navn}.webp", 900)
-    for fil, _ in T.FOTO + T.FOTO_BYGGET:
+    for fil, _ in nb.FOTO + nb.FOTO_BYGGET:
         bilde(os.path.join(HER, "bilder", fil), f"bilder/foto/{fil}", 1400)
 
     dager = hent_dager()
     for d in dager:
         d["_stor"] = bilde(d["_png"], f"bilder/dager/{d['dato']}.webp", 1200)
         d["_liten"] = bilde(d["_png"], f"bilder/dager/{d['dato']}-liten.webp", 240)
-    nyeste = dager[-1] if dager else None
 
-    skriv("index.html", side("", forside(nyeste, dager, arter), 0, None, None, nyeste["_stor"] if nyeste else None))
-    for d in dager:
-        u, dato = dato_tekst(d["dato"])
-        skriv(f"dag/{d['dato']}/index.html", side(f"{u} {dato}", vegg(d, dager, "../../"), 2, None, None, d["_stor"]))
-    skriv("fuglene/index.html", side(T.FUGLENE["tittel"], fuglene(arter, "../"), 1, "fuglene/"))
-    for a in arter:
-        skriv(f"fuglene/{a['slug']}/index.html",
-              side(a["norsk"], artside(a, "../../"), 2, "fuglene/", f'{a["norsk"]}, {a["sci"]}. {T.BESKRIVELSE}', a["_stor"]))
-    skriv("slik-virker-det/index.html", side(T.HVORDAN["tittel"], hvordan("../"), 1, "slik-virker-det/"))
-    skriv("valgene/index.html", side(T.VALGENE["tittel"], valgene("../"), 1, "valgene/"))
-    skriv("slik-bygde-jeg-det/index.html", side(T.BYGGET["tittel"], bygget("../"), 1, "slik-bygde-jeg-det/"))
+    sider = sum(bygg_spraak(s, arter, dager) for s in SPRAAKENE)
     with open(os.path.join(UT, ".nojekyll"), "w") as f:
         f.write("")
-    print(f"OK: {len(arter)} arter, {len(dager)} dager -> {UT}" + ("" if Image else "  (uten Pillow: originalbildene kopiert)"))
+    print(f"OK: {len(arter)} arter, {len(dager)} dager, {sider} sider paa {len(SPRAAKENE)} spraak -> {UT}"
+          + ("" if Image else "  (uten Pillow: originalbildene kopiert)"))
     return 0
 
 
