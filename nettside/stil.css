@@ -66,11 +66,14 @@ figure { margin: 0; }
 
 /* Topp: ordmerke, navigasjon, dobbel strek som på veggen. */
 .topp {
+  position: relative;
   display: flex; align-items: baseline; justify-content: space-between; gap: 24px; flex-wrap: wrap;
   padding: 28px var(--marg) 16px;
   border-bottom: 5px solid var(--blekk);
-  box-shadow: 0 7px 0 -5px var(--blekk);
 }
+/* Den tynne streken under den tykke. Var en box-shadow med negativ spredning,
+   som ble fem piksler kortere i hver ende og saa ut som et hakk. */
+.topp::after { content: ""; position: absolute; left: 0; right: 0; bottom: -9px; border-top: 2px solid var(--blekk); }
 .ordmerke { font-size: 30px; font-weight: 600; letter-spacing: 0.02em; color: var(--blekk); text-decoration: none; }
 .nav { display: flex; gap: clamp(14px, 2.2vw, 32px); align-items: baseline; flex-wrap: wrap; }
 .nav a {
