@@ -342,14 +342,18 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
     v = T.VEGG
     ukedag, dato = dato_tekst(d["dato"])
     i = [x["dato"] for x in dager].index(d["dato"])
-    def pil(j, tekst, tegn, tegn_foerst):
-        # Ordet vises bare paa smale skjermer, der pila er en knapp i
-        # pagineringa; paa brede er det bare tegnet. Finnes ikke dagen, er
-        # pila et span uten lenke, synlig men ikke trykkbar.
-        deler = [f'<span class="tegn" aria-hidden="true">{tegn}</span>', f'<span class="ord">{E(tekst)}</span>']
+    def pil(j, delta, tekst, tegn, tegn_foerst):
+        # Paa smale skjermer er pila en knapp med datoen den gaar til; paa
+        # brede er det bare tegnet. Finnes ikke dagen (i morgen, eller foer
+        # arkivet), staar kalenderdagen der graa og uten lenke.
+        finnes = 0 <= j < len(dager)
+        iso = dager[j]["dato"] if finnes else (datetime.date.fromisoformat(d["dato"]) + datetime.timedelta(days=delta)).isoformat()
+        u, lang = dato_tekst(iso)
+        kort = T.DAG_KORT.format(u=u[:3], d=int(iso[-2:]))
+        deler = [f'<span class="tegn" aria-hidden="true">{tegn}</span>', f'<span class="ord tall">{E(kort)}</span>']
         inni = "".join(deler if tegn_foerst else reversed(deler))
-        if 0 <= j < len(dager):
-            return f'<a class="pil skaaret" href="{p}{T.STIER["dag"]}{dager[j]["dato"]}/" aria-label="{E(tekst)}">{inni}</a>'
+        if finnes:
+            return f'<a class="pil skaaret" href="{p}{T.STIER["dag"]}{iso}/" aria-label="{E(tekst)}: {E(u.lower())} {E(lang)}">{inni}</a>'
         return f'<span class="pil skaaret av" aria-disabled="true">{inni}</span>'
     stripe = ""
     if len(dager) > 1:
@@ -370,9 +374,9 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
             idag = f'<span aria-current="date">{E(v["idag"])}</span>'
         else:
             idag = f'<a href="{p}{T.STIER["dag"]}{nyeste["dato"]}/">{E(v["idag"])}</a>'
-        naa = f'<div class="naa tall"><span>{E(kort_naa)}</span><span aria-hidden="true">·</span>{idag}</div>'
-        stripe = (f'<nav class="dager" aria-label="{E(v["dager"])}">{pil(i - 1, v["forrige"], "&lsaquo;", True)}'
-                  f'<div class="miniatyrer">{"".join(lenker)}</div>{naa}{pil(i + 1, v["neste"], "&rsaquo;", False)}</nav>')
+        naa = f'<div class="naa tall"><span>{E(kort_naa)}</span>{idag}</div>'
+        stripe = (f'<nav class="dager" aria-label="{E(v["dager"])}">{pil(i - 1, -1, v["forrige"], "&lsaquo;", True)}'
+                  f'<div class="miniatyrer">{"".join(lenker)}</div>{naa}{pil(i + 1, 1, v["neste"], "&rsaquo;", False)}</nav>')
     return f'''<section class="vegg">
   <div class="ramme-ytre">{ark(d, p)}</div>
   <div class="tekst"><div class="kicker tall">{E(ukedag)} {E(dato)}</div>
