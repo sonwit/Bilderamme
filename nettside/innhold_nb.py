@@ -13,6 +13,7 @@ NAV = [
     ("Slik bygde jeg det", "slik-bygde-jeg-det/"),
 ]
 GITHUB = "https://github.com/sonwit/Bilderamme"
+PROFIL = "https://github.com/sonwit"
 PERSONVERN = "https://sonwit.github.io/personvern/"
 
 FORSIDE = {
@@ -160,12 +161,12 @@ HVORDAN = {
         ("Kamera", "Android · Kotlin · CameraX"),
     ],
     "piler": {
-        "upload": "POST /upload · 60 s WAV + helse-JSON",
-        "config": "GET /config · lytteplanen tilbake",
-        "display": "POST /display · 960 000 byte",
-        "bilde": "POST /bilde · JPEG + meta",
+        "upload": ["POST /upload", "60 s WAV + helse-JSON"],
+        "config": ["GET /config", "lytteplanen tilbake"],
+        "display": ["POST /display", "960 000 byte"],
+        "bilde": ["POST /bilde", "JPEG + meta"],
         "vaer": "vær",
-        "gemini": "én fugl om gangen · tolkning av bilder",
+        "gemini": "fugler og bilder",
         "rammen": ["Rammen henter aldri noe selv.", "Uten strøm viser den det den sist fikk."],
     },
     "doegn_merker": [(7.12, "07:07 sida tegnes"), (9.62, "09:37 igjen"), (16.0, "16:00 dagen så langt"), (22.0, "22:00 statistikk")],
@@ -291,7 +292,9 @@ TIDSLINJE = [
 ]
 
 BUNN = {
-    "laget": "Laget av Sondre Wittek, frontend-utvikler. Alt fra firmware til denne sida ligger åpent på GitHub.",
+    "laget_foer": "Laget av ",
+    "bruker": "sonwit",
+    "laget_etter": ". Alt fra firmware til denne sida ligger åpent på GitHub.",
     "takk": ("Plansjene er public domain fra Wikimedia Commons; kunstneren står ved hver fugl. "
              "Artsgjenkjenning: BirdNET. Vær: MET Norge. Koden er MIT-lisensiert."),
     "github": "Koden på GitHub",

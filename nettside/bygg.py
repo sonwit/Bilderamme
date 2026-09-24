@@ -156,7 +156,7 @@ def topp(aktiv: str | None, p: str) -> str:
 
 def bunn(p: str) -> str:
     b = T.BUNN
-    return (f'<footer class="bunn"><div class="venstre"><span>{E(b["laget"])}</span><span>{E(b["takk"])}</span></div>'
+    return (f'<footer class="bunn"><div class="venstre"><span>{E(b["laget_foer"])}<a href="{T.PROFIL}">{E(b["bruker"])}</a>{E(b["laget_etter"])}</span><span>{E(b["takk"])}</span></div>'
             f'<div class="hoeyre"><a href="{T.GITHUB}">{E(b["github"])}</a>'
             f'<a href="{T.PERSONVERN}">{E(b["personvern"])}</a><span>{E(b["sporing"])}</span></div></footer>')
 
@@ -366,28 +366,37 @@ FONT = 'font-family="EB Garamond, Georgia, serif"'
 
 
 def diagram() -> str:
+    """Arkitekturen. Boksene staar med luft mellom seg, og hver pil har en kort
+    etikett i to linjer midt i mellomrommet, med hvit kant bak teksten saa
+    den aldri ligger oppaa en strek."""
     h = T.HVORDAN
     d = h["diagram"]; pl = h["piler"]
+    halo = 'stroke="#fff" stroke-width="7" stroke-linejoin="round" paint-order="stroke"'
     def boks(x, y, w, hh, tittel, under):
         return (f'<rect x="{x}" y="{y}" width="{w}" height="{hh}" rx="14" fill="#fff" stroke="#000" stroke-width="2.5"/>'
-                f'<text x="{x + 24}" y="{y + 44}" {FONT} font-size="27" font-weight="600">{E(tittel)}</text>'
-                f'<text x="{x + 24}" y="{y + 72}" {FONT} font-size="15" letter-spacing="2">{E(under.upper())}</text>')
-    def pil(pts, tekst, tx, ty, dashed=False):
+                f'<text x="{x + 24}" y="{y + 46}" {FONT} font-size="27" font-weight="600">{E(tittel)}</text>'
+                f'<text x="{x + 24}" y="{y + 76}" {FONT} font-size="14" letter-spacing="2">{E(under.upper())}</text>')
+    def pil(pts, dashed=False):
         dd = ' stroke-dasharray="6 6"' if dashed else ""
-        return (f'<polyline points="{pts}" fill="none" stroke="#000" stroke-width="2"{dd} marker-end="url(#spiss)"/>'
-                f'<text x="{tx}" y="{ty}" {FONT} font-size="15" letter-spacing="1">{E(tekst)}</text>')
-    return f'''<svg viewBox="0 0 1312 470" role="img" aria-label="{E(h["delene"])}">
+        return f'<polyline points="{pts}" fill="none" stroke="#000" stroke-width="2"{dd} marker-end="url(#spiss)"/>'
+    def etikett(x, y, linjer, anker="middle"):
+        return "".join(f'<text x="{x}" y="{y + i * 19}" {FONT} font-size="14" letter-spacing="0.5" text-anchor="{anker}" {halo}>{E(l)}</text>'
+                       for i, l in enumerate(linjer))
+    return f'''<svg viewBox="0 0 1312 540" role="img" aria-label="{E(h["delene"])}">
 <defs><marker id="spiss" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
-{boks(20, 40, 300, 150, *d[0])}{boks(506, 20, 360, 200, *d[1])}{boks(1000, 40, 292, 150, *d[2])}{boks(20, 300, 300, 130, *d[3])}
-<rect x="546" y="330" width="130" height="60" rx="10" fill="#fff" stroke="#000" stroke-width="1.5" stroke-dasharray="5 5"/>
-<text x="611" y="366" {FONT} font-size="17" text-anchor="middle">api.met.no</text>
-<rect x="706" y="330" width="130" height="60" rx="10" fill="#fff" stroke="#000" stroke-width="1.5" stroke-dasharray="5 5"/>
-<text x="771" y="366" {FONT} font-size="17" text-anchor="middle">Gemini</text>
-{pil("320,90 502,90", pl["upload"], 330, 78)}{pil("506,150 324,150", pl["config"], 330, 176)}
-{pil("866,110 996,110", pl["display"], 872, 98)}{pil("320,365 460,365 460,225", pl["bilde"], 330, 352)}
-{pil("611,220 611,326", pl["vaer"], 622, 280, True)}{pil("771,220 771,326", pl["gemini"], 782, 280, True)}
-<text x="1000" y="230" {FONT} font-size="15" letter-spacing="1">{E(pl["rammen"][0])}</text>
-<text x="1000" y="252" {FONT} font-size="15" letter-spacing="1">{E(pl["rammen"][1])}</text>
+{boks(20, 60, 280, 140, *d[0])}{boks(516, 40, 320, 200, *d[1])}{boks(1032, 60, 260, 140, *d[2])}{boks(20, 360, 280, 140, *d[3])}
+{pil("300,100 512,100")}{etikett(406, 74, pl["upload"])}
+{pil("516,176 304,176")}{etikett(406, 204, pl["config"])}
+{pil("836,100 1028,100")}{etikett(932, 74, pl["display"])}
+{pil("300,430 440,430 440,208 512,208")}{etikett(370, 404, pl["bilde"])}
+<rect x="556" y="420" width="130" height="60" rx="10" fill="#fff" stroke="#000" stroke-width="1.5" stroke-dasharray="5 5"/>
+<text x="621" y="456" {FONT} font-size="17" text-anchor="middle">api.met.no</text>
+<rect x="716" y="420" width="130" height="60" rx="10" fill="#fff" stroke="#000" stroke-width="1.5" stroke-dasharray="5 5"/>
+<text x="781" y="456" {FONT} font-size="17" text-anchor="middle">Gemini</text>
+{pil("621,240 621,416", True)}{etikett(631, 336, [pl["vaer"]], "start")}
+{pil("781,240 781,416", True)}{etikett(791, 336, [pl["gemini"]], "start")}
+<text x="1032" y="236" {FONT} font-size="14" letter-spacing="0.5">{E(pl["rammen"][0])}</text>
+<text x="1032" y="256" {FONT} font-size="14" letter-spacing="0.5">{E(pl["rammen"][1])}</text>
 </svg>'''
 
 
