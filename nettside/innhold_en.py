@@ -12,13 +12,11 @@ BESKRIVELSE = "A picture frame that shows the birds heard in the garden today."
 
 # The page paths in this language. bygg.py uses these to link between pages
 # and to find the same page in the other language.
-STIER = {"fuglene": "birds/", "hvordan": "how-it-works/", "valgene": "choices/",
-         "bygget": "how-i-built-it/", "dag": "day/"}
+STIER = {"fuglene": "birds/", "hvordan": "parts/", "bygget": "build-log/", "dag": "day/"}
 NAV = [
     ("The birds", STIER["fuglene"]),
-    ("How it works", STIER["hvordan"]),
-    ("The choices", STIER["valgene"]),
-    ("How I built it", STIER["bygget"]),
+    ("The parts", STIER["hvordan"]),
+    ("Build log", STIER["bygget"]),
 ]
 GITHUB = "https://github.com/sonwit/Bilderamme"
 PROFIL = "https://github.com/sonwit"
@@ -38,7 +36,7 @@ FORSIDE = {
     "deler": "The parts",
     "deler_lenke": "How they fit together",
     "bilder": "What it looks like",
-    "bilder_lenke": "The parts and how they were put together",
+    "bilder_lenke": "Build log: the parts and how they were put together",
     "fugler": "The birds in the library",
     "fugler_lenke": "All species, by habitat",
     "grener": "The branches",
@@ -123,12 +121,12 @@ FOTO_BYGGET = [
 ]
 
 DOERER = [
-    ("How", "How it works",
+    ("How", "The parts",
      "The parts, the data flow and the listening plan. Each part with what it does, why, and where the code is.", STIER["hvordan"]),
-    ("Why", "The choices",
-     "What was chosen along the way, what was tried, and what was dropped.", STIER["valgene"]),
-    ("The hardware", "How I built it",
+    ("The hardware", "Build log",
      "The parts list, the power outside and the timeline from July to September.", STIER["bygget"]),
+    ("Why", "The choices",
+     "What was chosen along the way, what was tried, and what was dropped. A section of the build log.", STIER["bygget"] + "#valgene"),
 ]
 LES_MER = "Read more"
 
@@ -178,8 +176,8 @@ ART = {
 }
 
 HVORDAN = {
-    "kicker": "How it works",
-    "tittel": "The parts, and how they fit together",
+    "kicker": "The parts",
+    "tittel": "How they fit together",
     "ingress": ("The outdoor unit sends audio, the server does the work, and the frame draws what it gets. "
                 "Below is each part with what it does, why it is the way it is, and where the code is."),
     "delene": "The parts",
@@ -238,7 +236,7 @@ FARGER = [("Black", "#000000"), ("White", "#ffffff"), ("Red", "#c8102e"),
 
 VALGENE = {
     "kicker": "The choices",
-    "tittel": "The choices made along the way",
+    "tittel": "The choices along the way",
     "ingress": ("Most of this was not decided in advance. We tried something, measured, and replaced what did "
                 "not hold up. Each choice is listed with the problem, what was tried, what was measured and what was chosen."),
     "problemet": "The problem", "proevd": "Tried", "maalt": "Measured", "valgt": "Chosen",
@@ -298,8 +296,8 @@ FORKASTET = [
 ]
 
 BYGGET = {
-    "kicker": "How I built it",
-    "tittel": "The parts, the power and the timeline",
+    "kicker": "Build log",
+    "tittel": "The parts list, the power, the timeline and the choices along the way",
     "ingress": "All ordinary parts. What took time was the power outside and the colours inside.",
     "deleliste": "The parts list",
     "stroem": "Power outside",
@@ -308,7 +306,7 @@ BYGGET = {
     "tidslinje": "The timeline",
     "verktoey": "The tools",
     "verktoey_avsnitt": ("Much of the code was written together with Claude Code. What was measured, chosen and "
-                         "dropped is on the Choices page. The repo has an AGENTS.md with the conventions, so an "
+                         "dropped is under the choices above. The repo has an AGENTS.md with the conventions, so an "
                          "agent works by the same rules a colleague would."),
 }
 DELELISTE = [

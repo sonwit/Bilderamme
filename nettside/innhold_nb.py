@@ -11,13 +11,11 @@ BESKRIVELSE = "En bilderamme som viser fuglene som ble hørt i hagen i dag."
 
 # Stiene til sidene på dette språket. bygg.py bruker dem til å lenke mellom
 # sidene og til å finne samme side på det andre språket.
-STIER = {"fuglene": "fuglene/", "hvordan": "slik-virker-det/", "valgene": "valgene/",
-         "bygget": "slik-bygde-jeg-det/", "dag": "dag/"}
+STIER = {"fuglene": "fuglene/", "hvordan": "delene/", "bygget": "byggeloggen/", "dag": "dag/"}
 NAV = [
     ("Fuglene", STIER["fuglene"]),
-    ("Slik virker det", STIER["hvordan"]),
-    ("Valgene", STIER["valgene"]),
-    ("Slik bygde jeg det", STIER["bygget"]),
+    ("Delene", STIER["hvordan"]),
+    ("Byggeloggen", STIER["bygget"]),
 ]
 GITHUB = "https://github.com/sonwit/Bilderamme"
 PROFIL = "https://github.com/sonwit"
@@ -31,13 +29,13 @@ FORSIDE = {
                 "fuglebøkene. Bildet vises på en e-papir-ramme på veggen. Denne siden viser hva "
                 "som henger der nå, og hvordan det er laget."),
     "knapp_fugler": "Se fuglene",
-    "knapp_hvordan": "Slik virker det",
+    "knapp_hvordan": "Hvordan det virker",
     "under_ramma": ("Slik henger den på veggen. Fuglene på grenen er de som ble hørt den dagen, "
                     "og en kan holde over en rad i listen for å se hvilken fugl det er."),
     "deler": "Delene",
     "deler_lenke": "Hvordan de henger sammen",
     "bilder": "Slik ser det ut",
-    "bilder_lenke": "Delene og hvordan de er satt sammen",
+    "bilder_lenke": "Byggeloggen: delene og hvordan de ble satt sammen",
     "fugler": "Fuglene i biblioteket",
     "fugler_lenke": "Alle artene, etter habitat",
     "grener": "Grenene",
@@ -103,12 +101,12 @@ FOTO_BYGGET = [
 ]
 
 DOERER = [
-    ("Hvordan", "Slik virker det",
+    ("Hvordan", "Delene",
      "Delene, dataflyten og lytteplanen. Hver del med hva den gjør, hvorfor og hvor koden ligger.", STIER["hvordan"]),
-    ("Hvorfor", "Valgene",
-     "Hva som ble valgt underveis, hva som ble prøvd, og hva som ble forkastet.", STIER["valgene"]),
-    ("Maskinvaren", "Slik bygde jeg det",
+    ("Maskinvaren", "Byggeloggen",
      "Delelisten, strømmen ute og tidslinjen fra juli til september.", STIER["bygget"]),
+    ("Hvorfor", "Valgene",
+     "Hva som ble valgt underveis, hva som ble prøvd, og hva som ble forkastet. Et punkt i byggeloggen.", STIER["bygget"] + "#valgene"),
 ]
 LES_MER = "Les mer"
 
@@ -158,8 +156,8 @@ ART = {
 }
 
 HVORDAN = {
-    "kicker": "Slik virker det",
-    "tittel": "Delene, og hvordan de henger sammen",
+    "kicker": "Delene",
+    "tittel": "Hvordan de henger sammen",
     "ingress": ("Utedelen sender lyd, serveren gjør jobben og rammen tegner det den får. Under står hver del "
                 "med hva den gjør, hvorfor den er som den er og hvor koden ligger."),
     "delene": "Delene",
@@ -218,7 +216,7 @@ FARGER = [("Svart", "#000000"), ("Hvit", "#ffffff"), ("Rød", "#c8102e"),
 
 VALGENE = {
     "kicker": "Valgene",
-    "tittel": "Valgene som ble tatt underveis",
+    "tittel": "Valgene underveis",
     "ingress": ("Det meste her ble ikke bestemt på forhånd. Vi prøvde noe, målte, og byttet ut det som ikke "
                 "holdt. Hvert valg står med problemet, det som ble prøvd, det som ble målt og det som ble valgt."),
     "problemet": "Problemet", "proevd": "Prøvd", "maalt": "Målt", "valgt": "Valgt",
@@ -278,8 +276,8 @@ FORKASTET = [
 ]
 
 BYGGET = {
-    "kicker": "Slik bygde jeg det",
-    "tittel": "Delene, strømmen og tidslinjen",
+    "kicker": "Byggeloggen",
+    "tittel": "Delelisten, strømmen, tidslinjen og valgene underveis",
     "ingress": "Alt er vanlige deler. Det som tok tid var strømmen ute og fargene inne.",
     "deleliste": "Delelisten",
     "stroem": "Strømmen ute",
@@ -288,7 +286,7 @@ BYGGET = {
     "tidslinje": "Tidslinjen",
     "verktoey": "Verktøyene",
     "verktoey_avsnitt": ("Mye av koden er skrevet sammen med Claude Code. Det som ble målt, valgt og forkastet "
-                         "står på Valgene-siden. Repoet har en AGENTS.md med konvensjonene, så en agent jobber "
+                         "står under valgene over. Repoet har en AGENTS.md med konvensjonene, så en agent jobber "
                          "etter de samme reglene som en kollega ville gjort."),
 }
 DELELISTE = [

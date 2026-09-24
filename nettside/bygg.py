@@ -587,21 +587,17 @@ def hvordan(p: str) -> str:
   <div class="farger"><div class="rekke">{farger}</div><p style="max-width: 52ch;">{E(h["farger_avsnitt"])}</p></div></section>'''
 
 
-def valgene(p: str) -> str:
+def bygget(p: str) -> str:
+    """Byggeloggen: bildene, delelista, stroemmen og tidslinja, og valgene
+    underveis som eget punkt med anker, saa forsida kan lenke rett dit."""
+    b = T.BYGGET
     v = T.VALGENE
     def blokk(tittel, pr, prv, m, va):
         trinn = "".join(f'<div class="trinn"><div>{E(k)}</div><div>{E(tekst)}</div></div>'
                         for k, tekst in ((v["problemet"], pr), (v["proevd"], prv), (v["maalt"], m), (v["valgt"], va)))
-        return f'<div class="valg"><h2 class="tittel">{E(tittel)}</h2>{trinn}</div>'
+        return f'<div class="valg"><h3 class="tittel">{E(tittel)}</h3>{trinn}</div>'
     valg = "".join(blokk(*x) for x in T.VALG)
     forkastet = "".join(f'<div class="forkastet"><h3 class="tittel">{E(t)}</h3><p>{E(b)}</p></div>' for t, b in T.FORKASTET)
-    return f'''<section><div class="kicker">{E(v["kicker"])}</div><h1 style="margin: 14px 0;">{E(v["tittel"])}</h1><p class="ingress">{E(v["ingress"])}</p></section>
-<section><div class="rad-2" style="gap: 44px 56px;">{valg}</div></section>
-<section>{seksjonstopp(v["forkastet"])}<div class="rad-4">{forkastet}</div></section>'''
-
-
-def bygget(p: str) -> str:
-    b = T.BYGGET
     bilder = "".join(foto(fil, tekst, p) for fil, tekst in T.FOTO_BYGGET)
     deler = "".join(f'<div class="deler-liste"><div class="navn">{E(n)}</div><ul>{"".join(f"<li>{E(x)}</li>" for x in liste)}</ul></div>'
                     for n, liste in T.DELELISTE)
@@ -613,6 +609,8 @@ def bygget(p: str) -> str:
 <section><div class="rad-2" style="gap: 40px 56px;">
   <div>{seksjonstopp(b["stroem"])}<table class="stroem">{stroem}</table><p style="margin-top: 20px;">{E(b["stroem_avsnitt"])}</p></div>
   <div>{seksjonstopp(b["tidslinje"])}{tid}</div></div></section>
+<section id="valgene">{seksjonstopp(v["tittel"])}<p class="ingress" style="margin-bottom: 40px;">{E(v["ingress"])}</p><div class="rad-2" style="gap: 44px 56px;">{valg}</div></section>
+<section>{seksjonstopp(v["forkastet"])}<div class="rad-4">{forkastet}</div></section>
 <section>{seksjonstopp(b["verktoey"])}<p class="ingress">{E(b["verktoey_avsnitt"])}</p></section>'''
 
 
@@ -640,10 +638,9 @@ def bygg_spraak(s: str, arter: list[dict], dager: list[dict]) -> int:
     for a in arter:
         skriv(f"{S['fuglene']}{a['slug']}/index.html",
               side(a["navn"], artside(a, "../../"), 2, ("art", a["slug"]), S["fuglene"], f'{a["navn"]}, {a["sci"]}. {T.BESKRIVELSE}', a["_stor"]))
-    skriv(f"{S['hvordan']}index.html", side(T.HVORDAN["tittel"], hvordan("../"), 1, ("hvordan",), S["hvordan"]))
-    skriv(f"{S['valgene']}index.html", side(T.VALGENE["tittel"], valgene("../"), 1, ("valgene",), S["valgene"]))
-    skriv(f"{S['bygget']}index.html", side(T.BYGGET["tittel"], bygget("../"), 1, ("bygget",), S["bygget"]))
-    return 5 + len(dager) + len(arter)   # forside, fuglene, hvordan, valgene, bygget
+    skriv(f"{S['hvordan']}index.html", side(T.HVORDAN["kicker"], hvordan("../"), 1, ("hvordan",), S["hvordan"]))
+    skriv(f"{S['bygget']}index.html", side(T.BYGGET["kicker"], bygget("../"), 1, ("bygget",), S["bygget"]))
+    return 4 + len(dager) + len(arter)   # forside, fuglene, hvordan, bygget
 
 
 def main() -> int:
