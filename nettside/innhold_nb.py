@@ -73,6 +73,7 @@ NAVN = {}
 VAER = {}
 BELEGG = {}                       # engelsk: {"ggr": ("once", "{n} times"), ...}
 KUNSTNER_FRA = "fra «{t}»"
+MENY = {"aapne": "Meny", "lukk": "Lukk menyen"}
 
 DELER = [
     ("Utedel", "Lytter i hagen",

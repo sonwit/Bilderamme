@@ -79,6 +79,40 @@ figure { margin: 0; }
 }
 .nav a[aria-current="page"] { border-bottom-color: var(--blekk); }
 .nav a.ekstern { color: var(--roed); }
+/* Menyen paa smale skjermer. Nav-en er en popover (HTML, ingen JavaScript):
+   bred skjerm viser den i toppen som foer, og knappen finnes ikke. Under
+   knekkpunktet ligger den bak knappen. Knekkpunktet er der menyen ikke lenger
+   faar plass paa én rad ved siden av ordmerket, maalt til rundt 1040 px paa
+   begge spraak 24. sep 2026. Nettlesere uten popover viser nav-en som foer. */
+.meny-knapp, .meny-lukk { display: none; }
+.nav[popover] { position: static; inset: auto; margin: 0; border: 0; padding: 0; width: auto; height: auto; overflow: visible; color: inherit; background: transparent; }
+@supports selector(:popover-open) {
+  @media (max-width: 1060px) {
+    .meny-knapp {
+      display: inline-flex; align-items: center; gap: 12px; cursor: pointer;
+      font: inherit; font-size: 15px; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1;
+      color: var(--blekk); background: none; border: 2px solid var(--blekk); padding: 9px 14px 8px;
+    }
+    .meny-knapp .strek { width: 18px; height: 2px; background: var(--blekk); box-shadow: 0 -6px 0 var(--blekk), 0 6px 0 var(--blekk); }
+    .nav[popover]:not(:popover-open) { display: none; }
+    .nav:popover-open {
+      display: flex; flex-direction: column; align-items: flex-start; gap: 20px;
+      position: fixed; top: 12px; right: 12px; left: auto; bottom: auto; margin: 0;
+      min-width: min(320px, calc(100vw - 24px)); max-height: calc(100vh - 24px); overflow: auto;
+      padding: 60px 30px 30px; background: var(--papir); color: var(--blekk);
+      border: 2px solid var(--blekk); box-shadow: 8px 8px 0 var(--blekk);
+    }
+    .nav:popover-open::backdrop { background: rgb(0 0 0 / 0.25); }
+    .nav:popover-open a { font-size: 18px; }
+    .nav:popover-open .spraak > * { font-size: 16px; }
+    .nav:popover-open .spraak { margin-left: 0; padding-left: 0; border-left: 0; width: 100%; padding-top: 18px; border-top: 1px solid var(--blekk); }
+    .meny-lukk {
+      display: block; position: absolute; top: 8px; right: 10px; cursor: pointer;
+      font: inherit; font-size: 32px; line-height: 1; color: var(--blekk); background: none; border: 0; padding: 6px 10px;
+    }
+  }
+}
+
 /* Spraakvelgeren staar sist i navigasjonen, samme smaa kapiteler som lenkene. */
 .spraak { display: flex; gap: 12px; font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; margin-left: 12px; padding-left: 16px; border-left: 1px solid var(--blekk); }
 .spraak a, .spraak span { color: var(--blekk); text-decoration: none; padding-bottom: 4px; border-bottom: 2px solid transparent; }

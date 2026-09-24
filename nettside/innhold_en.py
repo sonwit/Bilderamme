@@ -93,6 +93,7 @@ VAER = {"Overskyet": "Overcast", "Delvis skyet": "Partly cloudy", "Lettskyet": "
         "Regnbyger": "Showers", "Sludd": "Sleet", "Snø": "Snow", "Tåke": "Fog"}
 BELEGG = {"ggr": ("once", "{n} times"), "økter": ("{n} session", "{n} sessions")}   # «1 ggr» -> «once»
 KUNSTNER_FRA = "from “{t}”"
+MENY = {"aapne": "Menu", "lukk": "Close the menu"}
 
 DELER = [
     ("Outdoor unit", "Listens in the garden",

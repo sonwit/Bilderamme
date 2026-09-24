@@ -221,9 +221,16 @@ def topp(aktiv: str | None, p: str, noekkel: tuple) -> str:
             valg.append(f'<span aria-current="true" lang="{s}">{E(L.SPRAAK_NAVN)}</span>')
         else:
             valg.append(f'<a href="{p}{PRE}{L.ROT}{sti_til(L, noekkel)}" lang="{s}" hreflang="{s}">{E(L.SPRAAK_NAVN)}</a>')
+    # Paa smale skjermer ligger navigasjonen bak en menyknapp. Det er HTML-ens
+    # egen popover: ingen JavaScript, Escape og klikk utenfor lukker den, og
+    # knappen faar aria-expanded av nettleseren. Bred skjerm viser den samme
+    # nav-en i toppen; stil.css gjoer om paa det ved knekkpunktet.
     return (f'<a class="hopp" href="#innhold">{E(T.BUNN["hopp"])}</a>\n'
             f'<header class="topp"><a class="ordmerke" href="{p}">{E(T.TITTEL)}</a>'
-            f'<nav class="nav" aria-label="Sider">{"".join(lenker)}'
+            f'<button class="meny-knapp skaaret" type="button" popovertarget="meny"><span class="strek" aria-hidden="true"></span>{E(T.MENY["aapne"])}</button>'
+            f'<nav class="nav skaaret" id="meny" popover aria-label="Sider">'
+            f'<button class="meny-lukk" type="button" popovertarget="meny" popovertargetaction="hide" aria-label="{E(T.MENY["lukk"])}">&times;</button>'
+            f'{"".join(lenker)}'
             f'<a class="ekstern" href="{T.GITHUB}">GitHub</a>'
             f'<div class="spraak" role="group" aria-label="{E(T.SPRAAK_LABEL)}">{"".join(valg)}</div></nav></header>')
 
