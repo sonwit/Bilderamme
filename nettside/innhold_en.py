@@ -209,7 +209,7 @@ HVORDAN = {
     },
     "doegn_merker": [(7.12, "07:07 page drawn"), (9.62, "09:37 again"), (16.0, "16:00 the day so far"), (22.0, "22:00 statistics")],
     "doegn_tekst": ["Listening every 10 min in the fine window", "Every 20 min until 21:00", "The watch every quarter hour, all day"],
-    "sol_tekst": ["Sunrise", "Fine window: 1 h before to 4 h after, one session every 10 minutes", "Today"],
+    "sol_tekst": ["Sunrise", "Fine window: 1 h before to 4 h after, one session every 10 minutes", "Today", "Summer time"],
 }
 
 KOMPONENTER = [

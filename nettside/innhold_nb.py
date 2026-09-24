@@ -189,7 +189,7 @@ HVORDAN = {
     },
     "doegn_merker": [(7.12, "07:07 siden tegnes"), (9.62, "09:37 igjen"), (16.0, "16:00 dagen så langt"), (22.0, "22:00 statistikk")],
     "doegn_tekst": ["Lytting hvert 10. min i finvinduet", "Hvert 20. min til 21", "Vakten hvert kvarter, hele døgnet"],
-    "sol_tekst": ["Soloppgang", "Finvindu: 1 t før til 4 t etter, én økt hvert 10. minutt", "I dag"],
+    "sol_tekst": ["Soloppgang", "Finvindu: 1 t før til 4 t etter, én økt hvert 10. minutt", "I dag", "Sommertid"],
 }
 
 KOMPONENTER = [

@@ -551,7 +551,16 @@ def sol_graf() -> str:
     idag = datetime.date.today().timetuple().tm_yday
     tidligst = min(pts, key=lambda q: q[1]); senest = max(pts, key=lambda q: q[1])
     tid = lambda m: f"{m // 60:02d}:{m % 60:02d}"
-    sol, vindu, i_dag = h["sol_tekst"]
+    sol, vindu, i_dag, sommertid = h["sol_tekst"]
+    # Klokka hopper en time to ganger i aaret, sola gjoer det ikke. Trinnene
+    # i kurven (mer enn en halvtime fra en dag til den neste) faar en etikett
+    # over seg, saa hoppet ikke ser ut som en feil i utregningen. Finnes fra
+    # tallene, ikke fra datoer, saa det stemmer uansett aar.
+    hopp = [(dd, m0, m1) for (_, m0), (dd, m1) in zip(pts, pts[1:]) if abs(m1 - m0) > 30]
+    sommer = "".join(
+        f'<line x1="{X(dd):.1f}" y1="{Y(min(m0, m1)) - 26:.1f}" x2="{X(dd):.1f}" y2="{Y(min(m0, m1)) - 5:.1f}" stroke="#000" stroke-width="1" stroke-dasharray="2 3"/>'
+        f'<text x="{X(dd):.1f}" y="{Y(min(m0, m1)) - 32:.1f}" {FONT} font-size="13" letter-spacing="1" text-anchor="middle">{E(sommertid.upper())}</text>'
+        for dd, m0, m1 in hopp)
     return f'''<svg viewBox="0 0 {W} {H}" role="img" aria-label="{E(h["plan"])}">
 {timer}<polygon points="{oever} {under}" fill="#000" fill-opacity="0.07"/>
 <polyline points="{linje}" fill="none" stroke="#000" stroke-width="2.5"/>
@@ -561,6 +570,7 @@ def sol_graf() -> str:
 <text x="{X(tidligst[0]) - 20:.1f}" y="{Y(tidligst[1]) - 14:.1f}" {FONT} font-size="16" text-anchor="middle">{E(sol)} {tid(tidligst[1])}</text>
 <text x="{X(senest[0]):.1f}" y="{Y(senest[1]) + 34:.1f}" {FONT} font-size="16" text-anchor="end">{tid(senest[1])}</text>
 <text x="{X(20):.1f}" y="{Y(330):.1f}" {FONT} font-size="15" letter-spacing="1">{E(vindu.upper())}</text>
+{sommer}
 </svg>'''
 
 
