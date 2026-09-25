@@ -37,6 +37,7 @@ bash -n deploy/deploy.sh                                            # skallsynta
 tools/flash_firmware.sh --sjekk                                     # firmware kompilerer, uten brett
 kamera-app/kjor.sh bygg                                             # Android-appen
 python3 nettside/bygg.py                                            # nettsiden -> nettside/ut/
+python3 tools/artsstatistikk.py data/observations.jsonl nettside/statistikk.json  # dager hørt per art
 ```
 
 Det finnes ingen testsuite. `test/data/` har en dags `birds.json`; rendringen

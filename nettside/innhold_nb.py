@@ -37,7 +37,7 @@ FORSIDE = {
     "bilder": "Slik ser det ut",
     "bilder_lenke": "Byggeloggen: delene og hvordan de ble satt sammen",
     "fugler": "Fuglene i biblioteket",
-    "fugler_lenke": "Alle artene, etter habitat",
+    "fugler_lenke": "Alle artene, de vanligste først",
     "grener": "Grenene",
     "grener_tekst": "Samme gren hele året. Løvet følger måneden.",
     "mer": "Mer om prosjektet",
@@ -129,13 +129,18 @@ FUGLENE = {
     "ingress": ("Hver art som er hørt i hagen har fått en tegning etter en gammel plansje. Her står de i "
                 "samme innbyrdes størrelse som på veggen, skalert etter kroppslengde. Skalaen er komprimert, "
                 "ellers hadde gråhegren tatt hele siden. Klikk på en fugl for å se forelegget."),
+    "sortering": "De som er hørt flest dager siden {fra} står først. En dag teller når arten kom på dagens liste.",
     "art": "art", "arter": "arter",
     "cm": "cm",
+    "hoert_dager": "Hørt {n} dager", "hoert_en": "Hørt én dag", "opptil": "opptil {p} %",
+    "ikke_hoert": "Ikke sikkert hørt ennå",
 }
 
 ART = {
     "lengde": "Lengde", "lengde_tekst": "{cm} cm, nebb til halespiss",
     "habitat": "Habitat",
+    "hoert": "Hørt", "hoert_tekst": "{n} dager siden {fra}, sist {sist}. Beste sikkerhet {p} %.",
+    "hoert_aldri": "Ikke sikkert ennå.",
     "overvintrer": "Overvintrer", "ja": "Ja", "nei": "Nei, trekker",
     "paa_grenen": "På grenen",
     "paa_grenen_tekst": "Skala {skala} av rødvingetrosten. {plass}",

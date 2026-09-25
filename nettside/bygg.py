@@ -97,6 +97,10 @@ def les_json(sti):
 
 
 ARTER_JSON = les_json(os.path.join(ROT, "plates", "arter.json"))
+# Hvor mange dager hver art er hoert, fra tools/artsstatistikk.py. Mangler fila,
+# sorteres biblioteket alfabetisk og linja under hver fugl blir borte.
+_STAT_STI = os.path.join(HER, "statistikk.json")
+STATISTIKK = les_json(_STAT_STI) if os.path.exists(_STAT_STI) else {"arter": {}}
 # Norsk navn -> latinsk, til fotnoten i dagfilene, som bare har norske navn.
 NORSK_TIL_SCI = {v: k for k, v in bn.NORWEGIAN.items()}
 NORSK_TIL_SCI.update({v["norsk"]: k for k, v in ARTER_JSON.items() if v.get("norsk")})
@@ -175,6 +179,7 @@ def hent_arter() -> list[dict]:
             "side": p.get("side"),
             "flyvende": os.path.exists(os.path.join(fugler, f"{slug}-flyvende.png")),
             "klatrende": os.path.exists(os.path.join(fugler, f"{slug}-klatrende.png")),
+            "stat": STATISTIKK["arter"].get(sci),
         })
     return ut
 
@@ -417,23 +422,32 @@ def forside(dag: dict | None, dager: list[dict], arter: list[dict], p: str = "")
 <section>{seksjonstopp(f["mer"])}<div class="rad-3">{doerer}</div></section>'''
 
 
-def fuglene(arter: list[dict], p: str) -> str:
+def stat_linje(a: dict) -> str:
     f = T.FUGLENE
-    farger = {"tre": "var(--groenn)", "vaatmark": "var(--blaa)", "bakke": "var(--gul)", "luft": "var(--blekk)"}
-    seksjoner = []
-    for key in ("tre", "vaatmark", "bakke", "luft"):
-        liste = sorted([a for a in arter if a["habitat"] == key], key=lambda a: a["cm"])
-        if not liste:
-            continue
-        figurer = "".join(
-            f'<a href="{p}{T.STIER["fuglene"]}{a["slug"]}/"><img src="{p}{PRE}{a["_bilde"]}" alt="{E(a["navn"])}" style="height: {round(150 * a["skala"])}px;" loading="lazy">'
-            f'<span class="navn">{E(a["navn"])}</span><span class="latin tall">{E(a["sci"])} · {a["cm"]:g} {E(f["cm"])}</span>'
-            f'<span class="kunstner">{E(a["kunstner"])}</span></a>' for a in liste)
-        antall = f'{len(liste)} {f["art"] if len(liste) == 1 else f["arter"]}'
-        seksjoner.append(f'<section><div class="habitat"><span class="farge" style="background: {farger[key]};"></span>'
-                         f'<h2 class="kicker">{E(T.HABITAT[key])} · {antall}</h2></div><div class="oppstilling">{figurer}</div></section>')
-    return (f'<section><div class="kicker">{E(f["kicker"])}</div><h1 style="margin: 14px 0;">{E(f["tittel"])}</h1>'
-            f'<p class="ingress">{E(f["ingress"])}</p></section>' + "".join(seksjoner))
+    s = a["stat"]
+    if not s:
+        return f["ikke_hoert"]
+    dager = f["hoert_en"] if s["dager"] == 1 else f["hoert_dager"].format(n=s["dager"])
+    return f'{dager} · {f["opptil"].format(p=round(s["beste"] * 100))}'
+
+
+def fuglene(arter: list[dict], p: str) -> str:
+    """Biblioteket som én oppstilling: de som er hoert flest dager foerst, saa
+    beste sikkerhet, saa navn. Uten statistikk blir det alfabetisk."""
+    f = T.FUGLENE
+    liste = sorted(arter, key=lambda a: (-(a["stat"] or {}).get("dager", 0), -(a["stat"] or {}).get("beste", 0), a["navn"]))
+    figurer = "".join(
+        f'<a href="{p}{T.STIER["fuglene"]}{a["slug"]}/"><img src="{p}{PRE}{a["_bilde"]}" alt="{E(a["navn"])}" style="height: {round(150 * a["skala"])}px;" loading="lazy">'
+        f'<span class="navn">{E(a["navn"])}</span><span class="latin tall">{E(a["sci"])} · {a["cm"]:g} {E(f["cm"])}</span>'
+        f'<span class="stat tall">{E(stat_linje(a))}</span><span class="kunstner">{E(a["kunstner"])}</span></a>' for a in liste)
+    sortering = ""
+    if STATISTIKK.get("fra"):
+        _, fra = dato_tekst(STATISTIKK["fra"])
+        sortering = " " + f["sortering"].format(fra=fra)
+    antall = f'{len(liste)} {f["art"] if len(liste) == 1 else f["arter"]}'
+    return (f'<section><div class="kicker">{E(f["kicker"])} · {E(antall)}</div><h1 style="margin: 14px 0;">{E(f["tittel"])}</h1>'
+            f'<p class="ingress">{E(f["ingress"] + sortering)}</p></section>'
+            f'<section><div class="oppstilling">{figurer}</div></section>')
 
 
 def artside(a: dict, p: str) -> str:
@@ -441,6 +455,11 @@ def artside(a: dict, p: str) -> str:
     plass = t["plass_liten"] if a["skala"] < 0.8 else t["plass_stor"] if a["skala"] > 1.3 else t["plass_midt"]
     varianter = t["var_klatre"] if a["klatrende"] else t["var_fly"] if a["flyvende"] else ""
     rader = [(t["lengde"], t["lengde_tekst"].format(cm=f"{a['cm']:g}")), (t["habitat"], T.HABITAT.get(a["habitat"], a["habitat"]))]
+    s = a["stat"]
+    if s:
+        rader.append((t["hoert"], t["hoert_tekst"].format(n=s["dager"], fra=dato_tekst(s["foerst"])[1], sist=dato_tekst(s["sist"])[1], p=round(s["beste"] * 100))))
+    else:
+        rader.append((t["hoert"], t["hoert_aldri"]))
     if a["overvintrer"] is not None:
         rader.append((t["overvintrer"], t["ja"] if a["overvintrer"] else t["nei"]))
     rader.append((t["paa_grenen"], t["paa_grenen_tekst"].format(skala=f"{a['skala']:.2f}".replace(".", T.DESIMAL), plass=plass)))
@@ -457,7 +476,7 @@ def artside(a: dict, p: str) -> str:
     if a["klatrende"]:
         smaa += (f'<figure><div class="kort liten skaaret"><img src="{p}{PRE}bilder/fugler/{a["slug"]}-klatrende.webp" alt="{E(a["navn"])}, {E(t["klatrende"]).lower()}" loading="lazy"></div>'
                  f'<figcaption class="kicker liten" style="margin-top: 8px;">{E(t["klatrende"])}</figcaption></figure>')
-    return f'''<div class="sti"><a href="{p}{T.STIER["fuglene"]}">{E(T.FUGLENE["kicker"])}</a> &rsaquo; {E(T.HABITAT.get(a["habitat"], a["habitat"]))} &rsaquo; {E(a["navn"])}</div>
+    return f'''<div class="sti"><a href="{p}{T.STIER["fuglene"]}">{E(T.FUGLENE["kicker"])}</a> &rsaquo; {E(a["navn"])}</div>
 <section class="art">
   <div style="display: flex; flex-direction: column; gap: 22px;">
     <div class="kort stor skaaret"><img src="{p}{PRE}{a["_stor"]}" alt="{E(a["navn"])}"></div>

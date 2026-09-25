@@ -19,6 +19,7 @@ grenene og bildene; uten kopieres originalene, og siden blir tung, men riktig.
 | `stil.css` | Stilarket. Samme uttrykk som veggen: hvitt papir, svart blekk, seks farger, EB Garamond. |
 | `fonter/` | EB Garamond som woff2, subsettet til latin. SIL Open Font License, se `OFL.txt`. |
 | `bilder/` | Bildene på byggesiden og forsiden. |
+| `statistikk.json` | Hvor mange dager hver art er hørt, fra `tools/artsstatistikk.py`. Biblioteket sorteres etter den; mangler den, blir det alfabetisk. |
 | `dager/` | Dagene siden kan bla i: én PNG og én JSON per dag. Kontrakten står i `dager/README.md`. JSON-en er på norsk; den engelske siden slår opp artsnavn via latin i `plates/arter.json` og `innhold_en.py`, og oversetter værordene. |
 | `ut/` | Resultatet. Ikke i git. |
 
@@ -36,5 +37,5 @@ stå på «GitHub Actions» under Settings → Pages. Adressen blir
 ## Det som gjenstår
 
 - Fase to: serveren skriver `dager/<dato>.json` og `.png` selv etter hver
-  tegning og pusher dem, så dagvelgeren oppdaterer seg uten at noen gjør noe.
+  tegning, kjører `tools/artsstatistikk.py` og pusher dem, så dagvelgeren oppdaterer seg uten at noen gjør noe.
 - Nye bilder av rammen etter at serveren har fått koden som runder bunnlinjen.

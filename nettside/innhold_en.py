@@ -38,7 +38,7 @@ FORSIDE = {
     "bilder": "What it looks like",
     "bilder_lenke": "Build log: the parts and how they were put together",
     "fugler": "The birds in the library",
-    "fugler_lenke": "All species, by habitat",
+    "fugler_lenke": "All species, the most common first",
     "grener": "The branches",
     "grener_tekst": "The same branch all year. The leaves follow the month.",
     "mer": "More about the project",
@@ -149,13 +149,18 @@ FUGLENE = {
     "ingress": ("Every species heard in the garden has a drawing made after an old plate. Here they stand "
                 "at the same relative size as on the wall, scaled by body length. The scale is compressed, "
                 "otherwise the grey heron would take the whole page. Click a bird to see the original plate."),
+    "sortering": "The species heard on the most days since {fra} come first. A day counts when the species made the day's list.",
     "art": "species", "arter": "species",
     "cm": "cm",
+    "hoert_dager": "Heard on {n} days", "hoert_en": "Heard on one day", "opptil": "up to {p} %",
+    "ikke_hoert": "Not heard with confidence yet",
 }
 
 ART = {
     "lengde": "Length", "lengde_tekst": "{cm} cm, bill to tail tip",
     "habitat": "Habitat",
+    "hoert": "Heard", "hoert_tekst": "{n} days since {fra}, last on {sist}. Best confidence {p} %.",
+    "hoert_aldri": "Not with confidence yet.",
     "overvintrer": "Winters here", "ja": "Yes", "nei": "No, migrates",
     "paa_grenen": "On the branch",
     "paa_grenen_tekst": "Scale {skala} of the redwing. {plass}",

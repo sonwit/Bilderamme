@@ -21,6 +21,7 @@ tekstkollisjon.py       Måler om teksten faktisk kolliderer med illustrasjonen.
 audio_ingest.py         Mottak av opptak og kamerabilder fra utedelen (systemd, port 8091).
                         Svarer også GET /config: lytteplanen til utedelen.
 lytteplan.py            Når utedelen skal våkne, regnet ut fra soloppgang og batteri.
+artsstatistikk.py       Dager hørt per art, til nettsiden (nettside/statistikk.json).
 birdnet_analyze.py      BirdNET på én WAV -> observations.jsonl + birds.json.
 bird_stats.py           Statistikk og daglig rapport: arter, lydnivå, dekning, strøm.
 bilde_analyze.py        Hvilken fugl er på kamerabildet? Én linje i kamera.jsonl.

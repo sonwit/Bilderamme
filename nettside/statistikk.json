@@ -1,0 +1,248 @@
+{
+ "fra": "2026-07-26",
+ "til": "2026-09-25",
+ "dager_med_opptak": 48,
+ "terskel": 0.5,
+ "arter": {
+  "Pica pica": {
+   "dager": 29,
+   "beste": 1.0,
+   "foerst": "2026-07-27",
+   "sist": "2026-09-24"
+  },
+  "Parus major": {
+   "dager": 18,
+   "beste": 0.99,
+   "foerst": "2026-08-03",
+   "sist": "2026-09-23"
+  },
+  "Dryobates minor": {
+   "dager": 18,
+   "beste": 0.72,
+   "foerst": "2026-08-04",
+   "sist": "2026-09-20"
+  },
+  "Porzana porzana": {
+   "dager": 16,
+   "beste": 0.91,
+   "foerst": "2026-08-04",
+   "sist": "2026-09-24"
+  },
+  "Spinus spinus": {
+   "dager": 10,
+   "beste": 0.98,
+   "foerst": "2026-08-25",
+   "sist": "2026-09-08"
+  },
+  "Cyanistes caeruleus": {
+   "dager": 9,
+   "beste": 0.95,
+   "foerst": "2026-08-26",
+   "sist": "2026-09-23"
+  },
+  "Chloris chloris": {
+   "dager": 8,
+   "beste": 0.96,
+   "foerst": "2026-07-27",
+   "sist": "2026-09-22"
+  },
+  "Fulmarus glacialis": {
+   "dager": 7,
+   "beste": 0.69,
+   "foerst": "2026-08-30",
+   "sist": "2026-09-23"
+  },
+  "Turdus pilaris": {
+   "dager": 6,
+   "beste": 0.95,
+   "foerst": "2026-08-25",
+   "sist": "2026-09-12"
+  },
+  "Phylloscopus collybita": {
+   "dager": 5,
+   "beste": 1.0,
+   "foerst": "2026-09-05",
+   "sist": "2026-09-24"
+  },
+  "Corvus cornix": {
+   "dager": 5,
+   "beste": 0.77,
+   "foerst": "2026-08-29",
+   "sist": "2026-09-22"
+  },
+  "Turdus merula": {
+   "dager": 4,
+   "beste": 0.87,
+   "foerst": "2026-09-01",
+   "sist": "2026-09-18"
+  },
+  "Turdus iliacus": {
+   "dager": 4,
+   "beste": 0.85,
+   "foerst": "2026-07-28",
+   "sist": "2026-09-23"
+  },
+  "Strix aluco": {
+   "dager": 4,
+   "beste": 0.81,
+   "foerst": "2026-08-19",
+   "sist": "2026-09-24"
+  },
+  "Dendrocopos major": {
+   "dager": 4,
+   "beste": 0.78,
+   "foerst": "2026-08-07",
+   "sist": "2026-09-21"
+  },
+  "Periparus ater": {
+   "dager": 4,
+   "beste": 0.77,
+   "foerst": "2026-09-02",
+   "sist": "2026-09-22"
+  },
+  "Fringilla coelebs": {
+   "dager": 4,
+   "beste": 0.75,
+   "foerst": "2026-08-26",
+   "sist": "2026-09-23"
+  },
+  "Pyrrhula pyrrhula": {
+   "dager": 3,
+   "beste": 0.98,
+   "foerst": "2026-09-08",
+   "sist": "2026-09-22"
+  },
+  "Anas platyrhynchos": {
+   "dager": 3,
+   "beste": 0.8,
+   "foerst": "2026-08-27",
+   "sist": "2026-09-10"
+  },
+  "Ardea cinerea": {
+   "dager": 3,
+   "beste": 0.73,
+   "foerst": "2026-07-27",
+   "sist": "2026-09-01"
+  },
+  "Tetrao urogallus": {
+   "dager": 3,
+   "beste": 0.6,
+   "foerst": "2026-08-04",
+   "sist": "2026-08-27"
+  },
+  "Columba palumbus": {
+   "dager": 3,
+   "beste": 0.59,
+   "foerst": "2026-08-04",
+   "sist": "2026-09-03"
+  },
+  "Sitta europaea": {
+   "dager": 2,
+   "beste": 0.98,
+   "foerst": "2026-08-28",
+   "sist": "2026-09-05"
+  },
+  "Coturnix coturnix": {
+   "dager": 2,
+   "beste": 0.71,
+   "foerst": "2026-09-01",
+   "sist": "2026-09-16"
+  },
+  "Phoenicurus phoenicurus": {
+   "dager": 2,
+   "beste": 0.6,
+   "foerst": "2026-08-28",
+   "sist": "2026-09-19"
+  },
+  "Gallinago gallinago": {
+   "dager": 2,
+   "beste": 0.55,
+   "foerst": "2026-08-27",
+   "sist": "2026-08-28"
+  },
+  "Acanthis flammea": {
+   "dager": 2,
+   "beste": 0.53,
+   "foerst": "2026-08-27",
+   "sist": "2026-08-29"
+  },
+  "Erithacus rubecula": {
+   "dager": 1,
+   "beste": 1.0,
+   "foerst": "2026-08-03",
+   "sist": "2026-08-03"
+  },
+  "Falco tinnunculus": {
+   "dager": 1,
+   "beste": 0.92,
+   "foerst": "2026-09-16",
+   "sist": "2026-09-16"
+  },
+  "Sylvia atricapilla": {
+   "dager": 1,
+   "beste": 0.89,
+   "foerst": "2026-08-03",
+   "sist": "2026-08-03"
+  },
+  "Anser anser": {
+   "dager": 1,
+   "beste": 0.88,
+   "foerst": "2026-09-04",
+   "sist": "2026-09-04"
+  },
+  "Botaurus stellaris": {
+   "dager": 1,
+   "beste": 0.88,
+   "foerst": "2026-08-03",
+   "sist": "2026-08-03"
+  },
+  "Corvus monedula": {
+   "dager": 1,
+   "beste": 0.83,
+   "foerst": "2026-09-24",
+   "sist": "2026-09-24"
+  },
+  "Cygnus cygnus": {
+   "dager": 1,
+   "beste": 0.67,
+   "foerst": "2026-08-30",
+   "sist": "2026-08-30"
+  },
+  "Bubo bubo": {
+   "dager": 1,
+   "beste": 0.63,
+   "foerst": "2026-08-21",
+   "sist": "2026-08-21"
+  },
+  "Regulus regulus": {
+   "dager": 1,
+   "beste": 0.63,
+   "foerst": "2026-09-09",
+   "sist": "2026-09-09"
+  },
+  "Lophophanes cristatus": {
+   "dager": 1,
+   "beste": 0.57,
+   "foerst": "2026-09-18",
+   "sist": "2026-09-18"
+  },
+  "Mareca strepera": {
+   "dager": 1,
+   "beste": 0.56,
+   "foerst": "2026-08-29",
+   "sist": "2026-08-29"
+  },
+  "Loxia curvirostra": {
+   "dager": 1,
+   "beste": 0.51,
+   "foerst": "2026-09-12",
+   "sist": "2026-09-12"
+  },
+  "Loxia leucoptera": {
+   "dager": 1,
+   "beste": 0.45,
+   "foerst": "2026-09-11",
+   "sist": "2026-09-11"
+  }
+ }
+}
