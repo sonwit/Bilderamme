@@ -1,0 +1,32 @@
+{
+ "dato": "2026-09-25",
+ "tegnet": "07:07",
+ "periode": "05:46–07:09",
+ "opptak": 8,
+ "vaer": "Delvis skyet · 10° · 1 m/s",
+ "antall_arter": 2,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Dvergspett",
+   "latin": "Dryobates minor",
+   "sikkerhet": 30,
+   "tid": "05:59–06:19",
+   "belegg": "2 økter",
+   "boks": [
+    967,
+    1167,
+    1057,
+    1360
+   ],
+   "merke": [
+    931,
+    1360
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Kråke"
+ ],
+ "bilde": "2026-09-25.png"
+}
