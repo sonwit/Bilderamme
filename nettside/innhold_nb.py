@@ -56,7 +56,6 @@ VEGG = {
     "forrige": "Forrige dag",
     "neste": "Neste dag",
     "dager": "Siste dager",
-    "idag": "I dag",
 }
 UKEDAGER = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"]
 MAANEDER = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august",

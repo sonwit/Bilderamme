@@ -161,6 +161,8 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 
 /* Ramma på veggen */
 .vegg { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 16px var(--marg) 48px; }
+/* Pilene i dagvelgeren lenker hit, saa bildet ligger oeverst etter et klikk. */
+.vegg { scroll-margin-top: 10px; }
 .ramme-ytre {
   width: min(100%, 960px);
   border: clamp(8px, 1.3vw, 18px) solid var(--ramme);
@@ -257,14 +259,13 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 }
 .dager .pil .tegn { display: block; width: 10px; height: 18px; }
 .dager .pil.av { opacity: 0.3; }
-.dager .ord, .dager .idag { display: none; }
+.dager .ord { display: none; }
 @supports (corner-shape: bevel) { .dager .miniatyrer a, .dager .pil { corner-shape: bevel; } }
 @media (max-width: 700px) {
   .dager { justify-content: space-between; width: 100%; box-sizing: border-box; padding: 6px 0; gap: 10px; }
   .dager .miniatyrer { display: none; }
   .dager .ord { display: inline; }
   .dager .pil { width: auto; height: auto; gap: 6px; padding: 8px 10px 7px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; line-height: 18px; white-space: nowrap; }
-  .dager .idag { display: flex; }
 }
 
 /* Delene */

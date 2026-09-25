@@ -362,7 +362,7 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
         deler = [svg, f'<span class="ord tall">{E(kort)}</span>']
         inni = "".join(deler if tegn_foerst else reversed(deler))
         if finnes:
-            return f'<a class="pil skaaret" href="{p}{T.STIER["dag"]}{iso}/" aria-label="{E(tekst)}: {E(u.lower())} {E(lang)}">{inni}</a>'
+            return f'<a class="pil skaaret" href="{p}{T.STIER["dag"]}{iso}/#dagen" aria-label="{E(tekst)}: {E(u.lower())} {E(lang)}">{inni}</a>'
         return f'<span class="pil skaaret av" aria-disabled="true">{inni}</span>'
     stripe = ""
     if len(dager) > 1:
@@ -373,20 +373,15 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
             u, _ = dato_tekst(x["dato"])
             cur = ' aria-current="page"' if x["dato"] == d["dato"] else ""
             kort = T.DAG_KORT.format(u=u[:3], d=int(x["dato"][-2:]))
-            lenker.append(f'<a class="skaaret" href="{p}{T.STIER["dag"]}{x["dato"]}/"{cur}><img src="{p}{PRE}{x["_liten"]}" alt="" loading="lazy">'
+            lenker.append(f'<a class="skaaret" href="{p}{T.STIER["dag"]}{x["dato"]}/#dagen"{cur}><img src="{p}{PRE}{x["_liten"]}" alt="" loading="lazy">'
                           f'<span class="tall">{E(kort)}</span></a>')
-        # Paa smale skjermer staar «I dag» mellom pilene, som samme slags knapp:
-        # en vei tilbake til den nyeste dagen. Er det den som vises, er knappen
-        # graa og uten lenke, som en pil uten dag aa gaa til. Datoen staar alt i
-        # linja over stripa, saa den gjentas ikke her.
-        nyeste = dager[-1]
-        if d["dato"] == nyeste["dato"]:
-            idag = f'<span class="pil idag skaaret av" aria-disabled="true">{E(v["idag"])}</span>'
-        else:
-            idag = f'<a class="pil idag skaaret" href="{p}{T.STIER["dag"]}{nyeste["dato"]}/">{E(v["idag"])}</a>'
+        # Lenkene peker paa #dagen, ankeret paa ramma: da lander en paa bildet
+        # og ikke paa toppen av sida naar en blar. Uten JavaScript er det det
+        # naermeste vi kommer aa staa stille. Ingen «i dag»-knapp: dagens bilde
+        # er ikke alltid tegnet ennaa, saa den ville vist i gaar.
         stripe = (f'<nav class="dager" aria-label="{E(v["dager"])}">{pil(i - 1, -1, v["forrige"], "&lsaquo;", True)}'
-                  f'<div class="miniatyrer">{"".join(lenker)}</div>{idag}{pil(i + 1, 1, v["neste"], "&rsaquo;", False)}</nav>')
-    return f'''<section class="vegg">
+                  f'<div class="miniatyrer">{"".join(lenker)}</div>{pil(i + 1, 1, v["neste"], "&rsaquo;", False)}</nav>')
+    return f'''<section class="vegg" id="dagen">
   <div class="ramme-ytre">{ark(d, p)}</div>
   <div class="tekst"><div class="kicker tall">{E(ukedag)} {E(dato)}</div>
   <div class="tall">{d["antall_arter"]} {E(v["arter"])} {d["opptak"]} {E(v["opptak"])} · {E(v["tegnet"])} {E(d["tegnet"])}</div></div>
