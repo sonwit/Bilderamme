@@ -543,16 +543,16 @@ def doegn() -> str:
                     + (f'<text x="{X(t):.1f}" y="{y + 22}" {FONT} font-size="14" text-anchor="middle">{t:02d}</text>' if t % 3 == 0 else "")
                     for t in range(25))
     merker = "".join(f'<polygon points="{X(t):.1f},{y - 12} {X(t) - 7:.1f},{y - 24} {X(t) + 7:.1f},{y - 24}" fill="currentColor"/>'
-                     f'<text x="{X(t):.1f}" y="{y - 32}" {FONT} font-size="14" letter-spacing="1" text-anchor="middle">{E(tekst.upper())}</text>'
+                     f'<text x="{X(t):.1f}" y="{y - 32}" {FONT} font-size="14" letter-spacing="0.3" text-anchor="middle">{E(tekst)}</text>'
                      for t, tekst in h["doegn_merker"])
     a, b, c = h["doegn_tekst"]
     return f'''<svg viewBox="0 0 {W} 150" role="img" aria-label="{E(h["doegn"])}">
 <rect x="{X(6):.1f}" y="{y - 8}" width="{X(11) - X(6):.1f}" height="8" fill="currentColor" fill-opacity="0.35"/>
 <rect x="{X(11):.1f}" y="{y - 8}" width="{X(21) - X(11):.1f}" height="8" fill="currentColor" fill-opacity="0.12"/>
 <line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="currentColor" stroke-width="1.5"/>{ticks}{merker}
-<text x="{X(6):.1f}" y="{y + 44}" {FONT} font-size="13" letter-spacing="1">{E(a.upper())}</text>
-<text x="{X(11) + 6:.1f}" y="{y + 44}" {FONT} font-size="13" letter-spacing="1">{E(b.upper())}</text>
-<text x="{x1}" y="{y + 44}" {FONT} font-size="13" letter-spacing="1" text-anchor="end">{E(c.upper())}</text>
+<text x="{X(6):.1f}" y="{y + 44}" {FONT} font-size="13" letter-spacing="0.3">{E(a)}</text>
+<text x="{X(11) + 6:.1f}" y="{y + 44}" {FONT} font-size="13" letter-spacing="0.3">{E(b)}</text>
+<text x="{x1}" y="{y + 44}" {FONT} font-size="13" letter-spacing="0.3" text-anchor="end">{E(c)}</text>
 </svg>'''
 
 
@@ -587,17 +587,17 @@ def sol_graf() -> str:
     hopp = [(dd, m0, m1) for (_, m0), (dd, m1) in zip(pts, pts[1:]) if abs(m1 - m0) > 30]
     sommer = "".join(
         f'<line x1="{X(dd):.1f}" y1="{Y(min(m0, m1)) - 26:.1f}" x2="{X(dd):.1f}" y2="{Y(min(m0, m1)) - 5:.1f}" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3"/>'
-        f'<text x="{X(dd):.1f}" y="{Y(min(m0, m1)) - 32:.1f}" {FONT} font-size="13" letter-spacing="1" text-anchor="middle">{E(sommertid.upper())}</text>'
+        f'<text x="{X(dd):.1f}" y="{Y(min(m0, m1)) - 32:.1f}" {FONT} font-size="13" letter-spacing="0.3" text-anchor="middle">{E(sommertid)}</text>'
         for dd, m0, m1 in hopp)
     return f'''<svg viewBox="0 0 {W} {H}" role="img" aria-label="{E(h["plan"])}">
 {timer}<polygon points="{oever} {under}" fill="currentColor" fill-opacity="0.07"/>
 <polyline points="{linje}" fill="none" stroke="currentColor" stroke-width="2.5"/>
 <line x1="{x0}" y1="{y1}" x2="{x1}" y2="{y1}" stroke="currentColor" stroke-width="1.5"/>{ticks}
-<line x1="{X(idag):.1f}" y1="{y0}" x2="{X(idag):.1f}" y2="{y1}" stroke="#b3111f" stroke-width="1.5" stroke-dasharray="4 4"/>
-<text x="{X(idag) + 8:.1f}" y="{y0 + 16}" {FONT} font-size="15" letter-spacing="1" fill="#b3111f">{E(i_dag.upper())}</text>
+<line x1="{X(idag):.1f}" y1="{y0}" x2="{X(idag):.1f}" y2="{y1}" stroke="#2b5a8c" stroke-width="1.5" stroke-dasharray="4 4"/>
+<text x="{X(idag) + 8:.1f}" y="{y0 + 16}" {FONT} font-size="15" letter-spacing="0.3" fill="#2b5a8c">{E(i_dag)}</text>
 <text x="{X(tidligst[0]) - 20:.1f}" y="{Y(tidligst[1]) - 14:.1f}" {FONT} font-size="16" text-anchor="middle">{E(sol)} {tid(tidligst[1])}</text>
 <text x="{X(senest[0]):.1f}" y="{Y(senest[1]) + 34:.1f}" {FONT} font-size="16" text-anchor="end">{tid(senest[1])}</text>
-<text x="{X(20):.1f}" y="{Y(330):.1f}" {FONT} font-size="15" letter-spacing="1">{E(vindu.upper())}</text>
+<text x="{X(20):.1f}" y="{Y(330):.1f}" {FONT} font-size="15" letter-spacing="0.3">{E(vindu)}</text>
 {sommer}
 </svg>'''
 

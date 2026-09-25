@@ -18,11 +18,10 @@
 
 :root {
   /* Varm nesten-svart fra de moerkeste tonene i plansjene, og et papir med et
-     hint varme (25. sep 2026, etter at helsvart ble for hardt). Roedt er
-     bare en aksent, GitHub i menyen; lenker er blekk. */
+     hint varme (25. sep 2026, etter at helsvart ble for hardt). */
   --blekk: #2b2824;
   --papir: #fbfaf7;
-  --roed: #a8432f;
+  --lenke: #2b5a8c;      /* lenker i tekst: en dempet blaa, den vanlige konvensjonen */
   --groenn: #0b7a3b;
   --blaa: #1c4fa1;
   --gul: #d9a400;
@@ -40,17 +39,19 @@ body {
   text-rendering: optimizeLegibility;
 }
 h1, h2, h3 { text-wrap: balance; font-weight: 600; line-height: 1.02; margin: 0; }
-h1 { font-size: clamp(38px, 5.4vw, 76px); letter-spacing: -0.01em; }
+/* Sideoverskriftene tonet ned 25. sep 2026; foer gikk de til 76 px. */
+h1 { font-size: clamp(32px, 3.8vw, 52px); letter-spacing: -0.01em; }
 h2 { font-size: clamp(26px, 2.6vw, 34px); font-weight: 500; }
 p { margin: 0; }
 /* Lenker har samme farge som teksten rundt, og understrek paa hover. I
    loepende tekst og tabeller er understreken svak i ro og full paa hover, saa
    lenka kan skilles fra teksten uten farge. Frittstaaende lenker (meny,
    seksjonstopper, kort) faar streken bare paa hover. */
-a { color: inherit; text-decoration: none; }
-p a, li a, td a, .bunn a, .komponent a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.14em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
-p a:hover, li a:hover, td a:hover, .bunn a:hover, .komponent a:hover { text-decoration-color: currentColor; }
-.nav a:hover, .sti a:hover, .seksjonstopp a:hover, .doer:hover .tittel, .fuglekort:hover .navn, .oppstilling a:hover .navn, .dager .miniatyrer a:hover span { text-decoration: underline; text-underline-offset: 0.14em; text-decoration-thickness: 1px; }
+a { color: var(--lenke); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.14em; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+a:hover { text-decoration-color: currentColor; }
+/* Navigasjon, kort og knapper er lenker i kraft av plassen sin: blekk, uten
+   strek i ro, strek paa hover. */
+.nav a:hover, .sti a:hover, .doer:hover .tittel, .fuglekort:hover .navn, .oppstilling a:hover .navn, .dager .miniatyrer a:hover span { text-decoration: underline; text-underline-offset: 0.14em; text-decoration-thickness: 1px; }
 :focus-visible { outline: 3px solid var(--blaa); outline-offset: 3px; }
 img { max-width: 100%; height: auto; }
 figure { margin: 0; }
@@ -84,11 +85,10 @@ figure { margin: 0; }
 .ordmerke { font-size: 30px; font-weight: 600; letter-spacing: 0.02em; color: var(--blekk); text-decoration: none; }
 .nav { display: flex; gap: clamp(14px, 2.2vw, 32px); align-items: baseline; flex-wrap: wrap; }
 .nav a {
-  font-size: 16px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blekk);
+  font-size: 17px; letter-spacing: 0.02em; color: var(--blekk);
   text-decoration: none; padding-bottom: 4px; border-bottom: 2px solid transparent;
 }
 .nav a[aria-current="page"] { border-bottom-color: var(--blekk); }
-.nav a.ekstern { color: var(--roed); }
 /* Menyen paa smale skjermer. Nav-en er en popover (HTML, ingen JavaScript):
    bred skjerm viser den i toppen som foer, og knappen finnes ikke. Under
    knekkpunktet ligger den bak knappen. Knekkpunktet er der menyen ikke lenger
@@ -100,7 +100,7 @@ figure { margin: 0; }
   @media (max-width: 1060px) {
     .meny-knapp {
       display: inline-flex; align-items: center; gap: 12px; cursor: pointer;
-      font: inherit; font-size: 15px; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1;
+      font: inherit; font-size: 16px; letter-spacing: 0.02em; line-height: 1;
       color: var(--blekk); background: none; border: 2px solid var(--blekk); padding: 9px 14px 8px;
     }
     .meny-knapp .strek { width: 18px; height: 2px; background: var(--blekk); box-shadow: 0 -6px 0 var(--blekk), 0 6px 0 var(--blekk); }
@@ -124,7 +124,7 @@ figure { margin: 0; }
 }
 
 /* Spraakvelgeren staar sist i navigasjonen, samme smaa kapiteler som lenkene. */
-.spraak { display: flex; gap: 12px; font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; margin-left: 12px; padding-left: 16px; border-left: 1px solid var(--blekk); }
+.spraak { display: flex; gap: 12px; font-size: 15px; letter-spacing: 0.02em; margin-left: 12px; padding-left: 16px; border-left: 1px solid var(--blekk); }
 .spraak a, .spraak span { color: var(--blekk); text-decoration: none; padding-bottom: 4px; border-bottom: 2px solid transparent; }
 .spraak [aria-current="true"] { border-bottom-color: var(--blekk); }
 
@@ -134,8 +134,9 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
   display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap;
   border-bottom: 2px solid var(--blekk); padding-bottom: 10px; margin-bottom: 28px;
 }
-.kicker { font-size: 16px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; }
-.kicker.liten { font-size: 13px; letter-spacing: 0.2em; }
+/* Smaa overskrifter og etiketter i vanlig skrift, ikke versaler (25. sep 2026). */
+.kicker { font-size: 18px; letter-spacing: 0.01em; font-weight: 500; }
+.kicker.liten { font-size: 15px; }
 .ingress { font-size: clamp(19px, 1.6vw, 22px); max-width: 62ch; }
 
 .rad-2, .rad-3, .rad-4 { display: grid; gap: 40px 32px; }
@@ -161,7 +162,7 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 .knapp {
   display: inline-flex; align-items: center; height: 50px; padding: 0 24px;
   border: 2px solid var(--blekk); color: var(--blekk); text-decoration: none;
-  font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; border-radius: 10px;
+  font-size: 16px; letter-spacing: 0.02em; border-radius: 10px;
 }
 .knapp.fylt { background: var(--blekk); color: var(--papir); }
 @supports (corner-shape: bevel) { .knapp { corner-shape: bevel; } }
@@ -272,7 +273,7 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
   .dager { justify-content: space-between; width: 100%; box-sizing: border-box; padding: 6px 0; gap: 10px; }
   .dager .miniatyrer { display: none; }
   .dager .ord { display: inline; }
-  .dager .pil { width: auto; height: auto; gap: 6px; padding: 8px 10px 7px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; line-height: 18px; white-space: nowrap; }
+  .dager .pil { width: auto; height: auto; gap: 6px; padding: 8px 10px 7px; font-size: 14px; letter-spacing: 0.02em; line-height: 18px; white-space: nowrap; }
 }
 
 /* Delene */
@@ -305,13 +306,13 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 .gren .kort { padding: 8px; }
 .gren .kort img { width: 100%; display: block; }
 .gren .navn { font-size: 24px; font-weight: 500; }
-.gren .mnd { font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; }
+.gren .mnd { font-size: 16px; letter-spacing: 0.02em; }
 .doer {
   display: flex; flex-direction: column; gap: 10px; padding: 24px 26px 26px; border: 3px double var(--blekk);
   color: var(--blekk); text-decoration: none; background: var(--papir);
 }
-.doer .tittel { font-size: 32px; font-weight: 500; line-height: 1.05; }
-.doer .les { font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; margin-top: auto; padding-top: 8px; color: inherit; }
+.doer .tittel { font-size: 28px; font-weight: 500; line-height: 1.05; }
+.doer .les { font-size: 16px; letter-spacing: 0.02em; margin-top: auto; padding-top: 8px; color: var(--lenke); }
 
 /* Fuglene */
 .habitat { display: flex; align-items: center; gap: 14px; border-bottom: 2px solid var(--blekk); padding-bottom: 8px; margin-bottom: 20px; }
@@ -327,7 +328,7 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 .oppstilling .kunstner { font-size: 13px; letter-spacing: 0.06em; white-space: nowrap; margin-top: -2px; }
 
 /* Én art */
-.sti { padding: 28px var(--marg) 0; font-size: 16px; letter-spacing: 0.12em; text-transform: uppercase; }
+.sti { padding: 28px var(--marg) 0; font-size: 16px; letter-spacing: 0.02em; }
 .sti a { color: var(--blekk); text-decoration: none; }
 .art { display: grid; grid-template-columns: minmax(0, 620px) minmax(0, 1fr); gap: 40px 64px; align-items: start; }
 @media (max-width: 900px) { .art { grid-template-columns: minmax(0, 1fr); } }
@@ -335,11 +336,11 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 .art .stor img, .art .liten img { max-width: 100%; max-height: 100%; width: auto; object-fit: contain; }
 .art .liten { height: 220px; padding: 12px; }
 .art .tekst { display: flex; flex-direction: column; gap: 18px; }
-.art h1 { font-size: clamp(56px, 6.6vw, 96px); line-height: 0.95; }
+.art h1 { font-size: clamp(40px, 4.6vw, 64px); line-height: 0.98; }
 .art .latin { font-size: clamp(24px, 2.2vw, 32px); font-style: italic; margin-top: -6px; }
 .fakta { border-collapse: collapse; font-size: 20px; width: 100%; }
 .fakta td { padding: 9px 0; border-bottom: 1px solid var(--blekk); vertical-align: top; }
-.fakta td:first-child { letter-spacing: 0.1em; text-transform: uppercase; font-size: 14px; width: 170px; padding-right: 12px; }
+.fakta td:first-child { letter-spacing: 0.02em; font-size: 16px; font-weight: 500; width: 170px; padding-right: 12px; }
 
 /* Slik virker det */
 .komponent { display: grid; grid-template-columns: 200px minmax(0, 1fr) minmax(0, 1fr) 240px; gap: 32px; padding: 22px 0; border-bottom: 1px solid var(--blekk); align-items: start; }
@@ -352,7 +353,7 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 /* Teksten i diagrammet er HTML inne i SVG-en, saa den bryter selv. */
 .d-boks { font-family: inherit; color: var(--blekk); line-height: 1.1; }
 .d-tittel { font-size: 27px; font-weight: 600; }
-.d-under { font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 8px; line-height: 1.35; overflow-wrap: anywhere; }
+.d-under { font-size: 15px; letter-spacing: 0.02em; margin-top: 8px; line-height: 1.35; overflow-wrap: anywhere; }
 .d-etikett { display: flex; flex-direction: column; align-items: center; text-align: center; font-size: 14px; line-height: 1.3; letter-spacing: 0.03em; color: var(--blekk); font-family: inherit; }
 .d-etikett span { background: var(--papir); padding: 0 4px; overflow-wrap: anywhere; }
 .d-etikett.d-venstre { align-items: flex-start; text-align: left; }
@@ -368,13 +369,13 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 .farge-brikke { display: flex; flex-direction: column; gap: 8px; align-items: center; }
 .farge-brikke div { width: 92px; height: 92px; border: 1.5px solid var(--blekk); border-radius: 16px; }
 @supports (corner-shape: bevel) { .farge-brikke div { corner-shape: bevel; } }
-.farge-brikke span { font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; }
+.farge-brikke span { font-size: 16px; letter-spacing: 0.02em; }
 
 /* Valgene */
 .valg { display: flex; flex-direction: column; gap: 4px; }
-.valg .tittel { font-size: 30px; font-weight: 500; line-height: 1.1; padding-bottom: 10px; }
+.valg .tittel { font-size: 26px; font-weight: 500; line-height: 1.1; padding-bottom: 10px; }
 .valg .trinn { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; padding: 8px 0; border-top: 1px solid var(--blekk); }
-.valg .trinn div:first-child { font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; padding-top: 4px; }
+.valg .trinn div:first-child { font-size: 15px; letter-spacing: 0.02em; font-weight: 500; padding-top: 2px; }
 .valg .trinn div:last-child { font-size: 18px; }
 .forkastet { display: flex; flex-direction: column; gap: 6px; border-top: 2px solid var(--blekk); padding-top: 12px; }
 .forkastet .tittel { font-size: 24px; font-weight: 500; line-height: 1.1; }
