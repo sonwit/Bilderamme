@@ -17,14 +17,15 @@
 }
 
 :root {
-  --blekk: #000;
-  --papir: #fff;
-  --roed: #b3111f;
-  --roed-moerk: #7a0b15;
+  /* Varm nesten-svart fra de moerkeste tonene i plansjene, og et papir med et
+     hint varme (25. sep 2026, etter at helsvart ble for hardt). Roedt er
+     bare en aksent, GitHub i menyen; lenker er blekk. */
+  --blekk: #2b2824;
+  --papir: #fbfaf7;
+  --roed: #a8432f;
   --groenn: #0b7a3b;
   --blaa: #1c4fa1;
   --gul: #d9a400;
-  --ramme: #141414;
   --hjoerne: 12px;
   --marg: clamp(16px, 4vw, 64px);
 }
@@ -42,8 +43,14 @@ h1, h2, h3 { text-wrap: balance; font-weight: 600; line-height: 1.02; margin: 0;
 h1 { font-size: clamp(38px, 5.4vw, 76px); letter-spacing: -0.01em; }
 h2 { font-size: clamp(26px, 2.6vw, 34px); font-weight: 500; }
 p { margin: 0; }
-a { color: var(--roed); text-decoration-thickness: 1px; text-underline-offset: 0.14em; }
-a:hover { color: var(--roed-moerk); }
+/* Lenker har samme farge som teksten rundt, og understrek paa hover. I
+   loepende tekst og tabeller er understreken svak i ro og full paa hover, saa
+   lenka kan skilles fra teksten uten farge. Frittstaaende lenker (meny,
+   seksjonstopper, kort) faar streken bare paa hover. */
+a { color: inherit; text-decoration: none; }
+p a, li a, td a, .bunn a, .komponent a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.14em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+p a:hover, li a:hover, td a:hover, .bunn a:hover, .komponent a:hover { text-decoration-color: currentColor; }
+.nav a:hover, .sti a:hover, .seksjonstopp a:hover, .doer:hover .tittel, .fuglekort:hover .navn, .oppstilling a:hover .navn, .dager .miniatyrer a:hover span { text-decoration: underline; text-underline-offset: 0.14em; text-decoration-thickness: 1px; }
 :focus-visible { outline: 3px solid var(--blaa); outline-offset: 3px; }
 img { max-width: 100%; height: auto; }
 figure { margin: 0; }
@@ -168,15 +175,12 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
    91 % av skjermhoeyden. Paa telefon i hoeydeformat vinner 100 % som foer. */
 .ramme-ytre {
   width: min(100%, 960px, 70vh);
-  border: clamp(8px, 1.3vw, 18px) solid var(--ramme);
-  padding: clamp(10px, 2vw, 28px);
-  background: var(--papir);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.22);
 }
 .ark {
   container-type: inline-size;
   position: relative; aspect-ratio: 3 / 4; overflow: hidden;
-  background: var(--papir); border: 1px solid #e4e4e4; border-radius: 2.2cqw;
+  background: #fff; border: 1px solid #e4e4e4; border-radius: 2.2cqw;
+  box-shadow: 0 24px 60px rgba(43, 40, 36, 0.14), 0 3px 8px rgba(43, 40, 36, 0.10);
 }
 @supports (corner-shape: bevel) { .ark { corner-shape: bevel; } }
 .ark > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -307,7 +311,7 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
   color: var(--blekk); text-decoration: none; background: var(--papir);
 }
 .doer .tittel { font-size: 32px; font-weight: 500; line-height: 1.05; }
-.doer .les { font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; margin-top: auto; padding-top: 8px; color: var(--roed); }
+.doer .les { font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; margin-top: auto; padding-top: 8px; color: inherit; }
 
 /* Fuglene */
 .habitat { display: flex; align-items: center; gap: 14px; border-bottom: 2px solid var(--blekk); padding-bottom: 8px; margin-bottom: 20px; }

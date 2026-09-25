@@ -512,22 +512,22 @@ def diagram() -> str:
     d = h["diagram"]; pl = h["piler"]
     X = 'xmlns="http://www.w3.org/1999/xhtml"'
     def boks(x, y, w, hh, tittel, under):
-        return (f'<rect x="{x}" y="{y}" width="{w}" height="{hh}" rx="14" fill="#fff" stroke="#000" stroke-width="2.5"/>'
+        return (f'<rect x="{x}" y="{y}" width="{w}" height="{hh}" rx="14" fill="#fff" stroke="currentColor" stroke-width="2.5"/>'
                 f'<foreignObject x="{x + 20}" y="{y + 16}" width="{w - 40}" height="{hh - 28}"><div {X} class="d-boks">'
                 f'<div class="d-tittel">{E(tittel)}</div><div class="d-under">{E(under)}</div></div></foreignObject>')
     def pil(pts, dashed=False):
         dd = ' stroke-dasharray="6 6"' if dashed else ""
-        return f'<polyline points="{pts}" fill="none" stroke="#000" stroke-width="2"{dd} marker-end="url(#spiss)"/>'
+        return f'<polyline points="{pts}" fill="none" stroke="currentColor" stroke-width="2"{dd} marker-end="url(#spiss)"/>'
     def etikett(x, y, w, linjer, klasse="d-etikett"):
         return (f'<foreignObject x="{x}" y="{y}" width="{w}" height="64"><div {X} class="{klasse}">'
                 + "".join(f"<span>{E(l)}</span>" for l in linjer) + "</div></foreignObject>")
     return f'''<svg viewBox="0 0 1312 540" role="img" aria-label="{E(h["delene"])}">
-<defs><marker id="spiss" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
+<defs><marker id="spiss" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
 {boks(20, 60, 280, 140, *d[0])}{boks(516, 40, 320, 200, *d[1])}{boks(1032, 60, 260, 140, *d[2])}{boks(20, 360, 280, 140, *d[3])}
 {pil("300,100 512,100")}{pil("516,176 304,176")}{pil("836,100 1028,100")}{pil("300,430 440,430 440,208 512,208")}
 {pil("621,240 621,416", True)}{pil("781,240 781,416", True)}
-<rect x="556" y="420" width="130" height="60" rx="10" fill="#fff" stroke="#000" stroke-width="1.5" stroke-dasharray="5 5"/>
-<rect x="716" y="420" width="130" height="60" rx="10" fill="#fff" stroke="#000" stroke-width="1.5" stroke-dasharray="5 5"/>
+<rect x="556" y="420" width="130" height="60" rx="10" fill="#fff" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 5"/>
+<rect x="716" y="420" width="130" height="60" rx="10" fill="#fff" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 5"/>
 {etikett(306, 50, 200, pl["upload"])}{etikett(306, 184, 200, pl["config"])}{etikett(842, 50, 180, pl["display"])}
 {etikett(304, 380, 132, pl["bilde"])}{etikett(630, 316, 80, [pl["vaer"]], "d-etikett d-venstre")}
 {etikett(790, 316, 150, [pl["gemini"]], "d-etikett d-venstre")}{etikett(1032, 220, 260, pl["rammen"], "d-etikett d-venstre")}
@@ -539,17 +539,17 @@ def doegn() -> str:
     h = T.HVORDAN
     W, x0, x1, y = 1312, 40, 1272, 88
     X = lambda t: x0 + t / 24 * (x1 - x0)
-    ticks = "".join(f'<line x1="{X(t):.1f}" y1="{y - (8 if t % 3 == 0 else 4)}" x2="{X(t):.1f}" y2="{y}" stroke="#000" stroke-width="1"/>'
+    ticks = "".join(f'<line x1="{X(t):.1f}" y1="{y - (8 if t % 3 == 0 else 4)}" x2="{X(t):.1f}" y2="{y}" stroke="currentColor" stroke-width="1"/>'
                     + (f'<text x="{X(t):.1f}" y="{y + 22}" {FONT} font-size="14" text-anchor="middle">{t:02d}</text>' if t % 3 == 0 else "")
                     for t in range(25))
-    merker = "".join(f'<polygon points="{X(t):.1f},{y - 12} {X(t) - 7:.1f},{y - 24} {X(t) + 7:.1f},{y - 24}" fill="#000"/>'
+    merker = "".join(f'<polygon points="{X(t):.1f},{y - 12} {X(t) - 7:.1f},{y - 24} {X(t) + 7:.1f},{y - 24}" fill="currentColor"/>'
                      f'<text x="{X(t):.1f}" y="{y - 32}" {FONT} font-size="14" letter-spacing="1" text-anchor="middle">{E(tekst.upper())}</text>'
                      for t, tekst in h["doegn_merker"])
     a, b, c = h["doegn_tekst"]
     return f'''<svg viewBox="0 0 {W} 150" role="img" aria-label="{E(h["doegn"])}">
-<rect x="{X(6):.1f}" y="{y - 8}" width="{X(11) - X(6):.1f}" height="8" fill="#000" fill-opacity="0.35"/>
-<rect x="{X(11):.1f}" y="{y - 8}" width="{X(21) - X(11):.1f}" height="8" fill="#000" fill-opacity="0.12"/>
-<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="#000" stroke-width="1.5"/>{ticks}{merker}
+<rect x="{X(6):.1f}" y="{y - 8}" width="{X(11) - X(6):.1f}" height="8" fill="currentColor" fill-opacity="0.35"/>
+<rect x="{X(11):.1f}" y="{y - 8}" width="{X(21) - X(11):.1f}" height="8" fill="currentColor" fill-opacity="0.12"/>
+<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="currentColor" stroke-width="1.5"/>{ticks}{merker}
 <text x="{X(6):.1f}" y="{y + 44}" {FONT} font-size="13" letter-spacing="1">{E(a.upper())}</text>
 <text x="{X(11) + 6:.1f}" y="{y + 44}" {FONT} font-size="13" letter-spacing="1">{E(b.upper())}</text>
 <text x="{x1}" y="{y + 44}" {FONT} font-size="13" letter-spacing="1" text-anchor="end">{E(c.upper())}</text>
@@ -572,9 +572,9 @@ def sol_graf() -> str:
     oever = " ".join(f"{X(dd):.1f},{Y(m - lytteplan.FOER_SOL_MIN):.1f}" for dd, m in pts)
     under = " ".join(f"{X(dd):.1f},{Y(m + lytteplan.VINDU_TIMER * 60):.1f}" for dd, m in reversed(pts))
     mnd = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
-    ticks = "".join(f'<line x1="{X(dd):.1f}" y1="{y1}" x2="{X(dd):.1f}" y2="{y1 + 6}" stroke="#000" stroke-width="1"/>'
+    ticks = "".join(f'<line x1="{X(dd):.1f}" y1="{y1}" x2="{X(dd):.1f}" y2="{y1 + 6}" stroke="currentColor" stroke-width="1"/>'
                     f'<text x="{X(dd) + 4:.1f}" y="{y1 + 22}" {FONT} font-size="14">{T.MAANEDER[i][:3]}</text>' for i, dd in enumerate(mnd))
-    timer = "".join(f'<line x1="{x0}" y1="{Y(t * 60):.1f}" x2="{x1}" y2="{Y(t * 60):.1f}" stroke="#000" stroke-width="0.6" stroke-dasharray="2 5"/>'
+    timer = "".join(f'<line x1="{x0}" y1="{Y(t * 60):.1f}" x2="{x1}" y2="{Y(t * 60):.1f}" stroke="currentColor" stroke-width="0.6" stroke-dasharray="2 5"/>'
                     f'<text x="{x0 - 10}" y="{Y(t * 60) + 5:.1f}" {FONT} font-size="14" text-anchor="end">{t:02d}</text>' for t in (4, 6, 8, 10, 12, 14))
     idag = datetime.date.today().timetuple().tm_yday
     tidligst = min(pts, key=lambda q: q[1]); senest = max(pts, key=lambda q: q[1])
@@ -586,13 +586,13 @@ def sol_graf() -> str:
     # tallene, ikke fra datoer, saa det stemmer uansett aar.
     hopp = [(dd, m0, m1) for (_, m0), (dd, m1) in zip(pts, pts[1:]) if abs(m1 - m0) > 30]
     sommer = "".join(
-        f'<line x1="{X(dd):.1f}" y1="{Y(min(m0, m1)) - 26:.1f}" x2="{X(dd):.1f}" y2="{Y(min(m0, m1)) - 5:.1f}" stroke="#000" stroke-width="1" stroke-dasharray="2 3"/>'
+        f'<line x1="{X(dd):.1f}" y1="{Y(min(m0, m1)) - 26:.1f}" x2="{X(dd):.1f}" y2="{Y(min(m0, m1)) - 5:.1f}" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3"/>'
         f'<text x="{X(dd):.1f}" y="{Y(min(m0, m1)) - 32:.1f}" {FONT} font-size="13" letter-spacing="1" text-anchor="middle">{E(sommertid.upper())}</text>'
         for dd, m0, m1 in hopp)
     return f'''<svg viewBox="0 0 {W} {H}" role="img" aria-label="{E(h["plan"])}">
-{timer}<polygon points="{oever} {under}" fill="#000" fill-opacity="0.07"/>
-<polyline points="{linje}" fill="none" stroke="#000" stroke-width="2.5"/>
-<line x1="{x0}" y1="{y1}" x2="{x1}" y2="{y1}" stroke="#000" stroke-width="1.5"/>{ticks}
+{timer}<polygon points="{oever} {under}" fill="currentColor" fill-opacity="0.07"/>
+<polyline points="{linje}" fill="none" stroke="currentColor" stroke-width="2.5"/>
+<line x1="{x0}" y1="{y1}" x2="{x1}" y2="{y1}" stroke="currentColor" stroke-width="1.5"/>{ticks}
 <line x1="{X(idag):.1f}" y1="{y0}" x2="{X(idag):.1f}" y2="{y1}" stroke="#b3111f" stroke-width="1.5" stroke-dasharray="4 4"/>
 <text x="{X(idag) + 8:.1f}" y="{y0 + 16}" {FONT} font-size="15" letter-spacing="1" fill="#b3111f">{E(i_dag.upper())}</text>
 <text x="{X(tidligst[0]) - 20:.1f}" y="{Y(tidligst[1]) - 14:.1f}" {FONT} font-size="16" text-anchor="middle">{E(sol)} {tid(tidligst[1])}</text>
