@@ -257,16 +257,14 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 }
 .dager .pil .tegn { display: block; width: 10px; height: 18px; }
 .dager .pil.av { opacity: 0.3; }
-.dager .ord, .dager .naa { display: none; }
+.dager .ord, .dager .idag { display: none; }
 @supports (corner-shape: bevel) { .dager .miniatyrer a, .dager .pil { corner-shape: bevel; } }
 @media (max-width: 700px) {
   .dager { justify-content: space-between; width: 100%; box-sizing: border-box; padding: 6px 0; gap: 10px; }
   .dager .miniatyrer { display: none; }
   .dager .ord { display: inline; }
-  .dager .pil { width: auto; height: auto; gap: 6px; padding: 8px 10px 7px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
-  .dager .naa { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
-  .dager .naa a { color: var(--blekk); }
-  .dager .naa [aria-current] { border-bottom: 2px solid var(--blekk); padding-bottom: 2px; }
+  .dager .pil { width: auto; height: auto; gap: 6px; padding: 8px 10px 7px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; line-height: 18px; white-space: nowrap; }
+  .dager .idag { display: flex; }
 }
 
 /* Delene */

@@ -375,17 +375,17 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
             kort = T.DAG_KORT.format(u=u[:3], d=int(x["dato"][-2:]))
             lenker.append(f'<a class="skaaret" href="{p}{T.STIER["dag"]}{x["dato"]}/"{cur}><img src="{p}{PRE}{x["_liten"]}" alt="" loading="lazy">'
                           f'<span class="tall">{E(kort)}</span></a>')
-        # Paa smale skjermer erstatter denne miniatyrene: dagen som vises, og
-        # en vei tilbake til den nyeste dagen.
+        # Paa smale skjermer staar «I dag» mellom pilene, som samme slags knapp:
+        # en vei tilbake til den nyeste dagen. Er det den som vises, er knappen
+        # graa og uten lenke, som en pil uten dag aa gaa til. Datoen staar alt i
+        # linja over stripa, saa den gjentas ikke her.
         nyeste = dager[-1]
-        kort_naa = T.DAG_KORT.format(u=ukedag[:3], d=int(d["dato"][-2:]))
         if d["dato"] == nyeste["dato"]:
-            idag = f'<span aria-current="date">{E(v["idag"])}</span>'
+            idag = f'<span class="pil idag skaaret av" aria-disabled="true">{E(v["idag"])}</span>'
         else:
-            idag = f'<a href="{p}{T.STIER["dag"]}{nyeste["dato"]}/">{E(v["idag"])}</a>'
-        naa = f'<div class="naa tall"><span>{E(kort_naa)}</span>{idag}</div>'
+            idag = f'<a class="pil idag skaaret" href="{p}{T.STIER["dag"]}{nyeste["dato"]}/">{E(v["idag"])}</a>'
         stripe = (f'<nav class="dager" aria-label="{E(v["dager"])}">{pil(i - 1, -1, v["forrige"], "&lsaquo;", True)}'
-                  f'<div class="miniatyrer">{"".join(lenker)}</div>{naa}{pil(i + 1, 1, v["neste"], "&rsaquo;", False)}</nav>')
+                  f'<div class="miniatyrer">{"".join(lenker)}</div>{idag}{pil(i + 1, 1, v["neste"], "&rsaquo;", False)}</nav>')
     return f'''<section class="vegg">
   <div class="ramme-ytre">{ark(d, p)}</div>
   <div class="tekst"><div class="kicker tall">{E(ukedag)} {E(dato)}</div>
