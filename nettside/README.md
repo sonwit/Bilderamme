@@ -34,8 +34,10 @@ stå på «GitHub Actions» under Settings → Pages. Adressen blir
 `https://sonwit.github.io/Bilderamme/`; `NETTSIDE_URL` overstyrer den for
 `og:image`.
 
+Serveren skriver `dager/<dato>.json` og `.png` selv etter hver tegning
+(`tools/eksporter_dag.py`), regner statistikken og pusher. Oppsettet på
+serveren står i `deploy/README.md`.
+
 ## Det som gjenstår
 
-- Fase to: serveren skriver `dager/<dato>.json` og `.png` selv etter hver
-  tegning, kjører `tools/artsstatistikk.py` og pusher dem, så dagvelgeren oppdaterer seg uten at noen gjør noe.
 - Nye bilder av rammen etter at serveren har fått koden som runder bunnlinjen.

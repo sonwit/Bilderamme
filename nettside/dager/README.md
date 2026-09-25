@@ -32,6 +32,9 @@ plansje står i listen uten nummer, som på veggen. `ogsaa` er fotnoten.
 
 Ingen posisjon. Siden viser aldri koordinater, uansett hva veggen viser.
 
-Fase to: serveren skriver disse to filene selv etter hver tegning og pusher
-dem hit, så dagvelgeren oppdaterer seg uten at noen gjør noe. Til det er på
-plass legges dager inn for hånd.
+Serveren skriver disse to filene selv etter hver tegning, med
+`tools/eksporter_dag.py`, og pusher dem hit sammen med `statistikk.json`. Hver
+push bygger siden. Lista settes sammen med de samme funksjonene som veggen,
+så JSON-en sier det samme som arket. Eksporten går noen minutter etter
+tegningen, så et opptak eller to kan ha kommet til siden. Dagene til og med
+23. september 2026 ble lagt inn for hånd fra arkivet, med `ferdig_side`.

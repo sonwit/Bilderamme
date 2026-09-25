@@ -142,3 +142,25 @@ Rammen kan få ny DHCP-adresse. Med `FRAME_HOST=fugleramme.local` og
 `libnss-mdns` på serveren løser det seg selv. Ryker mDNS, sett en IP i
 `frame_server.env` til det er oppe igjen, ellers feiler både cron og webappen
 med `[Errno 113] No route to host`.
+
+## Nettsiden: eksport fra serveren
+
+Serveren pusher hver tegnet dag til repoet selv, og GitHub Pages bygger
+siden. Det går utenom `deploy.sh`: scriptet kjører fra en klone av repoet.
+
+- Klonen ligger i `/opt/fugleramme/repo`, med `user.email` satt til
+  noreply-adressen. `git pull` skjer i starten av hver eksport, så scriptet
+  oppdaterer seg selv.
+- Nøkkelen er `~/.ssh/bilderamme-deploy`, en deploy key med skriverett på
+  bare dette repoet, koblet til vertsnavnet `github.com-bilderamme` i
+  `~/.ssh/config`. Den kan ikke brukes til noe annet på GitHub.
+- Cron kjører eksporten etter hver tegning og logger til `logs/nettside.log`:
+
+```
+20 7  * * * cd /opt/fugleramme && venv/bin/python3 repo/tools/eksporter_dag.py >> logs/nettside.log 2>&1
+50 9  * * * cd /opt/fugleramme && venv/bin/python3 repo/tools/eksporter_dag.py >> logs/nettside.log 2>&1
+15 16 * * * cd /opt/fugleramme && venv/bin/python3 repo/tools/eksporter_dag.py >> logs/nettside.log 2>&1
+```
+
+Eksporten skriver ingen posisjon, og stopper heller enn å pushe hvis noe i
+den ligner en koordinat. Se `nettside/dager/README.md` for hva filene inneholder.
