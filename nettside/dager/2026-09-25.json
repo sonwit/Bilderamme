@@ -1,18 +1,108 @@
 {
  "dato": "2026-09-25",
- "tegnet": "07:07",
- "periode": "05:46–07:09",
- "opptak": 8,
- "vaer": "Delvis skyet · 10° · 1 m/s",
- "antall_arter": 2,
+ "tegnet": "09:39",
+ "periode": "05:46–09:39",
+ "opptak": 23,
+ "vaer": "Overskyet · 11° · 1 m/s",
+ "antall_arter": 11,
  "hoert": [
   {
    "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 95,
+   "tid": "08:19–08:59",
+   "belegg": "4 økter",
+   "boks": [
+    592,
+    1144,
+    964,
+    1418
+   ],
+   "merke": [
+    675,
+    1386
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 78,
+   "tid": "09:09",
+   "belegg": "2 ggr",
+   "boks": [
+    808,
+    904,
+    956,
+    1038
+   ],
+   "merke": [
+    864,
+    1051
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Grønnsisik",
+   "latin": "Spinus spinus",
+   "sikkerhet": 74,
+   "tid": "07:39",
+   "belegg": "1 ggr",
+   "boks": [
+    930,
+    521,
+    1054,
+    640
+   ],
+   "merke": [
+    974,
+    649
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 66,
+   "tid": "07:59",
+   "belegg": "3 ggr",
+   "boks": [
+    238,
+    1265,
+    422,
+    1403
+   ],
+   "merke": [
+    314,
+    1409
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Vannrikse",
+   "latin": "Rallus aquaticus",
+   "sikkerhet": 60,
+   "tid": "08:29–08:39",
+   "belegg": "2 økter",
+   "boks": [
+    645,
+    99,
+    835,
+    209
+   ],
+   "merke": [
+    609,
+    209
+   ]
+  },
+  {
+   "nr": 6,
    "norsk": "Dvergspett",
    "latin": "Dryobates minor",
-   "sikkerhet": 30,
-   "tid": "05:59–06:19",
-   "belegg": "2 økter",
+   "sikkerhet": 57,
+   "tid": "05:59–09:39",
+   "belegg": "3 økter",
    "boks": [
     967,
     1167,
@@ -23,10 +113,31 @@
     931,
     1360
    ]
+  },
+  {
+   "nr": 7,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 54,
+   "tid": "07:49–09:09",
+   "belegg": "4 økter",
+   "boks": [
+    940,
+    750,
+    1086,
+    864
+   ],
+   "merke": [
+    999,
+    869
+   ]
   }
  ],
  "ogsaa": [
-  "Kråke"
+  "Kråke",
+  "Fuglekonge",
+  "Gray Wagtail",
+  "Blåmeis"
  ],
  "bilde": "2026-09-25.png"
 }
