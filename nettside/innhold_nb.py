@@ -36,8 +36,8 @@ FORSIDE = {
     "deler_lenke": "Hvordan de henger sammen",
     "bilder": "Slik ser det ut",
     "bilder_lenke": "Byggeloggen: delene og hvordan de ble satt sammen",
-    "fugler": "Fuglene i biblioteket",
-    "fugler_lenke": "Alle artene, de vanligste først",
+    "fugler": "De vanligste fuglene",
+    "fugler_lenke": "Hele biblioteket",
     "grener": "Grenene",
     "grener_tekst": "Samme gren hele året. Løvet følger måneden.",
     "mer": "Mer om prosjektet",
@@ -110,7 +110,8 @@ DOERER = [
 ]
 LES_MER = "Les mer"
 
-# Utvalget på forsiden, latinske navn.
+# Utvalget på forsiden hvis statistikken mangler, latinske navn. Med statistikk
+# vises de åtte som er hørt flest dager.
 UTVALG = ["Parus major", "Cyanistes caeruleus", "Pica pica", "Chloris chloris",
           "Pyrrhula pyrrhula", "Dendrocopos major", "Ardea cinerea", "Strix aluco"]
 

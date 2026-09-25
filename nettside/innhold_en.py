@@ -37,8 +37,8 @@ FORSIDE = {
     "deler_lenke": "How they fit together",
     "bilder": "What it looks like",
     "bilder_lenke": "Build log: the parts and how they were put together",
-    "fugler": "The birds in the library",
-    "fugler_lenke": "All species, the most common first",
+    "fugler": "The most common birds",
+    "fugler_lenke": "The whole library",
     "grener": "The branches",
     "grener_tekst": "The same branch all year. The leaves follow the month.",
     "mer": "More about the project",
@@ -130,7 +130,8 @@ DOERER = [
 ]
 LES_MER = "Read more"
 
-# The selection on the front page, scientific names.
+# The front-page selection when there are no statistics, scientific names. With
+# statistics, the eight species heard on the most days are shown.
 UTVALG = ["Parus major", "Cyanistes caeruleus", "Pica pica", "Chloris chloris",
           "Pyrrhula pyrrhula", "Dendrocopos major", "Ardea cinerea", "Strix aluco"]
 

@@ -290,7 +290,7 @@ def fuglekort(a: dict, p: str) -> str:
     return (f'<a class="fuglekort" href="{p}{T.STIER["fuglene"]}{a["slug"]}/">'
             f'<div class="kort skaaret"><img src="{p}{PRE}{a["_bilde"]}" alt="{E(a["navn"])}" loading="lazy"></div>'
             f'<div class="navnlinje"><span class="navn">{E(a["navn"])}</span><span class="cm tall">{a["cm"]:g} {T.FUGLENE["cm"]}</span></div>'
-            f'<div class="latin">{E(a["sci"])}</div></a>')
+            f'<div class="latin">{E(a["sci"])}</div><div class="stat tall">{E(stat_linje(a))}</div></a>')
 
 
 def foto(fil: str, tekst: str, p: str) -> str:
@@ -394,7 +394,12 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
 # ---------------------------------------------------------------- sidene
 def forside(dag: dict | None, dager: list[dict], arter: list[dict], p: str = "") -> str:
     f = T.FORSIDE
-    kort = "".join(fuglekort(a, p) for a in arter if a["sci"] in T.UTVALG)
+    # De aatte som er hoert flest dager. Uten statistikk: det faste utvalget.
+    if STATISTIKK["arter"]:
+        utvalg = sorter_arter(arter)[:8]
+    else:
+        utvalg = [a for a in arter if a["sci"] in T.UTVALG]
+    kort = "".join(fuglekort(a, p) for a in utvalg)
     deler = "".join(
         f'<div class="del"><div class="kicker liten">{E(n)}</div><div class="under">{E(u)}</div><p>{E(t)}</p>'
         f'<div class="etiketter">{"".join(f"<span class=\"etikett\">{E(c)}</span>" for c in chips)}</div></div>'
@@ -422,6 +427,11 @@ def forside(dag: dict | None, dager: list[dict], arter: list[dict], p: str = "")
 <section>{seksjonstopp(f["mer"])}<div class="rad-3">{doerer}</div></section>'''
 
 
+def sorter_arter(arter: list[dict]) -> list[dict]:
+    """Flest dager hoert foerst, saa beste sikkerhet, saa navn."""
+    return sorted(arter, key=lambda a: (-(a["stat"] or {}).get("dager", 0), -(a["stat"] or {}).get("beste", 0), a["navn"]))
+
+
 def stat_linje(a: dict) -> str:
     f = T.FUGLENE
     s = a["stat"]
@@ -435,7 +445,7 @@ def fuglene(arter: list[dict], p: str) -> str:
     """Biblioteket som én oppstilling: de som er hoert flest dager foerst, saa
     beste sikkerhet, saa navn. Uten statistikk blir det alfabetisk."""
     f = T.FUGLENE
-    liste = sorted(arter, key=lambda a: (-(a["stat"] or {}).get("dager", 0), -(a["stat"] or {}).get("beste", 0), a["navn"]))
+    liste = sorter_arter(arter)
     figurer = "".join(
         f'<a href="{p}{T.STIER["fuglene"]}{a["slug"]}/"><img src="{p}{PRE}{a["_bilde"]}" alt="{E(a["navn"])}" style="height: {round(150 * a["skala"])}px;" loading="lazy">'
         f'<span class="navn">{E(a["navn"])}</span><span class="latin tall">{E(a["sci"])} · {a["cm"]:g} {E(f["cm"])}</span>'
