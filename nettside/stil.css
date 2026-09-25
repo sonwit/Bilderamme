@@ -163,8 +163,11 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 .vegg { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 16px var(--marg) 48px; }
 /* Pilene i dagvelgeren lenker hit, saa bildet ligger oeverst etter et klikk. */
 .vegg { scroll-margin-top: 10px; }
+/* Ramma skal faa plass paa skjermen i hele sin hoeyde. Ytre forhold er om lag
+   0,77 (arket 3:4 pluss ramme og passepartout), saa 70vh i bredde gir rundt
+   91 % av skjermhoeyden. Paa telefon i hoeydeformat vinner 100 % som foer. */
 .ramme-ytre {
-  width: min(100%, 960px);
+  width: min(100%, 960px, 70vh);
   border: clamp(8px, 1.3vw, 18px) solid var(--ramme);
   padding: clamp(10px, 2vw, 28px);
   background: var(--papir);
