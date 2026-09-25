@@ -1,18 +1,18 @@
 {
  "dato": "2026-09-25",
- "tegnet": "09:39",
- "periode": "05:46–09:39",
- "opptak": 23,
- "vaer": "Overskyet · 11° · 1 m/s",
- "antall_arter": 11,
+ "tegnet": "16:00",
+ "periode": "05:46–15:58",
+ "opptak": 44,
+ "vaer": "Delvis skyet · 16° · 2 m/s",
+ "antall_arter": 13,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 95,
-   "tid": "08:19–08:59",
-   "belegg": "4 økter",
+   "tid": "08:19–13:19",
+   "belegg": "6 økter",
    "boks": [
     592,
     1144,
@@ -26,6 +26,24 @@
   },
   {
    "nr": 2,
+   "norsk": "Toppmeis",
+   "latin": "Lophophanes cristatus",
+   "sikkerhet": 85,
+   "tid": "14:58",
+   "belegg": "2 ggr",
+   "boks": [
+    976,
+    523,
+    1096,
+    646
+   ],
+   "merke": [
+    974,
+    649
+   ]
+  },
+  {
+   "nr": 3,
    "norsk": "Pilfink",
    "latin": "Passer montanus",
    "sikkerhet": 78,
@@ -43,25 +61,25 @@
    ]
   },
   {
-   "nr": 3,
+   "nr": 4,
    "norsk": "Grønnsisik",
    "latin": "Spinus spinus",
    "sikkerhet": 74,
    "tid": "07:39",
    "belegg": "1 ggr",
    "boks": [
-    930,
-    521,
-    1054,
-    640
+    960,
+    197,
+    1073,
+    305
    ],
    "merke": [
-    974,
-    649
+    964,
+    315
    ]
   },
   {
-   "nr": 4,
+   "nr": 5,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
    "sikkerhet": 66,
@@ -79,7 +97,7 @@
    ]
   },
   {
-   "nr": 5,
+   "nr": 6,
    "norsk": "Vannrikse",
    "latin": "Rallus aquaticus",
    "sikkerhet": 60,
@@ -97,7 +115,7 @@
    ]
   },
   {
-   "nr": 6,
+   "nr": 7,
    "norsk": "Dvergspett",
    "latin": "Dryobates minor",
    "sikkerhet": 57,
@@ -115,7 +133,7 @@
    ]
   },
   {
-   "nr": 7,
+   "nr": 8,
    "norsk": "Kjøttmeis",
    "latin": "Parus major",
    "sikkerhet": 54,
@@ -134,6 +152,7 @@
   }
  ],
  "ogsaa": [
+  "Myrrikse",
   "Kråke",
   "Fuglekonge",
   "Gray Wagtail",

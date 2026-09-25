@@ -23,10 +23,10 @@
    "sist": "2026-09-25"
   },
   "Porzana porzana": {
-   "dager": 16,
+   "dager": 17,
    "beste": 0.91,
    "foerst": "2026-08-04",
-   "sist": "2026-09-24"
+   "sist": "2026-09-25"
   },
   "Spinus spinus": {
    "dager": 11,
@@ -142,6 +142,12 @@
    "foerst": "2026-08-28",
    "sist": "2026-09-05"
   },
+  "Lophophanes cristatus": {
+   "dager": 2,
+   "beste": 0.85,
+   "foerst": "2026-09-18",
+   "sist": "2026-09-25"
+  },
   "Coturnix coturnix": {
    "dager": 2,
    "beste": 0.71,
@@ -231,12 +237,6 @@
    "beste": 0.6,
    "foerst": "2026-09-25",
    "sist": "2026-09-25"
-  },
-  "Lophophanes cristatus": {
-   "dager": 1,
-   "beste": 0.57,
-   "foerst": "2026-09-18",
-   "sist": "2026-09-18"
   },
   "Mareca strepera": {
    "dager": 1,
