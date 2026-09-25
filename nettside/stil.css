@@ -252,9 +252,10 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
 .dager .miniatyrer span { font-size: 14px; letter-spacing: 0.08em; }
 .dager .miniatyrer a[aria-current="page"] { outline: 2px solid var(--blekk); outline-offset: 2px; }
 .dager .pil {
-  width: 44px; height: 44px; border: 2px solid var(--blekk); border-radius: 10px; font-size: 26px; color: var(--blekk); text-decoration: none;
+  width: 44px; height: 44px; border: 2px solid var(--blekk); border-radius: 10px; color: var(--blekk); text-decoration: none;
   display: flex; align-items: center; justify-content: center; padding: 0;
 }
+.dager .pil .tegn { display: block; width: 10px; height: 18px; }
 .dager .pil.av { opacity: 0.3; }
 .dager .ord, .dager .naa { display: none; }
 @supports (corner-shape: bevel) { .dager .miniatyrer a, .dager .pil { corner-shape: bevel; } }
@@ -263,7 +264,6 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
   .dager .miniatyrer { display: none; }
   .dager .ord { display: inline; }
   .dager .pil { width: auto; height: auto; gap: 6px; padding: 8px 10px 7px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
-  .dager .pil .tegn { font-size: 20px; line-height: 0.7; }
   .dager .naa { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1; white-space: nowrap; }
   .dager .naa a { color: var(--blekk); }
   .dager .naa [aria-current] { border-bottom: 2px solid var(--blekk); padding-bottom: 2px; }

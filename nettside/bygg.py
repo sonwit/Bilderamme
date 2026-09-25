@@ -355,7 +355,11 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
         iso = dager[j]["dato"] if finnes else (datetime.date.fromisoformat(d["dato"]) + datetime.timedelta(days=delta)).isoformat()
         u, lang = dato_tekst(iso)
         kort = T.DAG_KORT.format(u=u[:3], d=int(iso[-2:]))
-        deler = [f'<span class="tegn" aria-hidden="true">{tegn}</span>', f'<span class="ord tall">{E(kort)}</span>']
+        # Chevronen er tegnet, ikke en bokstav: «‹» i EB Garamond sitter hoeyt i
+        # linjeboksen og saa skjev ut i knappen. En strek sentreres eksakt.
+        sti = "M7 1 L1.5 7 L7 13" if tegn_foerst else "M1 1 L6.5 7 L1 13"
+        svg = f'<svg class="tegn" viewBox="0 0 8 14" width="8" height="14" aria-hidden="true"><path d="{sti}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        deler = [svg, f'<span class="ord tall">{E(kort)}</span>']
         inni = "".join(deler if tegn_foerst else reversed(deler))
         if finnes:
             return f'<a class="pil skaaret" href="{p}{T.STIER["dag"]}{iso}/" aria-label="{E(tekst)}: {E(u.lower())} {E(lang)}">{inni}</a>'
