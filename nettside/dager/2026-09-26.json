@@ -1,0 +1,122 @@
+{
+ "dato": "2026-09-26",
+ "tegnet": "09:37",
+ "periode": "05:20–09:39",
+ "opptak": 23,
+ "vaer": "Overskyet · 11° · 2 m/s",
+ "antall_arter": 7,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Kråke",
+   "latin": "Corvus cornix",
+   "sikkerhet": 84,
+   "tid": "07:29–08:39",
+   "belegg": "3 økter",
+   "boks": [
+    592,
+    1109,
+    966,
+    1396
+   ],
+   "merke": [
+    698,
+    1396
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Blåmeis",
+   "latin": "Cyanistes caeruleus",
+   "sikkerhet": 77,
+   "tid": "09:29",
+   "belegg": "2 ggr",
+   "boks": [
+    968,
+    527,
+    1102,
+    637
+   ],
+   "merke": [
+    974,
+    649
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 77,
+   "tid": "07:59–08:39",
+   "belegg": "2 økter",
+   "boks": [
+    238,
+    1265,
+    422,
+    1403
+   ],
+   "merke": [
+    314,
+    1409
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 69,
+   "tid": "09:09–09:39",
+   "belegg": "2 økter",
+   "boks": [
+    678,
+    837,
+    1005,
+    1078
+   ],
+   "merke": [
+    864,
+    1051
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 61,
+   "tid": "08:59–09:29",
+   "belegg": "2 økter",
+   "boks": [
+    940,
+    750,
+    1086,
+    864
+   ],
+   "merke": [
+    999,
+    869
+   ]
+  },
+  {
+   "nr": 6,
+   "norsk": "Dvergspett",
+   "latin": "Dryobates minor",
+   "sikkerhet": 34,
+   "tid": "05:57–07:59",
+   "belegg": "3 økter",
+   "boks": [
+    967,
+    1167,
+    1057,
+    1360
+   ],
+   "merke": [
+    931,
+    1360
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Atlantic Puffin"
+ ],
+ "bilde": "2026-09-26.png"
+}
