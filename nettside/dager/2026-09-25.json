@@ -1,9 +1,9 @@
 {
  "dato": "2026-09-25",
- "tegnet": "16:00",
- "periode": "05:46–15:58",
- "opptak": 44,
- "vaer": "Delvis skyet · 16° · 2 m/s",
+ "tegnet": "07:07",
+ "periode": "05:46–21:38",
+ "opptak": 61,
+ "vaer": "Overskyet · 11° · 2 m/s",
  "antall_arter": 13,
  "hoert": [
   {
@@ -11,8 +11,8 @@
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 95,
-   "tid": "08:19–13:19",
-   "belegg": "6 økter",
+   "tid": "08:19–16:58",
+   "belegg": "7 økter",
    "boks": [
     592,
     1144,
