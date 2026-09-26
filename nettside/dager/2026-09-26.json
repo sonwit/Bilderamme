@@ -1,13 +1,31 @@
 {
  "dato": "2026-09-26",
- "tegnet": "09:37",
- "periode": "05:20–09:39",
- "opptak": 23,
- "vaer": "Overskyet · 11° · 2 m/s",
+ "tegnet": "16:00",
+ "periode": "05:20–15:59",
+ "opptak": 44,
+ "vaer": "Klarvær · 15° · 2 m/s",
  "antall_arter": 7,
  "hoert": [
   {
    "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 99,
+   "tid": "09:09–15:59",
+   "belegg": "11 økter",
+   "boks": [
+    678,
+    837,
+    1005,
+    1078
+   ],
+   "merke": [
+    864,
+    1051
+   ]
+  },
+  {
+   "nr": 2,
    "norsk": "Kråke",
    "latin": "Corvus cornix",
    "sikkerhet": 84,
@@ -25,7 +43,7 @@
    ]
   },
   {
-   "nr": 2,
+   "nr": 3,
    "norsk": "Blåmeis",
    "latin": "Cyanistes caeruleus",
    "sikkerhet": 77,
@@ -43,12 +61,12 @@
    ]
   },
   {
-   "nr": 3,
+   "nr": 4,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
    "sikkerhet": 77,
-   "tid": "07:59–08:39",
-   "belegg": "2 økter",
+   "tid": "07:59–10:39",
+   "belegg": "3 økter",
    "boks": [
     238,
     1265,
@@ -58,24 +76,6 @@
    "merke": [
     314,
     1409
-   ]
-  },
-  {
-   "nr": 4,
-   "norsk": "Skjære",
-   "latin": "Pica pica",
-   "sikkerhet": 69,
-   "tid": "09:09–09:39",
-   "belegg": "2 økter",
-   "boks": [
-    678,
-    837,
-    1005,
-    1078
-   ],
-   "merke": [
-    864,
-    1051
    ]
   },
   {
@@ -101,8 +101,8 @@
    "norsk": "Dvergspett",
    "latin": "Dryobates minor",
    "sikkerhet": 34,
-   "tid": "05:57–07:59",
-   "belegg": "3 økter",
+   "tid": "05:57–12:59",
+   "belegg": "4 økter",
    "boks": [
     967,
     1167,
