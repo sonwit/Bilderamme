@@ -390,6 +390,55 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
 </section>'''
 
 
+def dagsoversikt(d: dict) -> str:
+    """Doegnet paa dagsiden: naar opptakene ble gjort, og hvem som var i dem.
+
+    Arket viser hvilke fugler dagen ga; dette viser naar. Ett merke per opptak
+    paa klokkeslettet sitt, fylt naar noe ble hoert og blekt naar opptaket var
+    tomt -- de tomme er ikke stoey, de er timene mikrofonen sto paa uten at
+    noen sang. Dagene som ble lagt inn for haand fra arkivet har ingen
+    doegn-liste i JSON-en, og faar ingen seksjon.
+
+    SVG tegnet for haand som resten av grafene, og <title> i stedet for
+    JavaScript: peker en paa et merke, staar klokkeslettet og artene der.
+    """
+    v = T.VEGG
+    opptak = d.get("doegn") or []
+    if not opptak:
+        return ""
+    W, x0, x1, y = 1312, 40, 1272, 76
+    X = lambda m: x0 + m / 1440 * (x1 - x0)    # noqa: E731 -- minutt paa doegnaksen
+    ticks = "".join(
+        f'<line x1="{X(t * 60):.1f}" y1="{y - (7 if t % 3 == 0 else 4)}" x2="{X(t * 60):.1f}" y2="{y}" '
+        f'stroke="currentColor" stroke-width="1"/>'
+        + (f'<text x="{X(t * 60):.1f}" y="{y + 26}" {FONT} font-size="16" text-anchor="middle">{t:02d}</text>'
+           if t % 3 == 0 else "")
+        for t in range(25))
+    merker, rader, med = [], [], 0
+    for o in opptak:
+        try:
+            minutt = int(o["t"][:2]) * 60 + int(o["t"][3:5])
+        except (ValueError, KeyError, TypeError):
+            continue
+        navn = [(artsnavn(lat, nor), pst) for nor, lat, pst in o.get("arter", [])]
+        hoeyde = 30 if navn else 13
+        tittel = o["t"] + " · " + (", ".join(f"{n} {p} %" for n, p in navn) if navn else v["stille"])
+        klasse = "opptaksmerke" if navn else "opptaksmerke tom"
+        merker.append(f'<g><title>{E(tittel)}</title><rect class="{klasse}" x="{X(minutt) - 2.5:.1f}" '
+                      f'y="{y - hoeyde}" width="5" height="{hoeyde}" rx="1.5"/></g>')
+        if navn:
+            med += 1
+            arter = " · ".join(f'<span class="hvem">{E(n)}</span> <span class="pst">{p} %</span>' for n, p in navn)
+            rader.append(f'<li><span class="kl">{E(o["t"])}</span><span class="arter">{arter}</span></li>')
+    stripe = (f'<svg viewBox="0 0 {W} 120" role="img" aria-label="{E(v["doegn"])}">'
+              f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="currentColor" stroke-width="1.5"/>'
+              f'{ticks}{"".join(merker)}</svg>')
+    topp = seksjonstopp(v["doegn"], f'<span class="tall">{E(v["doegn_teller"].format(n=med, m=len(opptak)))}</span>')
+    liste = f'<ol class="opptaksliste tall">{"".join(rader)}</ol>' if rader else ""
+    return (f'<section class="graf doegnet">{topp}\n  <div class="doegnstripe">{stripe}</div>\n'
+            f'  {liste}\n  <p class="under">{E(v["doegn_under"])}</p>\n</section>')
+
+
 # ---------------------------------------------------------------- sidene
 def forside(dag: dict | None, dager: list[dict], arter: list[dict], p: str = "") -> str:
     f = T.FORSIDE
@@ -671,7 +720,8 @@ def bygg_spraak(s: str, arter: list[dict], dager: list[dict]) -> int:
     skriv("index.html", side("", forside(nyeste, dager, arter), 0, ("forside",), None, None, nyeste["_stor"] if nyeste else None))
     for d in dager:
         u, dato = dato_tekst(d["dato"])
-        skriv(f"{S['dag']}{d['dato']}/index.html", side(f"{u} {dato}", vegg(d, dager, "../../"), 2, ("dag", d["dato"]), None, None, d["_stor"]))
+        skriv(f"{S['dag']}{d['dato']}/index.html",
+              side(f"{u} {dato}", vegg(d, dager, "../../") + dagsoversikt(d), 2, ("dag", d["dato"]), None, None, d["_stor"]))
     skriv(f"{S['fuglene']}index.html", side(T.FUGLENE["tittel"], fuglene(arter, "../"), 1, ("fuglene",), S["fuglene"]))
     for a in arter:
         skriv(f"{S['fuglene']}{a['slug']}/index.html",

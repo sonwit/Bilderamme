@@ -22,9 +22,26 @@ Hver dag siden skal kunne vise ligger her som to filer med samme navn:
      "tid": "09:39", "belegg": "5 ggr"}
   ],
   "ogsaa": ["Myrrikse", "Kjøttmeis"],
-  "bilde": "2026-09-24.png"
+  "bilde": "2026-09-24.png",
+  "doegn": [
+   {"t": "04:59", "arter": [["Kattugle", "Strix aluco", 60]]},
+   {"t": "05:29", "arter": []},
+   {"t": "06:59", "arter": [["Kjøttmeis", "Parus major", 92], ["Bokfink", "Fringilla coelebs", 57]]}
+  ]
 }
 ```
+
+`doegn` er dagsoversikten: ett innslag per opptak, i klokkerekkefølge, med
+tidspunktet og artene i nettopp det opptaket som `[norsk, latin, prosent]`.
+Terskelen er den samme som hovedlisten på arket bruker (50 %), så et opptak
+der bare et usikkert treff lå under, står med tom liste — det samme gjør et
+opptak der ingenting ble hørt. De tomme er halve poenget: de viser når
+mikrofonen sto på uten at noen sang. Listen kan inneholde en art som ikke er
+på arket, siden arket har plass til et begrenset antall linjer.
+
+Ingen filnavn, ingen lyd, ingen kamerabilder: dette repoet er offentlig, og
+dagsfilen skal tåle å ligge der. Feltet kan mangle helt — dagene som ble lagt
+inn for hånd fra arkivet har det ikke, og da viser siden ingen døgn-seksjon.
 
 `nr`, `boks` og `merke` finnes bare for artene som faktisk står på grenen;
 de kommer fra `dagens-bakgrunn.json` og er i bildets koordinater. Arter uten

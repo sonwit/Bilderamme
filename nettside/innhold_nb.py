@@ -56,6 +56,12 @@ VEGG = {
     "forrige": "Forrige dag",
     "neste": "Neste dag",
     "dager": "Siste dager",
+    "doegn": "Døgnet",
+    "doegn_teller": "{n} av {m} opptak med fugl",
+    "doegn_under": "Hvert merke er ett opptak på 60 sekunder, satt der på døgnet det ble gjort. "
+                   "Fylt når noe ble hørt, blekt når opptaket var tomt — også de tomme timene "
+                   "er svar. Utedelen lytter tettest rundt soloppgang.",
+    "stille": "ingen fugl hørt",
 }
 UKEDAGER = ["Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag"]
 MAANEDER = ["januar", "februar", "mars", "april", "mai", "juni", "juli", "august",
