@@ -23,6 +23,8 @@ audio_ingest.py         Mottak av opptak og kamerabilder fra utedelen (systemd, 
 lytteplan.py            Når utedelen skal våkne, regnet ut fra soloppgang og batteri.
 artsstatistikk.py       Dager hørt per art, til nettsiden (nettside/statistikk.json).
 eksporter_dag.py        Dagen på veggen til nettsiden: JSON, PNG, statistikk, commit og push.
+                        Døgnet (hvert opptak med klokkeslett og artene i det) leses av
+                        observations.jsonl — birds.json er aggregert per art.
 birdnet_analyze.py      BirdNET på én WAV -> observations.jsonl + birds.json.
 bird_stats.py           Statistikk og daglig rapport: arter, lydnivå, dekning, strøm.
 bilde_analyze.py        Hvilken fugl er på kamerabildet? Én linje i kamera.jsonl.

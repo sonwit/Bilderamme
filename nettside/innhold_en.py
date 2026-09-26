@@ -57,6 +57,12 @@ VEGG = {
     "forrige": "Previous day",
     "neste": "Next day",
     "dager": "Recent days",
+    "doegn": "The day, hour by hour",
+    "doegn_teller": "{n} of {m} recordings with birds",
+    "doegn_under": "Each mark is one 60-second recording, placed at the time of day it was made. "
+                   "Filled when something was heard, faint when the recording was empty — the empty "
+                   "hours are answers too. The outdoor unit listens most closely around sunrise.",
+    "stille": "nothing heard",
 }
 UKEDAGER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 MAANEDER = ["January", "February", "March", "April", "May", "June", "July", "August",

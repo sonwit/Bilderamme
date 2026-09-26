@@ -276,6 +276,29 @@ section, .seksjon { padding: 24px var(--marg) 44px; }
   .dager .pil { width: auto; height: auto; gap: 6px; padding: 8px 10px 7px; font-size: 14px; letter-spacing: 0.02em; line-height: 18px; white-space: nowrap; }
 }
 
+/* Doegnet paa dagsiden: opptakene gjennom doegnet, og hvem som var i dem.
+   Stripen er SVG fra bygg.py; her er bare fargen paa merkene og listen under. */
+.doegnet .doegnstripe { margin-bottom: 20px; }
+.doegnet .opptaksmerke { fill: currentColor; }
+.doegnet .opptaksmerke.tom { fill-opacity: 0.22; }
+.opptaksliste { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 52px; }
+.opptaksliste li {
+  display: flex; gap: 14px; break-inside: avoid; padding: 7px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--blekk) 16%, transparent);
+}
+.opptaksliste .kl { flex: none; width: 4.4em; letter-spacing: 0.04em; }
+.opptaksliste .arter { flex: 1; line-height: 1.35; }
+.opptaksliste .pst { font-size: 0.85em; color: color-mix(in srgb, var(--blekk) 58%, var(--papir)); }
+.doegnet .under { margin-top: 20px; max-width: 64ch; font-size: 17px; }
+@media (max-width: 700px) {
+  .opptaksliste { columns: 1; }
+  /* Stripen skalerer med bredden, saa paa en mobil blir timetallene fire piksler
+     og merkene en haarstrek. Begge er i viewBox-enheter: her blir de stoerre,
+     mens aksen er like lang. */
+  .doegnet svg text { font-size: 30px; }
+  .doegnet .opptaksmerke { width: 9px; }
+}
+
 /* Delene */
 .del { display: flex; flex-direction: column; gap: 10px; }
 .del .under { font-size: 26px; font-weight: 500; line-height: 1.1; }

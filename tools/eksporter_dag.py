@@ -7,8 +7,9 @@ eksporter_dag.py -- dagen paa veggen til nettsida, og push.
 
 Kjoeres paa serveren etter hver tegning. Leser det kjeden alt har laget:
 plates/dagens-bakgrunn.json og .png (illustrasjonen og hvor fuglene staar),
-birds.json eller www/birds-valgt.json (dagens liste) og www/panel.html
-(vaerlinja slik den ble tegnet). Skriver nettside/dager/<dato>.json og .png i
+birds.json eller www/birds-valgt.json (dagens liste), www/panel.html
+(vaerlinja slik den ble tegnet) og data/observations.jsonl (doegnet: hvert
+opptak med klokkeslett og artene i det). Skriver nettside/dager/<dato>.json og .png i
 repo-klonen, regner artsstatistikken, committer og pusher. Hver push bygger
 nettsida paa GitHub Pages.
 
@@ -137,8 +138,69 @@ def dagens(base: str, rdp, bn) -> tuple[dict, str] | None:
         "hoert": hoert,
         "ogsaa": ogsaa,
         "bilde": f"{dato}.png",
+        "doegn": doegnet(base, dato, rdp, bn),
     }
     return d, bg_png
+
+
+def doegnet(base: str, dato: str, rdp, bn) -> list[dict]:
+    """Opptakene den dagen, i rekkefoelge: naar mikrofonen var paa, og hvem
+    som var i hvert opptak.
+
+    Maa leses av observasjonsloggen. birds.json er aggregert per art, saa
+    klokkeslettet til det enkelte opptaket finnes ingen andre steder.
+    Terskelen er den veggen bruker paa hovedlisten (SURE_CONF), og tomme
+    opptak blir staaende med tom liste: naar det ble lyttet uten aa hoere noe
+    er ogsaa et svar, og det er halve poenget med stripen paa siden.
+
+    Ingen filnavn, ingen lyd, ingen kamerabilder -- bare klokkeslett, art og
+    sikkerhet. Dette gaar til et offentlig repo.
+    """
+    logg = os.path.join(base, "data", "observations.jsonl")
+    ut = []
+    try:
+        with open(logg, encoding="utf-8") as f:
+            for rad in f:
+                rad = rad.strip()
+                if not rad:
+                    continue
+                try:
+                    o = json.loads(rad)
+                except ValueError:
+                    continue      # en halv linje: tjenesten kan bli drept midt i en skriving
+                if o.get("date") != dato:
+                    continue
+                t = (o.get("recorded_at") or "")[11:16]
+                if not t:
+                    continue
+                arter = []
+                for s in o.get("species", []):
+                    sci = (s.get("scientific_name") or "").strip()
+                    konf = float(s.get("confidence", 0.0))
+                    if not sci or sci in rdp.BLOKKERT or konf < rdp.SURE_CONF:
+                        continue
+                    arter.append([bn.norwegian_name(sci, s.get("common_name", "")), sci, round(konf * 100)])
+                arter.sort(key=lambda a: -a[2])
+                ut.append({"t": t, "arter": arter})
+    except OSError:
+        return []
+    ut.sort(key=lambda o: o["t"])
+    return ut
+
+
+def dag_json(d: dict) -> str:
+    """Som json.dumps(indent=1), men med ett opptak per linje i doegnet.
+    Et doegn er 20-60 opptak; med vanlig innrykk ble det fire hundre linjer
+    ny diff hver dag, i et repo som faar en commit per tegning."""
+    doegn = d.get("doegn")
+    if doegn is None:
+        return json.dumps(d, ensure_ascii=False, indent=1) + "\n"
+    stempel = "@@doegn@@"
+    tekst = json.dumps({**d, "doegn": stempel}, ensure_ascii=False, indent=1)
+    assert tekst.count(f'"{stempel}"') == 1, "stempelet maa vaere unikt"
+    blokk = ("[\n" + ",\n".join("  " + json.dumps(o, ensure_ascii=False) for o in doegn) + "\n ]"
+             if doegn else "[]")
+    return tekst.replace(f'"{stempel}"', blokk) + "\n"
 
 
 def sjekk_personvern(d: dict, rdp) -> None:
@@ -194,7 +256,7 @@ def main() -> int:
 
     dager = os.path.join(REPO, "nettside", "dager")
     endret = skriv_hvis_endret(os.path.join(dager, f"{d['dato']}.json"),
-                               (json.dumps(d, ensure_ascii=False, indent=1) + "\n").encode("utf-8"))
+                               dag_json(d).encode("utf-8"))
     with open(bg_png, "rb") as f:
         endret = skriv_hvis_endret(os.path.join(dager, f"{d['dato']}.png"), f.read()) or endret
 
