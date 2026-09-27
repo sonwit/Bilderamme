@@ -1,18 +1,18 @@
 {
  "dato": "2026-09-27",
- "tegnet": "09:38",
- "periode": "05:42–09:39",
- "opptak": 23,
- "vaer": "Delvis skyet · 8° · 2 m/s",
- "antall_arter": 8,
+ "tegnet": "16:01",
+ "periode": "05:42–15:59",
+ "opptak": 44,
+ "vaer": "Overskyet · 14° · 4 m/s",
+ "antall_arter": 13,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 97,
-   "tid": "08:09–09:39",
-   "belegg": "3 økter",
+   "tid": "08:09–12:39",
+   "belegg": "6 økter",
    "boks": [
     592,
     1144,
@@ -25,14 +25,25 @@
    ]
   },
   {
+   "nr": 2,
    "norsk": "Spettmeis",
    "latin": "Sitta europaea",
    "sikkerhet": 74,
    "tid": "09:39",
-   "belegg": "3 ggr"
+   "belegg": "3 ggr",
+   "boks": [
+    1014,
+    907,
+    1087,
+    1064
+   ],
+   "merke": [
+    978,
+    1064
+   ]
   },
   {
-   "nr": 2,
+   "nr": 3,
    "norsk": "Jernspurv",
    "latin": "Prunella modularis",
    "sikkerhet": 60,
@@ -50,12 +61,12 @@
    ]
   },
   {
-   "nr": 3,
+   "nr": 4,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
    "sikkerhet": 59,
-   "tid": "09:29",
-   "belegg": "1 ggr",
+   "tid": "09:29–11:19",
+   "belegg": "3 økter",
    "boks": [
     238,
     1265,
@@ -68,12 +79,12 @@
    ]
   },
   {
-   "nr": 4,
+   "nr": 5,
    "norsk": "Kjøttmeis",
    "latin": "Parus major",
    "sikkerhet": 50,
-   "tid": "06:59–08:39",
-   "belegg": "3 økter",
+   "tid": "06:59–11:19",
+   "belegg": "4 økter",
    "boks": [
     940,
     750,
@@ -86,7 +97,7 @@
    ]
   },
   {
-   "nr": 5,
+   "nr": 6,
    "norsk": "Dvergspett",
    "latin": "Dryobates minor",
    "sikkerhet": 45,
@@ -102,11 +113,33 @@
     931,
     1360
    ]
+  },
+  {
+   "nr": 7,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 42,
+   "tid": "09:29–13:59",
+   "belegg": "2 økter",
+   "boks": [
+    924,
+    518,
+    1051,
+    645
+   ],
+   "merke": [
+    974,
+    649
+   ]
   }
  ],
  "ogsaa": [
+  "Myrrikse",
   "Bokfink",
-  "Gråsisik"
+  "Pine Grosbeak",
+  "Gråtrost",
+  "Pilfink",
+  "Bydue"
  ],
  "bilde": "2026-09-27.png",
  "doegn": [
@@ -132,6 +165,27 @@
   {"t": "09:09", "arter": []},
   {"t": "09:19", "arter": []},
   {"t": "09:29", "arter": [["Grønnfink", "Chloris chloris", 59]]},
-  {"t": "09:39", "arter": [["Skjære", "Pica pica", 95], ["Spettmeis", "Sitta europaea", 74]]}
+  {"t": "09:39", "arter": [["Skjære", "Pica pica", 95], ["Spettmeis", "Sitta europaea", 74]]},
+  {"t": "09:49", "arter": []},
+  {"t": "09:59", "arter": [["Skjære", "Pica pica", 89]]},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": [["Skjære", "Pica pica", 54]]},
+  {"t": "10:39", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": [["Skjære", "Pica pica", 77]]},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:40", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }

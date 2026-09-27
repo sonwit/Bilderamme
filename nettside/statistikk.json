@@ -23,10 +23,10 @@
    "sist": "2026-09-27"
   },
   "Porzana porzana": {
-   "dager": 17,
+   "dager": 18,
    "beste": 0.91,
    "foerst": "2026-08-04",
-   "sist": "2026-09-25"
+   "sist": "2026-09-27"
   },
   "Spinus spinus": {
    "dager": 11,
@@ -142,6 +142,12 @@
    "foerst": "2026-08-04",
    "sist": "2026-09-03"
   },
+  "Acanthis flammea": {
+   "dager": 3,
+   "beste": 0.53,
+   "foerst": "2026-08-27",
+   "sist": "2026-09-27"
+  },
   "Lophophanes cristatus": {
    "dager": 2,
    "beste": 0.85,
@@ -171,12 +177,6 @@
    "beste": 0.55,
    "foerst": "2026-08-27",
    "sist": "2026-08-28"
-  },
-  "Acanthis flammea": {
-   "dager": 2,
-   "beste": 0.53,
-   "foerst": "2026-08-27",
-   "sist": "2026-08-29"
   },
   "Erithacus rubecula": {
    "dager": 1,
