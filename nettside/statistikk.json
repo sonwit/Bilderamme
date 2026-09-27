@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-09-26",
- "dager_med_opptak": 49,
+ "til": "2026-09-27",
+ "dager_med_opptak": 50,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -10,16 +10,16 @@
    "foerst": "2026-07-27",
    "sist": "2026-09-26"
   },
+  "Dryobates minor": {
+   "dager": 21,
+   "beste": 0.72,
+   "foerst": "2026-08-04",
+   "sist": "2026-09-27"
+  },
   "Parus major": {
    "dager": 20,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-09-26"
-  },
-  "Dryobates minor": {
-   "dager": 20,
-   "beste": 0.72,
-   "foerst": "2026-08-04",
    "sist": "2026-09-26"
   },
   "Porzana porzana": {
@@ -71,10 +71,10 @@
    "sist": "2026-09-24"
   },
   "Turdus merula": {
-   "dager": 4,
+   "dager": 5,
    "beste": 0.87,
    "foerst": "2026-09-01",
-   "sist": "2026-09-18"
+   "sist": "2026-09-26"
   },
   "Turdus iliacus": {
    "dager": 4,
@@ -148,6 +148,12 @@
    "foerst": "2026-09-18",
    "sist": "2026-09-25"
   },
+  "Passer montanus": {
+   "dager": 2,
+   "beste": 0.78,
+   "foerst": "2026-09-25",
+   "sist": "2026-09-26"
+  },
   "Coturnix coturnix": {
    "dager": 2,
    "beste": 0.71,
@@ -207,12 +213,6 @@
    "beste": 0.83,
    "foerst": "2026-09-24",
    "sist": "2026-09-24"
-  },
-  "Passer montanus": {
-   "dager": 1,
-   "beste": 0.78,
-   "foerst": "2026-09-25",
-   "sist": "2026-09-25"
   },
   "Cygnus cygnus": {
    "dager": 1,
