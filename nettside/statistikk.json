@@ -5,22 +5,22 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 31,
+   "dager": 32,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-09-26"
+   "sist": "2026-09-27"
+  },
+  "Parus major": {
+   "dager": 21,
+   "beste": 0.99,
+   "foerst": "2026-08-03",
+   "sist": "2026-09-27"
   },
   "Dryobates minor": {
    "dager": 21,
    "beste": 0.72,
    "foerst": "2026-08-04",
    "sist": "2026-09-27"
-  },
-  "Parus major": {
-   "dager": 20,
-   "beste": 0.99,
-   "foerst": "2026-08-03",
-   "sist": "2026-09-26"
   },
   "Porzana porzana": {
    "dager": 17,
@@ -35,10 +35,10 @@
    "sist": "2026-09-25"
   },
   "Chloris chloris": {
-   "dager": 10,
+   "dager": 11,
    "beste": 0.96,
    "foerst": "2026-07-27",
-   "sist": "2026-09-26"
+   "sist": "2026-09-27"
   },
   "Cyanistes caeruleus": {
    "dager": 10,
@@ -112,6 +112,12 @@
    "foerst": "2026-09-08",
    "sist": "2026-09-22"
   },
+  "Sitta europaea": {
+   "dager": 3,
+   "beste": 0.98,
+   "foerst": "2026-08-28",
+   "sist": "2026-09-27"
+  },
   "Anas platyrhynchos": {
    "dager": 3,
    "beste": 0.8,
@@ -135,12 +141,6 @@
    "beste": 0.59,
    "foerst": "2026-08-04",
    "sist": "2026-09-03"
-  },
-  "Sitta europaea": {
-   "dager": 2,
-   "beste": 0.98,
-   "foerst": "2026-08-28",
-   "sist": "2026-09-05"
   },
   "Lophophanes cristatus": {
    "dager": 2,
@@ -231,6 +231,12 @@
    "beste": 0.63,
    "foerst": "2026-09-09",
    "sist": "2026-09-09"
+  },
+  "Prunella modularis": {
+   "dager": 1,
+   "beste": 0.6,
+   "foerst": "2026-09-27",
+   "sist": "2026-09-27"
   },
   "Rallus aquaticus": {
    "dager": 1,
