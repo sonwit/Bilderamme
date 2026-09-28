@@ -1,0 +1,45 @@
+{
+ "dato": "2026-09-28",
+ "tegnet": "07:08",
+ "periode": "05:46–07:09",
+ "opptak": 8,
+ "vaer": "Lett regn · 12° · 2 m/s",
+ "antall_arter": 5,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Storfugl",
+   "latin": "Tetrao urogallus",
+   "sikkerhet": 50,
+   "tid": "05:46",
+   "belegg": "1 ggr",
+   "boks": [
+    592,
+    1084,
+    920,
+    1411
+   ],
+   "merke": [
+    747,
+    1402
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Myrrikse",
+  "Ring Ouzel",
+  "Sivhøne",
+  "Sothøne"
+ ],
+ "bilde": "2026-09-28.png",
+ "doegn": [
+  {"t": "05:46", "arter": [["Storfugl", "Tetrao urogallus", 50]]},
+  {"t": "05:59", "arter": []},
+  {"t": "06:19", "arter": []},
+  {"t": "06:29", "arter": []},
+  {"t": "06:39", "arter": []},
+  {"t": "06:49", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:09", "arter": []}
+ ]
+}

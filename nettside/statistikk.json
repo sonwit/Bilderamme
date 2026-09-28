@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-09-27",
- "dager_med_opptak": 50,
+ "til": "2026-09-28",
+ "dager_med_opptak": 51,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -106,6 +106,12 @@
    "foerst": "2026-08-26",
    "sist": "2026-09-23"
   },
+  "Tetrao urogallus": {
+   "dager": 4,
+   "beste": 0.6,
+   "foerst": "2026-08-04",
+   "sist": "2026-09-28"
+  },
   "Pyrrhula pyrrhula": {
    "dager": 3,
    "beste": 0.98,
@@ -129,12 +135,6 @@
    "beste": 0.73,
    "foerst": "2026-07-27",
    "sist": "2026-09-01"
-  },
-  "Tetrao urogallus": {
-   "dager": 3,
-   "beste": 0.6,
-   "foerst": "2026-08-04",
-   "sist": "2026-08-27"
   },
   "Columba palumbus": {
    "dager": 3,
