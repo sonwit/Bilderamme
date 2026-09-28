@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 32,
+   "dager": 33,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-09-27"
+   "sist": "2026-09-28"
   },
   "Parus major": {
    "dager": 21,
@@ -23,10 +23,10 @@
    "sist": "2026-09-27"
   },
   "Porzana porzana": {
-   "dager": 18,
+   "dager": 19,
    "beste": 0.91,
    "foerst": "2026-08-04",
-   "sist": "2026-09-27"
+   "sist": "2026-09-28"
   },
   "Spinus spinus": {
    "dager": 11,
@@ -184,6 +184,12 @@
    "foerst": "2026-08-03",
    "sist": "2026-08-03"
   },
+  "Corvus corax": {
+   "dager": 1,
+   "beste": 0.96,
+   "foerst": "2026-09-28",
+   "sist": "2026-09-28"
+  },
   "Falco tinnunculus": {
    "dager": 1,
    "beste": 0.92,
@@ -243,6 +249,12 @@
    "beste": 0.6,
    "foerst": "2026-09-25",
    "sist": "2026-09-25"
+  },
+  "Tringa ochropus": {
+   "dager": 1,
+   "beste": 0.57,
+   "foerst": "2026-09-28",
+   "sist": "2026-09-28"
   },
   "Mareca strepera": {
    "dager": 1,

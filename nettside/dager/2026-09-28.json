@@ -1,13 +1,67 @@
 {
  "dato": "2026-09-28",
- "tegnet": "07:08",
- "periode": "05:46–07:09",
- "opptak": 8,
- "vaer": "Lett regn · 12° · 2 m/s",
- "antall_arter": 5,
+ "tegnet": "09:39",
+ "periode": "05:46–09:39",
+ "opptak": 23,
+ "vaer": "Overskyet · 12° · 3 m/s",
+ "antall_arter": 10,
  "hoert": [
   {
    "nr": 1,
+   "norsk": "Ravn",
+   "latin": "Corvus corax",
+   "sikkerhet": 96,
+   "tid": "07:29",
+   "belegg": "5 ggr",
+   "boks": [
+    717,
+    812,
+    1035,
+    1074
+   ],
+   "merke": [
+    864,
+    1051
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 95,
+   "tid": "07:59–09:19",
+   "belegg": "4 økter",
+   "boks": [
+    831,
+    671,
+    1131,
+    892
+   ],
+   "merke": [
+    999,
+    869
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Skogsnipe",
+   "latin": "Tringa ochropus",
+   "sikkerhet": 57,
+   "tid": "07:19",
+   "belegg": "1 ggr",
+   "boks": [
+    679,
+    97,
+    801,
+    211
+   ],
+   "merke": [
+    643,
+    211
+   ]
+  },
+  {
+   "nr": 4,
    "norsk": "Storfugl",
    "latin": "Tetrao urogallus",
    "sikkerhet": 50,
@@ -28,7 +82,9 @@
  "ogsaa": [
   "Myrrikse",
   "Ring Ouzel",
+  "Gråhegre",
   "Sivhøne",
+  "Kjøttmeis",
   "Sothøne"
  ],
  "bilde": "2026-09-28.png",
@@ -40,6 +96,21 @@
   {"t": "06:39", "arter": []},
   {"t": "06:49", "arter": []},
   {"t": "06:59", "arter": []},
-  {"t": "07:09", "arter": []}
+  {"t": "07:09", "arter": []},
+  {"t": "07:19", "arter": [["Skogsnipe", "Tringa ochropus", 57]]},
+  {"t": "07:29", "arter": [["Ravn", "Corvus corax", 96]]},
+  {"t": "07:39", "arter": []},
+  {"t": "07:49", "arter": []},
+  {"t": "07:59", "arter": [["Skjære", "Pica pica", 94]]},
+  {"t": "08:09", "arter": []},
+  {"t": "08:19", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:39", "arter": [["Skjære", "Pica pica", 95]]},
+  {"t": "08:49", "arter": []},
+  {"t": "08:59", "arter": []},
+  {"t": "09:09", "arter": []},
+  {"t": "09:19", "arter": [["Skjære", "Pica pica", 82]]},
+  {"t": "09:29", "arter": []},
+  {"t": "09:39", "arter": []}
  ]
 }
