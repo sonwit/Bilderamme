@@ -1,10 +1,10 @@
 {
  "dato": "2026-09-28",
- "tegnet": "09:39",
- "periode": "05:46–09:39",
- "opptak": 23,
- "vaer": "Overskyet · 12° · 3 m/s",
- "antall_arter": 10,
+ "tegnet": "16:01",
+ "periode": "05:46–15:59",
+ "opptak": 44,
+ "vaer": "Lett regn · 14° · 2 m/s",
+ "antall_arter": 16,
  "hoert": [
   {
    "nr": 1,
@@ -29,8 +29,8 @@
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 95,
-   "tid": "07:59–09:19",
-   "belegg": "4 økter",
+   "tid": "07:59–13:59",
+   "belegg": "6 økter",
    "boks": [
     831,
     671,
@@ -44,6 +44,24 @@
   },
   {
    "nr": 3,
+   "norsk": "Blåmeis",
+   "latin": "Cyanistes caeruleus",
+   "sikkerhet": 58,
+   "tid": "11:19",
+   "belegg": "1 ggr",
+   "boks": [
+    968,
+    527,
+    1102,
+    637
+   ],
+   "merke": [
+    974,
+    649
+   ]
+  },
+  {
+   "nr": 4,
    "norsk": "Skogsnipe",
    "latin": "Tringa ochropus",
    "sikkerhet": 57,
@@ -61,12 +79,12 @@
    ]
   },
   {
-   "nr": 4,
+   "nr": 5,
    "norsk": "Storfugl",
    "latin": "Tetrao urogallus",
    "sikkerhet": 50,
-   "tid": "05:46",
-   "belegg": "1 ggr",
+   "tid": "05:46–15:19",
+   "belegg": "3 økter",
    "boks": [
     592,
     1084,
@@ -77,15 +95,40 @@
     747,
     1402
    ]
+  },
+  {
+   "norsk": "Sivhøne",
+   "latin": "Gallinula chloropus",
+   "sikkerhet": 28,
+   "tid": "06:59–14:19",
+   "belegg": "2 økter"
+  },
+  {
+   "nr": 6,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 27,
+   "tid": "09:29–14:59",
+   "belegg": "2 økter",
+   "boks": [
+    290,
+    1271,
+    462,
+    1406
+   ],
+   "merke": [
+    314,
+    1409
+   ]
   }
  ],
  "ogsaa": [
   "Myrrikse",
+  "Svarttrost",
+  "Kråke",
+  "Gråtrost",
   "Ring Ouzel",
-  "Gråhegre",
-  "Sivhøne",
-  "Kjøttmeis",
-  "Sothøne"
+  "Stokkand"
  ],
  "bilde": "2026-09-28.png",
  "doegn": [
@@ -111,6 +154,27 @@
   {"t": "09:09", "arter": []},
   {"t": "09:19", "arter": [["Skjære", "Pica pica", 82]]},
   {"t": "09:29", "arter": []},
-  {"t": "09:39", "arter": []}
+  {"t": "09:39", "arter": []},
+  {"t": "09:49", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": []},
+  {"t": "10:39", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:19", "arter": [["Blåmeis", "Cyanistes caeruleus", 58]]},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }

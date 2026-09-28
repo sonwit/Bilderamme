@@ -11,10 +11,10 @@
    "sist": "2026-09-28"
   },
   "Parus major": {
-   "dager": 21,
+   "dager": 22,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-09-27"
+   "sist": "2026-09-28"
   },
   "Dryobates minor": {
    "dager": 21,
@@ -41,10 +41,10 @@
    "sist": "2026-09-27"
   },
   "Cyanistes caeruleus": {
-   "dager": 10,
+   "dager": 11,
    "beste": 0.95,
    "foerst": "2026-08-26",
-   "sist": "2026-09-26"
+   "sist": "2026-09-28"
   },
   "Fulmarus glacialis": {
    "dager": 7,
@@ -273,6 +273,12 @@
    "beste": 0.45,
    "foerst": "2026-09-11",
    "sist": "2026-09-11"
+  },
+  "Gallinula chloropus": {
+   "dager": 1,
+   "beste": 0.28,
+   "foerst": "2026-09-28",
+   "sist": "2026-09-28"
   }
  }
 }
