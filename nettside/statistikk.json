@@ -5,22 +5,22 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 33,
+   "dager": 34,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-09-28"
+   "sist": "2026-09-29"
   },
   "Parus major": {
-   "dager": 22,
+   "dager": 23,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-09-28"
+   "sist": "2026-09-29"
   },
   "Dryobates minor": {
-   "dager": 21,
+   "dager": 22,
    "beste": 0.72,
    "foerst": "2026-08-04",
-   "sist": "2026-09-27"
+   "sist": "2026-09-29"
   },
   "Porzana porzana": {
    "dager": 20,
@@ -28,17 +28,17 @@
    "foerst": "2026-08-04",
    "sist": "2026-09-29"
   },
+  "Chloris chloris": {
+   "dager": 12,
+   "beste": 0.96,
+   "foerst": "2026-07-27",
+   "sist": "2026-09-29"
+  },
   "Spinus spinus": {
    "dager": 11,
    "beste": 0.98,
    "foerst": "2026-08-25",
    "sist": "2026-09-25"
-  },
-  "Chloris chloris": {
-   "dager": 11,
-   "beste": 0.96,
-   "foerst": "2026-07-27",
-   "sist": "2026-09-27"
   },
   "Cyanistes caeruleus": {
    "dager": 11,
@@ -130,6 +130,12 @@
    "foerst": "2026-08-28",
    "sist": "2026-09-27"
   },
+  "Passer montanus": {
+   "dager": 3,
+   "beste": 0.92,
+   "foerst": "2026-09-25",
+   "sist": "2026-09-29"
+  },
   "Ardea cinerea": {
    "dager": 3,
    "beste": 0.73,
@@ -153,12 +159,6 @@
    "beste": 0.85,
    "foerst": "2026-09-18",
    "sist": "2026-09-25"
-  },
-  "Passer montanus": {
-   "dager": 2,
-   "beste": 0.78,
-   "foerst": "2026-09-25",
-   "sist": "2026-09-26"
   },
   "Coturnix coturnix": {
    "dager": 2,
@@ -261,6 +261,12 @@
    "beste": 0.56,
    "foerst": "2026-08-29",
    "sist": "2026-08-29"
+  },
+  "Pinicola enucleator": {
+   "dager": 1,
+   "beste": 0.55,
+   "foerst": "2026-09-29",
+   "sist": "2026-09-29"
   },
   "Loxia curvirostra": {
    "dager": 1,

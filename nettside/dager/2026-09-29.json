@@ -1,0 +1,150 @@
+{
+ "dato": "2026-09-29",
+ "tegnet": "09:38",
+ "periode": "05:18–09:39",
+ "opptak": 23,
+ "vaer": "Klarvær · 7° · 1 m/s",
+ "antall_arter": 10,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 96,
+   "tid": "07:19–09:39",
+   "belegg": "2 økter",
+   "boks": [
+    592,
+    1144,
+    964,
+    1418
+   ],
+   "merke": [
+    675,
+    1386
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 92,
+   "tid": "08:59",
+   "belegg": "4 ggr",
+   "boks": [
+    951,
+    733,
+    1087,
+    856
+   ],
+   "merke": [
+    999,
+    869
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 78,
+   "tid": "07:29–09:29",
+   "belegg": "3 økter",
+   "boks": [
+    834,
+    917,
+    1003,
+    1044
+   ],
+   "merke": [
+    864,
+    1051
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 56,
+   "tid": "07:29–07:39",
+   "belegg": "2 økter",
+   "boks": [
+    912,
+    527,
+    1063,
+    645
+   ],
+   "merke": [
+    974,
+    649
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Konglebiter",
+   "latin": "Pinicola enucleator",
+   "sikkerhet": 55,
+   "tid": "07:29",
+   "belegg": "1 ggr",
+   "boks": [
+    225,
+    1213,
+    416,
+    1424
+   ],
+   "merke": [
+    314,
+    1409
+   ]
+  },
+  {
+   "nr": 6,
+   "norsk": "Dvergspett",
+   "latin": "Dryobates minor",
+   "sikkerhet": 40,
+   "tid": "05:18–09:09",
+   "belegg": "2 økter",
+   "boks": [
+    967,
+    1167,
+    1057,
+    1360
+   ],
+   "merke": [
+    931,
+    1360
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Myrrikse",
+  "White-winged Crossbill",
+  "Rødstjert",
+  "Bokfink"
+ ],
+ "bilde": "2026-09-29.png",
+ "doegn": [
+  {"t": "05:18", "arter": []},
+  {"t": "05:56", "arter": []},
+  {"t": "06:18", "arter": []},
+  {"t": "06:29", "arter": []},
+  {"t": "06:39", "arter": []},
+  {"t": "06:49", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:09", "arter": []},
+  {"t": "07:19", "arter": [["Skjære", "Pica pica", 75]]},
+  {"t": "07:29", "arter": [["Konglebiter", "Pinicola enucleator", 55]]},
+  {"t": "07:39", "arter": [["Grønnfink", "Chloris chloris", 65], ["Kjøttmeis", "Parus major", 56]]},
+  {"t": "07:49", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:09", "arter": []},
+  {"t": "08:19", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:39", "arter": []},
+  {"t": "08:49", "arter": []},
+  {"t": "08:59", "arter": [["Pilfink", "Passer montanus", 92]]},
+  {"t": "09:09", "arter": []},
+  {"t": "09:19", "arter": []},
+  {"t": "09:29", "arter": [["Grønnfink", "Chloris chloris", 78]]},
+  {"t": "09:39", "arter": [["Skjære", "Pica pica", 96]]}
+ ]
+}
