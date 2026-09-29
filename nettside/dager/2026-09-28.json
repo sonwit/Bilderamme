@@ -1,10 +1,10 @@
 {
  "dato": "2026-09-28",
- "tegnet": "16:01",
- "periode": "05:46–15:59",
- "opptak": 44,
- "vaer": "Lett regn · 14° · 2 m/s",
- "antall_arter": 16,
+ "tegnet": "07:07",
+ "periode": "05:46–21:38",
+ "opptak": 61,
+ "vaer": "Klarvær · 7° · 2 m/s",
+ "antall_arter": 17,
  "hoert": [
   {
    "nr": 1,
@@ -44,6 +44,24 @@
   },
   {
    "nr": 3,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 59,
+   "tid": "09:29–17:19",
+   "belegg": "3 økter",
+   "boks": [
+    290,
+    1271,
+    462,
+    1406
+   ],
+   "merke": [
+    314,
+    1409
+   ]
+  },
+  {
+   "nr": 4,
    "norsk": "Blåmeis",
    "latin": "Cyanistes caeruleus",
    "sikkerhet": 58,
@@ -61,7 +79,7 @@
    ]
   },
   {
-   "nr": 4,
+   "nr": 5,
    "norsk": "Skogsnipe",
    "latin": "Tringa ochropus",
    "sikkerhet": 57,
@@ -79,7 +97,7 @@
    ]
   },
   {
-   "nr": 5,
+   "nr": 6,
    "norsk": "Storfugl",
    "latin": "Tetrao urogallus",
    "sikkerhet": 50,
@@ -97,29 +115,18 @@
    ]
   },
   {
+   "norsk": "Stokkand",
+   "latin": "Anas platyrhynchos",
+   "sikkerhet": 35,
+   "tid": "10:59–17:39",
+   "belegg": "2 økter"
+  },
+  {
    "norsk": "Sivhøne",
    "latin": "Gallinula chloropus",
    "sikkerhet": 28,
    "tid": "06:59–14:19",
    "belegg": "2 økter"
-  },
-  {
-   "nr": 6,
-   "norsk": "Kjøttmeis",
-   "latin": "Parus major",
-   "sikkerhet": 27,
-   "tid": "09:29–14:59",
-   "belegg": "2 økter",
-   "boks": [
-    290,
-    1271,
-    462,
-    1406
-   ],
-   "merke": [
-    314,
-    1409
-   ]
   }
  ],
  "ogsaa": [
@@ -128,7 +135,7 @@
   "Kråke",
   "Gråtrost",
   "Ring Ouzel",
-  "Stokkand"
+  "Trane"
  ],
  "bilde": "2026-09-28.png",
  "doegn": [
@@ -175,6 +182,23 @@
   {"t": "14:59", "arter": []},
   {"t": "15:19", "arter": []},
   {"t": "15:39", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:19", "arter": []},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:19", "arter": [["Kjøttmeis", "Parus major", 59]]},
+  {"t": "17:39", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:19", "arter": []},
+  {"t": "18:39", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:18", "arter": []},
+  {"t": "19:38", "arter": []},
+  {"t": "19:58", "arter": []},
+  {"t": "20:18", "arter": []},
+  {"t": "20:38", "arter": []},
+  {"t": "20:58", "arter": []},
+  {"t": "21:18", "arter": []},
+  {"t": "21:38", "arter": []}
  ]
 }

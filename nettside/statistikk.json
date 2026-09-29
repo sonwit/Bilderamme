@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-09-28",
- "dager_med_opptak": 51,
+ "til": "2026-09-29",
+ "dager_med_opptak": 52,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -23,10 +23,10 @@
    "sist": "2026-09-27"
   },
   "Porzana porzana": {
-   "dager": 19,
+   "dager": 20,
    "beste": 0.91,
    "foerst": "2026-08-04",
-   "sist": "2026-09-28"
+   "sist": "2026-09-29"
   },
   "Spinus spinus": {
    "dager": 11,
@@ -88,6 +88,12 @@
    "foerst": "2026-08-19",
    "sist": "2026-09-24"
   },
+  "Anas platyrhynchos": {
+   "dager": 4,
+   "beste": 0.8,
+   "foerst": "2026-08-27",
+   "sist": "2026-09-28"
+  },
   "Dendrocopos major": {
    "dager": 4,
    "beste": 0.78,
@@ -123,12 +129,6 @@
    "beste": 0.98,
    "foerst": "2026-08-28",
    "sist": "2026-09-27"
-  },
-  "Anas platyrhynchos": {
-   "dager": 3,
-   "beste": 0.8,
-   "foerst": "2026-08-27",
-   "sist": "2026-09-10"
   },
   "Ardea cinerea": {
    "dager": 3,
