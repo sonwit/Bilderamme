@@ -1,18 +1,18 @@
 {
  "dato": "2026-09-29",
- "tegnet": "09:38",
- "periode": "05:18–09:39",
- "opptak": 23,
- "vaer": "Klarvær · 7° · 1 m/s",
- "antall_arter": 10,
+ "tegnet": "16:00",
+ "periode": "05:18–15:59",
+ "opptak": 44,
+ "vaer": "Delvis skyet · 13° · 2 m/s",
+ "antall_arter": 14,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 96,
-   "tid": "07:19–09:39",
-   "belegg": "2 økter",
+   "tid": "07:19–15:39",
+   "belegg": "4 økter",
    "boks": [
     592,
     1144,
@@ -29,8 +29,8 @@
    "norsk": "Pilfink",
    "latin": "Passer montanus",
    "sikkerhet": 92,
-   "tid": "08:59",
-   "belegg": "4 ggr",
+   "tid": "08:59–10:19",
+   "belegg": "2 økter",
    "boks": [
     951,
     733,
@@ -46,9 +46,9 @@
    "nr": 3,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
-   "sikkerhet": 78,
-   "tid": "07:29–09:29",
-   "belegg": "3 økter",
+   "sikkerhet": 90,
+   "tid": "07:29–09:59",
+   "belegg": "5 økter",
    "boks": [
     834,
     917,
@@ -118,8 +118,10 @@
  "ogsaa": [
   "Myrrikse",
   "White-winged Crossbill",
+  "Kanadagås",
   "Rødstjert",
-  "Bokfink"
+  "Spurveugle",
+  "Gråspurv"
  ],
  "bilde": "2026-09-29.png",
  "doegn": [
@@ -145,6 +147,27 @@
   {"t": "09:09", "arter": []},
   {"t": "09:19", "arter": []},
   {"t": "09:29", "arter": [["Grønnfink", "Chloris chloris", 78]]},
-  {"t": "09:39", "arter": [["Skjære", "Pica pica", 96]]}
+  {"t": "09:39", "arter": [["Skjære", "Pica pica", 96]]},
+  {"t": "09:49", "arter": [["Grønnfink", "Chloris chloris", 90]]},
+  {"t": "09:59", "arter": []},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": []},
+  {"t": "10:38", "arter": []},
+  {"t": "10:58", "arter": []},
+  {"t": "11:18", "arter": []},
+  {"t": "11:38", "arter": []},
+  {"t": "11:58", "arter": []},
+  {"t": "12:18", "arter": []},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": [["Skjære", "Pica pica", 86]]},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": [["Skjære", "Pica pica", 75]]},
+  {"t": "15:59", "arter": []}
  ]
 }
