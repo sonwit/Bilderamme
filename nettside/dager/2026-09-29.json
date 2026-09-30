@@ -1,18 +1,18 @@
 {
  "dato": "2026-09-29",
- "tegnet": "16:00",
- "periode": "05:18–15:59",
- "opptak": 44,
- "vaer": "Delvis skyet · 13° · 2 m/s",
- "antall_arter": 14,
+ "tegnet": "07:08",
+ "periode": "05:18–21:39",
+ "opptak": 61,
+ "vaer": "Overskyet · 10° · 3 m/s",
+ "antall_arter": 19,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 96,
-   "tid": "07:19–15:39",
-   "belegg": "4 økter",
+   "tid": "07:19–16:39",
+   "belegg": "6 økter",
    "boks": [
     592,
     1144,
@@ -62,6 +62,24 @@
   },
   {
    "nr": 4,
+   "norsk": "Vaktel",
+   "latin": "Coturnix coturnix",
+   "sikkerhet": 63,
+   "tid": "18:59",
+   "belegg": "1 ggr",
+   "boks": [
+    693,
+    100,
+    787,
+    209
+   ],
+   "merke": [
+    657,
+    209
+   ]
+  },
+  {
+   "nr": 5,
    "norsk": "Kjøttmeis",
    "latin": "Parus major",
    "sikkerhet": 56,
@@ -79,7 +97,7 @@
    ]
   },
   {
-   "nr": 5,
+   "nr": 6,
    "norsk": "Konglebiter",
    "latin": "Pinicola enucleator",
    "sikkerhet": 55,
@@ -97,7 +115,14 @@
    ]
   },
   {
-   "nr": 6,
+   "norsk": "Heilo",
+   "latin": "Pluvialis apricaria",
+   "sikkerhet": 54,
+   "tid": "19:19",
+   "belegg": "1 ggr"
+  },
+  {
+   "nr": 7,
    "norsk": "Dvergspett",
    "latin": "Dryobates minor",
    "sikkerhet": 40,
@@ -117,11 +142,11 @@
  ],
  "ogsaa": [
   "Myrrikse",
+  "Storspove",
   "White-winged Crossbill",
   "Kanadagås",
   "Rødstjert",
-  "Spurveugle",
-  "Gråspurv"
+  "Spurveugle"
  ],
  "bilde": "2026-09-29.png",
  "doegn": [
@@ -168,6 +193,23 @@
   {"t": "14:59", "arter": []},
   {"t": "15:19", "arter": []},
   {"t": "15:39", "arter": [["Skjære", "Pica pica", 75]]},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:19", "arter": [["Skjære", "Pica pica", 68]]},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:19", "arter": []},
+  {"t": "17:39", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:19", "arter": []},
+  {"t": "18:39", "arter": []},
+  {"t": "18:59", "arter": [["Vaktel", "Coturnix coturnix", 63]]},
+  {"t": "19:19", "arter": [["Heilo", "Pluvialis apricaria", 54]]},
+  {"t": "19:39", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:19", "arter": []},
+  {"t": "20:39", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:19", "arter": []},
+  {"t": "21:39", "arter": []}
  ]
 }
