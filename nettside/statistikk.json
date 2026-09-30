@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 34,
+   "dager": 35,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-09-29"
+   "sist": "2026-09-30"
   },
   "Parus major": {
    "dager": 23,
@@ -29,10 +29,10 @@
    "sist": "2026-09-30"
   },
   "Chloris chloris": {
-   "dager": 12,
+   "dager": 13,
    "beste": 0.96,
    "foerst": "2026-07-27",
-   "sist": "2026-09-29"
+   "sist": "2026-09-30"
   },
   "Spinus spinus": {
    "dager": 11,
