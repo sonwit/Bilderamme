@@ -1,10 +1,10 @@
 {
  "dato": "2026-09-30",
- "tegnet": "09:37",
- "periode": "05:45–09:39",
- "opptak": 23,
- "vaer": "Overskyet · 10° · 3 m/s",
- "antall_arter": 4,
+ "tegnet": "16:00",
+ "periode": "05:45–15:59",
+ "opptak": 44,
+ "vaer": "Overskyet · 12° · 4 m/s",
+ "antall_arter": 6,
  "hoert": [
   {
    "nr": 1,
@@ -28,9 +28,9 @@
    "nr": 2,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
-   "sikkerhet": 79,
-   "tid": "07:49–09:39",
-   "belegg": "3 økter",
+   "sikkerhet": 96,
+   "tid": "07:49–14:59",
+   "belegg": "10 økter",
    "boks": [
     238,
     1265,
@@ -41,11 +41,47 @@
     314,
     1409
    ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Grønnsisik",
+   "latin": "Spinus spinus",
+   "sikkerhet": 93,
+   "tid": "10:09",
+   "belegg": "2 ggr",
+   "boks": [
+    957,
+    745,
+    1077,
+    860
+   ],
+   "merke": [
+    999,
+    869
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 69,
+   "tid": "07:19–15:59",
+   "belegg": "3 økter",
+   "boks": [
+    796,
+    922,
+    956,
+    1047
+   ],
+   "merke": [
+    864,
+    1051
+   ]
   }
  ],
  "ogsaa": [
   "Myrrikse",
-  "Kjøttmeis"
+  "Konglebiter"
  ],
  "bilde": "2026-09-30.png",
  "doegn": [
@@ -71,6 +107,27 @@
   {"t": "09:09", "arter": [["Skjære", "Pica pica", 100]]},
   {"t": "09:19", "arter": []},
   {"t": "09:29", "arter": []},
-  {"t": "09:39", "arter": []}
+  {"t": "09:39", "arter": []},
+  {"t": "09:49", "arter": [["Grønnfink", "Chloris chloris", 69]]},
+  {"t": "09:59", "arter": []},
+  {"t": "10:09", "arter": [["Grønnsisik", "Spinus spinus", 93]]},
+  {"t": "10:19", "arter": []},
+  {"t": "10:39", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": [["Grønnfink", "Chloris chloris", 96]]},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": [["Grønnfink", "Chloris chloris", 91]]},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": [["Grønnfink", "Chloris chloris", 61]]},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": [["Grønnfink", "Chloris chloris", 95], ["Kjøttmeis", "Parus major", 69]]},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
