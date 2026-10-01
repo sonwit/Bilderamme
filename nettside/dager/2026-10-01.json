@@ -1,54 +1,18 @@
 {
  "dato": "2026-10-01",
- "tegnet": "09:37",
- "periode": "05:44–09:39",
- "opptak": 22,
- "vaer": "Overskyet · 11° · 3 m/s",
- "antall_arter": 12,
+ "tegnet": "16:00",
+ "periode": "05:44–16:00",
+ "opptak": 44,
+ "vaer": "Delvis skyet · 16° · 4 m/s",
+ "antall_arter": 14,
  "hoert": [
   {
    "nr": 1,
-   "norsk": "Spettmeis",
-   "latin": "Sitta europaea",
-   "sikkerhet": 88,
-   "tid": "07:49–09:09",
-   "belegg": "2 økter",
-   "boks": [
-    1036,
-    1153,
-    1122,
-    1338
-   ],
-   "merke": [
-    1000,
-    1338
-   ]
-  },
-  {
-   "nr": 2,
-   "norsk": "Grønnfink",
-   "latin": "Chloris chloris",
-   "sikkerhet": 79,
-   "tid": "07:59–09:29",
-   "belegg": "3 økter",
-   "boks": [
-    238,
-    1265,
-    422,
-    1403
-   ],
-   "merke": [
-    314,
-    1409
-   ]
-  },
-  {
-   "nr": 3,
    "norsk": "Skjære",
    "latin": "Pica pica",
-   "sikkerhet": 59,
-   "tid": "08:19",
-   "belegg": "1 ggr",
+   "sikkerhet": 100,
+   "tid": "08:19–15:19",
+   "belegg": "6 økter",
    "boks": [
     678,
     837,
@@ -58,6 +22,42 @@
    "merke": [
     864,
     1051
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Spettmeis",
+   "latin": "Sitta europaea",
+   "sikkerhet": 88,
+   "tid": "07:49–09:09",
+   "belegg": "2 økter",
+   "boks": [
+    1014,
+    907,
+    1087,
+    1064
+   ],
+   "merke": [
+    978,
+    1064
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 86,
+   "tid": "07:59–14:59",
+   "belegg": "7 økter",
+   "boks": [
+    238,
+    1265,
+    422,
+    1403
+   ],
+   "merke": [
+    314,
+    1409
    ]
   },
   {
@@ -80,6 +80,24 @@
   },
   {
    "nr": 5,
+   "norsk": "Dvergspett",
+   "latin": "Dryobates minor",
+   "sikkerhet": 50,
+   "tid": "13:59–14:59",
+   "belegg": "2 økter",
+   "boks": [
+    967,
+    1167,
+    1057,
+    1360
+   ],
+   "merke": [
+    931,
+    1360
+   ]
+  },
+  {
+   "nr": 6,
    "norsk": "Kråke",
    "latin": "Corvus cornix",
    "sikkerhet": 50,
@@ -128,6 +146,28 @@
   {"t": "09:09", "arter": [["Spettmeis", "Sitta europaea", 88]]},
   {"t": "09:19", "arter": [["Kråke", "Corvus cornix", 50]]},
   {"t": "09:29", "arter": [["Grønnfink", "Chloris chloris", 79]]},
-  {"t": "09:39", "arter": []}
+  {"t": "09:39", "arter": []},
+  {"t": "09:49", "arter": [["Grønnfink", "Chloris chloris", 86]]},
+  {"t": "09:59", "arter": [["Skjære", "Pica pica", 81]]},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": [["Skjære", "Pica pica", 94]]},
+  {"t": "10:29", "arter": []},
+  {"t": "10:39", "arter": [["Skjære", "Pica pica", 62]]},
+  {"t": "10:59", "arter": []},
+  {"t": "11:18", "arter": []},
+  {"t": "11:39", "arter": [["Skjære", "Pica pica", 88]]},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": [["Grønnfink", "Chloris chloris", 68]]},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": [["Dvergspett", "Dryobates minor", 50]]},
+  {"t": "15:19", "arter": [["Skjære", "Pica pica", 100]]},
+  {"t": "15:39", "arter": []},
+  {"t": "16:00", "arter": []}
  ]
 }
