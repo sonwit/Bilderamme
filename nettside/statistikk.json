@@ -5,16 +5,22 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 35,
+   "dager": 36,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-09-30"
+   "sist": "2026-10-01"
   },
   "Parus major": {
-   "dager": 24,
+   "dager": 25,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-09-30"
+   "sist": "2026-10-01"
+  },
+  "Porzana porzana": {
+   "dager": 22,
+   "beste": 0.91,
+   "foerst": "2026-08-04",
+   "sist": "2026-10-01"
   },
   "Dryobates minor": {
    "dager": 22,
@@ -22,17 +28,11 @@
    "foerst": "2026-08-04",
    "sist": "2026-09-29"
   },
-  "Porzana porzana": {
-   "dager": 21,
-   "beste": 0.91,
-   "foerst": "2026-08-04",
-   "sist": "2026-09-30"
-  },
   "Chloris chloris": {
-   "dager": 13,
+   "dager": 14,
    "beste": 0.96,
    "foerst": "2026-07-27",
-   "sist": "2026-09-30"
+   "sist": "2026-10-01"
   },
   "Spinus spinus": {
    "dager": 12,
@@ -46,6 +46,12 @@
    "foerst": "2026-08-26",
    "sist": "2026-09-28"
   },
+  "Corvus cornix": {
+   "dager": 7,
+   "beste": 0.84,
+   "foerst": "2026-08-29",
+   "sist": "2026-10-01"
+  },
   "Fulmarus glacialis": {
    "dager": 7,
    "beste": 0.69,
@@ -58,12 +64,6 @@
    "foerst": "2026-08-25",
    "sist": "2026-09-12"
   },
-  "Corvus cornix": {
-   "dager": 6,
-   "beste": 0.84,
-   "foerst": "2026-08-29",
-   "sist": "2026-09-26"
-  },
   "Phylloscopus collybita": {
    "dager": 5,
    "beste": 1.0,
@@ -75,6 +75,12 @@
    "beste": 0.87,
    "foerst": "2026-09-01",
    "sist": "2026-09-26"
+  },
+  "Sitta europaea": {
+   "dager": 4,
+   "beste": 0.98,
+   "foerst": "2026-08-28",
+   "sist": "2026-10-01"
   },
   "Turdus iliacus": {
    "dager": 4,
@@ -123,12 +129,6 @@
    "beste": 0.98,
    "foerst": "2026-09-08",
    "sist": "2026-09-22"
-  },
-  "Sitta europaea": {
-   "dager": 3,
-   "beste": 0.98,
-   "foerst": "2026-08-28",
-   "sist": "2026-09-27"
   },
   "Passer montanus": {
    "dager": 3,

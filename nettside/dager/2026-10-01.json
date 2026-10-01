@@ -1,0 +1,133 @@
+{
+ "dato": "2026-10-01",
+ "tegnet": "09:37",
+ "periode": "05:44–09:39",
+ "opptak": 22,
+ "vaer": "Overskyet · 11° · 3 m/s",
+ "antall_arter": 12,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Spettmeis",
+   "latin": "Sitta europaea",
+   "sikkerhet": 88,
+   "tid": "07:49–09:09",
+   "belegg": "2 økter",
+   "boks": [
+    1036,
+    1153,
+    1122,
+    1338
+   ],
+   "merke": [
+    1000,
+    1338
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 79,
+   "tid": "07:59–09:29",
+   "belegg": "3 økter",
+   "boks": [
+    238,
+    1265,
+    422,
+    1403
+   ],
+   "merke": [
+    314,
+    1409
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 59,
+   "tid": "08:19",
+   "belegg": "1 ggr",
+   "boks": [
+    678,
+    837,
+    1005,
+    1078
+   ],
+   "merke": [
+    864,
+    1051
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 54,
+   "tid": "07:29–08:29",
+   "belegg": "2 økter",
+   "boks": [
+    940,
+    750,
+    1086,
+    864
+   ],
+   "merke": [
+    999,
+    869
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Kråke",
+   "latin": "Corvus cornix",
+   "sikkerhet": 50,
+   "tid": "09:19",
+   "belegg": "2 ggr",
+   "boks": [
+    592,
+    1109,
+    966,
+    1396
+   ],
+   "merke": [
+    698,
+    1396
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Myrrikse",
+  "Gråsisik",
+  "Gråtrost",
+  "Sanglerke",
+  "Vipe",
+  "Grønnsisik"
+ ],
+ "bilde": "2026-10-01.png",
+ "doegn": [
+  {"t": "05:44", "arter": []},
+  {"t": "05:59", "arter": []},
+  {"t": "06:19", "arter": []},
+  {"t": "06:39", "arter": []},
+  {"t": "06:49", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:09", "arter": []},
+  {"t": "07:19", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:39", "arter": []},
+  {"t": "07:49", "arter": [["Spettmeis", "Sitta europaea", 74]]},
+  {"t": "07:59", "arter": []},
+  {"t": "08:09", "arter": []},
+  {"t": "08:19", "arter": [["Skjære", "Pica pica", 59]]},
+  {"t": "08:29", "arter": [["Kjøttmeis", "Parus major", 54]]},
+  {"t": "08:39", "arter": []},
+  {"t": "08:49", "arter": []},
+  {"t": "08:59", "arter": []},
+  {"t": "09:09", "arter": [["Spettmeis", "Sitta europaea", 88]]},
+  {"t": "09:19", "arter": [["Kråke", "Corvus cornix", 50]]},
+  {"t": "09:29", "arter": [["Grønnfink", "Chloris chloris", 79]]},
+  {"t": "09:39", "arter": []}
+ ]
+}
