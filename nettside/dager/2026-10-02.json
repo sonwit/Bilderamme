@@ -1,33 +1,85 @@
 {
  "dato": "2026-10-02",
- "tegnet": "09:37",
- "periode": "05:45–09:39",
- "opptak": 22,
- "vaer": "Regn · 12° · 1 m/s",
- "antall_arter": 2,
+ "tegnet": "16:00",
+ "periode": "05:45–15:59",
+ "opptak": 44,
+ "vaer": "Tåke · 13° · 0 m/s",
+ "antall_arter": 4,
  "hoert": [
   {
    "nr": 1,
-   "norsk": "Grønnfink",
-   "latin": "Chloris chloris",
-   "sikkerhet": 55,
-   "tid": "08:59–09:39",
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 74,
+   "tid": "09:39–09:49",
    "belegg": "2 økter",
    "boks": [
-    582,
-    1232,
-    776,
-    1377
+    592,
+    1144,
+    964,
+    1418
    ],
    "merke": [
-    664,
-    1382
+    675,
+    1386
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 67,
+   "tid": "08:59–15:39",
+   "belegg": "5 økter",
+   "boks": [
+    238,
+    1265,
+    422,
+    1403
+   ],
+   "merke": [
+    314,
+    1409
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Spettmeis",
+   "latin": "Sitta europaea",
+   "sikkerhet": 59,
+   "tid": "09:49",
+   "belegg": "1 ggr",
+   "boks": [
+    1014,
+    907,
+    1087,
+    1064
+   ],
+   "merke": [
+    978,
+    1064
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Dvergspett",
+   "latin": "Dryobates minor",
+   "sikkerhet": 48,
+   "tid": "11:59–15:39",
+   "belegg": "4 økter",
+   "boks": [
+    967,
+    1167,
+    1057,
+    1360
+   ],
+   "merke": [
+    931,
+    1360
    ]
   }
  ],
- "ogsaa": [
-  "Skjære"
- ],
+ "ogsaa": [],
  "bilde": "2026-10-02.png",
  "doegn": [
   {"t": "05:45", "arter": []},
@@ -51,6 +103,28 @@
   {"t": "09:09", "arter": []},
   {"t": "09:19", "arter": []},
   {"t": "09:29", "arter": []},
-  {"t": "09:39", "arter": []}
+  {"t": "09:39", "arter": []},
+  {"t": "09:49", "arter": [["Skjære", "Pica pica", 74], ["Spettmeis", "Sitta europaea", 59]]},
+  {"t": "09:59", "arter": []},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": []},
+  {"t": "10:29", "arter": []},
+  {"t": "10:39", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": [["Grønnfink", "Chloris chloris", 58]]},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": [["Grønnfink", "Chloris chloris", 67]]},
+  {"t": "15:59", "arter": []}
  ]
 }

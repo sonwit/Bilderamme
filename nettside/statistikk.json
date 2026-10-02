@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 36,
+   "dager": 37,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-10-01"
+   "sist": "2026-10-02"
   },
   "Parus major": {
    "dager": 25,
@@ -17,10 +17,10 @@
    "sist": "2026-10-01"
   },
   "Dryobates minor": {
-   "dager": 23,
+   "dager": 24,
    "beste": 0.72,
    "foerst": "2026-08-04",
-   "sist": "2026-10-01"
+   "sist": "2026-10-02"
   },
   "Chloris chloris": {
    "dager": 15,
@@ -58,17 +58,17 @@
    "foerst": "2026-09-05",
    "sist": "2026-09-24"
   },
+  "Sitta europaea": {
+   "dager": 5,
+   "beste": 0.98,
+   "foerst": "2026-08-28",
+   "sist": "2026-10-02"
+  },
   "Turdus merula": {
    "dager": 5,
    "beste": 0.87,
    "foerst": "2026-09-01",
    "sist": "2026-09-26"
-  },
-  "Sitta europaea": {
-   "dager": 4,
-   "beste": 0.98,
-   "foerst": "2026-08-28",
-   "sist": "2026-10-01"
   },
   "Turdus iliacus": {
    "dager": 4,
