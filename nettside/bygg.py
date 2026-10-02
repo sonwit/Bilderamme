@@ -371,8 +371,17 @@ def vegg(d: dict, dager: list[dict], p: str) -> str:
         return f'<span class="pil skaaret av" aria-disabled="true">{inni}</span>'
     stripe = ""
     if len(dager) > 1:
-        slutt = max(i, min(len(dager), 7) - 1) + 1
-        vindu = dager[max(0, slutt - 7):slutt]
+        # Faste blokker paa sju, regnet bakover fra nyeste dag: remsen viser
+        # de sju siste og staar stille mens en blar, bare ramma flytter seg.
+        # Foer 2. okt 2026 sluttet vinduet alltid paa valgt dag, saa valgt
+        # bilde laa lengst til hoeyre og hele remsen skled ved hvert klikk.
+        # Den eldste blokka fylles opp til sju fra starten av arkivet.
+        n = len(dager)
+        slutt = n - (n - 1 - i) // 7 * 7
+        start = slutt - 7
+        if start < 0:
+            start, slutt = 0, min(n, 7)
+        vindu = dager[start:slutt]
         lenker = []
         for x in vindu:
             u, _ = dato_tekst(x["dato"])
