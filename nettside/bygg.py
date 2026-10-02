@@ -37,6 +37,7 @@ URL = os.environ.get("NETTSIDE_URL", "https://sonwit.github.io/Bilderamme/").rst
 sys.path.insert(0, os.path.join(ROT, "tools"))
 sys.path.insert(0, HER)
 import bird_names as bn  # noqa: E402
+from render_daily_panel import BLOKKERT  # noqa: E402
 import lytteplan  # noqa: E402
 
 SPRAAKENE = ["nb", "en"]
@@ -166,6 +167,10 @@ def hent_arter() -> list[dict]:
         slug = fil[:-4]
         slekt, art = slug.split("-", 1)
         sci = f"{slekt.capitalize()} {art}"
+        # Plansjen finnes fordi BirdNET meldte arten foer vi visste bedre.
+        # Et kjent feiltreff skal ikke staa blant fuglene i hagen.
+        if sci in BLOKKERT:
+            continue
         a = ARTER_JSON.get(sci.lower(), {})
         p = plansjer.get(sci, {})
         cm = a.get("lengde_cm") or bn.length_cm(sci)

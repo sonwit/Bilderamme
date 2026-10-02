@@ -23,7 +23,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from render_daily_panel import SURE_CONF  # noqa: E402
+from render_daily_panel import BLOKKERT, SURE_CONF  # noqa: E402
 
 
 def regn(logg: str) -> dict:
@@ -45,7 +45,9 @@ def regn(logg: str) -> dict:
             dager_med_opptak.add(dato)
             for s in o.get("species", []):
                 sci = (s.get("scientific_name") or "").strip()
-                if not sci:
+                # Kjente feiltreff (myrrikse, storfugl ...) teller ikke som
+                # «hoert»: myrriksa laa fjerde oeverst paa forsiden med 16 dager.
+                if not sci or sci in BLOKKERT:
                     continue
                 c = float(s.get("confidence", 0))
                 per_dag[sci][dato].append(c)

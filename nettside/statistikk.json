@@ -22,12 +22,6 @@
    "foerst": "2026-08-04",
    "sist": "2026-10-01"
   },
-  "Porzana porzana": {
-   "dager": 22,
-   "beste": 0.91,
-   "foerst": "2026-08-04",
-   "sist": "2026-10-01"
-  },
   "Chloris chloris": {
    "dager": 14,
    "beste": 0.96,
@@ -58,12 +52,6 @@
    "foerst": "2026-08-29",
    "sist": "2026-10-01"
   },
-  "Fulmarus glacialis": {
-   "dager": 7,
-   "beste": 0.69,
-   "foerst": "2026-08-30",
-   "sist": "2026-09-23"
-  },
   "Phylloscopus collybita": {
    "dager": 5,
    "beste": 1.0,
@@ -75,12 +63,6 @@
    "beste": 0.87,
    "foerst": "2026-09-01",
    "sist": "2026-09-26"
-  },
-  "Tetrao urogallus": {
-   "dager": 5,
-   "beste": 0.6,
-   "foerst": "2026-08-04",
-   "sist": "2026-10-02"
   },
   "Sitta europaea": {
    "dager": 4,
@@ -142,12 +124,6 @@
    "foerst": "2026-07-27",
    "sist": "2026-09-01"
   },
-  "Coturnix coturnix": {
-   "dager": 3,
-   "beste": 0.71,
-   "foerst": "2026-09-01",
-   "sist": "2026-09-29"
-  },
   "Columba palumbus": {
    "dager": 3,
    "beste": 0.59,
@@ -171,12 +147,6 @@
    "beste": 0.6,
    "foerst": "2026-08-28",
    "sist": "2026-09-19"
-  },
-  "Gallinago gallinago": {
-   "dager": 2,
-   "beste": 0.55,
-   "foerst": "2026-08-27",
-   "sist": "2026-08-28"
   },
   "Erithacus rubecula": {
    "dager": 1,
@@ -207,12 +177,6 @@
    "beste": 0.88,
    "foerst": "2026-09-04",
    "sist": "2026-09-04"
-  },
-  "Botaurus stellaris": {
-   "dager": 1,
-   "beste": 0.88,
-   "foerst": "2026-08-03",
-   "sist": "2026-08-03"
   },
   "Corvus monedula": {
    "dager": 1,
@@ -255,12 +219,6 @@
    "beste": 0.57,
    "foerst": "2026-09-28",
    "sist": "2026-09-28"
-  },
-  "Mareca strepera": {
-   "dager": 1,
-   "beste": 0.56,
-   "foerst": "2026-08-29",
-   "sist": "2026-08-29"
   },
   "Pinicola enucleator": {
    "dager": 1,
