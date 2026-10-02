@@ -1,31 +1,33 @@
 {
  "dato": "2026-10-02",
- "tegnet": "07:07",
- "periode": "05:45–07:09",
- "opptak": 7,
- "vaer": "Kraftig regn · 12° · 1 m/s",
- "antall_arter": 1,
+ "tegnet": "09:37",
+ "periode": "05:45–09:39",
+ "opptak": 22,
+ "vaer": "Regn · 12° · 1 m/s",
+ "antall_arter": 2,
  "hoert": [
   {
    "nr": 1,
-   "norsk": "Storfugl",
-   "latin": "Tetrao urogallus",
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
    "sikkerhet": 55,
-   "tid": "06:49–07:09",
-   "belegg": "3 økter",
+   "tid": "08:59–09:39",
+   "belegg": "2 økter",
    "boks": [
-    592,
-    1084,
-    920,
-    1411
+    582,
+    1232,
+    776,
+    1377
    ],
    "merke": [
-    747,
-    1402
+    664,
+    1382
    ]
   }
  ],
- "ogsaa": [],
+ "ogsaa": [
+  "Skjære"
+ ],
  "bilde": "2026-10-02.png",
  "doegn": [
   {"t": "05:45", "arter": []},
@@ -33,7 +35,22 @@
   {"t": "06:19", "arter": []},
   {"t": "06:39", "arter": []},
   {"t": "06:49", "arter": []},
-  {"t": "06:59", "arter": [["Storfugl", "Tetrao urogallus", 55]]},
-  {"t": "07:09", "arter": [["Storfugl", "Tetrao urogallus", 53]]}
+  {"t": "06:59", "arter": []},
+  {"t": "07:09", "arter": []},
+  {"t": "07:19", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:39", "arter": []},
+  {"t": "07:49", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:09", "arter": []},
+  {"t": "08:19", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:39", "arter": []},
+  {"t": "08:49", "arter": []},
+  {"t": "08:59", "arter": [["Grønnfink", "Chloris chloris", 55]]},
+  {"t": "09:09", "arter": []},
+  {"t": "09:19", "arter": []},
+  {"t": "09:29", "arter": []},
+  {"t": "09:39", "arter": []}
  ]
 }
