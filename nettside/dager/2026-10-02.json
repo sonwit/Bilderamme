@@ -1,0 +1,39 @@
+{
+ "dato": "2026-10-02",
+ "tegnet": "07:07",
+ "periode": "05:45–07:09",
+ "opptak": 7,
+ "vaer": "Kraftig regn · 12° · 1 m/s",
+ "antall_arter": 1,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Storfugl",
+   "latin": "Tetrao urogallus",
+   "sikkerhet": 55,
+   "tid": "06:49–07:09",
+   "belegg": "3 økter",
+   "boks": [
+    592,
+    1084,
+    920,
+    1411
+   ],
+   "merke": [
+    747,
+    1402
+   ]
+  }
+ ],
+ "ogsaa": [],
+ "bilde": "2026-10-02.png",
+ "doegn": [
+  {"t": "05:45", "arter": []},
+  {"t": "05:59", "arter": []},
+  {"t": "06:19", "arter": []},
+  {"t": "06:39", "arter": []},
+  {"t": "06:49", "arter": []},
+  {"t": "06:59", "arter": [["Storfugl", "Tetrao urogallus", 55]]},
+  {"t": "07:09", "arter": [["Storfugl", "Tetrao urogallus", 53]]}
+ ]
+}

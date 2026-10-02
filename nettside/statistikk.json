@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-10-01",
- "dager_med_opptak": 54,
+ "til": "2026-10-02",
+ "dager_med_opptak": 55,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -35,16 +35,22 @@
    "sist": "2026-10-01"
   },
   "Spinus spinus": {
-   "dager": 12,
+   "dager": 13,
    "beste": 0.98,
    "foerst": "2026-08-25",
-   "sist": "2026-09-30"
+   "sist": "2026-10-01"
   },
   "Cyanistes caeruleus": {
    "dager": 11,
    "beste": 0.95,
    "foerst": "2026-08-26",
    "sist": "2026-09-28"
+  },
+  "Turdus pilaris": {
+   "dager": 7,
+   "beste": 0.95,
+   "foerst": "2026-08-25",
+   "sist": "2026-10-01"
   },
   "Corvus cornix": {
    "dager": 7,
@@ -58,12 +64,6 @@
    "foerst": "2026-08-30",
    "sist": "2026-09-23"
   },
-  "Turdus pilaris": {
-   "dager": 6,
-   "beste": 0.95,
-   "foerst": "2026-08-25",
-   "sist": "2026-09-12"
-  },
   "Phylloscopus collybita": {
    "dager": 5,
    "beste": 1.0,
@@ -75,6 +75,12 @@
    "beste": 0.87,
    "foerst": "2026-09-01",
    "sist": "2026-09-26"
+  },
+  "Tetrao urogallus": {
+   "dager": 5,
+   "beste": 0.6,
+   "foerst": "2026-08-04",
+   "sist": "2026-10-02"
   },
   "Sitta europaea": {
    "dager": 4,
@@ -117,12 +123,6 @@
    "beste": 0.75,
    "foerst": "2026-08-26",
    "sist": "2026-09-23"
-  },
-  "Tetrao urogallus": {
-   "dager": 4,
-   "beste": 0.6,
-   "foerst": "2026-08-04",
-   "sist": "2026-09-28"
   },
   "Pyrrhula pyrrhula": {
    "dager": 3,
