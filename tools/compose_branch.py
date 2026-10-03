@@ -907,6 +907,20 @@ NY_NAER = int(os.environ.get("RETUSJ_NY_NAER", "12"))
 # alt like ved en fugl vi selv har satt er per definisjon ikke nytt.
 NY_BOKS_SLAKK = int(os.environ.get("RETUSJ_NY_SLAKK", "30"))
 
+# Proevemodus fra 3. okt 2026: fuglevaktene (_fuglene_staar, _noe_nytt)
+# maaler og logger fortsatt, men forkaster ikke. Av 49 retusjer foer det ble
+# 13 forkastet av dem, 11 for «tegnet inn noe selv» -- og arket som ble
+# staaende igjen hadde fugler som sto OPPAA grenen i stedet for aa gripe.
+# Vi vil se om det de stopper faktisk er et problem paa veggen. Tekstsonen
+# er fortsatt absolutt: rot der gjoer siden uleselig. Loggen sier «ville
+# forkastet» der vaktene ville slaatt til. RETUSJ_STRENG=1 setter alt
+# tilbake; viser proeven seg daarlig, blir standarden «1» igjen.
+STRENG = os.environ.get("RETUSJ_STRENG", "0") == "1"
+
+# Det lokale arket foer retusjen, saa et proeveresultat kan sammenlignes
+# med det vaktene ellers ville beholdt.
+LOKAL_PNG = BG_PNG.replace(".png", "-lokal.png")
+
 
 def _noe_nytt(kandidat: Image.Image, foer: Image.Image,
               plassert: list[dict]) -> str | None:
@@ -957,6 +971,7 @@ def retusjer(ark: Image.Image, tries: int,
     ref = ark.copy()
     ref.thumbnail((RETUSJ_REF, RETUSJ_REF), Image.LANCZOS)
     basis = zone_report(ark)
+    ark.save(LOKAL_PNG)
     feil = 0
     for forsoek in range(1, tries + 1):
         try:
@@ -977,13 +992,15 @@ def retusjer(ark: Image.Image, tries: int,
         if not ren:
             dom = "FORKASTET — rotet i tekstsonen"
         elif borte:
-            dom = f"FORKASTET — flyttet paa {borte}"
+            dom = (f"FORKASTET — flyttet paa {borte}" if STRENG else
+                   f"godtatt (proeve, ville forkastet: flyttet paa {borte})")
         elif nytt:
-            dom = f"FORKASTET — tegnet inn noe selv: {nytt}"
+            dom = (f"FORKASTET — tegnet inn noe selv: {nytt}" if STRENG else
+                   f"godtatt (proeve, ville forkastet: tegnet inn noe selv: {nytt})")
         else:
             dom = "godtatt"
         print(f"  retusj {forsoek}/{tries}: {status}  {dom}")
-        if ren and not borte and not nytt:
+        if ren and (not STRENG or (not borte and not nytt)):
             return kandidat, soner, "godtatt"
     print("  ingen retusjforsoek besto — beholder den lokale sammensettingen",
           file=sys.stderr)
