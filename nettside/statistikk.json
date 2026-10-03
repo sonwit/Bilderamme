@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-10-02",
- "dager_med_opptak": 55,
+ "til": "2026-10-03",
+ "dager_med_opptak": 56,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -41,10 +41,10 @@
    "sist": "2026-09-28"
   },
   "Turdus pilaris": {
-   "dager": 7,
+   "dager": 8,
    "beste": 0.95,
    "foerst": "2026-08-25",
-   "sist": "2026-10-01"
+   "sist": "2026-10-02"
   },
   "Corvus cornix": {
    "dager": 7,
