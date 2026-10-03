@@ -11,10 +11,10 @@
    "sist": "2026-10-03"
   },
   "Parus major": {
-   "dager": 25,
+   "dager": 26,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-10-01"
+   "sist": "2026-10-03"
   },
   "Dryobates minor": {
    "dager": 24,
@@ -71,10 +71,10 @@
    "sist": "2026-09-26"
   },
   "Turdus iliacus": {
-   "dager": 4,
+   "dager": 5,
    "beste": 0.85,
    "foerst": "2026-07-28",
-   "sist": "2026-09-23"
+   "sist": "2026-10-03"
   },
   "Strix aluco": {
    "dager": 4,

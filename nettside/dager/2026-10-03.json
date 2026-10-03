@@ -1,41 +1,23 @@
 {
  "dato": "2026-10-03",
- "tegnet": "09:37",
- "periode": "05:44–09:39",
- "opptak": 22,
- "vaer": "Overskyet · 10° · 5 m/s",
- "antall_arter": 6,
+ "tegnet": "16:01",
+ "periode": "05:44–15:59",
+ "opptak": 44,
+ "vaer": "Kraftig regn · 13° · 6 m/s",
+ "antall_arter": 7,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
    "sikkerhet": 98,
-   "tid": "08:39–09:19",
-   "belegg": "2 økter",
+   "tid": "08:39–10:59",
+   "belegg": "3 økter",
    "boks": [
-    238,
-    1265,
-    422,
-    1403
-   ],
-   "merke": [
-    314,
-    1409
-   ]
-  },
-  {
-   "nr": 2,
-   "norsk": "Gransanger",
-   "latin": "Phylloscopus collybita",
-   "sikkerhet": 58,
-   "tid": "08:59",
-   "belegg": "1 ggr",
-   "boks": [
-    848,
-    938,
-    992,
-    1041
+    834,
+    917,
+    1003,
+    1044
    ],
    "merke": [
     864,
@@ -43,7 +25,61 @@
    ]
   },
   {
+   "nr": 2,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 82,
+   "tid": "07:19–13:38",
+   "belegg": "3 økter",
+   "boks": [
+    940,
+    750,
+    1086,
+    864
+   ],
+   "merke": [
+    999,
+    869
+   ]
+  },
+  {
    "nr": 3,
+   "norsk": "Rødvingetrost",
+   "latin": "Turdus iliacus",
+   "sikkerhet": 68,
+   "tid": "10:29",
+   "belegg": "1 ggr",
+   "boks": [
+    234,
+    1238,
+    441,
+    1421
+   ],
+   "merke": [
+    314,
+    1409
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Gransanger",
+   "latin": "Phylloscopus collybita",
+   "sikkerhet": 58,
+   "tid": "08:59",
+   "belegg": "1 ggr",
+   "boks": [
+    961,
+    541,
+    1097,
+    638
+   ],
+   "merke": [
+    974,
+    649
+   ]
+  },
+  {
+   "nr": 5,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 58,
@@ -61,7 +97,7 @@
    ]
   },
   {
-   "nr": 4,
+   "nr": 6,
    "norsk": "Spettmeis",
    "latin": "Sitta europaea",
    "sikkerhet": 55,
@@ -80,7 +116,6 @@
   }
  ],
  "ogsaa": [
-  "Kjøttmeis",
   "Dvergspett"
  ],
  "bilde": "2026-10-03.png",
@@ -106,6 +141,28 @@
   {"t": "09:09", "arter": []},
   {"t": "09:19", "arter": [["Grønnfink", "Chloris chloris", 95]]},
   {"t": "09:29", "arter": [["Skjære", "Pica pica", 58]]},
-  {"t": "09:39", "arter": []}
+  {"t": "09:39", "arter": []},
+  {"t": "09:49", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": []},
+  {"t": "10:29", "arter": [["Rødvingetrost", "Turdus iliacus", 68]]},
+  {"t": "10:39", "arter": []},
+  {"t": "10:59", "arter": [["Grønnfink", "Chloris chloris", 52]]},
+  {"t": "11:19", "arter": []},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": [["Kjøttmeis", "Parus major", 82]]},
+  {"t": "13:38", "arter": [["Kjøttmeis", "Parus major", 51]]},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
