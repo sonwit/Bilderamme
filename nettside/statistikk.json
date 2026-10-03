@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 37,
+   "dager": 38,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-10-02"
+   "sist": "2026-10-03"
   },
   "Parus major": {
    "dager": 25,
@@ -23,10 +23,10 @@
    "sist": "2026-10-02"
   },
   "Chloris chloris": {
-   "dager": 15,
-   "beste": 0.96,
+   "dager": 16,
+   "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-10-02"
+   "sist": "2026-10-03"
   },
   "Spinus spinus": {
    "dager": 13,
@@ -53,16 +53,16 @@
    "sist": "2026-10-01"
   },
   "Phylloscopus collybita": {
-   "dager": 5,
+   "dager": 6,
    "beste": 1.0,
    "foerst": "2026-09-05",
-   "sist": "2026-09-24"
+   "sist": "2026-10-03"
   },
   "Sitta europaea": {
-   "dager": 5,
+   "dager": 6,
    "beste": 0.98,
    "foerst": "2026-08-28",
-   "sist": "2026-10-02"
+   "sist": "2026-10-03"
   },
   "Turdus merula": {
    "dager": 5,

@@ -1,0 +1,111 @@
+{
+ "dato": "2026-10-03",
+ "tegnet": "09:37",
+ "periode": "05:44–09:39",
+ "opptak": 22,
+ "vaer": "Overskyet · 10° · 5 m/s",
+ "antall_arter": 6,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 98,
+   "tid": "08:39–09:19",
+   "belegg": "2 økter",
+   "boks": [
+    238,
+    1265,
+    422,
+    1403
+   ],
+   "merke": [
+    314,
+    1409
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Gransanger",
+   "latin": "Phylloscopus collybita",
+   "sikkerhet": 58,
+   "tid": "08:59",
+   "belegg": "1 ggr",
+   "boks": [
+    848,
+    938,
+    992,
+    1041
+   ],
+   "merke": [
+    864,
+    1051
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 58,
+   "tid": "09:29",
+   "belegg": "1 ggr",
+   "boks": [
+    592,
+    1144,
+    964,
+    1418
+   ],
+   "merke": [
+    675,
+    1386
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Spettmeis",
+   "latin": "Sitta europaea",
+   "sikkerhet": 55,
+   "tid": "08:39",
+   "belegg": "1 ggr",
+   "boks": [
+    1036,
+    1153,
+    1122,
+    1338
+   ],
+   "merke": [
+    1000,
+    1338
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Kjøttmeis",
+  "Dvergspett"
+ ],
+ "bilde": "2026-10-03.png",
+ "doegn": [
+  {"t": "05:44", "arter": []},
+  {"t": "05:59", "arter": []},
+  {"t": "06:19", "arter": []},
+  {"t": "06:39", "arter": []},
+  {"t": "06:49", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:09", "arter": []},
+  {"t": "07:19", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:39", "arter": []},
+  {"t": "07:49", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:09", "arter": []},
+  {"t": "08:19", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:39", "arter": [["Grønnfink", "Chloris chloris", 98], ["Spettmeis", "Sitta europaea", 55]]},
+  {"t": "08:49", "arter": []},
+  {"t": "08:59", "arter": [["Gransanger", "Phylloscopus collybita", 58]]},
+  {"t": "09:09", "arter": []},
+  {"t": "09:19", "arter": [["Grønnfink", "Chloris chloris", 95]]},
+  {"t": "09:29", "arter": [["Skjære", "Pica pica", 58]]},
+  {"t": "09:39", "arter": []}
+ ]
+}
