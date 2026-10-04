@@ -1,18 +1,36 @@
 {
  "dato": "2026-10-04",
- "tegnet": "09:38",
- "periode": "05:20–09:39",
- "opptak": 22,
- "vaer": "Delvis skyet · 6° · 2 m/s",
- "antall_arter": 13,
+ "tegnet": "16:04",
+ "periode": "05:20–15:59",
+ "opptak": 44,
+ "vaer": "Overskyet · 12° · 4 m/s",
+ "antall_arter": 16,
  "hoert": [
   {
    "nr": 1,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 82,
+   "tid": "08:29–10:29",
+   "belegg": "5 økter",
+   "boks": [
+    974,
+    745,
+    1130,
+    862
+   ],
+   "merke": [
+    999,
+    869
+   ]
+  },
+  {
+   "nr": 2,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 77,
-   "tid": "08:09–09:09",
-   "belegg": "3 økter",
+   "tid": "08:09–12:19",
+   "belegg": "4 økter",
    "boks": [
     592,
     1144,
@@ -25,7 +43,7 @@
    ]
   },
   {
-   "nr": 2,
+   "nr": 3,
    "norsk": "Gråtrost",
    "latin": "Turdus pilaris",
    "sikkerhet": 69,
@@ -43,32 +61,43 @@
    ]
   },
   {
-   "nr": 3,
-   "norsk": "Grønnfink",
-   "latin": "Chloris chloris",
-   "sikkerhet": 59,
-   "tid": "08:29–09:39",
-   "belegg": "4 økter",
-   "boks": [
-    974,
-    745,
-    1130,
-    862
-   ],
-   "merke": [
-    999,
-    869
-   ]
-  },
-  {
+   "nr": 4,
    "norsk": "Gråspurv",
    "latin": "Passer domesticus",
    "sikkerhet": 59,
    "tid": "07:29",
-   "belegg": "2 ggr"
+   "belegg": "2 ggr",
+   "boks": [
+    914,
+    529,
+    1077,
+    648
+   ],
+   "merke": [
+    974,
+    649
+   ]
   },
   {
-   "nr": 4,
+   "nr": 5,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 58,
+   "tid": "07:29–14:59",
+   "belegg": "2 økter",
+   "boks": [
+    419,
+    1330,
+    526,
+    1427
+   ],
+   "merke": [
+    424,
+    1440
+   ]
+  },
+  {
+   "nr": 6,
    "norsk": "Svarttrost",
    "latin": "Turdus merula",
    "sikkerhet": 54,
@@ -86,17 +115,17 @@
    ]
   },
   {
-   "nr": 5,
-   "norsk": "Pilfink",
-   "latin": "Passer montanus",
-   "sikkerhet": 52,
-   "tid": "07:29",
-   "belegg": "2 ggr",
+   "nr": 7,
+   "norsk": "Bokfink",
+   "latin": "Fringilla coelebs",
+   "sikkerhet": 43,
+   "tid": "07:19–09:29",
+   "belegg": "2 økter",
    "boks": [
-    951,
+    922,
     186,
-    1079,
-    302
+    1045,
+    317
    ],
    "merke": [
     964,
@@ -104,30 +133,12 @@
    ]
   },
   {
-   "nr": 6,
-   "norsk": "Bokfink",
-   "latin": "Fringilla coelebs",
-   "sikkerhet": 43,
-   "tid": "07:19–09:29",
-   "belegg": "2 økter",
-   "boks": [
-    961,
-    509,
-    1095,
-    652
-   ],
-   "merke": [
-    974,
-    649
-   ]
-  },
-  {
-   "nr": 7,
+   "nr": 8,
    "norsk": "Dvergspett",
    "latin": "Dryobates minor",
    "sikkerhet": 42,
-   "tid": "05:20–09:09",
-   "belegg": "6 økter",
+   "tid": "05:20–10:19",
+   "belegg": "7 økter",
    "boks": [
     967,
     1167,
@@ -142,10 +153,11 @@
  ],
  "ogsaa": [
   "Fuglekonge",
+  "Gjøk",
   "Kråke",
   "Ringdue",
   "Ring Ouzel",
-  "Kjøttmeis"
+  "Låvesvale"
  ],
  "bilde": "2026-10-04.png",
  "doegn": [
@@ -170,6 +182,28 @@
   {"t": "09:09", "arter": []},
   {"t": "09:19", "arter": []},
   {"t": "09:29", "arter": [["Grønnfink", "Chloris chloris", 59]]},
-  {"t": "09:39", "arter": []}
+  {"t": "09:39", "arter": []},
+  {"t": "09:49", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": []},
+  {"t": "10:29", "arter": [["Grønnfink", "Chloris chloris", 82]]},
+  {"t": "10:39", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": [["Skjære", "Pica pica", 64]]},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": [["Pilfink", "Passer montanus", 58]]},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }

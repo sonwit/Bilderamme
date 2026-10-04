@@ -148,6 +148,12 @@
    "foerst": "2026-08-28",
    "sist": "2026-09-19"
   },
+  "Loxia leucoptera": {
+   "dager": 2,
+   "beste": 0.45,
+   "foerst": "2026-09-11",
+   "sist": "2026-10-04"
+  },
   "Erithacus rubecula": {
    "dager": 1,
    "beste": 1.0,
@@ -243,12 +249,6 @@
    "beste": 0.51,
    "foerst": "2026-09-12",
    "sist": "2026-09-12"
-  },
-  "Loxia leucoptera": {
-   "dager": 1,
-   "beste": 0.45,
-   "foerst": "2026-09-11",
-   "sist": "2026-09-11"
   },
   "Gallinula chloropus": {
    "dager": 1,
