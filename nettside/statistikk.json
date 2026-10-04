@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 38,
+   "dager": 39,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-10-03"
+   "sist": "2026-10-04"
   },
   "Parus major": {
    "dager": 26,
@@ -23,10 +23,10 @@
    "sist": "2026-10-04"
   },
   "Chloris chloris": {
-   "dager": 16,
+   "dager": 17,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-10-03"
+   "sist": "2026-10-04"
   },
   "Spinus spinus": {
    "dager": 13,
@@ -41,10 +41,10 @@
    "sist": "2026-09-28"
   },
   "Turdus pilaris": {
-   "dager": 8,
+   "dager": 9,
    "beste": 0.95,
    "foerst": "2026-08-25",
-   "sist": "2026-10-02"
+   "sist": "2026-10-04"
   },
   "Corvus cornix": {
    "dager": 7,
@@ -65,16 +65,28 @@
    "sist": "2026-10-03"
   },
   "Turdus merula": {
-   "dager": 5,
+   "dager": 6,
    "beste": 0.87,
    "foerst": "2026-09-01",
-   "sist": "2026-09-26"
+   "sist": "2026-10-04"
   },
   "Turdus iliacus": {
    "dager": 5,
    "beste": 0.85,
    "foerst": "2026-07-28",
    "sist": "2026-10-03"
+  },
+  "Fringilla coelebs": {
+   "dager": 5,
+   "beste": 0.75,
+   "foerst": "2026-08-26",
+   "sist": "2026-10-04"
+  },
+  "Passer montanus": {
+   "dager": 4,
+   "beste": 0.92,
+   "foerst": "2026-09-25",
+   "sist": "2026-10-04"
   },
   "Strix aluco": {
    "dager": 4,
@@ -100,23 +112,11 @@
    "foerst": "2026-09-02",
    "sist": "2026-09-22"
   },
-  "Fringilla coelebs": {
-   "dager": 4,
-   "beste": 0.75,
-   "foerst": "2026-08-26",
-   "sist": "2026-09-23"
-  },
   "Pyrrhula pyrrhula": {
    "dager": 3,
    "beste": 0.98,
    "foerst": "2026-09-08",
    "sist": "2026-09-22"
-  },
-  "Passer montanus": {
-   "dager": 3,
-   "beste": 0.92,
-   "foerst": "2026-09-25",
-   "sist": "2026-09-29"
   },
   "Ardea cinerea": {
    "dager": 3,
@@ -213,6 +213,12 @@
    "beste": 0.6,
    "foerst": "2026-09-25",
    "sist": "2026-09-25"
+  },
+  "Passer domesticus": {
+   "dager": 1,
+   "beste": 0.59,
+   "foerst": "2026-10-04",
+   "sist": "2026-10-04"
   },
   "Tringa ochropus": {
    "dager": 1,
