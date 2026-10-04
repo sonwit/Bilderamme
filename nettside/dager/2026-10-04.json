@@ -1,0 +1,41 @@
+{
+ "dato": "2026-10-04",
+ "tegnet": "07:07",
+ "periode": "05:20–07:09",
+ "opptak": 7,
+ "vaer": "Delvis skyet · 6° · 1 m/s",
+ "antall_arter": 2,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Dvergspett",
+   "latin": "Dryobates minor",
+   "sikkerhet": 39,
+   "tid": "05:20–05:56",
+   "belegg": "2 økter",
+   "boks": [
+    967,
+    1167,
+    1057,
+    1360
+   ],
+   "merke": [
+    931,
+    1360
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Ringdue"
+ ],
+ "bilde": "2026-10-04.png",
+ "doegn": [
+  {"t": "05:20", "arter": []},
+  {"t": "05:56", "arter": []},
+  {"t": "06:18", "arter": []},
+  {"t": "06:39", "arter": []},
+  {"t": "06:49", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:09", "arter": []}
+ ]
+}
