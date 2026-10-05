@@ -76,6 +76,12 @@
    "foerst": "2026-07-28",
    "sist": "2026-10-03"
   },
+  "Periparus ater": {
+   "dager": 5,
+   "beste": 0.77,
+   "foerst": "2026-09-02",
+   "sist": "2026-10-05"
+  },
   "Fringilla coelebs": {
    "dager": 5,
    "beste": 0.75,
@@ -105,12 +111,6 @@
    "beste": 0.78,
    "foerst": "2026-08-07",
    "sist": "2026-09-21"
-  },
-  "Periparus ater": {
-   "dager": 4,
-   "beste": 0.77,
-   "foerst": "2026-09-02",
-   "sist": "2026-09-22"
   },
   "Pyrrhula pyrrhula": {
    "dager": 3,

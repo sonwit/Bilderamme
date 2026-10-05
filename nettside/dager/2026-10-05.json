@@ -1,10 +1,10 @@
 {
  "dato": "2026-10-05",
- "tegnet": "09:39",
- "periode": "05:44–09:39",
- "opptak": 22,
- "vaer": "Delvis skyet · 10° · 5 m/s",
- "antall_arter": 8,
+ "tegnet": "16:01",
+ "periode": "05:44–15:59",
+ "opptak": 44,
+ "vaer": "Overskyet · 14° · 7 m/s",
+ "antall_arter": 9,
  "hoert": [
   {
    "nr": 1,
@@ -29,8 +29,8 @@
    "norsk": "Kjøttmeis",
    "latin": "Parus major",
    "sikkerhet": 67,
-   "tid": "07:39–09:29",
-   "belegg": "2 økter",
+   "tid": "07:39–12:39",
+   "belegg": "3 økter",
    "boks": [
     290,
     1271,
@@ -40,6 +40,24 @@
    "merke": [
     314,
     1409
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Svartmeis",
+   "latin": "Periparus ater",
+   "sikkerhet": 41,
+   "tid": "10:59–12:39",
+   "belegg": "2 økter",
+   "boks": [
+    849,
+    937,
+    987,
+    1044
+   ],
+   "merke": [
+    864,
+    1051
    ]
   }
  ],
@@ -74,6 +92,28 @@
   {"t": "09:09", "arter": []},
   {"t": "09:19", "arter": []},
   {"t": "09:29", "arter": [["Kjøttmeis", "Parus major", 67]]},
-  {"t": "09:39", "arter": []}
+  {"t": "09:39", "arter": []},
+  {"t": "09:49", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": []},
+  {"t": "10:29", "arter": []},
+  {"t": "10:39", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": [["Kjøttmeis", "Parus major", 66]]},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
