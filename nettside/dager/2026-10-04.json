@@ -1,10 +1,10 @@
 {
  "dato": "2026-10-04",
- "tegnet": "16:04",
- "periode": "05:20–15:59",
- "opptak": 44,
- "vaer": "Overskyet · 12° · 4 m/s",
- "antall_arter": 16,
+ "tegnet": "07:07",
+ "periode": "05:20–21:39",
+ "opptak": 61,
+ "vaer": "Delvis skyet · 10° · 4 m/s",
+ "antall_arter": 18,
  "hoert": [
   {
    "nr": 1,
@@ -154,10 +154,10 @@
  "ogsaa": [
   "Fuglekonge",
   "Gjøk",
+  "Gransanger",
   "Kråke",
-  "Ringdue",
-  "Ring Ouzel",
-  "Låvesvale"
+  "Rødstjert",
+  "Ringdue"
  ],
  "bilde": "2026-10-04.png",
  "doegn": [
@@ -204,6 +204,23 @@
   {"t": "14:59", "arter": [["Pilfink", "Passer montanus", 58]]},
   {"t": "15:19", "arter": []},
   {"t": "15:39", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:19", "arter": []},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:19", "arter": []},
+  {"t": "17:39", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:19", "arter": []},
+  {"t": "18:39", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:19", "arter": []},
+  {"t": "19:39", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:19", "arter": []},
+  {"t": "20:39", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:19", "arter": []},
+  {"t": "21:39", "arter": []}
  ]
 }
