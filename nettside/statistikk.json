@@ -5,16 +5,16 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 39,
+   "dager": 40,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-10-04"
+   "sist": "2026-10-05"
   },
   "Parus major": {
-   "dager": 26,
+   "dager": 27,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-10-03"
+   "sist": "2026-10-05"
   },
   "Dryobates minor": {
    "dager": 25,
