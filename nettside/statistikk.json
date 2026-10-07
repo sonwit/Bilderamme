@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 41,
+   "dager": 42,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-10-06"
+   "sist": "2026-10-07"
   },
   "Parus major": {
    "dager": 27,
@@ -23,10 +23,10 @@
    "sist": "2026-10-04"
   },
   "Chloris chloris": {
-   "dager": 18,
+   "dager": 19,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-10-06"
+   "sist": "2026-10-07"
   },
   "Spinus spinus": {
    "dager": 13,
@@ -64,17 +64,17 @@
    "foerst": "2026-08-28",
    "sist": "2026-10-03"
   },
+  "Passer montanus": {
+   "dager": 6,
+   "beste": 0.92,
+   "foerst": "2026-09-25",
+   "sist": "2026-10-07"
+  },
   "Turdus merula": {
    "dager": 6,
    "beste": 0.87,
    "foerst": "2026-09-01",
    "sist": "2026-10-04"
-  },
-  "Passer montanus": {
-   "dager": 5,
-   "beste": 0.92,
-   "foerst": "2026-09-25",
-   "sist": "2026-10-06"
   },
   "Turdus iliacus": {
    "dager": 5,
@@ -93,6 +93,12 @@
    "beste": 0.75,
    "foerst": "2026-08-26",
    "sist": "2026-10-04"
+  },
+  "Pyrrhula pyrrhula": {
+   "dager": 4,
+   "beste": 0.98,
+   "foerst": "2026-09-08",
+   "sist": "2026-10-07"
   },
   "Strix aluco": {
    "dager": 4,
@@ -118,12 +124,6 @@
    "foerst": "2026-08-27",
    "sist": "2026-10-06"
   },
-  "Pyrrhula pyrrhula": {
-   "dager": 3,
-   "beste": 0.98,
-   "foerst": "2026-09-08",
-   "sist": "2026-09-22"
-  },
   "Ardea cinerea": {
    "dager": 3,
    "beste": 0.73,
@@ -141,6 +141,12 @@
    "beste": 0.85,
    "foerst": "2026-09-18",
    "sist": "2026-09-25"
+  },
+  "Corvus monedula": {
+   "dager": 2,
+   "beste": 0.83,
+   "foerst": "2026-09-24",
+   "sist": "2026-10-07"
   },
   "Phoenicurus phoenicurus": {
    "dager": 2,
@@ -183,12 +189,6 @@
    "beste": 0.88,
    "foerst": "2026-09-04",
    "sist": "2026-09-04"
-  },
-  "Corvus monedula": {
-   "dager": 1,
-   "beste": 0.83,
-   "foerst": "2026-09-24",
-   "sist": "2026-09-24"
   },
   "Cygnus cygnus": {
    "dager": 1,
