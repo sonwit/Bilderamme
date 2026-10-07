@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-10-06",
- "dager_med_opptak": 59,
+ "til": "2026-10-07",
+ "dager_med_opptak": 60,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -112,6 +112,12 @@
    "foerst": "2026-08-07",
    "sist": "2026-09-21"
   },
+  "Acanthis flammea": {
+   "dager": 4,
+   "beste": 0.71,
+   "foerst": "2026-08-27",
+   "sist": "2026-10-06"
+  },
   "Pyrrhula pyrrhula": {
    "dager": 3,
    "beste": 0.98,
@@ -129,12 +135,6 @@
    "beste": 0.59,
    "foerst": "2026-08-04",
    "sist": "2026-09-03"
-  },
-  "Acanthis flammea": {
-   "dager": 3,
-   "beste": 0.53,
-   "foerst": "2026-08-27",
-   "sist": "2026-09-27"
   },
   "Lophophanes cristatus": {
    "dager": 2,
