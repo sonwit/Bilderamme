@@ -94,6 +94,12 @@
    "foerst": "2026-08-26",
    "sist": "2026-10-04"
   },
+  "Acanthis flammea": {
+   "dager": 5,
+   "beste": 0.71,
+   "foerst": "2026-08-27",
+   "sist": "2026-10-07"
+  },
   "Pyrrhula pyrrhula": {
    "dager": 4,
    "beste": 0.98,
@@ -117,12 +123,6 @@
    "beste": 0.78,
    "foerst": "2026-08-07",
    "sist": "2026-09-21"
-  },
-  "Acanthis flammea": {
-   "dager": 4,
-   "beste": 0.71,
-   "foerst": "2026-08-27",
-   "sist": "2026-10-06"
   },
   "Ardea cinerea": {
    "dager": 3,

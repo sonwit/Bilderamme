@@ -1,18 +1,18 @@
 {
  "dato": "2026-10-07",
- "tegnet": "09:39",
- "periode": "05:43–09:39",
- "opptak": 22,
- "vaer": "Lettskyet · 4° · 0 m/s",
- "antall_arter": 10,
+ "tegnet": "16:02",
+ "periode": "05:43–15:59",
+ "opptak": 43,
+ "vaer": "Overskyet · 12° · 1 m/s",
+ "antall_arter": 11,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 100,
-   "tid": "07:59–08:29",
-   "belegg": "2 økter",
+   "tid": "07:59–15:59",
+   "belegg": "4 økter",
    "boks": [
     592,
     1144,
@@ -29,13 +29,31 @@
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
    "sikkerhet": 97,
-   "tid": "07:49–08:39",
-   "belegg": "4 økter",
+   "tid": "07:49–11:59",
+   "belegg": "7 økter",
    "boks": [
-    238,
-    1265,
-    422,
-    1403
+    834,
+    917,
+    1003,
+    1044
+   ],
+   "merke": [
+    864,
+    1051
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 93,
+   "tid": "09:39",
+   "belegg": "5 ggr",
+   "boks": [
+    247,
+    1246,
+    404,
+    1421
    ],
    "merke": [
     314,
@@ -43,28 +61,21 @@
    ]
   },
   {
-   "norsk": "Dompap",
-   "latin": "Pyrrhula pyrrhula",
-   "sikkerhet": 93,
-   "tid": "09:39",
-   "belegg": "5 ggr"
-  },
-  {
-   "nr": 3,
+   "nr": 4,
    "norsk": "Pilfink",
    "latin": "Passer montanus",
    "sikkerhet": 72,
    "tid": "08:29",
    "belegg": "1 ggr",
    "boks": [
-    808,
-    904,
-    956,
-    1038
+    951,
+    733,
+    1087,
+    856
    ],
    "merke": [
-    864,
-    1051
+    999,
+    869
    ]
   },
   {
@@ -73,6 +84,24 @@
    "sikkerhet": 55,
    "tid": "08:49",
    "belegg": "1 ggr"
+  },
+  {
+   "nr": 5,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 40,
+   "tid": "11:20–13:59",
+   "belegg": "2 økter",
+   "boks": [
+    924,
+    518,
+    1051,
+    645
+   ],
+   "merke": [
+    974,
+    649
+   ]
   }
  ],
  "ogsaa": [
@@ -105,6 +134,27 @@
   {"t": "09:09", "arter": []},
   {"t": "09:19", "arter": []},
   {"t": "09:29", "arter": []},
-  {"t": "09:39", "arter": [["Dompap", "Pyrrhula pyrrhula", 93]]}
+  {"t": "09:39", "arter": [["Dompap", "Pyrrhula pyrrhula", 93]]},
+  {"t": "09:49", "arter": []},
+  {"t": "09:59", "arter": [["Grønnfink", "Chloris chloris", 75]]},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": [["Skjære", "Pica pica", 97]]},
+  {"t": "10:29", "arter": []},
+  {"t": "10:39", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:20", "arter": [["Grønnfink", "Chloris chloris", 81]]},
+  {"t": "11:59", "arter": []},
+  {"t": "12:18", "arter": []},
+  {"t": "12:38", "arter": []},
+  {"t": "12:58", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
