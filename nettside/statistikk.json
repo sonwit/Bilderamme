@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-10-07",
- "dager_med_opptak": 60,
+ "til": "2026-10-08",
+ "dager_med_opptak": 61,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -148,6 +148,12 @@
    "foerst": "2026-09-24",
    "sist": "2026-10-07"
   },
+  "Passer domesticus": {
+   "dager": 2,
+   "beste": 0.7,
+   "foerst": "2026-10-04",
+   "sist": "2026-10-07"
+  },
   "Phoenicurus phoenicurus": {
    "dager": 2,
    "beste": 0.6,
@@ -219,12 +225,6 @@
    "beste": 0.6,
    "foerst": "2026-09-25",
    "sist": "2026-09-25"
-  },
-  "Passer domesticus": {
-   "dager": 1,
-   "beste": 0.59,
-   "foerst": "2026-10-04",
-   "sist": "2026-10-04"
   },
   "Tringa ochropus": {
    "dager": 1,
