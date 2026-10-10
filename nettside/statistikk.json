@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-10-09",
- "dager_med_opptak": 62,
+ "til": "2026-10-10",
+ "dager_med_opptak": 63,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -17,10 +17,10 @@
    "sist": "2026-10-05"
   },
   "Dryobates minor": {
-   "dager": 26,
+   "dager": 27,
    "beste": 0.72,
    "foerst": "2026-08-04",
-   "sist": "2026-10-09"
+   "sist": "2026-10-10"
   },
   "Chloris chloris": {
    "dager": 20,

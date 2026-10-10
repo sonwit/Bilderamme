@@ -1,0 +1,38 @@
+{
+ "dato": "2026-10-10",
+ "tegnet": "07:07",
+ "periode": "05:20–07:09",
+ "opptak": 6,
+ "vaer": "Kraftig regn · 3° · 4 m/s",
+ "antall_arter": 1,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Dvergspett",
+   "latin": "Dryobates minor",
+   "sikkerhet": 39,
+   "tid": "05:20–07:09",
+   "belegg": "6 økter",
+   "boks": [
+    967,
+    1167,
+    1057,
+    1360
+   ],
+   "merke": [
+    931,
+    1360
+   ]
+  }
+ ],
+ "ogsaa": [],
+ "bilde": "2026-10-10.png",
+ "doegn": [
+  {"t": "05:20", "arter": []},
+  {"t": "05:58", "arter": []},
+  {"t": "06:19", "arter": []},
+  {"t": "06:38", "arter": []},
+  {"t": "06:58", "arter": []},
+  {"t": "07:09", "arter": []}
+ ]
+}
