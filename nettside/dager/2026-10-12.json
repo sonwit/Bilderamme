@@ -1,9 +1,9 @@
 {
  "dato": "2026-10-12",
- "tegnet": "16:00",
- "periode": "05:43–15:59",
- "opptak": 44,
- "vaer": "Klarvær · 7° · 2 m/s",
+ "tegnet": "07:07",
+ "periode": "05:43–21:38",
+ "opptak": 61,
+ "vaer": "Overskyet · 1° · 1 m/s",
  "antall_arter": 2,
  "hoert": [
   {
@@ -11,8 +11,8 @@
    "norsk": "Dvergspett",
    "latin": "Dryobates minor",
    "sikkerhet": 56,
-   "tid": "05:59–15:59",
-   "belegg": "41 økter",
+   "tid": "05:59–21:38",
+   "belegg": "58 økter",
    "boks": [
     967,
     1167,
@@ -73,6 +73,23 @@
   {"t": "14:59", "arter": []},
   {"t": "15:19", "arter": []},
   {"t": "15:39", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:19", "arter": []},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:19", "arter": []},
+  {"t": "17:38", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:19", "arter": [["Dvergspett", "Dryobates minor", 51]]},
+  {"t": "18:38", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:18", "arter": []},
+  {"t": "19:38", "arter": []},
+  {"t": "19:58", "arter": []},
+  {"t": "20:18", "arter": []},
+  {"t": "20:39", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:19", "arter": []},
+  {"t": "21:38", "arter": []}
  ]
 }
