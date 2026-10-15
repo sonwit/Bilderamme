@@ -153,11 +153,19 @@ def doegnet(base: str, dato: str, rdp, bn) -> list[dict]:
     opptak blir staaende med tom liste: naar det ble lyttet uten aa hoere noe
     er ogsaa et svar, og det er halve poenget med stripen paa siden.
 
+    Opptak som bare er sus fra mikrofonen (lydkvalitet.py) faar "sus": true
+    og ingen arter, og en art som nesten bare er hoert i sus, holdes ute av
+    de rene opptakene ogsaa. 9.-15. okt 2026 viste doegnet en dvergspett i
+    nesten hvert opptak; det var mikrofonen som hveste. Samme regel som
+    birdnet_analyze.aggregate_day bruker paa veggen.
+
     Ingen filnavn, ingen lyd, ingen kamerabilder -- bare klokkeslett, art og
     sikkerhet. Dette gaar til et offentlig repo.
     """
+    from lydkvalitet import hoert_i_suset, sus
+
     logg = os.path.join(base, "data", "observations.jsonl")
-    ut = []
+    dagens = []
     try:
         with open(logg, encoding="utf-8") as f:
             for rad in f:
@@ -168,22 +176,41 @@ def doegnet(base: str, dato: str, rdp, bn) -> list[dict]:
                     o = json.loads(rad)
                 except ValueError:
                     continue      # en halv linje: tjenesten kan bli drept midt i en skriving
-                if o.get("date") != dato:
-                    continue
-                t = (o.get("recorded_at") or "")[11:16]
-                if not t:
-                    continue
-                arter = []
-                for s in o.get("species", []):
-                    sci = (s.get("scientific_name") or "").strip()
-                    konf = float(s.get("confidence", 0.0))
-                    if not sci or sci in rdp.BLOKKERT or konf < rdp.SURE_CONF:
-                        continue
-                    arter.append([bn.norwegian_name(sci, s.get("common_name", "")), sci, round(konf * 100)])
-                arter.sort(key=lambda a: -a[2])
-                ut.append({"t": t, "arter": arter})
+                if o.get("date") == dato:
+                    dagens.append(o)
     except OSError:
         return []
+    dagens.sort(key=lambda o: o.get("recorded_at", ""))
+    flagg = sus([o.get("audio") for o in dagens])
+
+    # Oekter per art i sus og i rene opptak, for aa kjenne igjen en art som
+    # er hoert i suset (12. okt slapp dvergspetten gjennom i to av 58).
+    i_sus: dict[str, int] = {}
+    rene: dict[str, int] = {}
+    for o, er_sus in zip(dagens, flagg):
+        for s in o.get("species", []):
+            sci = (s.get("scientific_name") or "").strip()
+            telling = i_sus if er_sus else rene
+            telling[sci] = telling.get(sci, 0) + 1
+    i_suset = {sci for sci in rene if hoert_i_suset(i_sus.get(sci, 0), rene[sci])}
+
+    ut = []
+    for o, er_sus in zip(dagens, flagg):
+        t = (o.get("recorded_at") or "")[11:16]
+        if not t:
+            continue
+        if er_sus:
+            ut.append({"t": t, "arter": [], "sus": True})
+            continue
+        arter = []
+        for s in o.get("species", []):
+            sci = (s.get("scientific_name") or "").strip()
+            konf = float(s.get("confidence", 0.0))
+            if not sci or sci in rdp.BLOKKERT or sci in i_suset or konf < rdp.SURE_CONF:
+                continue
+            arter.append([bn.norwegian_name(sci, s.get("common_name", "")), sci, round(konf * 100)])
+        arter.sort(key=lambda a: -a[2])
+        ut.append({"t": t, "arter": arter})
     ut.sort(key=lambda o: o["t"])
     return ut
 
