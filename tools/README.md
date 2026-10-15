@@ -26,6 +26,7 @@ eksporter_dag.py        Dagen på veggen til nettsiden: JSON, PNG, statistikk, c
                         Døgnet (hvert opptak med klokkeslett og artene i det) leses av
                         observations.jsonl — birds.json er aggregert per art.
 birdnet_analyze.py      BirdNET på én WAV -> observations.jsonl + birds.json.
+lydkvalitet.py          Kjenner igjen opptak som bare er sus fra mikrofonen (høyt og flatt).
 bird_stats.py           Statistikk og daglig rapport: arter, lydnivå, dekning, strøm.
 bilde_analyze.py        Hvilken fugl er på kamerabildet? Én linje i kamera.jsonl.
 

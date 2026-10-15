@@ -21,12 +21,16 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import json
 import os
 import shutil
 import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from lydkvalitet import lyd_daarlig  # noqa: E402
+
 PY = sys.executable
 BIRDS = os.environ.get("BIRDS_JSON", os.path.join(HERE, "birds.json"))
 WWW = os.environ.get("FRAME_OUTPUT_DIR", "/opt/fugleramme/www")
@@ -118,6 +122,7 @@ def main() -> int:
                   for n in range(2, RESERVE_DAGER + 1)]
 
     birds = BIRDS
+    komponert = False
     for i, dag in enumerate(dager):
         if i >= 2:
             # Eldre dager kan mangle opptak helt (utedelen laa nede). Det er
@@ -139,6 +144,20 @@ def main() -> int:
         kode = kjoer_kode("compose_branch.py", "--birds", birds,
                           "--retusj", RETUSJ)
         if kode == 0:
+            komponert = True
+            break
+        # Er dagen tom fordi mikrofonen bare har tatt opp sus, skal veggen si
+        # det -- ikke hente fram en eldre dag som om alt var i orden. 9.-15.
+        # okt 2026 hveste den i en uke, og ingenting sa fra.
+        try:
+            with open(birds) as f:
+                sus = lyd_daarlig(json.load(f))
+        except (OSError, ValueError):
+            sus = False
+        if sus:
+            print(f"Opptakene {dag} er bare sus fra mikrofonen — tegner siden "
+                  "med beskjed om det i stedet for en eldre dag.",
+                  file=sys.stderr)
             break
         if i + 1 < len(dager):
             print(f"Ingenting aa tegne for {dag} ennaa — tegner "
@@ -154,7 +173,7 @@ def main() -> int:
     maske_png = os.path.join(WWW, "panel-maske.png")
     bg_json = os.path.join(os.path.dirname(WWW), "plates", "dagens-bakgrunn.json")
     bg_png = os.path.join(os.path.dirname(WWW), "plates", "dagens-bakgrunn.png")
-    if os.path.exists(bg_json) and os.path.exists(bg_png):
+    if komponert and os.path.exists(bg_json) and os.path.exists(bg_png):
         kjoer("render_daily_panel.py", "--birds", birds, "--out", maske_html,
               "--uten-bakgrunn")
         kjoer("render_panel_png.py", "--html", maske_html, "--bare-png", maske_png)

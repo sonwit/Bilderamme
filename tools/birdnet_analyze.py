@@ -38,6 +38,7 @@ import tempfile
 # Hvor hagen er: FUGLERAMME_LAT/LON i frame_server.env, se oppsett.py.
 # Samme koordinater som generate_daily_image.py og lytteplan.py.
 from oppsett import LAT, LON  # noqa: E402
+from lydkvalitet import hoert_i_suset, sus  # noqa: E402
 MIN_CONF = float(os.environ.get("BIRDNET_MIN_CONF", "0.25"))
 
 BASE_DIR = os.environ.get("FUGLE_DIR", "/opt/fugleramme")
@@ -257,13 +258,22 @@ def aggregate_day(dag: str) -> dict:
     agg: dict[str, dict] = {}
     sessions = 0
     tider: list[str] = []
-    for obs in _iter_observations():
-        if obs.get("date") != dag:
-            continue
+    dagens = sorted((o for o in _iter_observations() if o.get("date") == dag),
+                    key=lambda o: o.get("recorded_at", ""))
+    # Opptak som bare er sus fra mikrofonen bidrar ikke med arter.
+    # 9.-15. okt 2026 hoerte BirdNET en dvergspett i suset paa 35-59 opptak
+    # om dagen, og veggen viste ingenting annet. Se lydkvalitet.py.
+    flagg = sus([o.get("audio") for o in dagens])
+    i_sus: dict[str, int] = {}
+    for obs, er_sus in zip(dagens, flagg):
         sessions += 1
         t = obs.get("recorded_at", "")[11:16]
         if t:
             tider.append(t)
+        if er_sus:
+            for s in obs.get("species", []):
+                i_sus[s["common_name"]] = i_sus.get(s["common_name"], 0) + 1
+            continue
         for s in obs.get("species", []):
             name = s["common_name"]
             a = agg.setdefault(name, {
@@ -281,6 +291,12 @@ def aggregate_day(dag: str) -> dict:
             a["first_heard"] = min(a["first_heard"], t) if a["first_heard"] else t
             a["last_heard"] = max(a["last_heard"], t)
 
+    # Og en art som nesten bare er hoert i sus, er hoert i suset -- ogsaa om
+    # et par opptak med noe oppaa suset slapp gjennom.
+    for navn in [n for n, a in agg.items()
+                 if hoert_i_suset(i_sus.get(n, 0), a["sessions"])]:
+        del agg[navn]
+
     # Sorter paa hvor godt belagt arten er i dag: flest oekter foerst, saa
     # antall deteksjoner, saa konfidens. Bildet velger blant toppen av denne.
     species = sorted(agg.values(),
@@ -295,6 +311,9 @@ def aggregate_day(dag: str) -> dict:
         "timestamp": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
         "date": dag,
         "sessions_today": sessions,
+        # Siden bruker dette til aa si at lyden er daarlig i stedet for aa
+        # tegne det BirdNET fant i suset (lydkvalitet.lyd_daarlig).
+        "hvesende_opptak": sum(flagg),
         "periode": periode,
         "species": species,
     }
@@ -353,7 +372,9 @@ def main() -> int:
         dag = loes_dag(sys.argv[2])
         p = skriv_birds(aggregate_day(dag), sys.argv[3])
         print(f"{dag}: {len(p['species'])} arter paa {p['sessions_today']} "
-              f"opptak ({p['periode'] or 'ingen'}) -> {sys.argv[3]}")
+              f"opptak ({p['periode'] or 'ingen'}) -> {sys.argv[3]}"
+              + (f"  [{p['hvesende_opptak']} opptak bare sus, arter holdt utenfor]"
+                 if p["hvesende_opptak"] else ""))
         # Ingen opptak den dagen: si fra, saa cron kan falle tilbake.
         return 0 if p["sessions_today"] else 1
 

@@ -35,6 +35,8 @@ echo "→ Kopierer python-scripts til $SERVER:$DEST ..."
 # kjoerer ny_art.py og tekstkollisjon.py, og vakt.py gaar i crontab-en hvert
 # kvarter og leses av helse.py. De manglet her til 22. sep 2026, saa serveren
 # laa med en eldre lytteplan.py enn oppsett.py den skulle lese fra.
+# lydkvalitet.py importeres av birdnet_analyze.py, vakt.py, daily_panel.py og
+# render_daily_panel.py: uten den feiler baade analysen og tegningen.
 scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/push_to_frame.py" \
     "$HERE/tools/frame_server.py" \
@@ -56,6 +58,7 @@ scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/fugler.py" \
     "$HERE/tools/dag.py" \
     "$HERE/tools/vakt.py" \
+    "$HERE/tools/lydkvalitet.py" \
     "$HERE/tools/ny_art.py" \
     "$HERE/tools/tekstkollisjon.py" \
     "$SERVER:$DEST/"

@@ -35,6 +35,7 @@ import urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from bird_names import norwegian_name, is_translated  # noqa: E402
 from oppsett import LAT, LON, STEDSNAVN, user_agent    # noqa: E402
+from lydkvalitet import lyd_daarlig                    # noqa: E402
 
 WIDTH, HEIGHT = 1200, 1600          # samme som panelet
 # Paa serveren ligger alt flatt i /opt/fugleramme/, i repoet ligger scriptene i
@@ -430,6 +431,13 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
     periode = birds.get("periode", "")
     dekning = f"{periode} · {sessions} opptak" if periode else f"{sessions} opptak"
 
+    # Mikrofonen kan hvese: jevnt sus i stedet for hage. 9.-15. okt 2026 viste
+    # veggen bare dvergspett i en uke, fordi BirdNET hoerte den i suset.
+    # birdnet_analyze holder artene fra slike opptak utenfor; her sier siden
+    # fra om det, saa en tom eller tynn liste ikke ser ut som en stille hage.
+    daarlig = lyd_daarlig(birds)
+    hves = birds.get("hvesende_opptak", 0)
+
     hero_meta = None if bg_meta else todays_hero(birds.get("date", ""))
     hero = sure[0] if sure else None
     # Med komponert hero viser den lille plansjen en art som IKKE er med der,
@@ -558,6 +566,14 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
     <div>{html.escape(vaer)}</div>
   </div>"""
 
+    # Uten en eneste art aa vise blir beskjeden selve midtdelen, der plansjen
+    # ellers staar. Ellers er den én linje under listeoverskriften.
+    lyd_i_midten = daarlig and not bg_meta and not hero_meta and not hero
+    lydvarsel = (f'<p class="lydvarsel">Mikrofonen hveser: {hves} av '
+                 f'{sessions} opptak er bare sus. Det BirdNET hørte i dem, '
+                 'er holdt utenfor.</p>'
+                 if daarlig and not lyd_i_midten else "")
+
     if bg_meta:
         # Illustrasjonen ER midtdelen. Ingen regel, ingen hero-ramme, ingen
         # liten plansje -- alt det er bakgrunnen naa.
@@ -568,9 +584,20 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
             for s in sure)
         bunntekst = ""
     else:
-        midtdel = ('<div class="regel"></div>\n  '
-                   + (hero_block(hero_meta) if hero_meta
-                      else plate_block(hero, "hero", True)))
+        if lyd_i_midten:
+            midt = f"""
+        <section class="hero lyd">
+          <div class="ramme"><div class="melding">
+            <h2>Lyden er dårlig</h2>
+            <p>{hves} av {sessions} opptak {naar} er jevnt sus fra mikrofonen,
+               ikke fugler.</p>
+            <p>Ingen arter vises før lyden er god igjen.</p>
+          </div></div>
+        </section>"""
+        else:
+            midt = (hero_block(hero_meta) if hero_meta
+                    else plate_block(hero, "hero", True))
+        midtdel = '<div class="regel"></div>\n  ' + midt
         sideplansje = plate_block(side, "side-plansje", False)
         liste_innhold = f"<table>{rows}</table>"
         bunntekst = ('<footer class="bunn">'
@@ -681,6 +708,15 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
            border-top:2px solid var(--blekk); padding-top:8px;
            display:flex; justify-content:space-between; font-size:19px; }}
   .usikre {{ font-size:17px; padding-top:16px; }}
+
+  /* --- daarlig lyd: mikrofonen hveser --- */
+  .lydvarsel {{ font-size:20px; line-height:1.3; color:var(--aksent);
+                padding:4px 0 12px; }}
+  .lyd .ramme {{ border-color:var(--aksent); }}
+  .melding {{ text-align:center; max-width:760px; }}
+  .melding h2 {{ font-size:64px; font-weight:600; color:var(--aksent);
+                 margin-bottom:28px; }}
+  .melding p {{ font-size:32px; line-height:1.35; margin-top:12px; }}
   .usikre span {{ letter-spacing:.16em; text-transform:uppercase; font-size:14px; }}
 
   /* --- overlegg: illustrasjonen fyller hele arket, teksten ligger oppaa --- */
@@ -765,6 +801,7 @@ def build_html(birds: dict, weather: dict | None, pute: str = "maalt",
 
   <section class="liste{pute_venstre}">
     <h3>Hørt {naar}</h3>
+    {lydvarsel}
     {liste_innhold}
     {fotnote}
     {kildeblokk}

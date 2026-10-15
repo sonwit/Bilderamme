@@ -27,14 +27,19 @@ har ingen i dag.
 from __future__ import annotations
 
 import argparse
+import collections
 import datetime
 import glob
 import json
 import os
 import urllib.request
 
+from lydkvalitet import VAKT_N, stoeygulv
+
 BASE = os.environ.get("FUGLE_DIR", os.path.dirname(os.path.abspath(__file__)))
 AUDIO = os.path.join(BASE, "audio")
+OBS_LOG = os.path.join(os.environ.get("FUGLE_DATA_DIR", os.path.join(BASE, "data")),
+                       "observations.jsonl")
 WWW = os.environ.get("FRAME_OUTPUT_DIR", os.path.join(BASE, "www"))
 VARSEL_URL = os.environ.get("VARSEL_URL", "")
 # Hvor lenge det kan gaa mellom opptak i vaaken tid foer noe er galt. Planen
@@ -68,6 +73,23 @@ def _siste_opptak() -> tuple[datetime.datetime | None, dict]:
         return t, {}
 
 
+def _siste_observasjoner(n: int) -> list[dict]:
+    """De n siste radene i observations.jsonl. Halve linjer hoppes over:
+    analysatoren kan bli drept midt i en skriving."""
+    try:
+        with open(OBS_LOG, encoding="utf-8") as f:
+            rader = collections.deque(f, maxlen=n + 5)
+    except OSError:
+        return []
+    ut = []
+    for rad in rader:
+        try:
+            ut.append(json.loads(rad))
+        except ValueError:
+            continue
+    return ut[-n:]
+
+
 def sjekk(naa: datetime.datetime) -> list[tuple[str, str]]:
     """Liste med (noekkel, melding). Noekkelen brukes til aa unngaa gjentakelse."""
     ut: list[tuple[str, str]] = []
@@ -81,6 +103,17 @@ def sjekk(naa: datetime.datetime) -> list[tuple[str, str]]:
             ut.append(("stille",
                        f"Utedelen er stille: {min_siden} min siden siste "
                        f"opptak ({t:%d.%m %H:%M})."))
+
+    # Hvesing: opptakene kommer, men de er bare sus. 9.-15. okt 2026 laa
+    # utedelen paa jevne -35 dBFS doegnet rundt, BirdNET hoerte en dvergspett
+    # i hvert opptak, og ingenting her merket det -- stillhetssjekken over
+    # ser jo bare om det kommer filer.
+    gulv = stoeygulv(_siste_observasjoner(VAKT_N))
+    if gulv and gulv["hveser"]:
+        ut.append(("hvesing",
+                   f"Mikrofonen hveser: de siste {gulv['n']} opptakene ligger "
+                   f"jevnt paa {gulv['median']} dBFS (crest {gulv['crest']} dB). "
+                   f"Det er sus, ikke fugler -- fukt i mikrofonen?"))
 
     volt = helse.get("volt")
     if volt and volt < LAV_VOLT:
