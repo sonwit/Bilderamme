@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-10-16",
- "dager_med_opptak": 69,
+ "til": "2026-10-17",
+ "dager_med_opptak": 70,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -11,10 +11,10 @@
    "sist": "2026-10-08"
   },
   "Dryobates minor": {
-   "dager": 33,
+   "dager": 34,
    "beste": 0.72,
    "foerst": "2026-08-04",
-   "sist": "2026-10-16"
+   "sist": "2026-10-17"
   },
   "Parus major": {
    "dager": 27,
