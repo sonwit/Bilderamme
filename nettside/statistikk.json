@@ -154,6 +154,12 @@
    "foerst": "2026-10-04",
    "sist": "2026-10-07"
   },
+  "Regulus regulus": {
+   "dager": 2,
+   "beste": 0.63,
+   "foerst": "2026-09-09",
+   "sist": "2026-10-17"
+  },
   "Phoenicurus phoenicurus": {
    "dager": 2,
    "beste": 0.6,
@@ -207,12 +213,6 @@
    "beste": 0.63,
    "foerst": "2026-08-21",
    "sist": "2026-08-21"
-  },
-  "Regulus regulus": {
-   "dager": 1,
-   "beste": 0.63,
-   "foerst": "2026-09-09",
-   "sist": "2026-09-09"
   },
   "Prunella modularis": {
    "dager": 1,
