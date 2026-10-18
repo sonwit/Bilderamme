@@ -21,6 +21,15 @@ GITHUB = "https://github.com/sonwit/Bilderamme"
 PROFIL = "https://github.com/sonwit"
 PERSONVERN = "https://sonwit.github.io/personvern/"
 
+# Driftsmelding øverst på alle sider. None når alt virker. Satt 18. okt 2026:
+# mikrofonen i hagen korroderte og har tatt opp sus siden 9. oktober.
+DRIFT = {
+    "tittel": "Ute av drift",
+    "tekst": ("Mikrofonen i hagen er ødelagt av fukt, og siden 9. oktober har den bare tatt opp sus. "
+              "Fuglene som vises for dagene etter det, er ikke ekte. Vi bygger en ny lytter med bedre "
+              "mikrofon og bedre værvern, og rammen er tilbake når den er på plass."),
+}
+
 FORSIDE = {
     "kicker": "Hobbyprosjekt, i drift siden sommeren 2026",
     "tittel": "En bilderamme som viser fuglene som ble hørt i hagen i dag.",

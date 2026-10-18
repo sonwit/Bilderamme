@@ -245,6 +245,15 @@ def topp(aktiv: str | None, p: str, noekkel: tuple) -> str:
             f'<div class="spraak" role="group" aria-label="{E(T.SPRAAK_LABEL)}">{"".join(valg)}</div></nav></header>')
 
 
+def driftsmelding() -> str:
+    """Meldingen under toppen naar noe er ute av drift. Tom naar T.DRIFT er None."""
+    d = getattr(T, "DRIFT", None)
+    if not d:
+        return ""
+    return (f'<aside class="drift" role="status"><strong>{E(d["tittel"])}.</strong> '
+            f'{E(d["tekst"])}</aside>')
+
+
 def bunn(p: str) -> str:
     b = T.BUNN
     return (f'<footer class="bunn"><div class="venstre"><span>{E(b["laget_foer"])}<a href="{T.PROFIL}">{E(b["bruker"])}</a>{E(b["laget_etter"])}</span><span>{E(b["takk"])}</span></div>'
@@ -277,6 +286,7 @@ def side(tittel: str, innhold: str, dybde: int, noekkel: tuple, aktiv: str | Non
 <body>
 <div class="side">
 {topp(aktiv, p, noekkel)}
+{driftsmelding()}
 <main id="innhold">
 {innhold}
 </main>

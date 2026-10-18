@@ -82,6 +82,13 @@ figure { margin: 0; }
 /* Den tynne streken under den tykke. Var en box-shadow med negativ spredning,
    som ble fem piksler kortere i hver ende og saa ut som et hakk. */
 .topp::after { content: ""; position: absolute; left: 0; right: 0; bottom: -9px; border-top: 2px solid var(--blekk); }
+/* Driftsmeldingen under toppen, i panelets roede. Settes i innhold_<spraak>.py. */
+.drift {
+  margin: 28px var(--marg) 0; padding: 14px 18px;
+  border-left: 5px solid #c8102e; background: color-mix(in srgb, #c8102e 6%, var(--papir));
+  max-width: 72ch;
+}
+.drift strong { color: #c8102e; font-weight: 600; }
 .ordmerke { font-size: 30px; font-weight: 600; letter-spacing: 0.02em; color: var(--blekk); text-decoration: none; }
 .nav { display: flex; gap: clamp(14px, 2.2vw, 32px); align-items: baseline; flex-wrap: wrap; }
 .nav a {

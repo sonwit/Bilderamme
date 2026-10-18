@@ -22,6 +22,15 @@ GITHUB = "https://github.com/sonwit/Bilderamme"
 PROFIL = "https://github.com/sonwit"
 PERSONVERN = "https://sonwit.github.io/personvern/"
 
+# Status notice at the top of every page. None when everything works.
+DRIFT = {
+    "tittel": "Out of order",
+    "tekst": ("The microphone in the garden has been damaged by moisture, and since 9 October it has "
+              "only recorded hiss. The birds shown for the days after that are not real. We are building "
+              "a new listener with a better microphone and better weather protection, and the frame will "
+              "be back once it is in place."),
+}
+
 FORSIDE = {
     "kicker": "Hobby project, running since the summer of 2026",
     "tittel": "A picture frame that shows the birds heard in the garden today.",
