@@ -37,6 +37,8 @@ echo "→ Kopierer python-scripts til $SERVER:$DEST ..."
 # laa med en eldre lytteplan.py enn oppsett.py den skulle lese fra.
 # lydkvalitet.py importeres av birdnet_analyze.py, vakt.py, daily_panel.py og
 # render_daily_panel.py: uten den feiler baade analysen og tegningen.
+# vaerside.py kjoeres av daily_panel.py naar det ikke er fugler aa vise
+# (lagt til 18. okt 2026, mens mikrofonen var oedelagt).
 scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/push_to_frame.py" \
     "$HERE/tools/frame_server.py" \
@@ -61,6 +63,7 @@ scp "$HERE/tools/generate_daily_image.py" \
     "$HERE/tools/lydkvalitet.py" \
     "$HERE/tools/ny_art.py" \
     "$HERE/tools/tekstkollisjon.py" \
+    "$HERE/tools/vaerside.py" \
     "$SERVER:$DEST/"
 
 # Plansjebiblioteket: kildeskanningene, den faste grenen og 1:1-fuglene med

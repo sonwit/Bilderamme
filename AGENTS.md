@@ -56,7 +56,7 @@ serveren.
   `deploy/deploy.env` og `/opt/fugleramme/frame_server.env` er ignorert med
   vilje. Eksempelfilene ved siden av dem er det som committes.
 - **Standardbibliotek på serversidene.** `render_daily_panel.py`, `helse.py`,
-  `fugler.py`, `dag.py` og `vakt.py` importerer ingenting utenfor `stdlib`.
+  `fugler.py`, `dag.py`, `vakt.py` og `vaerside.py` importerer ingenting utenfor `stdlib`.
   Grafer tegnes som SVG for hånd. Ikke legg til avhengigheter der.
 - **Seks farger.** Alt som skal på panelet tegnes i svart, hvitt, rødt, gult,
   blått og grønt. Ingen gråtoner, ingen gjennomsiktighet.

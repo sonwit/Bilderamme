@@ -9,6 +9,9 @@ Dette er inngangspunktet cron kaller. Det gjoer i tur og orden:
   3. render_panel_png   — rastrer + Atkinson-dithring -> www/frame.bin
   4. arkiverer sida saa galleriet paa :8090 faar den med
 
+Er det ingen fugler aa vise -- bare sus fra mikrofonen, eller ingen dag
+bakover med noe aa tegne -- tegnes vaersiden (vaerside.py) i stedet for 1-2.
+
     venv/bin/python daily_panel.py
 
 Returnerer 0 bare hvis frame.bin faktisk ble skrevet. Feiler noe -- ingen av
@@ -70,6 +73,17 @@ RESERVE_I_GAAR = os.environ.get("RESERVE_I_GAAR", "1") != "0"
 # bakover den leter; 0 slaar det av.
 RESERVE_DAGER = int(os.environ.get("RESERVE_DAGER", "7"))
 
+# Vaersiden (vaerside.py) er reserven naar det ikke er fugler aa vise: dagen
+# er bare sus fra mikrofonen, eller ingen dag bakover har noe aa tegne. Den ble
+# laget 18. okt 2026, da mikrofonen hadde korrodert og en ny var bestilt, saa
+# veggen viste noe nyttig i stedet for «Lyden er daarlig» uke etter uke.
+# sus (standard) = bare da, alltid = hopp over fuglene, aldri = slaa den av.
+VAERSIDE = os.environ.get("VAERSIDE", "sus")
+MERKNAD_SUS = os.environ.get(
+    "VAERSIDE_MERKNAD",
+    "Lytteren i hagen hører bare sus. Fuglene er tilbake når mikrofonen er byttet.")
+MERKNAD_TOM = "Lytteren i hagen har ikke hørt fugler de siste dagene."
+
 
 def kjoer(navn: str, *args: str) -> None:
     print(f"\n--- {navn} ---", flush=True)
@@ -123,6 +137,10 @@ def main() -> int:
 
     birds = BIRDS
     komponert = False
+    sus = False
+    tom = False
+    if VAERSIDE == "alltid":
+        dager = []
     for i, dag in enumerate(dager):
         if i >= 2:
             # Eldre dager kan mangle opptak helt (utedelen laa nede). Det er
@@ -162,8 +180,21 @@ def main() -> int:
         if i + 1 < len(dager):
             print(f"Ingenting aa tegne for {dag} ennaa — tegner "
                   f"{dager[i + 1]} i stedet.", file=sys.stderr)
+        elif VAERSIDE != "aldri":
+            print("Ingen dag har noe aa tegne — tegner vaersiden.", file=sys.stderr)
+            tom = True
         else:
             raise SystemExit(f"FEIL: compose_branch.py gikk ut med kode {kode}")
+
+    vaer = VAERSIDE == "alltid" or (VAERSIDE != "aldri" and (sus or tom))
+    if vaer:
+        merknad = MERKNAD_SUS if sus else MERKNAD_TOM if tom else ""
+        if kjoer_kode("vaerside.py", "--out", HTML, "--merknad", merknad) != 0:
+            # Uten nett er sus-siden fra render_daily_panel reserven. Er det
+            # ingen dag i det hele tatt, finnes det ingenting aa falle tilbake paa.
+            if tom or VAERSIDE == "alltid":
+                raise SystemExit("FEIL: ingen fugler aa tegne, og vaersiden feilet")
+            vaer = False
     # Puta avgjoeres av om teksten FAKTISK kolliderer med illustrasjonen, ikke
     # av hvor mye blekk som ligger i et rektangel. Sida tegnes derfor én gang
     # uten bakgrunn foerst: alt som ikke er hvitt der er tekst, og da kan vi
@@ -173,14 +204,15 @@ def main() -> int:
     maske_png = os.path.join(WWW, "panel-maske.png")
     bg_json = os.path.join(os.path.dirname(WWW), "plates", "dagens-bakgrunn.json")
     bg_png = os.path.join(os.path.dirname(WWW), "plates", "dagens-bakgrunn.png")
-    if komponert and os.path.exists(bg_json) and os.path.exists(bg_png):
+    if not vaer and komponert and os.path.exists(bg_json) and os.path.exists(bg_png):
         kjoer("render_daily_panel.py", "--birds", birds, "--out", maske_html,
               "--uten-bakgrunn")
         kjoer("render_panel_png.py", "--html", maske_html, "--bare-png", maske_png)
         kjoer("tekstkollisjon.py", "--maske", maske_png,
               "--bakgrunn", bg_png, "--json", bg_json)
 
-    kjoer("render_daily_panel.py", "--birds", birds, "--out", HTML)
+    if not vaer:
+        kjoer("render_daily_panel.py", "--birds", birds, "--out", HTML)
     kjoer("render_panel_png.py", "--html", HTML, "--out-dir", WWW)
 
     frame = os.path.join(WWW, "frame.bin")

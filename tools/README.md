@@ -16,6 +16,7 @@ render_daily_panel.py   Siden som HTML på nøyaktig 1200x1600, i palettfarger.
 render_panel_png.py     Rastrer HTML -> PNG -> Atkinson-dither -> frame.bin.
 push_to_frame.py        Sender en ferdig frame.bin til rammen. Cron.
 tekstkollisjon.py       Måler om teksten faktisk kolliderer med illustrasjonen.
+vaerside.py             Reservesiden: været fra api.met.no, time for time og fem dager.
 
 — Lyd og arter —
 audio_ingest.py         Mottak av opptak og kamerabilder fra utedelen (systemd, port 8091).
@@ -63,6 +64,7 @@ daily_panel.py
   → render_daily_panel.py  yr / api.met.no (vær), HTML 1200x1600 i palettfarger
   → render_panel_png.py    headless chromium → PNG, Atkinson-dither, pakk 2 px/byte
   → www/frame.bin
+  (bare sus, eller ingen dag med fugler: vaerside.py i stedet for de to første)
 push_to_frame.py           POST http://fugleramme.local/display   (~20–35 s å tegne)
 ```
 
@@ -146,6 +148,8 @@ venv/bin/python daily_panel.py                                   # hele kjeden -
 venv/bin/python compose_branch.py --birds birds.json --retusj 0  # uten AI-retusj
 venv/bin/python render_daily_panel.py --bar paa                  # med konfidens-bar
 RETUSJ=0 venv/bin/python daily_panel.py                          # spar et Gemini-kall
+VAERSIDE=alltid venv/bin/python daily_panel.py                   # værsiden uansett
+venv/bin/python vaerside.py --out /tmp/vaer.html               # bare værsiden som HTML
 ```
 
 `--retusj` sender det ferdige arket tilbake til Gemini for å få tærne til å
