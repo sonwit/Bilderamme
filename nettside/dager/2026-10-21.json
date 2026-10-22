@@ -1,18 +1,18 @@
 {
  "dato": "2026-10-21",
- "tegnet": "16:00",
- "periode": "06:45–15:59",
- "opptak": 38,
- "vaer": "Overskyet · 8° · 1 m/s",
- "antall_arter": 1,
+ "tegnet": "07:07",
+ "periode": "06:45–21:29",
+ "opptak": 54,
+ "vaer": "Overskyet · 10° · 5 m/s",
+ "antall_arter": 2,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Dvergspett",
    "latin": "Dryobates minor",
    "sikkerhet": 47,
-   "tid": "12:59–15:59",
-   "belegg": "10 økter",
+   "tid": "12:59–21:29",
+   "belegg": "21 økter",
    "boks": [
     967,
     1167,
@@ -25,7 +25,9 @@
    ]
   }
  ],
- "ogsaa": [],
+ "ogsaa": [
+  "Fuglekonge"
+ ],
  "bilde": "2026-10-21.png",
  "doegn": [
   {"t": "06:45", "arter": []},
@@ -65,6 +67,22 @@
   {"t": "14:59", "arter": []},
   {"t": "15:29", "arter": []},
   {"t": "15:39", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:19", "arter": []},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:19", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:39", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:29", "arter": []},
+  {"t": "18:39", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:29", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:29", "arter": []},
+  {"t": "20:39", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:29", "arter": []}
  ]
 }
