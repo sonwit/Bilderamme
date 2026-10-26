@@ -1,0 +1,49 @@
+{
+ "dato": "2026-10-26",
+ "tegnet": "09:37",
+ "periode": "05:47–09:29",
+ "opptak": 15,
+ "vaer": "Lettskyet · 8° · 4 m/s",
+ "antall_arter": 2,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Dvergspett",
+   "latin": "Dryobates minor",
+   "sikkerhet": 41,
+   "tid": "06:59–09:29",
+   "belegg": "10 økter",
+   "boks": [
+    967,
+    1167,
+    1057,
+    1360
+   ],
+   "merke": [
+    931,
+    1360
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Fuglekonge"
+ ],
+ "bilde": "2026-10-26.png",
+ "doegn": [
+  {"t": "05:47", "arter": []},
+  {"t": "05:59", "arter": []},
+  {"t": "06:29", "arter": []},
+  {"t": "06:44", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:14", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:44", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": []},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": []},
+  {"t": "09:29", "arter": []}
+ ]
+}
