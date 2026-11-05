@@ -120,9 +120,10 @@ bruk hjemme trenger du ingenting ekstra.
 | `GET` eller `POST /daily` | Generer dagens standardbilde (som cron) |
 | `GET /status` | Hva serveren jobber med akkurat nå |
 
-Setter du `FRAME_TOKEN` i env-fila, må alle kall ha `?token=<token>` eller
-header `X-Token: <token>` — en enkel sperre mot at tilfeldige enheter på nettet
-trigger rammen.
+Setter du `FRAME_TOKEN` i env-filen, må alle kall ha header `X-Token: <token>`
+— en enkel sperre mot at tilfeldige enheter på nettet trigger rammen. I Snarveier
+legges den til under **Headers** i «Hent innhold fra URL». `?token=<token>` virker
+også, men da står tokenet i URL-en.
 
 **Home Assistant-eksempel** (`rest_command` i `configuration.yaml`):
 ```yaml

@@ -26,12 +26,15 @@ og bare én jobb kjøres om gangen. Rammen spiller et "pling" når bildet lander
 
 Miljøvariabler:
   GEMINI_API_KEY   kreves      FRAME_HOST  rammens adresse (default fugleramme.local)
-  FRAME_SERVER_PORT (8090)     FRAME_TOKEN valgfri delt hemmelighet (?token=... )
+  FRAME_SERVER_PORT (8090)     FRAME_TOKEN valgfri delt hemmelighet: header X-Token
+                               for klienter, ?token=... en gang i nettleseren (gir cookie)
 
 Kjør som systemd-tjeneste, se deploy/fugleramme-frame-server.service.
 """
 import os
+import re
 import sys
+import hmac
 import json
 import time
 import base64
@@ -39,7 +42,7 @@ import threading
 import traceback
 from io import BytesIO
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, parse_qsl, urlencode, quote, unquote
 
 from PIL import Image
 
@@ -55,6 +58,18 @@ FRAME_HOST = os.environ.get("FRAME_HOST", DEFAULT_HOST)
 FRAME_PATH = os.environ.get("FRAME_PATH", os.path.join(gen.OUTPUT_DIR, "frame.bin"))
 PORT = int(os.environ.get("FRAME_SERVER_PORT", "8090"))
 TOKEN = os.environ.get("FRAME_TOKEN")
+
+# Nettleseren faar tokenet som cookie ved foerste besoek med ?token=. Med token
+# i URL-en ga menylenkene 401, og tokenet havnet i journalen ved hvert kall.
+# SameSite=Strict fordi GET /generate og /daily setter i gang arbeid: en annen
+# nettside skal ikke kunne utloese dem gjennom nettleseren din. Ikke Secure,
+# for porten er ren HTTP paa LAN.
+COOKIE = "fugleramme_token"
+COOKIE_SEKUNDER = 365 * 24 * 3600
+# Bare sidene sendes videre uten token. API-kall kan vaere klienter uten
+# cookie-lager, og en omdirigering ville gitt dem 401 paa neste kall.
+SIDER = {"/", "/dag", "/fugler", "/helse"}
+TOKEN_I_URL = re.compile(r"([?&]token=)[^&\s\"]+")
 
 MAX_SUBJECT_LEN = 300
 MAX_SEEDS = 3
@@ -241,10 +256,33 @@ class Handler(BaseHTTPRequestHandler):
     def _reply_json(self, code, obj):
         self._reply(code, json.dumps(obj, ensure_ascii=False), "application/json; charset=utf-8")
 
+    def _cookie_token(self):
+        # Parses for haand: SimpleCookie kan gi opp paa hele headeren, og samme
+        # IP har andre tjenester som setter sine egne cookies.
+        for del_ in (self.headers.get("Cookie") or "").split(";"):
+            navn, _, verdi = del_.strip().partition("=")
+            if navn == COOKIE:
+                return unquote(verdi)
+        return None
+
     def _authorized(self, query):
         if not TOKEN:
             return True
-        return query.get("token", [None])[0] == TOKEN or self.headers.get("X-Token") == TOKEN
+        return (_samme_token(query.get("token", [None])[0])
+                or _samme_token(self.headers.get("X-Token"))
+                or _samme_token(self._cookie_token()))
+
+    def _logg_inn(self, side, raa_query):
+        """Gyldig ?token= paa en side: sett cookie og send videre uten token."""
+        rest = [(k, v) for k, v in parse_qsl(raa_query, keep_blank_values=True) if k != "token"]
+        self.send_response(303)
+        self.send_header("Location", side + ("?" + urlencode(rest) if rest else ""))
+        self.send_header("Set-Cookie", f"{COOKIE}={quote(TOKEN, safe='')}; Path=/; "
+                                       f"Max-Age={COOKIE_SEKUNDER}; HttpOnly; SameSite=Strict")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Content-Length", "0")
+        self.end_headers()
 
     def _serve_archive(self, name):
         safe = os.path.basename(name)
@@ -291,6 +329,9 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         query = parse_qs(parsed.query)
         path = parsed.path
+        side = path.rstrip("/") or "/"
+        if TOKEN and side in SIDER and _samme_token(query.get("token", [None])[0]):
+            return self._logg_inn(side, parsed.query)
         if path.startswith("/arkiv/"):
             if not self._authorized(query):
                 return self._reply(401, "Mangler eller feil token.")
@@ -431,7 +472,12 @@ class Handler(BaseHTTPRequestHandler):
         return self._reply(404, "Ukjent endepunkt.")
 
     def log_message(self, fmt, *args):
-        sys.stderr.write("%s - %s\n" % (self.address_string(), fmt % args))
+        linje = TOKEN_I_URL.sub(r"\1***", fmt % args)
+        sys.stderr.write("%s - %s\n" % (self.address_string(), linje))
+
+
+def _samme_token(kandidat):
+    return bool(kandidat) and hmac.compare_digest(kandidat.encode(), TOKEN.encode())
 
 
 def _parse_subject(raw, ctype):

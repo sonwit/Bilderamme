@@ -58,8 +58,12 @@ Så åpner du `http://192.168.1.38:8090/` i nettleseren.
 | `POST /api/send` | JSON `{name}` → send et arkivbilde til rammen på nytt |
 | `GET /api/dag?dato=` | JSON: én dag + indeks over alle dager med opptak |
 
-Setter du `FRAME_TOKEN` i `frame_server.env`, må du åpne webappen med
-`?token=din-token` i URL-en (den sender token videre på alle kall automatisk).
+Setter du `FRAME_TOKEN` i `frame_server.env`, åpner du webappen én gang med
+`?token=din-token` i URL-en. Serveren lagrer tokenet i en cookie og sender deg
+videre til adressen uten token, så menyen, bildene og lyden virker etterpå og
+bokmerket blir uten hemmelighet. Cookien gjelder ett vertsnavn, så IP-adressen og
+et eventuelt vertsnavn må åpnes med token hver for seg. Den har `SameSite=Strict`,
+så en lenke fra en annen nettside kan gi 401. Bruk da bokmerket.
 
 ## Mulige neste steg (ikke gjort ennå)
 
