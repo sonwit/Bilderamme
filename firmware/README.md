@@ -57,8 +57,8 @@ kodekoppsettet fra Waveshares lydeksempel.
 
 ## outdoor_sensor/ — lytteren i hagen
 
-Seeed XIAO ESP32-S3 med 8 MB PSRAM, INMP441 I2S-mikrofon med skumgummi som
-vindbeskyttelse, Waveshare Solar Power Manager (D) med MPPT-lading, 3,7 V
+Seeed XIAO ESP32-S3 med 8 MB PSRAM, ICS-43434 I2S-mikrofon (Adafruit 6049)
+med skumgummi som vindbeskyttelse, Waveshare Solar Power Manager (D) med MPPT-lading, 3,7 V
 LiPo på 10 Ah og et solcellepanel (6–24 V inn). XIAO-en går rett på
 batteriet via BAT-padene; managerens 5 V-utgang brukes ikke, for
 powerbank-brikken kutter ved µA-last.
@@ -84,4 +84,6 @@ tools/flash_firmware.sh utedel           # XIAO_ESP32S3, PSRAM på
 ```
 
 Alt om montering, strøm og feilsøking står i `docs/Utedel v2 — ESP32-S3 XIAO.md`.
+INMP441-en som satt der fra august til oktober 2026 korroderte; byttet og
+hvorfor firmwaren ikke trengte endringer står i samme dokument.
 Versjon 1 på Raspberry Pi 3 B, som trakk for mye strøm, ligger i `../pi/`.

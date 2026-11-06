@@ -17,7 +17,8 @@
 #define SAMPLE_RATE   48000                   // Hz — samme som Pi-pipelinen
 #define REC_SECONDS   60                      // sekunder per oekt
 
-// INMP441 gir 24-bit data i 32-bit rammer. Vi skifter ned til 16 bit:
+// Mikrofonen (ICS-43434, foer det INMP441) gir 24-bit data i 32-bit rammer.
+// Begge har -26 dBFS foelsomhet, saa samme gain passer. Vi skifter ned til 16 bit:
 //   16 = raatt nivaa (identisk med Pi-ens S32->S16), 14 = +12 dB, 12 = +24 dB.
 // Mikrofonen tar opp lavt og serveren peak-normaliserer uansett, men litt
 // digital gain her bevarer flere signalbiter. 14 er trygt mot klipping.
@@ -30,10 +31,14 @@
 
 // ---------------------------------------------------------------- pinner
 // XIAO ESP32-S3: D1=GPIO2, D2=GPIO3, D3=GPIO4 (se docs/Utedel v2).
-// INMP441: VDD->3V3, GND->GND, L/R->GND, SCK->D1, WS->D2, SD->D3.
-#define PIN_I2S_SCK   2                       // BCLK  (INMP441 SCK)
-#define PIN_I2S_WS    3                       // LRCLK (INMP441 WS)
-#define PIN_I2S_SD    4                       // DATA  (INMP441 SD)
+// ICS-43434 (Adafruit 6049, fra nov 2026):
+//   3V->3V3, GND->GND, SEL->GND, BCLK->D1, LRCL->D2, DOUT->D3.
+// INMP441 (aug-okt 2026, korroderte):
+//   VDD->3V3, GND->GND, L/R->GND, SCK->D1, WS->D2, SD->D3.
+// SEL/L-R til GND = venstre kanal, som firmwaren leser. Samme pinner for begge.
+#define PIN_I2S_SCK   2                       // BCLK  (ICS-43434 BCLK, INMP441 SCK)
+#define PIN_I2S_WS    3                       // LRCLK (ICS-43434 LRCL, INMP441 WS)
+#define PIN_I2S_SD    4                       // DATA  (ICS-43434 DOUT, INMP441 SD)
 
 // ---------------------------------------------------------------- batteri (valgfritt)
 // Maal batterispenningen: lodd 2 like motstander (f.eks. 220k + 220k) som

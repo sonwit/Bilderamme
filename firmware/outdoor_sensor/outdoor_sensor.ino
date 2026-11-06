@@ -6,7 +6,7 @@
 // aldri kunne gi.
 //
 // Flyt per oppvaakning (timer fra deep sleep):
-//   1. Ta opp REC_SECONDS mono 16-bit fra INMP441 (I2S) rett i PSRAM.
+//   1. Ta opp REC_SECONDS mono 16-bit fra I2S-mikrofonen (ICS-43434) rett i PSRAM.
 //      Opptak foerst, radio av — mikrofonen slipper wifi-stoey, og vi bruker
 //      ikke straum paa wifi foer vi maa.
 //   2. Koble til wifi, synk klokka (NTP). Systemklokka overlever deep sleep
@@ -181,11 +181,12 @@ static size_t record_audio(int16_t *pcm, uint32_t seconds) {
   static int32_t raw[CHUNK];
   size_t got = 0;
 
-  // INMP441 trenger tid paa aa vaakne. 100 ms var ikke nok: 233 av 293
-  // opptak (19.08-02.09.2026) begynte med et klippet smell paa opptil ett
-  // sekund, alle naar boksen var under 22 °C. Kast foerste ~1 s (48 x 1024
-  // rammer @ 48 kHz). Serveren kutter ogsaa selv om smellet er der, saa
-  // dette er belte og bukseseler.
+  // Mikrofonen trenger tid paa aa vaakne. Med INMP441 var 100 ms ikke nok:
+  // 233 av 293 opptak (19.08-02.09.2026) begynte med et klippet smell paa
+  // opptil ett sekund, alle naar boksen var under 22 °C. Kast foerste ~1 s
+  // (48 x 1024 rammer @ 48 kHz). Serveren kutter ogsaa selv om smellet er
+  // der, saa dette er belte og bukseseler. ICS-43434 (nov 2026) beholder
+  // samme sekund til smell_pct paa serveren viser at det kan kortes ned.
   for (int i = 0; i < 48; i++) i2s.readBytes((char *)raw, sizeof(raw));
 
   // 1. ordens hoeypass (~HIGHPASS_HZ) FOER gain: vind paa membranen lager

@@ -15,7 +15,7 @@ Pi-ens ~10 000 mAh/døgn. Grovt 150× mindre.
 ## Arkitektur (det eneste som endres er venstre boks)
 
 ```
-[XIAO ute]  deep sleep → våkner etter plan → 60 s I2S-opptak (INMP441, PSRAM)
+[XIAO ute]  deep sleep → våkner etter plan → 60 s I2S-opptak (ICS-43434, PSRAM)
             → wifi på → NTP → HTTP POST til serveren → deep sleep
 [Server]    audio_ingest.py (:8091) lagrer audio/fugl_<stamp>.wav + helse-json
             → trigger birdnet_analyze.py (samme som før)
@@ -29,14 +29,98 @@ merker ikke forskjell.
 
 ## Deler (fra ordren + det vi har)
 
-- **Seeed XIAO ESP32-S3** (uten Sense — vi bruker INMP441-en vi har)
-- **INMP441** I2S-mikrofon (flyttes fra Pi-en)
+- **Seeed XIAO ESP32-S3** (uten Sense — vi bruker en egen I2S-mikrofon)
+- **ICS-43434** I2S-mikrofon, Adafruit 6049 fra Electrokit (fra november 2026).
+  Før det satt INMP441-en fra Pi-en der, til den korroderte i oktober.
 - ESP32-S3-DevKitC 8MB PSRAM — reserve/benkebrett, samme firmware kan testes der
 - Breadboard 400 + koblingstråd — benketest før lodding
 - JST-PH-kabler — til LiPo på BAT-padene (alternativ B under)
 - USB-C-kabel med åpen ende — 5V fra dagens solcellebank (alternativ A)
 
-## Kobling INMP441 ↔ XIAO
+## Kobling ICS-43434 ↔ XIAO
+
+```
+ICS-43434      XIAO ESP32-S3
+(Adafruit)
+---------      -------------
+3V      →      3V3
+GND     →      GND
+SEL     →      GND            (venstre kanal)
+BCLK    →      D1  (GPIO2)
+LRCL    →      D2  (GPIO3)
+DOUT    →      D3  (GPIO4)
+```
+
+Samme pinner og samme kanal som INMP441-en under, så firmwaren er uendret.
+Adafruit sier SEL er lav som standard, men den kobles til GND likevel: en flytende
+SEL ute i fukt kan bytte kanal, og da leser firmwaren bare null.
+Kortet tar 1,6–3,6 V. Aldri 5 V.
+
+## Mikrofonbyttet til ICS-43434 (november 2026)
+
+**Hvorfor.** Fra 9. oktober 2026 tok INMP441-en opp jevnt sus på rundt
+−35 dBFS døgnet rundt, og BirdNET hørte en dvergspett i suset. 18. oktober
+viste baksiden av kortet korrosjon rundt VDD og GND: det hadde kommet vann
+inn i huset. ICS-43434 ble valgt fordi den er en direkte erstatning:
+
+| | INMP441 | ICS-43434 |
+|---|---|---|
+| Følsomhet | −26 dBFS | −26 dBFS |
+| SNR | 61 dB | 65 dBA |
+| Format | 24 bit i 32-bit ramme, I2S | det samme |
+| 48 kHz | ja | ja (høyytelsesmodus 23–51,6 kHz) |
+| Strøm | ~1,4 mA | ~0,5 mA |
+
+Samme følsomhet betyr at `GAIN_SHIFT 14` og `HIGHPASS_HZ 150` beholdes.
+Adafruit merker 6049 som utgått og anbefaler SPH0645 i stedet; den har
+et annet dataformat (18 bit, kjent for DC-forskyvning), så kjøp ICS-43434
+igjen hvis en reserve trengs.
+
+**Fuktsikring, lærdommen fra INMP441.** Det var loddepunktene som ruste,
+ikke membranen:
+
+1. Lodd stiftlisten, og klipp den kort på undersiden.
+2. Vask flussmiddelet av med isopropanol og la det tørke.
+3. Lakk alle loddepunkter og ledningsender med kretskortlakk (Plastik 70,
+   PRF 202; Clas Ohlson fører det ikke) eller klar neglelakk på begge sider av kortet. **Hold lakken unna lydhullet.**
+   Dekk hullet med en bit tape mens du lakker, og ta tapen av etterpå.
+4. Krympestrømpe over hver ledning der den møter stiften.
+5. Hullet sitter på undersiden av kortet (bunnportet). Det skal peke ned,
+   som før, med skumgummien foran. Vann som renner, skal renne forbi og ikke
+   samle seg i hullet.
+6. Se etter hvordan vannet kom inn i huset, og tett det. Et lite dryppehull
+   i bunnen av kassen lar kondens slippe ut.
+
+**Testrekkefølge.**
+
+1. *Benk, før lakk.* Koble opp på breadboardet inne med XIAO-en fra kassen.
+   Sett benketesting via fjernkonfig, så slipper du reflash:
+   ```bash
+   curl -X POST --data '{"rev": <neste>, "test_interval_s": 120}' http://<server>:8091/config
+   ```
+   Brettet starter med `config.h`-verdiene etter strømbruddet, henter den
+   nye konfigen etter første opplasting og kjører hvert 2. minutt fra økten
+   etter. Med USB i: `tools/flash_firmware.sh --monitor` viser `Opplastet`.
+2. *Lytt.* Hent et opptak og hør etter: et stille rom skal være nesten
+   stille, og et knips eller fløyt skal høres tydelig.
+3. *Mål, ikke håp.* Det INMP441-en klarte før den ble skadet, er målestokken:
+   ```bash
+   ssh <server> 'cd /opt/fugleramme && venv/bin/python3 lydkvalitet.py data/observations.jsonl <dagens dato>'
+   ```
+   Et stille rom skal ligge godt under −45 dBFS RMS, og ingen opptak skal
+   merkes som sus. Ligger det flatt rundt −35 dBFS, er det ledningene eller
+   kortet, ikke fuglene.
+4. *Lakk og monter*, når benken er grønn.
+5. *Tilbake til planen:*
+   ```bash
+   curl -X POST --data '{"rev": <neste>, "test_interval_s": 0}' http://<server>:8091/config
+   ```
+6. *Første natt og morgen ute.* Nattnivået skal tilbake til −55 til
+   −65 dBFS, som før 8. oktober, og `vakt.py` skal ikke varsle om sus.
+   Først da tas driftsmeldingen av nettsiden (`DRIFT` i
+   `nettside/innhold_*.py`), og INMP441 byttes ut i README og på nettsiden.
+
+## Kobling INMP441 ↔ XIAO (august–oktober 2026)
 
 ```
 INMP441        XIAO ESP32-S3
@@ -214,7 +298,7 @@ i firmwaren.
 - **Klokkedrift i deep sleep** (RC-oscillator, ±2–3 %): etter nattesøvnen kan
   første økt bomme med noen minutter. Tidsstempelet på opptaket er likevel
   riktig — det regnes bakover fra NTP-synket klokke ved opplasting.
-- **Digital gain `GAIN_SHIFT 14`** (+12 dB vs Pi-ens S32→S16). INMP441 tar opp
-  lavt; dette bevarer flere signalbiter før serverens peak-normalisering.
+- **Digital gain `GAIN_SHIFT 14`** (+12 dB vs Pi-ens S32→S16). Mikrofonen tar opp
+  lavt (INMP441 og ICS-43434 har begge −26 dBFS); dette bevarer flere signalbiter før serverens peak-normalisering.
   Klipper opptak (`clipped_pct` i statistikken), sett 15 eller 16.
 - Kamera: XIAO-en har ikke kamera (det har Sense-varianten). Uaktuelt nå.
