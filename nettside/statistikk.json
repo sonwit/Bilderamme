@@ -1,20 +1,20 @@
 {
  "fra": "2026-07-26",
- "til": "2026-10-26",
- "dager_med_opptak": 79,
+ "til": "2026-11-07",
+ "dager_med_opptak": 91,
  "terskel": 0.5,
  "arter": {
+  "Dryobates minor": {
+   "dager": 54,
+   "beste": 0.72,
+   "foerst": "2026-08-04",
+   "sist": "2026-11-06"
+  },
   "Pica pica": {
    "dager": 43,
    "beste": 1.0,
    "foerst": "2026-07-27",
    "sist": "2026-10-08"
-  },
-  "Dryobates minor": {
-   "dager": 43,
-   "beste": 0.72,
-   "foerst": "2026-08-04",
-   "sist": "2026-10-26"
   },
   "Parus major": {
    "dager": 27,
@@ -23,10 +23,10 @@
    "sist": "2026-10-05"
   },
   "Chloris chloris": {
-   "dager": 20,
+   "dager": 21,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-10-08"
+   "sist": "2026-11-07"
   },
   "Spinus spinus": {
    "dager": 13,
@@ -46,6 +46,12 @@
    "foerst": "2026-08-25",
    "sist": "2026-10-04"
   },
+  "Passer montanus": {
+   "dager": 7,
+   "beste": 0.92,
+   "foerst": "2026-09-25",
+   "sist": "2026-11-07"
+  },
   "Corvus cornix": {
    "dager": 7,
    "beste": 0.84,
@@ -64,17 +70,17 @@
    "foerst": "2026-08-28",
    "sist": "2026-10-03"
   },
-  "Passer montanus": {
-   "dager": 6,
-   "beste": 0.92,
-   "foerst": "2026-09-25",
-   "sist": "2026-10-07"
-  },
   "Turdus merula": {
    "dager": 6,
    "beste": 0.87,
    "foerst": "2026-09-01",
    "sist": "2026-10-04"
+  },
+  "Fringilla coelebs": {
+   "dager": 6,
+   "beste": 0.75,
+   "foerst": "2026-08-26",
+   "sist": "2026-11-07"
   },
   "Turdus iliacus": {
    "dager": 5,
@@ -87,12 +93,6 @@
    "beste": 0.77,
    "foerst": "2026-09-02",
    "sist": "2026-10-05"
-  },
-  "Fringilla coelebs": {
-   "dager": 5,
-   "beste": 0.75,
-   "foerst": "2026-08-26",
-   "sist": "2026-10-04"
   },
   "Acanthis flammea": {
    "dager": 5,
@@ -124,17 +124,17 @@
    "foerst": "2026-08-07",
    "sist": "2026-09-21"
   },
+  "Regulus regulus": {
+   "dager": 4,
+   "beste": 0.63,
+   "foerst": "2026-09-09",
+   "sist": "2026-10-26"
+  },
   "Ardea cinerea": {
    "dager": 3,
    "beste": 0.73,
    "foerst": "2026-07-27",
    "sist": "2026-09-01"
-  },
-  "Regulus regulus": {
-   "dager": 3,
-   "beste": 0.63,
-   "foerst": "2026-09-09",
-   "sist": "2026-10-23"
   },
   "Columba palumbus": {
    "dager": 3,
@@ -250,17 +250,17 @@
    "foerst": "2026-09-12",
    "sist": "2026-09-12"
   },
+  "Gallinula chloropus": {
+   "dager": 1,
+   "beste": 0.43,
+   "foerst": "2026-09-28",
+   "sist": "2026-09-28"
+  },
   "Nucifraga caryocatactes": {
    "dager": 1,
    "beste": 0.39,
    "foerst": "2026-10-25",
    "sist": "2026-10-25"
-  },
-  "Gallinula chloropus": {
-   "dager": 1,
-   "beste": 0.28,
-   "foerst": "2026-09-28",
-   "sist": "2026-09-28"
   }
  }
 }

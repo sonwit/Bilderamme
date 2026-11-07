@@ -1,0 +1,118 @@
+{
+ "dato": "2026-11-07",
+ "tegnet": "16:00",
+ "periode": "05:48–15:59",
+ "opptak": 44,
+ "vaer": "Overskyet · -2° · 1 m/s",
+ "antall_arter": 8,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 83,
+   "tid": "11:59–14:39",
+   "belegg": "3 økter",
+   "boks": [
+    582,
+    1232,
+    776,
+    1377
+   ],
+   "merke": [
+    664,
+    1382
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 82,
+   "tid": "12:59–13:39",
+   "belegg": "2 økter",
+   "boks": [
+    808,
+    905,
+    956,
+    1039
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Bokfink",
+   "latin": "Fringilla coelebs",
+   "sikkerhet": 58,
+   "tid": "12:59",
+   "belegg": "1 ggr",
+   "boks": [
+    253,
+    1252,
+    407,
+    1416
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Gråsisik",
+  "Rødstrupe",
+  "Kjøttmeis",
+  "Flaggspett",
+  "Gråhegre"
+ ],
+ "bilde": "2026-11-07.png",
+ "doegn": [
+  {"t": "05:48", "arter": []},
+  {"t": "05:59", "arter": []},
+  {"t": "06:19", "arter": []},
+  {"t": "06:39", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:09", "arter": []},
+  {"t": "07:19", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:39", "arter": []},
+  {"t": "07:49", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:09", "arter": []},
+  {"t": "08:19", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:39", "arter": []},
+  {"t": "08:49", "arter": []},
+  {"t": "08:59", "arter": []},
+  {"t": "09:09", "arter": []},
+  {"t": "09:19", "arter": []},
+  {"t": "09:29", "arter": []},
+  {"t": "09:39", "arter": []},
+  {"t": "09:49", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:09", "arter": []},
+  {"t": "10:19", "arter": []},
+  {"t": "10:29", "arter": []},
+  {"t": "10:39", "arter": []},
+  {"t": "10:49", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": [["Grønnfink", "Chloris chloris", 83]]},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": [["Pilfink", "Passer montanus", 73], ["Bokfink", "Fringilla coelebs", 58]]},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": [["Pilfink", "Passer montanus", 82]]},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": [["Grønnfink", "Chloris chloris", 70]]},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
+ ]
+}
