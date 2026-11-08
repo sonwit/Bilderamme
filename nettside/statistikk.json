@@ -11,22 +11,22 @@
    "sist": "2026-11-06"
   },
   "Pica pica": {
-   "dager": 43,
+   "dager": 44,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-10-08"
+   "sist": "2026-11-08"
   },
   "Parus major": {
-   "dager": 27,
+   "dager": 28,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-10-05"
+   "sist": "2026-11-08"
   },
   "Chloris chloris": {
-   "dager": 21,
+   "dager": 22,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-11-07"
+   "sist": "2026-11-08"
   },
   "Spinus spinus": {
    "dager": 13,
@@ -47,10 +47,10 @@
    "sist": "2026-10-04"
   },
   "Passer montanus": {
-   "dager": 7,
+   "dager": 8,
    "beste": 0.92,
    "foerst": "2026-09-25",
-   "sist": "2026-11-07"
+   "sist": "2026-11-08"
   },
   "Corvus cornix": {
    "dager": 7,
@@ -231,6 +231,12 @@
    "beste": 0.57,
    "foerst": "2026-09-28",
    "sist": "2026-09-28"
+  },
+  "Corvus corone": {
+   "dager": 1,
+   "beste": 0.56,
+   "foerst": "2026-11-08",
+   "sist": "2026-11-08"
   },
   "Pinicola enucleator": {
    "dager": 1,

@@ -1,0 +1,128 @@
+{
+ "dato": "2026-11-08",
+ "tegnet": "09:38",
+ "periode": "05:45–09:39",
+ "opptak": 21,
+ "vaer": "Overskyet · -4° · 0 m/s",
+ "antall_arter": 7,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 98,
+   "tid": "08:09–08:59",
+   "belegg": "2 økter",
+   "boks": [
+    238,
+    1266,
+    422,
+    1404
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 76,
+   "tid": "08:39",
+   "belegg": "3 ggr",
+   "boks": [
+    796,
+    923,
+    956,
+    1048
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 74,
+   "tid": "08:19–09:09",
+   "belegg": "2 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Svartkråke",
+   "latin": "Corvus corone",
+   "sikkerhet": 56,
+   "tid": "09:09",
+   "belegg": "2 ggr",
+   "boks": [
+    632,
+    557,
+    809,
+    731
+   ],
+   "merke": [
+    596,
+    731
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 53,
+   "tid": "07:39",
+   "belegg": "1 ggr",
+   "boks": [
+    951,
+    562,
+    1087,
+    685
+   ],
+   "merke": [
+    999,
+    698
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Spettmeis",
+  "Gråtrost"
+ ],
+ "bilde": "2026-11-08.png",
+ "doegn": [
+  {"t": "05:45", "arter": []},
+  {"t": "05:59", "arter": []},
+  {"t": "06:19", "arter": []},
+  {"t": "06:39", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:09", "arter": []},
+  {"t": "07:19", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:39", "arter": [["Pilfink", "Passer montanus", 53]]},
+  {"t": "07:49", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:09", "arter": [["Grønnfink", "Chloris chloris", 98]]},
+  {"t": "08:19", "arter": [["Skjære", "Pica pica", 73]]},
+  {"t": "08:29", "arter": []},
+  {"t": "08:39", "arter": [["Kjøttmeis", "Parus major", 76]]},
+  {"t": "08:49", "arter": []},
+  {"t": "08:59", "arter": [["Grønnfink", "Chloris chloris", 50]]},
+  {"t": "09:09", "arter": [["Skjære", "Pica pica", 74], ["Svartkråke", "Corvus corone", 56]]},
+  {"t": "09:19", "arter": []},
+  {"t": "09:29", "arter": []},
+  {"t": "09:39", "arter": []}
+ ]
+}
