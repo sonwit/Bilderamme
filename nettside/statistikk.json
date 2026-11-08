@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-11-07",
- "dager_med_opptak": 91,
+ "til": "2026-11-08",
+ "dager_med_opptak": 92,
  "terskel": 0.5,
  "arter": {
   "Dryobates minor": {
@@ -255,6 +255,12 @@
    "beste": 0.43,
    "foerst": "2026-09-28",
    "sist": "2026-09-28"
+  },
+  "Strix uralensis": {
+   "dager": 1,
+   "beste": 0.43,
+   "foerst": "2026-11-07",
+   "sist": "2026-11-07"
   },
   "Nucifraga caryocatactes": {
    "dager": 1,
