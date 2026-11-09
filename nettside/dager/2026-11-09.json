@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-09",
- "tegnet": "09:37",
- "periode": "05:44–09:39",
- "opptak": 17,
- "vaer": "Overskyet · 0° · 0 m/s",
- "antall_arter": 8,
+ "tegnet": "16:01",
+ "periode": "05:44–15:59",
+ "opptak": 40,
+ "vaer": "Tåke · 0° · 0 m/s",
+ "antall_arter": 15,
  "hoert": [
   {
    "nr": 1,
@@ -25,37 +25,48 @@
    ]
   },
   {
-   "norsk": "Kaie",
-   "latin": "Corvus monedula",
-   "sikkerhet": 73,
-   "tid": "08:29",
-   "belegg": "3 ggr"
-  },
-  {
    "nr": 2,
    "norsk": "Dompap",
    "latin": "Pyrrhula pyrrhula",
-   "sikkerhet": 69,
-   "tid": "09:09–09:19",
-   "belegg": "2 økter",
+   "sikkerhet": 98,
+   "tid": "09:09–10:39",
+   "belegg": "4 økter",
    "boks": [
-    247,
-    1247,
-    404,
-    1422
+    990,
+    558,
+    1122,
+    706
    ],
    "merke": [
-    314,
-    1410
+    999,
+    698
    ]
   },
   {
    "nr": 3,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 90,
+   "tid": "10:19–14:39",
+   "belegg": "5 økter",
+   "boks": [
+    948,
+    449,
+    1108,
+    569
+   ],
+   "merke": [
+    974,
+    576
+   ]
+  },
+  {
+   "nr": 4,
    "norsk": "Skjære",
    "latin": "Pica pica",
-   "sikkerhet": 54,
-   "tid": "08:19–09:19",
-   "belegg": "3 økter",
+   "sikkerhet": 90,
+   "tid": "08:19–11:39",
+   "belegg": "5 økter",
    "boks": [
     592,
     1143,
@@ -68,17 +79,85 @@
    ]
   },
   {
-   "norsk": "Stokkand",
-   "latin": "Anas platyrhynchos",
-   "sikkerhet": 41,
-   "tid": "08:49–09:19",
-   "belegg": "2 økter"
+   "nr": 5,
+   "norsk": "Svarttrost",
+   "latin": "Turdus merula",
+   "sikkerhet": 71,
+   "tid": "10:09",
+   "belegg": "1 ggr",
+   "boks": [
+    201,
+    1213,
+    450,
+    1401
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 6,
+   "norsk": "Svartmeis",
+   "latin": "Periparus ater",
+   "sikkerhet": 70,
+   "tid": "10:39",
+   "belegg": "1 ggr",
+   "boks": [
+    697,
+    119,
+    783,
+    189
+   ],
+   "merke": [
+    661,
+    189
+   ]
+  },
+  {
+   "nr": 7,
+   "norsk": "Blåmeis",
+   "latin": "Cyanistes caeruleus",
+   "sikkerhet": 66,
+   "tid": "10:39",
+   "belegg": "1 ggr",
+   "boks": [
+    916,
+    204,
+    1039,
+    305
+   ],
+   "merke": [
+    964,
+    317
+   ]
+  },
+  {
+   "nr": 8,
+   "norsk": "Kornkråke",
+   "latin": "Corvus frugilegus",
+   "sikkerhet": 64,
+   "tid": "09:59",
+   "belegg": "1 ggr",
+   "boks": [
+    631,
+    558,
+    810,
+    731
+   ],
+   "merke": [
+    595,
+    731
+   ]
   }
  ],
  "ogsaa": [
+  "Gråsisik",
   "Fuglekonge",
   "Rødstilk",
-  "Taksvale"
+  "Taksvale",
+  "Kaie",
+  "Sivhøne"
  ],
  "bilde": "2026-11-09.png",
  "doegn": [
@@ -98,6 +177,29 @@
   {"t": "09:09", "arter": [["Dompap", "Pyrrhula pyrrhula", 57]]},
   {"t": "09:19", "arter": [["Dompap", "Pyrrhula pyrrhula", 69]]},
   {"t": "09:29", "arter": []},
-  {"t": "09:39", "arter": [["Gråtrost", "Turdus pilaris", 100]]}
+  {"t": "09:39", "arter": [["Gråtrost", "Turdus pilaris", 100]]},
+  {"t": "09:49", "arter": [["Dompap", "Pyrrhula pyrrhula", 98], ["Skjære", "Pica pica", 65]]},
+  {"t": "09:59", "arter": [["Kornkråke", "Corvus frugilegus", 64]]},
+  {"t": "10:09", "arter": [["Svarttrost", "Turdus merula", 71]]},
+  {"t": "10:19", "arter": []},
+  {"t": "10:29", "arter": []},
+  {"t": "10:39", "arter": [["Svartmeis", "Periparus ater", 70], ["Blåmeis", "Cyanistes caeruleus", 66], ["Dompap", "Pyrrhula pyrrhula", 52]]},
+  {"t": "10:49", "arter": [["Grønnfink", "Chloris chloris", 70]]},
+  {"t": "10:59", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:39", "arter": [["Skjære", "Pica pica", 90]]},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": [["Grønnfink", "Chloris chloris", 78]]},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": [["Grønnfink", "Chloris chloris", 60]]},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": [["Sivhøne", "Gallinula chloropus", 54]]},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": [["Grønnfink", "Chloris chloris", 90]]},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }

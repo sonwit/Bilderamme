@@ -23,10 +23,10 @@
    "sist": "2026-11-08"
   },
   "Chloris chloris": {
-   "dager": 22,
+   "dager": 23,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-11-08"
+   "sist": "2026-11-09"
   },
   "Spinus spinus": {
    "dager": 13,
@@ -35,10 +35,10 @@
    "sist": "2026-10-01"
   },
   "Cyanistes caeruleus": {
-   "dager": 12,
+   "dager": 13,
    "beste": 0.95,
    "foerst": "2026-08-26",
-   "sist": "2026-11-08"
+   "sist": "2026-11-09"
   },
   "Turdus pilaris": {
    "dager": 10,
@@ -46,16 +46,16 @@
    "foerst": "2026-08-25",
    "sist": "2026-11-09"
   },
+  "Turdus merula": {
+   "dager": 8,
+   "beste": 0.99,
+   "foerst": "2026-09-01",
+   "sist": "2026-11-09"
+  },
   "Passer montanus": {
    "dager": 8,
    "beste": 0.94,
    "foerst": "2026-09-25",
-   "sist": "2026-11-08"
-  },
-  "Turdus merula": {
-   "dager": 7,
-   "beste": 0.99,
-   "foerst": "2026-09-01",
    "sist": "2026-11-08"
   },
   "Corvus cornix": {
@@ -82,6 +82,12 @@
    "foerst": "2026-08-28",
    "sist": "2026-10-03"
   },
+  "Periparus ater": {
+   "dager": 6,
+   "beste": 0.77,
+   "foerst": "2026-09-02",
+   "sist": "2026-11-09"
+  },
   "Fringilla coelebs": {
    "dager": 6,
    "beste": 0.75,
@@ -105,12 +111,6 @@
    "beste": 0.8,
    "foerst": "2026-08-27",
    "sist": "2026-11-09"
-  },
-  "Periparus ater": {
-   "dager": 5,
-   "beste": 0.77,
-   "foerst": "2026-09-02",
-   "sist": "2026-10-05"
   },
   "Strix aluco": {
    "dager": 4,
@@ -172,6 +172,12 @@
    "foerst": "2026-08-28",
    "sist": "2026-09-19"
   },
+  "Gallinula chloropus": {
+   "dager": 2,
+   "beste": 0.54,
+   "foerst": "2026-09-28",
+   "sist": "2026-11-09"
+  },
   "Loxia leucoptera": {
    "dager": 2,
    "beste": 0.45,
@@ -214,6 +220,12 @@
    "foerst": "2026-08-30",
    "sist": "2026-08-30"
   },
+  "Corvus frugilegus": {
+   "dager": 1,
+   "beste": 0.64,
+   "foerst": "2026-11-09",
+   "sist": "2026-11-09"
+  },
   "Prunella modularis": {
    "dager": 1,
    "beste": 0.6,
@@ -255,12 +267,6 @@
    "beste": 0.51,
    "foerst": "2026-09-12",
    "sist": "2026-09-12"
-  },
-  "Gallinula chloropus": {
-   "dager": 1,
-   "beste": 0.43,
-   "foerst": "2026-09-28",
-   "sist": "2026-09-28"
   },
   "Strix uralensis": {
    "dager": 1,
