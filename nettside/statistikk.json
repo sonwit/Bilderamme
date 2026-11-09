@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-11-08",
- "dager_med_opptak": 92,
+ "til": "2026-11-09",
+ "dager_med_opptak": 93,
  "terskel": 0.5,
  "arter": {
   "Dryobates minor": {
@@ -52,6 +52,12 @@
    "foerst": "2026-09-25",
    "sist": "2026-11-08"
   },
+  "Turdus merula": {
+   "dager": 7,
+   "beste": 0.99,
+   "foerst": "2026-09-01",
+   "sist": "2026-11-08"
+  },
   "Corvus cornix": {
    "dager": 7,
    "beste": 0.84,
@@ -69,12 +75,6 @@
    "beste": 0.98,
    "foerst": "2026-08-28",
    "sist": "2026-10-03"
-  },
-  "Turdus merula": {
-   "dager": 6,
-   "beste": 0.87,
-   "foerst": "2026-09-01",
-   "sist": "2026-10-04"
   },
   "Fringilla coelebs": {
    "dager": 6,
@@ -160,6 +160,12 @@
    "foerst": "2026-10-04",
    "sist": "2026-10-07"
   },
+  "Bubo bubo": {
+   "dager": 2,
+   "beste": 0.63,
+   "foerst": "2026-08-21",
+   "sist": "2026-11-08"
+  },
   "Phoenicurus phoenicurus": {
    "dager": 2,
    "beste": 0.6,
@@ -207,12 +213,6 @@
    "beste": 0.67,
    "foerst": "2026-08-30",
    "sist": "2026-08-30"
-  },
-  "Bubo bubo": {
-   "dager": 1,
-   "beste": 0.63,
-   "foerst": "2026-08-21",
-   "sist": "2026-08-21"
   },
   "Prunella modularis": {
    "dager": 1,

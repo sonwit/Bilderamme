@@ -1,31 +1,49 @@
 {
  "dato": "2026-11-08",
- "tegnet": "16:00",
- "periode": "05:45–15:59",
- "opptak": 44,
- "vaer": "Overskyet · -3° · 0 m/s",
- "antall_arter": 17,
+ "tegnet": "07:08",
+ "periode": "05:45–21:39",
+ "opptak": 61,
+ "vaer": "Overskyet · 0° · 0 m/s",
+ "antall_arter": 22,
  "hoert": [
   {
    "nr": 1,
+   "norsk": "Svarttrost",
+   "latin": "Turdus merula",
+   "sikkerhet": 99,
+   "tid": "16:19",
+   "belegg": "5 ggr",
+   "boks": [
+    201,
+    1213,
+    450,
+    1401
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 2,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
    "sikkerhet": 98,
    "tid": "08:09–14:59",
    "belegg": "7 økter",
    "boks": [
-    834,
-    918,
-    1003,
-    1045
+    974,
+    574,
+    1130,
+    691
    ],
    "merke": [
-    864,
-    1052
+    999,
+    698
    ]
   },
   {
-   "nr": 2,
+   "nr": 3,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 98,
@@ -43,43 +61,43 @@
    ]
   },
   {
-   "nr": 3,
+   "nr": 4,
    "norsk": "Pilfink",
    "latin": "Passer montanus",
    "sikkerhet": 94,
    "tid": "07:39–14:19",
    "belegg": "2 økter",
    "boks": [
-    951,
-    562,
-    1087,
-    685
+    923,
+    453,
+    1063,
+    580
    ],
    "merke": [
-    999,
-    698
+    974,
+    593
    ]
   },
   {
-   "nr": 4,
+   "nr": 5,
    "norsk": "Dompap",
    "latin": "Pyrrhula pyrrhula",
    "sikkerhet": 86,
    "tid": "13:19",
    "belegg": "4 ggr",
    "boks": [
-    247,
-    1247,
-    404,
-    1422
+    851,
+    900,
+    996,
+    1062
    ],
    "merke": [
-    314,
-    1410
+    864,
+    1052
    ]
   },
   {
-   "nr": 5,
+   "nr": 6,
    "norsk": "Kjøttmeis",
    "latin": "Parus major",
    "sikkerhet": 76,
@@ -97,7 +115,7 @@
    ]
   },
   {
-   "nr": 6,
+   "nr": 7,
    "norsk": "Gråsisik",
    "latin": "Acanthis flammea",
    "sikkerhet": 61,
@@ -115,49 +133,31 @@
    ]
   },
   {
-   "nr": 7,
+   "nr": 8,
    "norsk": "Blåmeis",
    "latin": "Cyanistes caeruleus",
    "sikkerhet": 57,
    "tid": "11:59–12:19",
    "belegg": "2 økter",
    "boks": [
-    706,
-    106,
-    775,
-    203
+    687,
+    598,
+    753,
+    691
    ],
    "merke": [
-    670,
-    203
-   ]
-  },
-  {
-   "nr": 8,
-   "norsk": "Svartkråke",
-   "latin": "Corvus corone",
-   "sikkerhet": 56,
-   "tid": "09:09–15:19",
-   "belegg": "2 økter",
-   "boks": [
-    632,
-    557,
-    809,
-    731
-   ],
-   "merke": [
-    596,
-    731
+    651,
+    691
    ]
   }
  ],
  "ogsaa": [
   "Skogsnipe",
+  "Heilo",
   "Spettmeis",
   "Nøttekråke",
   "Kjernebiter",
-  "Gråtrost",
-  "Vannrikse"
+  "Gråtrost"
  ],
  "bilde": "2026-11-08.png",
  "doegn": [
@@ -204,6 +204,23 @@
   {"t": "14:59", "arter": []},
   {"t": "15:19", "arter": []},
   {"t": "15:39", "arter": [["Skjære", "Pica pica", 98]]},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:19", "arter": [["Svarttrost", "Turdus merula", 99]]},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:19", "arter": []},
+  {"t": "17:39", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:19", "arter": []},
+  {"t": "18:39", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:19", "arter": []},
+  {"t": "19:39", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:19", "arter": []},
+  {"t": "20:39", "arter": []},
+  {"t": "20:58", "arter": []},
+  {"t": "21:19", "arter": []},
+  {"t": "21:39", "arter": []}
  ]
 }
