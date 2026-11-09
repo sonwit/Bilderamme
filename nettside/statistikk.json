@@ -11,10 +11,10 @@
    "sist": "2026-11-06"
   },
   "Pica pica": {
-   "dager": 44,
+   "dager": 45,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-08"
+   "sist": "2026-11-09"
   },
   "Parus major": {
    "dager": 28,
@@ -41,10 +41,10 @@
    "sist": "2026-11-08"
   },
   "Turdus pilaris": {
-   "dager": 9,
-   "beste": 0.95,
+   "dager": 10,
+   "beste": 1.0,
    "foerst": "2026-08-25",
-   "sist": "2026-10-04"
+   "sist": "2026-11-09"
   },
   "Passer montanus": {
    "dager": 8,
@@ -70,6 +70,12 @@
    "foerst": "2026-09-05",
    "sist": "2026-10-03"
   },
+  "Pyrrhula pyrrhula": {
+   "dager": 6,
+   "beste": 0.98,
+   "foerst": "2026-09-08",
+   "sist": "2026-11-09"
+  },
   "Sitta europaea": {
    "dager": 6,
    "beste": 0.98,
@@ -88,17 +94,17 @@
    "foerst": "2026-08-27",
    "sist": "2026-11-08"
   },
-  "Pyrrhula pyrrhula": {
-   "dager": 5,
-   "beste": 0.98,
-   "foerst": "2026-09-08",
-   "sist": "2026-11-08"
-  },
   "Turdus iliacus": {
    "dager": 5,
    "beste": 0.85,
    "foerst": "2026-07-28",
    "sist": "2026-10-03"
+  },
+  "Anas platyrhynchos": {
+   "dager": 5,
+   "beste": 0.8,
+   "foerst": "2026-08-27",
+   "sist": "2026-11-09"
   },
   "Periparus ater": {
    "dager": 5,
@@ -112,12 +118,6 @@
    "foerst": "2026-08-19",
    "sist": "2026-09-24"
   },
-  "Anas platyrhynchos": {
-   "dager": 4,
-   "beste": 0.8,
-   "foerst": "2026-08-27",
-   "sist": "2026-09-28"
-  },
   "Dendrocopos major": {
    "dager": 4,
    "beste": 0.78,
@@ -129,6 +129,12 @@
    "beste": 0.63,
    "foerst": "2026-09-09",
    "sist": "2026-10-26"
+  },
+  "Corvus monedula": {
+   "dager": 3,
+   "beste": 0.83,
+   "foerst": "2026-09-24",
+   "sist": "2026-11-09"
   },
   "Ardea cinerea": {
    "dager": 3,
@@ -147,12 +153,6 @@
    "beste": 0.85,
    "foerst": "2026-09-18",
    "sist": "2026-09-25"
-  },
-  "Corvus monedula": {
-   "dager": 2,
-   "beste": 0.83,
-   "foerst": "2026-09-24",
-   "sist": "2026-10-07"
   },
   "Passer domesticus": {
    "dager": 2,

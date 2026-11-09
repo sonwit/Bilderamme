@@ -1,0 +1,103 @@
+{
+ "dato": "2026-11-09",
+ "tegnet": "09:37",
+ "periode": "05:44–09:39",
+ "opptak": 17,
+ "vaer": "Overskyet · 0° · 0 m/s",
+ "antall_arter": 8,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Gråtrost",
+   "latin": "Turdus pilaris",
+   "sikkerhet": 100,
+   "tid": "07:59–09:39",
+   "belegg": "2 økter",
+   "boks": [
+    772,
+    847,
+    968,
+    1050
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "norsk": "Kaie",
+   "latin": "Corvus monedula",
+   "sikkerhet": 73,
+   "tid": "08:29",
+   "belegg": "3 ggr"
+  },
+  {
+   "nr": 2,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 69,
+   "tid": "09:09–09:19",
+   "belegg": "2 økter",
+   "boks": [
+    247,
+    1247,
+    404,
+    1422
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 54,
+   "tid": "08:19–09:19",
+   "belegg": "3 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "norsk": "Stokkand",
+   "latin": "Anas platyrhynchos",
+   "sikkerhet": 41,
+   "tid": "08:49–09:19",
+   "belegg": "2 økter"
+  }
+ ],
+ "ogsaa": [
+  "Fuglekonge",
+  "Rødstilk",
+  "Taksvale"
+ ],
+ "bilde": "2026-11-09.png",
+ "doegn": [
+  {"t": "05:44", "arter": []},
+  {"t": "06:58", "arter": []},
+  {"t": "07:18", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:39", "arter": []},
+  {"t": "07:49", "arter": []},
+  {"t": "07:59", "arter": [["Gråtrost", "Turdus pilaris", 88]]},
+  {"t": "08:09", "arter": []},
+  {"t": "08:19", "arter": [["Skjære", "Pica pica", 54]]},
+  {"t": "08:29", "arter": [["Kaie", "Corvus monedula", 73]]},
+  {"t": "08:39", "arter": []},
+  {"t": "08:49", "arter": []},
+  {"t": "08:59", "arter": []},
+  {"t": "09:09", "arter": [["Dompap", "Pyrrhula pyrrhula", 57]]},
+  {"t": "09:19", "arter": [["Dompap", "Pyrrhula pyrrhula", 69]]},
+  {"t": "09:29", "arter": []},
+  {"t": "09:39", "arter": [["Gråtrost", "Turdus pilaris", 100]]}
+ ]
+}
