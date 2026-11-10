@@ -17,16 +17,22 @@
    "sist": "2026-11-10"
   },
   "Parus major": {
-   "dager": 28,
+   "dager": 29,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-11-08"
+   "sist": "2026-11-10"
   },
   "Chloris chloris": {
-   "dager": 23,
+   "dager": 24,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-11-09"
+   "sist": "2026-11-10"
+  },
+  "Cyanistes caeruleus": {
+   "dager": 14,
+   "beste": 0.95,
+   "foerst": "2026-08-26",
+   "sist": "2026-11-10"
   },
   "Spinus spinus": {
    "dager": 13,
@@ -34,17 +40,11 @@
    "foerst": "2026-08-25",
    "sist": "2026-10-01"
   },
-  "Cyanistes caeruleus": {
-   "dager": 13,
-   "beste": 0.95,
-   "foerst": "2026-08-26",
-   "sist": "2026-11-09"
-  },
   "Turdus pilaris": {
-   "dager": 10,
+   "dager": 11,
    "beste": 1.0,
    "foerst": "2026-08-25",
-   "sist": "2026-11-09"
+   "sist": "2026-11-10"
   },
   "Turdus merula": {
    "dager": 8,
@@ -57,6 +57,12 @@
    "beste": 0.94,
    "foerst": "2026-09-25",
    "sist": "2026-11-08"
+  },
+  "Sitta europaea": {
+   "dager": 7,
+   "beste": 0.99,
+   "foerst": "2026-08-28",
+   "sist": "2026-11-10"
   },
   "Pyrrhula pyrrhula": {
    "dager": 7,
@@ -74,12 +80,6 @@
    "dager": 6,
    "beste": 1.0,
    "foerst": "2026-09-05",
-   "sist": "2026-10-03"
-  },
-  "Sitta europaea": {
-   "dager": 6,
-   "beste": 0.98,
-   "foerst": "2026-08-28",
    "sist": "2026-10-03"
   },
   "Periparus ater": {
@@ -112,17 +112,17 @@
    "foerst": "2026-08-27",
    "sist": "2026-11-09"
   },
+  "Dendrocopos major": {
+   "dager": 5,
+   "beste": 0.78,
+   "foerst": "2026-08-07",
+   "sist": "2026-11-10"
+  },
   "Strix aluco": {
    "dager": 4,
    "beste": 0.81,
    "foerst": "2026-08-19",
    "sist": "2026-09-24"
-  },
-  "Dendrocopos major": {
-   "dager": 4,
-   "beste": 0.78,
-   "foerst": "2026-08-07",
-   "sist": "2026-09-21"
   },
   "Regulus regulus": {
    "dager": 4,
@@ -153,6 +153,12 @@
    "beste": 0.85,
    "foerst": "2026-09-18",
    "sist": "2026-09-25"
+  },
+  "Corvus corone": {
+   "dager": 2,
+   "beste": 0.71,
+   "foerst": "2026-11-08",
+   "sist": "2026-11-10"
   },
   "Passer domesticus": {
    "dager": 2,
@@ -249,12 +255,6 @@
    "beste": 0.57,
    "foerst": "2026-09-28",
    "sist": "2026-09-28"
-  },
-  "Corvus corone": {
-   "dager": 1,
-   "beste": 0.56,
-   "foerst": "2026-11-08",
-   "sist": "2026-11-08"
   },
   "Pinicola enucleator": {
    "dager": 1,

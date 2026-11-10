@@ -1,18 +1,18 @@
 {
  "dato": "2026-11-10",
- "tegnet": "09:38",
- "periode": "06:42–09:44",
- "opptak": 13,
- "vaer": "Tåke · -2° · 0 m/s",
- "antall_arter": 6,
+ "tegnet": "16:00",
+ "periode": "06:42–15:59",
+ "opptak": 34,
+ "vaer": "Overskyet · -2° · 1 m/s",
+ "antall_arter": 15,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Skjære",
    "latin": "Pica pica",
-   "sikkerhet": 99,
-   "tid": "08:29–09:44",
-   "belegg": "4 økter",
+   "sikkerhet": 100,
+   "tid": "08:29–10:49",
+   "belegg": "6 økter",
    "boks": [
     592,
     1143,
@@ -26,24 +26,42 @@
   },
   {
    "nr": 2,
-   "norsk": "Dompap",
-   "latin": "Pyrrhula pyrrhula",
-   "sikkerhet": 91,
-   "tid": "07:29–08:59",
-   "belegg": "4 økter",
+   "norsk": "Spettmeis",
+   "latin": "Sitta europaea",
+   "sikkerhet": 99,
+   "tid": "13:19",
+   "belegg": "5 ggr",
    "boks": [
-    851,
-    900,
-    996,
-    1062
+    1003,
+    907,
+    1076,
+    1064
    ],
    "merke": [
-    864,
-    1052
+    967,
+    1064
    ]
   },
   {
    "nr": 3,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 91,
+   "tid": "07:29–12:59",
+   "belegg": "5 økter",
+   "boks": [
+    990,
+    558,
+    1122,
+    706
+   ],
+   "merke": [
+    999,
+    698
+   ]
+  },
+  {
+   "nr": 4,
    "norsk": "Sidensvans",
    "latin": "Bombycilla garrulus",
    "sikkerhet": 90,
@@ -59,12 +77,87 @@
     314,
     1410
    ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Gråtrost",
+   "latin": "Turdus pilaris",
+   "sikkerhet": 67,
+   "tid": "10:14",
+   "belegg": "2 ggr",
+   "boks": [
+    772,
+    847,
+    968,
+    1050
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 6,
+   "norsk": "Blåmeis",
+   "latin": "Cyanistes caeruleus",
+   "sikkerhet": 63,
+   "tid": "09:59–12:59",
+   "belegg": "3 økter",
+   "boks": [
+    916,
+    204,
+    1039,
+    305
+   ],
+   "merke": [
+    964,
+    317
+   ]
+  },
+  {
+   "nr": 7,
+   "norsk": "Flaggspett",
+   "latin": "Dendrocopos major",
+   "sikkerhet": 57,
+   "tid": "10:39",
+   "belegg": "3 ggr",
+   "boks": [
+    961,
+    1139,
+    1079,
+    1388
+   ],
+   "merke": [
+    925,
+    1388
+   ]
+  },
+  {
+   "nr": 8,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 46,
+   "tid": "07:59–11:14",
+   "belegg": "5 økter",
+   "boks": [
+    948,
+    449,
+    1108,
+    569
+   ],
+   "merke": [
+    974,
+    576
+   ]
   }
  ],
  "ogsaa": [
-  "Kjøttmeis",
   "Storlom",
-  "Grønnfink"
+  "Ringdue",
+  "Grønnsisik",
+  "Slagugle",
+  "Great Cormorant",
+  "Svartkråke"
  ],
  "bilde": "2026-11-10.png",
  "doegn": [
@@ -80,6 +173,27 @@
   {"t": "08:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 91]]},
   {"t": "09:14", "arter": [["Skjære", "Pica pica", 97]]},
   {"t": "09:29", "arter": []},
-  {"t": "09:44", "arter": [["Skjære", "Pica pica", 51]]}
+  {"t": "09:44", "arter": [["Skjære", "Pica pica", 51]]},
+  {"t": "09:59", "arter": [["Blåmeis", "Cyanistes caeruleus", 63]]},
+  {"t": "10:14", "arter": [["Gråtrost", "Turdus pilaris", 67]]},
+  {"t": "10:29", "arter": []},
+  {"t": "10:39", "arter": [["Skjære", "Pica pica", 85], ["Flaggspett", "Dendrocopos major", 57]]},
+  {"t": "10:49", "arter": [["Skjære", "Pica pica", 100]]},
+  {"t": "10:59", "arter": []},
+  {"t": "11:14", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": [["Svartkråke", "Corvus corone", 71]]},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 56]]},
+  {"t": "13:19", "arter": [["Spettmeis", "Sitta europaea", 99]]},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:29", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:29", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
