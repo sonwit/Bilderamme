@@ -11,10 +11,10 @@
    "sist": "2026-11-06"
   },
   "Pica pica": {
-   "dager": 45,
+   "dager": 46,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-09"
+   "sist": "2026-11-10"
   },
   "Parus major": {
    "dager": 28,
@@ -58,6 +58,12 @@
    "foerst": "2026-09-25",
    "sist": "2026-11-08"
   },
+  "Pyrrhula pyrrhula": {
+   "dager": 7,
+   "beste": 0.98,
+   "foerst": "2026-09-08",
+   "sist": "2026-11-10"
+  },
   "Corvus cornix": {
    "dager": 7,
    "beste": 0.84,
@@ -69,12 +75,6 @@
    "beste": 1.0,
    "foerst": "2026-09-05",
    "sist": "2026-10-03"
-  },
-  "Pyrrhula pyrrhula": {
-   "dager": 6,
-   "beste": 0.98,
-   "foerst": "2026-09-08",
-   "sist": "2026-11-09"
   },
   "Sitta europaea": {
    "dager": 6,
@@ -201,6 +201,12 @@
    "beste": 0.92,
    "foerst": "2026-09-16",
    "sist": "2026-09-16"
+  },
+  "Bombycilla garrulus": {
+   "dager": 1,
+   "beste": 0.91,
+   "foerst": "2026-11-10",
+   "sist": "2026-11-10"
   },
   "Sylvia atricapilla": {
    "dager": 1,
