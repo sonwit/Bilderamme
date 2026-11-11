@@ -1,0 +1,128 @@
+{
+ "dato": "2026-11-11",
+ "tegnet": "09:37",
+ "periode": "06:42–09:44",
+ "opptak": 12,
+ "vaer": "Overskyet · -1° · 1 m/s",
+ "antall_arter": 10,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Spettmeis",
+   "latin": "Sitta europaea",
+   "sikkerhet": 99,
+   "tid": "08:59",
+   "belegg": "6 ggr",
+   "boks": [
+    1033,
+    1153,
+    1119,
+    1338
+   ],
+   "merke": [
+    997,
+    1338
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 97,
+   "tid": "08:59",
+   "belegg": "1 ggr",
+   "boks": [
+    238,
+    1266,
+    422,
+    1404
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 92,
+   "tid": "09:44",
+   "belegg": "4 ggr"
+  },
+  {
+   "nr": 3,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 78,
+   "tid": "09:29",
+   "belegg": "3 ggr",
+   "boks": [
+    678,
+    838,
+    1005,
+    1079
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Svartkråke",
+   "latin": "Corvus corone",
+   "sikkerhet": 68,
+   "tid": "09:29",
+   "belegg": "3 ggr",
+   "boks": [
+    632,
+    557,
+    809,
+    731
+   ],
+   "merke": [
+    596,
+    731
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Kråke",
+   "latin": "Corvus cornix",
+   "sikkerhet": 58,
+   "tid": "09:29",
+   "belegg": "4 ggr",
+   "boks": [
+    592,
+    1110,
+    966,
+    1397
+   ],
+   "merke": [
+    698,
+    1397
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Gråtrost",
+  "Pilfink",
+  "Bokfink",
+  "Hubro"
+ ],
+ "bilde": "2026-11-11.png",
+ "doegn": [
+  {"t": "06:42", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:44", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": []},
+  {"t": "08:59", "arter": [["Spettmeis", "Sitta europaea", 99], ["Grønnfink", "Chloris chloris", 97]]},
+  {"t": "09:14", "arter": []},
+  {"t": "09:29", "arter": [["Skjære", "Pica pica", 78], ["Svartkråke", "Corvus corone", 68], ["Kråke", "Corvus cornix", 58]]},
+  {"t": "09:44", "arter": [["Dompap", "Pyrrhula pyrrhula", 92]]}
+ ]
+}
