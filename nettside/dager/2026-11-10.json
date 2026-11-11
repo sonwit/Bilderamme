@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-10",
- "tegnet": "16:00",
- "periode": "06:42–15:59",
- "opptak": 34,
- "vaer": "Overskyet · -2° · 1 m/s",
- "antall_arter": 15,
+ "tegnet": "07:07",
+ "periode": "06:42–21:29",
+ "opptak": 46,
+ "vaer": "Delvis skyet · -2° · 1 m/s",
+ "antall_arter": 16,
  "hoert": [
   {
    "nr": 1,
@@ -155,9 +155,9 @@
   "Storlom",
   "Ringdue",
   "Grønnsisik",
+  "Hubro",
   "Slagugle",
-  "Great Cormorant",
-  "Svartkråke"
+  "Great Cormorant"
  ],
  "bilde": "2026-11-10.png",
  "doegn": [
@@ -194,6 +194,18 @@
   {"t": "14:59", "arter": []},
   {"t": "15:29", "arter": []},
   {"t": "15:39", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:29", "arter": []},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:29", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:29", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:29", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:29", "arter": []}
  ]
 }
