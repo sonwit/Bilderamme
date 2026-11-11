@@ -1,18 +1,18 @@
 {
  "dato": "2026-11-11",
- "tegnet": "09:37",
- "periode": "06:42–09:44",
- "opptak": 12,
- "vaer": "Overskyet · -1° · 1 m/s",
- "antall_arter": 10,
+ "tegnet": "16:00",
+ "periode": "06:42–15:59",
+ "opptak": 28,
+ "vaer": "Overskyet · 0° · 1 m/s",
+ "antall_arter": 12,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Spettmeis",
    "latin": "Sitta europaea",
-   "sikkerhet": 99,
-   "tid": "08:59",
-   "belegg": "6 ggr",
+   "sikkerhet": 100,
+   "tid": "08:59–13:59",
+   "belegg": "2 økter",
    "boks": [
     1033,
     1153,
@@ -26,36 +26,11 @@
   },
   {
    "nr": 2,
-   "norsk": "Grønnfink",
-   "latin": "Chloris chloris",
-   "sikkerhet": 97,
-   "tid": "08:59",
-   "belegg": "1 ggr",
-   "boks": [
-    238,
-    1266,
-    422,
-    1404
-   ],
-   "merke": [
-    314,
-    1410
-   ]
-  },
-  {
-   "norsk": "Dompap",
-   "latin": "Pyrrhula pyrrhula",
-   "sikkerhet": 92,
-   "tid": "09:44",
-   "belegg": "4 ggr"
-  },
-  {
-   "nr": 3,
    "norsk": "Skjære",
    "latin": "Pica pica",
-   "sikkerhet": 78,
-   "tid": "09:29",
-   "belegg": "3 ggr",
+   "sikkerhet": 97,
+   "tid": "09:29–12:29",
+   "belegg": "4 økter",
    "boks": [
     678,
     838,
@@ -68,7 +43,61 @@
    ]
   },
   {
+   "nr": 3,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 97,
+   "tid": "08:59–10:14",
+   "belegg": "2 økter",
+   "boks": [
+    974,
+    574,
+    1130,
+    691
+   ],
+   "merke": [
+    999,
+    698
+   ]
+  },
+  {
    "nr": 4,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 92,
+   "tid": "09:44–09:59",
+   "belegg": "2 økter",
+   "boks": [
+    247,
+    1247,
+    404,
+    1422
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 72,
+   "tid": "07:59–11:59",
+   "belegg": "2 økter",
+   "boks": [
+    923,
+    453,
+    1063,
+    580
+   ],
+   "merke": [
+    974,
+    593
+   ]
+  },
+  {
+   "nr": 6,
    "norsk": "Svartkråke",
    "latin": "Corvus corone",
    "sikkerhet": 68,
@@ -86,7 +115,7 @@
    ]
   },
   {
-   "nr": 5,
+   "nr": 7,
    "norsk": "Kråke",
    "latin": "Corvus cornix",
    "sikkerhet": 58,
@@ -102,11 +131,29 @@
     698,
     1397
    ]
+  },
+  {
+   "nr": 8,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 39,
+   "tid": "10:14–10:29",
+   "belegg": "2 økter",
+   "boks": [
+    962,
+    196,
+    1078,
+    312
+   ],
+   "merke": [
+    964,
+    317
+   ]
   }
  ],
  "ogsaa": [
   "Gråtrost",
-  "Pilfink",
+  "Grønnsisik",
   "Bokfink",
   "Hubro"
  ],
@@ -123,6 +170,22 @@
   {"t": "08:59", "arter": [["Spettmeis", "Sitta europaea", 99], ["Grønnfink", "Chloris chloris", 97]]},
   {"t": "09:14", "arter": []},
   {"t": "09:29", "arter": [["Skjære", "Pica pica", 78], ["Svartkråke", "Corvus corone", 68], ["Kråke", "Corvus cornix", 58]]},
-  {"t": "09:44", "arter": [["Dompap", "Pyrrhula pyrrhula", 92]]}
+  {"t": "09:44", "arter": [["Dompap", "Pyrrhula pyrrhula", 92]]},
+  {"t": "09:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 89]]},
+  {"t": "10:14", "arter": [["Grønnfink", "Chloris chloris", 72]]},
+  {"t": "10:29", "arter": [["Skjære", "Pica pica", 58]]},
+  {"t": "10:44", "arter": [["Skjære", "Pica pica", 76]]},
+  {"t": "10:59", "arter": []},
+  {"t": "11:14", "arter": []},
+  {"t": "11:29", "arter": []},
+  {"t": "11:59", "arter": [["Pilfink", "Passer montanus", 72]]},
+  {"t": "12:29", "arter": [["Skjære", "Pica pica", 97]]},
+  {"t": "12:59", "arter": []},
+  {"t": "13:29", "arter": []},
+  {"t": "13:59", "arter": [["Spettmeis", "Sitta europaea", 100]]},
+  {"t": "14:29", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:29", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }

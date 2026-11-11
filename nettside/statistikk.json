@@ -46,9 +46,15 @@
    "foerst": "2026-08-25",
    "sist": "2026-11-10"
   },
+  "Passer montanus": {
+   "dager": 9,
+   "beste": 0.94,
+   "foerst": "2026-09-25",
+   "sist": "2026-11-11"
+  },
   "Sitta europaea": {
    "dager": 8,
-   "beste": 0.99,
+   "beste": 1.0,
    "foerst": "2026-08-28",
    "sist": "2026-11-11"
   },
@@ -64,16 +70,16 @@
    "foerst": "2026-09-08",
    "sist": "2026-11-11"
   },
-  "Passer montanus": {
-   "dager": 8,
-   "beste": 0.94,
-   "foerst": "2026-09-25",
-   "sist": "2026-11-08"
-  },
   "Corvus cornix": {
    "dager": 8,
    "beste": 0.84,
    "foerst": "2026-08-29",
+   "sist": "2026-11-11"
+  },
+  "Acanthis flammea": {
+   "dager": 7,
+   "beste": 0.71,
+   "foerst": "2026-08-27",
    "sist": "2026-11-11"
   },
   "Phylloscopus collybita": {
@@ -93,12 +99,6 @@
    "beste": 0.75,
    "foerst": "2026-08-26",
    "sist": "2026-11-07"
-  },
-  "Acanthis flammea": {
-   "dager": 6,
-   "beste": 0.71,
-   "foerst": "2026-08-27",
-   "sist": "2026-11-08"
   },
   "Turdus iliacus": {
    "dager": 5,
