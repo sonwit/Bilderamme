@@ -1,0 +1,62 @@
+{
+ "dato": "2026-11-12",
+ "tegnet": "09:37",
+ "periode": "06:42–09:44",
+ "opptak": 12,
+ "vaer": "Kraftig snø · 0° · 2 m/s",
+ "antall_arter": 2,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 73,
+   "tid": "08:44",
+   "belegg": "4 ggr",
+   "boks": [
+    289,
+    1251,
+    450,
+    1397
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 72,
+   "tid": "09:14",
+   "belegg": "1 ggr",
+   "boks": [
+    592,
+    1211,
+    757,
+    1395
+   ],
+   "merke": [
+    664,
+    1382
+   ]
+  }
+ ],
+ "ogsaa": [],
+ "bilde": "2026-11-12.png",
+ "doegn": [
+  {"t": "06:42", "arter": []},
+  {"t": "06:58", "arter": []},
+  {"t": "07:27", "arter": []},
+  {"t": "07:43", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": [["Pilfink", "Passer montanus", 73]]},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": [["Dompap", "Pyrrhula pyrrhula", 72]]},
+  {"t": "09:29", "arter": []},
+  {"t": "09:44", "arter": []}
+ ]
+}
