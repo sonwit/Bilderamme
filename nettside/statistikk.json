@@ -11,10 +11,10 @@
    "sist": "2026-11-06"
   },
   "Pica pica": {
-   "dager": 47,
+   "dager": 48,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-11"
+   "sist": "2026-11-12"
   },
   "Parus major": {
    "dager": 29,
@@ -166,6 +166,12 @@
    "foerst": "2026-10-04",
    "sist": "2026-10-07"
   },
+  "Strix uralensis": {
+   "dager": 2,
+   "beste": 0.65,
+   "foerst": "2026-11-07",
+   "sist": "2026-11-12"
+  },
   "Bubo bubo": {
    "dager": 2,
    "beste": 0.63,
@@ -273,12 +279,6 @@
    "beste": 0.51,
    "foerst": "2026-09-12",
    "sist": "2026-09-12"
-  },
-  "Strix uralensis": {
-   "dager": 1,
-   "beste": 0.43,
-   "foerst": "2026-11-07",
-   "sist": "2026-11-07"
   },
   "Nucifraga caryocatactes": {
    "dager": 1,
