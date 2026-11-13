@@ -1,18 +1,18 @@
 {
  "dato": "2026-11-13",
- "tegnet": "09:37",
- "periode": "06:42–09:44",
- "opptak": 12,
- "vaer": "Lettskyet · -2° · 4 m/s",
- "antall_arter": 5,
+ "tegnet": "16:00",
+ "periode": "06:42–15:59",
+ "opptak": 29,
+ "vaer": "Lettskyet · 0° · 4 m/s",
+ "antall_arter": 11,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Skjære",
    "latin": "Pica pica",
-   "sikkerhet": 96,
-   "tid": "07:59",
-   "belegg": "6 ggr",
+   "sikkerhet": 100,
+   "tid": "07:59–11:29",
+   "belegg": "4 økter",
    "boks": [
     592,
     1143,
@@ -26,11 +26,29 @@
   },
   {
    "nr": 2,
+   "norsk": "Grønnsisik",
+   "latin": "Spinus spinus",
+   "sikkerhet": 97,
+   "tid": "14:39",
+   "belegg": "1 ggr",
+   "boks": [
+    960,
+    199,
+    1073,
+    307
+   ],
+   "merke": [
+    964,
+    317
+   ]
+  },
+  {
+   "nr": 3,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
    "sikkerhet": 80,
-   "tid": "07:44",
-   "belegg": "3 ggr",
+   "tid": "07:44–14:59",
+   "belegg": "3 økter",
    "boks": [
     238,
     1266,
@@ -43,27 +61,49 @@
    ]
   },
   {
-   "nr": 3,
-   "norsk": "Pilfink",
-   "latin": "Passer montanus",
-   "sikkerhet": 60,
-   "tid": "08:14",
-   "belegg": "2 ggr",
+   "nr": 4,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 68,
+   "tid": "10:29",
+   "belegg": "1 ggr",
    "boks": [
-    808,
-    905,
+    796,
+    923,
     956,
-    1039
+    1048
    ],
    "merke": [
     864,
     1052
    ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 65,
+   "tid": "08:14–15:29",
+   "belegg": "2 økter",
+   "boks": [
+    951,
+    562,
+    1087,
+    685
+   ],
+   "merke": [
+    999,
+    698
+   ]
   }
  ],
  "ogsaa": [
+  "Båndkorsnebb",
+  "Storlom",
   "Gulspurv",
-  "Dompap"
+  "Dompap",
+  "Storlom",
+  "Hubro"
  ],
  "bilde": "2026-11-13.png",
  "doegn": [
@@ -78,6 +118,23 @@
   {"t": "08:59", "arter": []},
   {"t": "09:14", "arter": []},
   {"t": "09:29", "arter": []},
-  {"t": "09:44", "arter": []}
+  {"t": "09:44", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:14", "arter": [["Skjære", "Pica pica", 100]]},
+  {"t": "10:29", "arter": [["Skjære", "Pica pica", 81], ["Kjøttmeis", "Parus major", 68]]},
+  {"t": "10:44", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:14", "arter": []},
+  {"t": "11:29", "arter": [["Skjære", "Pica pica", 89]]},
+  {"t": "11:59", "arter": []},
+  {"t": "12:29", "arter": []},
+  {"t": "12:59", "arter": []},
+  {"t": "13:29", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": [["Grønnfink", "Chloris chloris", 69]]},
+  {"t": "14:39", "arter": [["Grønnsisik", "Spinus spinus", 97]]},
+  {"t": "14:59", "arter": []},
+  {"t": "15:29", "arter": [["Pilfink", "Passer montanus", 65]]},
+  {"t": "15:59", "arter": []}
  ]
 }

@@ -17,10 +17,10 @@
    "sist": "2026-11-13"
   },
   "Parus major": {
-   "dager": 29,
+   "dager": 30,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-11-10"
+   "sist": "2026-11-13"
   },
   "Chloris chloris": {
    "dager": 26,
@@ -28,17 +28,17 @@
    "foerst": "2026-07-27",
    "sist": "2026-11-13"
   },
+  "Spinus spinus": {
+   "dager": 14,
+   "beste": 0.98,
+   "foerst": "2026-08-25",
+   "sist": "2026-11-13"
+  },
   "Cyanistes caeruleus": {
    "dager": 14,
    "beste": 0.95,
    "foerst": "2026-08-26",
    "sist": "2026-11-10"
-  },
-  "Spinus spinus": {
-   "dager": 13,
-   "beste": 0.98,
-   "foerst": "2026-08-25",
-   "sist": "2026-10-01"
   },
   "Turdus pilaris": {
    "dager": 11,
