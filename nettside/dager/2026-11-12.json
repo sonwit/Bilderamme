@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-12",
- "tegnet": "16:00",
- "periode": "06:42–15:59",
- "opptak": 28,
- "vaer": "Lett snø · 0° · 4 m/s",
- "antall_arter": 5,
+ "tegnet": "07:07",
+ "periode": "06:42–21:29",
+ "opptak": 39,
+ "vaer": "Lettskyet · -2° · 4 m/s",
+ "antall_arter": 6,
  "hoert": [
   {
    "nr": 1,
@@ -80,7 +80,8 @@
   }
  ],
  "ogsaa": [
-  "Grønnfink"
+  "Grønnfink",
+  "Kattugle"
  ],
  "bilde": "2026-11-12.png",
  "doegn": [
@@ -111,6 +112,17 @@
   {"t": "14:29", "arter": []},
   {"t": "14:59", "arter": []},
   {"t": "15:29", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:29", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:29", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:29", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:29", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:29", "arter": []}
  ]
 }
