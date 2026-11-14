@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-13",
- "tegnet": "16:00",
- "periode": "06:42–15:59",
- "opptak": 29,
- "vaer": "Lettskyet · 0° · 4 m/s",
- "antall_arter": 11,
+ "tegnet": "07:07",
+ "periode": "06:42–21:29",
+ "opptak": 44,
+ "vaer": "Delvis skyet · -3° · 2 m/s",
+ "antall_arter": 12,
  "hoert": [
   {
    "nr": 1,
@@ -98,12 +98,12 @@
   }
  ],
  "ogsaa": [
+  "Ringdue",
   "Båndkorsnebb",
   "Storlom",
   "Gulspurv",
   "Dompap",
-  "Storlom",
-  "Hubro"
+  "Storlom"
  ],
  "bilde": "2026-11-13.png",
  "doegn": [
@@ -135,6 +135,21 @@
   {"t": "14:39", "arter": [["Grønnsisik", "Spinus spinus", 97]]},
   {"t": "14:59", "arter": []},
   {"t": "15:29", "arter": [["Pilfink", "Passer montanus", 65]]},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:29", "arter": []},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:19", "arter": []},
+  {"t": "18:39", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:29", "arter": []},
+  {"t": "19:39", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:29", "arter": []},
+  {"t": "20:39", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:29", "arter": []}
  ]
 }
