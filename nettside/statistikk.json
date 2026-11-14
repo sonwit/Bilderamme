@@ -11,10 +11,10 @@
    "sist": "2026-11-06"
   },
   "Pica pica": {
-   "dager": 49,
+   "dager": 50,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-13"
+   "sist": "2026-11-14"
   },
   "Parus major": {
    "dager": 30,
@@ -40,17 +40,17 @@
    "foerst": "2026-08-26",
    "sist": "2026-11-10"
   },
+  "Passer montanus": {
+   "dager": 12,
+   "beste": 0.94,
+   "foerst": "2026-09-25",
+   "sist": "2026-11-14"
+  },
   "Turdus pilaris": {
    "dager": 11,
    "beste": 1.0,
    "foerst": "2026-08-25",
    "sist": "2026-11-10"
-  },
-  "Passer montanus": {
-   "dager": 11,
-   "beste": 0.94,
-   "foerst": "2026-09-25",
-   "sist": "2026-11-13"
   },
   "Pyrrhula pyrrhula": {
    "dager": 9,

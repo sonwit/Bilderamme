@@ -1,11 +1,29 @@
 {
  "dato": "2026-11-14",
- "tegnet": "09:37",
- "periode": "06:40–09:44",
- "opptak": 12,
- "vaer": "Delvis skyet · -3° · 2 m/s",
- "antall_arter": 5,
+ "tegnet": "16:00",
+ "periode": "06:40–15:59",
+ "opptak": 33,
+ "vaer": "Delvis skyet · 1° · 4 m/s",
+ "antall_arter": 6,
  "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 93,
+   "tid": "09:14–13:58",
+   "belegg": "2 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
   {
    "norsk": "Kaie",
    "latin": "Corvus monedula",
@@ -14,28 +32,45 @@
    "belegg": "2 ggr"
   },
   {
-   "nr": 1,
+   "nr": 2,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
-   "sikkerhet": 50,
-   "tid": "09:29",
-   "belegg": "1 ggr",
+   "sikkerhet": 79,
+   "tid": "09:29–14:59",
+   "belegg": "2 økter",
    "boks": [
-    582,
-    1232,
-    776,
-    1377
+    238,
+    1266,
+    422,
+    1404
    ],
    "merke": [
-    664,
-    1382
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 45,
+   "tid": "09:29–11:14",
+   "belegg": "2 økter",
+   "boks": [
+    808,
+    905,
+    956,
+    1039
+   ],
+   "merke": [
+    864,
+    1052
    ]
   }
  ],
  "ogsaa": [
-  "Pilfink",
-  "Skjære",
-  "Musvåk"
+  "Musvåk",
+  "Gråtrost"
  ],
  "bilde": "2026-11-14.png",
  "doegn": [
@@ -50,6 +85,27 @@
   {"t": "08:59", "arter": []},
   {"t": "09:14", "arter": []},
   {"t": "09:29", "arter": [["Grønnfink", "Chloris chloris", 50]]},
-  {"t": "09:44", "arter": []}
+  {"t": "09:44", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:14", "arter": []},
+  {"t": "10:29", "arter": []},
+  {"t": "10:44", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:09", "arter": []},
+  {"t": "11:14", "arter": []},
+  {"t": "11:38", "arter": []},
+  {"t": "11:58", "arter": []},
+  {"t": "12:18", "arter": []},
+  {"t": "12:38", "arter": []},
+  {"t": "12:58", "arter": []},
+  {"t": "13:18", "arter": []},
+  {"t": "13:38", "arter": []},
+  {"t": "13:58", "arter": [["Skjære", "Pica pica", 93]]},
+  {"t": "14:19", "arter": []},
+  {"t": "14:29", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": [["Grønnfink", "Chloris chloris", 79]]},
+  {"t": "15:29", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
