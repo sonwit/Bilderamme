@@ -23,10 +23,10 @@
    "sist": "2026-11-13"
   },
   "Chloris chloris": {
-   "dager": 26,
+   "dager": 27,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-11-13"
+   "sist": "2026-11-14"
   },
   "Spinus spinus": {
    "dager": 14,
@@ -118,6 +118,12 @@
    "foerst": "2026-08-07",
    "sist": "2026-11-10"
   },
+  "Corvus monedula": {
+   "dager": 4,
+   "beste": 0.91,
+   "foerst": "2026-09-24",
+   "sist": "2026-11-14"
+  },
   "Strix aluco": {
    "dager": 4,
    "beste": 0.81,
@@ -129,12 +135,6 @@
    "beste": 0.63,
    "foerst": "2026-09-09",
    "sist": "2026-10-26"
-  },
-  "Corvus monedula": {
-   "dager": 3,
-   "beste": 0.83,
-   "foerst": "2026-09-24",
-   "sist": "2026-11-09"
   },
   "Ardea cinerea": {
    "dager": 3,

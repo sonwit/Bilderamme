@@ -1,0 +1,55 @@
+{
+ "dato": "2026-11-14",
+ "tegnet": "09:37",
+ "periode": "06:40–09:44",
+ "opptak": 12,
+ "vaer": "Delvis skyet · -3° · 2 m/s",
+ "antall_arter": 5,
+ "hoert": [
+  {
+   "norsk": "Kaie",
+   "latin": "Corvus monedula",
+   "sikkerhet": 91,
+   "tid": "07:59",
+   "belegg": "2 ggr"
+  },
+  {
+   "nr": 1,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 50,
+   "tid": "09:29",
+   "belegg": "1 ggr",
+   "boks": [
+    582,
+    1232,
+    776,
+    1377
+   ],
+   "merke": [
+    664,
+    1382
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Pilfink",
+  "Skjære",
+  "Musvåk"
+ ],
+ "bilde": "2026-11-14.png",
+ "doegn": [
+  {"t": "06:40", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:44", "arter": []},
+  {"t": "07:59", "arter": [["Kaie", "Corvus monedula", 91]]},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": []},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": []},
+  {"t": "09:29", "arter": [["Grønnfink", "Chloris chloris", 50]]},
+  {"t": "09:44", "arter": []}
+ ]
+}
