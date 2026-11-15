@@ -4,12 +4,6 @@
  "dager_med_opptak": 99,
  "terskel": 0.5,
  "arter": {
-  "Dryobates minor": {
-   "dager": 54,
-   "beste": 0.72,
-   "foerst": "2026-08-04",
-   "sist": "2026-11-06"
-  },
   "Pica pica": {
    "dager": 51,
    "beste": 1.0,
@@ -21,6 +15,12 @@
    "beste": 0.99,
    "foerst": "2026-08-03",
    "sist": "2026-11-13"
+  },
+  "Dryobates minor": {
+   "dager": 28,
+   "beste": 0.72,
+   "foerst": "2026-08-04",
+   "sist": "2026-10-26"
   },
   "Chloris chloris": {
    "dager": 27,
@@ -41,10 +41,10 @@
    "sist": "2026-11-10"
   },
   "Passer montanus": {
-   "dager": 12,
+   "dager": 13,
    "beste": 0.94,
    "foerst": "2026-09-25",
-   "sist": "2026-11-14"
+   "sist": "2026-11-15"
   },
   "Turdus pilaris": {
    "dager": 11,
@@ -130,18 +130,6 @@
    "foerst": "2026-08-19",
    "sist": "2026-09-24"
   },
-  "Regulus regulus": {
-   "dager": 4,
-   "beste": 0.63,
-   "foerst": "2026-09-09",
-   "sist": "2026-10-26"
-  },
-  "Ardea cinerea": {
-   "dager": 3,
-   "beste": 0.73,
-   "foerst": "2026-07-27",
-   "sist": "2026-09-01"
-  },
   "Loxia leucoptera": {
    "dager": 3,
    "beste": 0.73,
@@ -165,6 +153,12 @@
    "beste": 0.85,
    "foerst": "2026-09-18",
    "sist": "2026-09-25"
+  },
+  "Ardea cinerea": {
+   "dager": 2,
+   "beste": 0.73,
+   "foerst": "2026-07-27",
+   "sist": "2026-09-01"
   },
   "Passer domesticus": {
    "dager": 2,
@@ -244,6 +238,12 @@
    "foerst": "2026-11-09",
    "sist": "2026-11-09"
   },
+  "Regulus regulus": {
+   "dager": 1,
+   "beste": 0.63,
+   "foerst": "2026-09-09",
+   "sist": "2026-09-09"
+  },
   "Prunella modularis": {
    "dager": 1,
    "beste": 0.6,
@@ -280,11 +280,11 @@
    "foerst": "2026-09-12",
    "sist": "2026-09-12"
   },
-  "Nucifraga caryocatactes": {
+  "Coccothraustes coccothraustes": {
    "dager": 1,
-   "beste": 0.4,
-   "foerst": "2026-10-25",
-   "sist": "2026-10-25"
+   "beste": 0.5,
+   "foerst": "2026-11-15",
+   "sist": "2026-11-15"
   }
  }
 }

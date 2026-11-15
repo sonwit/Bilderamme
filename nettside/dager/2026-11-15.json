@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-15",
- "tegnet": "09:37",
- "periode": "06:44–09:44",
- "opptak": 12,
- "vaer": "Delvis skyet · 4° · 7 m/s",
- "antall_arter": 6,
+ "tegnet": "16:01",
+ "periode": "06:44–15:59",
+ "opptak": 30,
+ "vaer": "Overskyet · 5° · 7 m/s",
+ "antall_arter": 8,
  "hoert": [
   {
    "nr": 1,
@@ -30,13 +30,49 @@
    "sikkerhet": 73,
    "tid": "07:59",
    "belegg": "1 ggr"
+  },
+  {
+   "nr": 2,
+   "norsk": "Kjernebiter",
+   "latin": "Coccothraustes coccothraustes",
+   "sikkerhet": 50,
+   "tid": "07:59–14:29",
+   "belegg": "2 økter",
+   "boks": [
+    273,
+    1239,
+    466,
+    1403
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 34,
+   "tid": "08:29–11:39",
+   "belegg": "2 økter",
+   "boks": [
+    808,
+    905,
+    956,
+    1039
+   ],
+   "merke": [
+    864,
+    1052
+   ]
   }
  ],
  "ogsaa": [
-  "Kjernebiter",
   "Kråke",
+  "Gråsisik",
   "Grønnfink",
-  "Pilfink"
+  "Gråspurv"
  ],
  "bilde": "2026-11-15.png",
  "doegn": [
@@ -51,6 +87,24 @@
   {"t": "08:59", "arter": []},
   {"t": "09:14", "arter": []},
   {"t": "09:29", "arter": []},
-  {"t": "09:44", "arter": []}
+  {"t": "09:44", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:14", "arter": []},
+  {"t": "10:29", "arter": []},
+  {"t": "10:44", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:14", "arter": []},
+  {"t": "11:29", "arter": []},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:29", "arter": []},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:29", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:29", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
