@@ -207,7 +207,7 @@ HVORDAN = {
     "farger_avsnitt": ("A colour that is not in the palette has to be made with dithering, and dithered text "
                        "is hard to read. So text, lines and pads are pure palette colours. Only the plates are dithered."),
     "diagram": [
-        ("Outdoor unit", "XIAO ESP32-S3 · INMP441 · solar panel"),
+        ("Outdoor unit", "XIAO ESP32-S3 · ICS-43434 · solar panel"),
         ("Home server", "Python · BirdNET · systemd · cron"),
         ("Indoor unit", "ESP32-S3 · e-paper 1200×1600"),
         ("Camera", "Android · Kotlin · CameraX"),
@@ -325,7 +325,7 @@ BYGGET = {
 }
 DELELISTE = [
     ("Indoor unit", ["Waveshare ESP32-S3-ePaper-13.3E6, 13.3\" Spectra 6, six colours, 16 MB PSRAM", "IKEA RÖDALM frame, 30×40 cm"]),
-    ("Outdoor unit", ["Seeed XIAO ESP32-S3, 8 MB PSRAM", "INMP441 I2S microphone, foam against wind",
+    ("Outdoor unit", ["Seeed XIAO ESP32-S3, 8 MB PSRAM", "ICS-43434 I2S microphone, foam against wind",
                       "Waveshare Solar Power Manager (D), MPPT charging", "3.7 V LiPo, 10 Ah", "Solar panel, 6 to 24 V in"]),
     ("Home server", ["An old PC running Linux, Python 3.12, two venvs", "systemd for the services, cron for the day"]),
     ("Camera", ["Android phone with a telephoto lens in the window", "Before: Raspberry Pi 3 B with the HQ camera, parked"]),

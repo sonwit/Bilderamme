@@ -189,7 +189,7 @@ HVORDAN = {
     "farger_avsnitt": ("En farge som ikke finnes i paletten må lages med dithering, og dithret tekst blir "
                        "vanskelig å lese. Derfor er tekst, streker og puter rene palettfarger. Bare plansjene dithres."),
     "diagram": [
-        ("Utedel", "XIAO ESP32-S3 · INMP441 · solcelle"),
+        ("Utedel", "XIAO ESP32-S3 · ICS-43434 · solcelle"),
         ("Hjemmeserver", "Python · BirdNET · systemd · cron"),
         ("Innedel", "ESP32-S3 · e-papir 1200×1600"),
         ("Kamera", "Android · Kotlin · CameraX"),
@@ -307,7 +307,7 @@ BYGGET = {
 }
 DELELISTE = [
     ("Innedel", ["Waveshare ESP32-S3-ePaper-13.3E6, 13,3\" Spectra 6, seks farger, 16 MB PSRAM", "IKEA RÖDALM-ramme, 30×40 cm"]),
-    ("Utedel", ["Seeed XIAO ESP32-S3, 8 MB PSRAM", "INMP441 I2S-mikrofon, skumgummi mot vind",
+    ("Utedel", ["Seeed XIAO ESP32-S3, 8 MB PSRAM", "ICS-43434 I2S-mikrofon, skumgummi mot vind",
                 "Waveshare Solar Power Manager (D), MPPT-lading", "3,7 V LiPo på 10 Ah", "Solcellepanel, 6 til 24 V inn"]),
     ("Hjemmeserver", ["En gammel PC med Linux, Python 3.12, to venv-er", "systemd for tjenestene, cron for døgnet"]),
     ("Kamera", ["Android-telefon med telelinse i vinduet", "Før: Raspberry Pi 3 B med HQ-kamera, parkert"]),

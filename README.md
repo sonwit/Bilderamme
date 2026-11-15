@@ -22,7 +22,7 @@ for lydopptakene i hagen.
 ## Slik henger delene sammen
 
 ```
- [Utedel]   XIAO ESP32-S3 + INMP441-mikrofon, solcelle + LiPo
+ [Utedel]   XIAO ESP32-S3 + ICS-43434-mikrofon, solcelle + LiPo
      │  POST /upload   60 s WAV + helse-JSON; henter GET /config etterpå
      ▼
  [Hjemmeserver]   /opt/fugleramme, to venv-er, systemd + cron
@@ -46,7 +46,7 @@ klokke, plan eller nett for å vise det det sist fikk.
 | Del | Hva | Les mer |
 |---|---|---|
 | Innedel | Waveshare ESP32-S3-ePaper-13.3E6 i en IKEA RÖDALM-ramme. Tar imot en ferdig pakket bildebuffer over HTTP og skyver den til panelet. Passer på seg selv med watchdog og WiFi-gjenoppretting. | [firmware/README.md](firmware/README.md) |
-| Utedel | Seeed XIAO ESP32-S3 med INMP441. Deep sleep på ~14 µA mellom øktene, opptaket bor i PSRAM, radioen er av mens det tas opp. Lytteplanen regnes ut på serveren og hentes etter hver opplasting. | [firmware/README.md](firmware/README.md) |
+| Utedel | Seeed XIAO ESP32-S3 med ICS-43434. Deep sleep på ~14 µA mellom øktene, opptaket bor i PSRAM, radioen er av mens det tas opp. Lytteplanen regnes ut på serveren og hentes etter hver opplasting. | [firmware/README.md](firmware/README.md) |
 | Server | Alt er Python, og sidene som serveres er ren standardbibliotek. Den daglige kjeden, lyd og arter, webappen, helsesiden og vakten. | [tools/README.md](tools/README.md), [deploy/README.md](deploy/README.md) |
 | Kamera | En Android-app som overvåker hagen på 1x og tar telebilde ved materen når noe rører seg. Bildene analyseres på serveren. Forgjengeren på Raspberry Pi ligger i `kamera/`. | [kamera-app/README.md](kamera-app/README.md) |
 | Plansjer | Skannede plansjer fra Wikimedia Commons, én 1:1-fugl per art med fotpunktet sitt, og grenmalene for årstidene. | [plates/README.md](plates/README.md) |
@@ -128,7 +128,7 @@ derfor etter det som *ikke* skjer, og er ellers helt stille.
 ## Kom i gang
 
 1. **Maskinvare.** Innedel: Waveshare ESP32-S3-ePaper-13.3E6 og en ramme
-   på 30×40 cm. Utedel: Seeed XIAO ESP32-S3, INMP441, Waveshare Solar Power
+   på 30×40 cm. Utedel: Seeed XIAO ESP32-S3, ICS-43434, Waveshare Solar Power
    Manager (D), 3,7 V LiPo på 10 Ah og et solcellepanel. Server: en hvilken
    som helst Linux-maskin med Python 3.12.
 2. **Flash innedelen.** Kopier `firmware/indoor_frame/config.example.h` til
