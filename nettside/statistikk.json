@@ -11,10 +11,10 @@
    "sist": "2026-11-06"
   },
   "Pica pica": {
-   "dager": 50,
+   "dager": 51,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-14"
+   "sist": "2026-11-15"
   },
   "Parus major": {
    "dager": 30,
@@ -142,6 +142,12 @@
    "foerst": "2026-07-27",
    "sist": "2026-09-01"
   },
+  "Loxia leucoptera": {
+   "dager": 3,
+   "beste": 0.73,
+   "foerst": "2026-09-11",
+   "sist": "2026-11-15"
+  },
   "Corvus corone": {
    "dager": 3,
    "beste": 0.71,
@@ -189,12 +195,6 @@
    "beste": 0.54,
    "foerst": "2026-09-28",
    "sist": "2026-11-09"
-  },
-  "Loxia leucoptera": {
-   "dager": 2,
-   "beste": 0.45,
-   "foerst": "2026-09-11",
-   "sist": "2026-10-04"
   },
   "Erithacus rubecula": {
    "dager": 1,
