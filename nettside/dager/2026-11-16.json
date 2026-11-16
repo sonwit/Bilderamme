@@ -1,0 +1,157 @@
+{
+ "dato": "2026-11-16",
+ "tegnet": "16:00",
+ "periode": "06:40–15:59",
+ "opptak": 28,
+ "vaer": "Overskyet · 0° · 2 m/s",
+ "antall_arter": 11,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 94,
+   "tid": "09:14–14:59",
+   "belegg": "4 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 70,
+   "tid": "12:29",
+   "belegg": "2 ggr",
+   "boks": [
+    247,
+    1247,
+    404,
+    1422
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 67,
+   "tid": "15:29",
+   "belegg": "6 ggr",
+   "boks": [
+    834,
+    918,
+    1003,
+    1045
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "norsk": "Kaie",
+   "latin": "Corvus monedula",
+   "sikkerhet": 64,
+   "tid": "08:44",
+   "belegg": "1 ggr"
+  },
+  {
+   "norsk": "Låvesvale",
+   "latin": "Hirundo rustica",
+   "sikkerhet": 55,
+   "tid": "11:29",
+   "belegg": "1 ggr"
+  },
+  {
+   "norsk": "Skogdue",
+   "latin": "Columba oenas",
+   "sikkerhet": 51,
+   "tid": "15:29",
+   "belegg": "2 ggr"
+  },
+  {
+   "nr": 4,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 45,
+   "tid": "11:29–15:29",
+   "belegg": "3 økter",
+   "boks": [
+    951,
+    562,
+    1087,
+    685
+   ],
+   "merke": [
+    999,
+    698
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Blåmeis",
+   "latin": "Cyanistes caeruleus",
+   "sikkerhet": 40,
+   "tid": "08:29–09:44",
+   "belegg": "2 økter",
+   "boks": [
+    916,
+    204,
+    1039,
+    305
+   ],
+   "merke": [
+    964,
+    317
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Kjøttmeis",
+  "Gråsisik",
+  "Peregrine Falcon"
+ ],
+ "bilde": "2026-11-16.png",
+ "doegn": [
+  {"t": "06:40", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:44", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": [["Kaie", "Corvus monedula", 64]]},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": []},
+  {"t": "09:29", "arter": []},
+  {"t": "09:44", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:14", "arter": []},
+  {"t": "10:29", "arter": []},
+  {"t": "10:44", "arter": [["Skjære", "Pica pica", 92]]},
+  {"t": "10:59", "arter": []},
+  {"t": "11:14", "arter": []},
+  {"t": "11:29", "arter": [["Låvesvale", "Hirundo rustica", 55]]},
+  {"t": "11:59", "arter": [["Skjære", "Pica pica", 94]]},
+  {"t": "12:29", "arter": [["Dompap", "Pyrrhula pyrrhula", 70]]},
+  {"t": "12:59", "arter": []},
+  {"t": "13:29", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:29", "arter": []},
+  {"t": "14:59", "arter": [["Skjære", "Pica pica", 74]]},
+  {"t": "15:29", "arter": [["Grønnfink", "Chloris chloris", 67], ["Skogdue", "Columba oenas", 51]]},
+  {"t": "15:59", "arter": []}
+ ]
+}

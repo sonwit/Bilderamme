@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 51,
+   "dager": 52,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-15"
+   "sist": "2026-11-16"
   },
   "Parus major": {
    "dager": 30,
@@ -16,17 +16,17 @@
    "foerst": "2026-08-03",
    "sist": "2026-11-13"
   },
+  "Chloris chloris": {
+   "dager": 28,
+   "beste": 0.98,
+   "foerst": "2026-07-27",
+   "sist": "2026-11-16"
+  },
   "Dryobates minor": {
    "dager": 28,
    "beste": 0.72,
    "foerst": "2026-08-04",
    "sist": "2026-10-26"
-  },
-  "Chloris chloris": {
-   "dager": 27,
-   "beste": 0.98,
-   "foerst": "2026-07-27",
-   "sist": "2026-11-14"
   },
   "Cyanistes caeruleus": {
    "dager": 15,
@@ -41,10 +41,10 @@
    "sist": "2026-11-13"
   },
   "Passer montanus": {
-   "dager": 13,
+   "dager": 14,
    "beste": 0.94,
    "foerst": "2026-09-25",
-   "sist": "2026-11-15"
+   "sist": "2026-11-16"
   },
   "Turdus pilaris": {
    "dager": 11,
@@ -53,10 +53,10 @@
    "sist": "2026-11-10"
   },
   "Pyrrhula pyrrhula": {
-   "dager": 9,
+   "dager": 10,
    "beste": 0.98,
    "foerst": "2026-09-08",
-   "sist": "2026-11-12"
+   "sist": "2026-11-16"
   },
   "Sitta europaea": {
    "dager": 8,
@@ -262,6 +262,12 @@
    "foerst": "2026-09-28",
    "sist": "2026-09-28"
   },
+  "Hirundo rustica": {
+   "dager": 1,
+   "beste": 0.55,
+   "foerst": "2026-11-16",
+   "sist": "2026-11-16"
+  },
   "Pinicola enucleator": {
    "dager": 1,
    "beste": 0.55,
@@ -279,6 +285,12 @@
    "beste": 0.54,
    "foerst": "2026-09-29",
    "sist": "2026-09-29"
+  },
+  "Columba oenas": {
+   "dager": 1,
+   "beste": 0.51,
+   "foerst": "2026-11-16",
+   "sist": "2026-11-16"
   },
   "Loxia curvirostra": {
    "dager": 1,
