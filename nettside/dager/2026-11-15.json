@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-15",
- "tegnet": "16:01",
- "periode": "06:44–15:59",
- "opptak": 30,
- "vaer": "Overskyet · 5° · 7 m/s",
- "antall_arter": 8,
+ "tegnet": "07:08",
+ "periode": "06:44–21:29",
+ "opptak": 41,
+ "vaer": "Overskyet · 1° · 1 m/s",
+ "antall_arter": 10,
  "hoert": [
   {
    "nr": 1,
@@ -33,6 +33,24 @@
   },
   {
    "nr": 2,
+   "norsk": "Skjeggmeis",
+   "latin": "Panurus biarmicus",
+   "sikkerhet": 54,
+   "tid": "17:59",
+   "belegg": "1 ggr",
+   "boks": [
+    674,
+    597,
+    767,
+    691
+   ],
+   "merke": [
+    638,
+    691
+   ]
+  },
+  {
+   "nr": 3,
    "norsk": "Kjernebiter",
    "latin": "Coccothraustes coccothraustes",
    "sikkerhet": 50,
@@ -50,7 +68,7 @@
    ]
   },
   {
-   "nr": 3,
+   "nr": 4,
    "norsk": "Pilfink",
    "latin": "Passer montanus",
    "sikkerhet": 34,
@@ -72,6 +90,7 @@
   "Kråke",
   "Gråsisik",
   "Grønnfink",
+  "Bydue",
   "Gråspurv"
  ],
  "bilde": "2026-11-15.png",
@@ -105,6 +124,17 @@
   {"t": "14:29", "arter": []},
   {"t": "14:59", "arter": []},
   {"t": "15:29", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:29", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:59", "arter": [["Skjeggmeis", "Panurus biarmicus", 54]]},
+  {"t": "18:29", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:29", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:29", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:29", "arter": []}
  ]
 }

@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-11-15",
- "dager_med_opptak": 99,
+ "til": "2026-11-16",
+ "dager_med_opptak": 100,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -267,6 +267,12 @@
    "beste": 0.55,
    "foerst": "2026-09-29",
    "sist": "2026-09-29"
+  },
+  "Panurus biarmicus": {
+   "dager": 1,
+   "beste": 0.54,
+   "foerst": "2026-11-15",
+   "sist": "2026-11-15"
   },
   "Pluvialis apricaria": {
    "dager": 1,
