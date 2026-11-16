@@ -28,17 +28,17 @@
    "foerst": "2026-07-27",
    "sist": "2026-11-14"
   },
+  "Cyanistes caeruleus": {
+   "dager": 15,
+   "beste": 0.95,
+   "foerst": "2026-08-26",
+   "sist": "2026-11-16"
+  },
   "Spinus spinus": {
    "dager": 14,
    "beste": 0.98,
    "foerst": "2026-08-25",
    "sist": "2026-11-13"
-  },
-  "Cyanistes caeruleus": {
-   "dager": 14,
-   "beste": 0.95,
-   "foerst": "2026-08-26",
-   "sist": "2026-11-10"
   },
   "Passer montanus": {
    "dager": 13,
@@ -100,6 +100,12 @@
    "foerst": "2026-08-26",
    "sist": "2026-11-07"
   },
+  "Corvus monedula": {
+   "dager": 5,
+   "beste": 0.91,
+   "foerst": "2026-09-24",
+   "sist": "2026-11-16"
+  },
   "Turdus iliacus": {
    "dager": 5,
    "beste": 0.85,
@@ -117,12 +123,6 @@
    "beste": 0.78,
    "foerst": "2026-08-07",
    "sist": "2026-11-10"
-  },
-  "Corvus monedula": {
-   "dager": 4,
-   "beste": 0.91,
-   "foerst": "2026-09-24",
-   "sist": "2026-11-14"
   },
   "Strix aluco": {
    "dager": 4,
