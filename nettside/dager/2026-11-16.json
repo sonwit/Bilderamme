@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-16",
- "tegnet": "16:00",
- "periode": "06:40–15:59",
- "opptak": 28,
- "vaer": "Overskyet · 0° · 2 m/s",
- "antall_arter": 11,
+ "tegnet": "07:07",
+ "periode": "06:40–21:29",
+ "opptak": 39,
+ "vaer": "Klarvær · -3° · 2 m/s",
+ "antall_arter": 12,
  "hoert": [
   {
    "nr": 1,
@@ -14,14 +14,14 @@
    "tid": "09:14–14:59",
    "belegg": "4 økter",
    "boks": [
-    592,
-    1143,
-    964,
-    1417
+    678,
+    838,
+    1005,
+    1079
    ],
    "merke": [
-    675,
-    1385
+    864,
+    1052
    ]
   },
   {
@@ -50,14 +50,14 @@
    "tid": "15:29",
    "belegg": "6 ggr",
    "boks": [
-    834,
-    918,
-    1003,
-    1045
+    974,
+    574,
+    1130,
+    691
    ],
    "merke": [
-    864,
-    1052
+    999,
+    698
    ]
   },
   {
@@ -68,6 +68,24 @@
    "belegg": "1 ggr"
   },
   {
+   "nr": 4,
+   "norsk": "Hubro",
+   "latin": "Bubo bubo",
+   "sikkerhet": 61,
+   "tid": "17:29–17:59",
+   "belegg": "2 økter",
+   "boks": [
+    592,
+    1060,
+    895,
+    1415
+   ],
+   "merke": [
+    738,
+    1401
+   ]
+  },
+  {
    "norsk": "Låvesvale",
    "latin": "Hirundo rustica",
    "sikkerhet": 55,
@@ -75,32 +93,25 @@
    "belegg": "1 ggr"
   },
   {
-   "norsk": "Skogdue",
-   "latin": "Columba oenas",
-   "sikkerhet": 51,
-   "tid": "15:29",
-   "belegg": "2 ggr"
-  },
-  {
-   "nr": 4,
+   "nr": 5,
    "norsk": "Pilfink",
    "latin": "Passer montanus",
    "sikkerhet": 45,
    "tid": "11:29–15:29",
    "belegg": "3 økter",
    "boks": [
-    951,
-    562,
-    1087,
-    685
+    923,
+    453,
+    1063,
+    580
    ],
    "merke": [
-    999,
-    698
+    974,
+    593
    ]
   },
   {
-   "nr": 5,
+   "nr": 6,
    "norsk": "Blåmeis",
    "latin": "Cyanistes caeruleus",
    "sikkerhet": 40,
@@ -121,7 +132,8 @@
  "ogsaa": [
   "Kjøttmeis",
   "Gråsisik",
-  "Peregrine Falcon"
+  "Peregrine Falcon",
+  "Skogdue"
  ],
  "bilde": "2026-11-16.png",
  "doegn": [
@@ -152,6 +164,17 @@
   {"t": "14:29", "arter": []},
   {"t": "14:59", "arter": [["Skjære", "Pica pica", 74]]},
   {"t": "15:29", "arter": [["Grønnfink", "Chloris chloris", 67], ["Skogdue", "Columba oenas", 51]]},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:29", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:59", "arter": [["Hubro", "Bubo bubo", 61]]},
+  {"t": "18:29", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:29", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:29", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:29", "arter": []}
  ]
 }
