@@ -1,0 +1,85 @@
+{
+ "dato": "2026-11-17",
+ "tegnet": "09:37",
+ "periode": "06:40–09:44",
+ "opptak": 12,
+ "vaer": "Klarvær · -3° · 2 m/s",
+ "antall_arter": 7,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 97,
+   "tid": "08:29–09:44",
+   "belegg": "3 økter",
+   "boks": [
+    247,
+    1247,
+    404,
+    1422
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 91,
+   "tid": "08:29",
+   "belegg": "2 ggr",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Bokfink",
+   "latin": "Fringilla coelebs",
+   "sikkerhet": 83,
+   "tid": "09:29",
+   "belegg": "1 ggr",
+   "boks": [
+    847,
+    904,
+    990,
+    1056
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Kjøttmeis",
+  "Pilfink",
+  "Gråsisik",
+  "Kråke"
+ ],
+ "bilde": "2026-11-17.png",
+ "doegn": [
+  {"t": "06:40", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:44", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": [["Skjære", "Pica pica", 91], ["Dompap", "Pyrrhula pyrrhula", 54]]},
+  {"t": "08:44", "arter": []},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": []},
+  {"t": "09:29", "arter": [["Bokfink", "Fringilla coelebs", 83]]},
+  {"t": "09:44", "arter": [["Dompap", "Pyrrhula pyrrhula", 97]]}
+ ]
+}

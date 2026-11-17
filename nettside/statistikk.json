@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 52,
+   "dager": 53,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-16"
+   "sist": "2026-11-17"
   },
   "Parus major": {
    "dager": 30,
@@ -53,10 +53,10 @@
    "sist": "2026-11-10"
   },
   "Pyrrhula pyrrhula": {
-   "dager": 10,
+   "dager": 11,
    "beste": 0.98,
    "foerst": "2026-09-08",
-   "sist": "2026-11-16"
+   "sist": "2026-11-17"
   },
   "Sitta europaea": {
    "dager": 8,
@@ -76,6 +76,12 @@
    "foerst": "2026-08-29",
    "sist": "2026-11-11"
   },
+  "Fringilla coelebs": {
+   "dager": 7,
+   "beste": 0.83,
+   "foerst": "2026-08-26",
+   "sist": "2026-11-17"
+  },
   "Acanthis flammea": {
    "dager": 7,
    "beste": 0.71,
@@ -93,12 +99,6 @@
    "beste": 0.77,
    "foerst": "2026-09-02",
    "sist": "2026-11-09"
-  },
-  "Fringilla coelebs": {
-   "dager": 6,
-   "beste": 0.75,
-   "foerst": "2026-08-26",
-   "sist": "2026-11-07"
   },
   "Corvus monedula": {
    "dager": 5,
