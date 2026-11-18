@@ -1,0 +1,100 @@
+{
+ "dato": "2026-11-18",
+ "tegnet": "09:39",
+ "periode": "06:41–09:44",
+ "opptak": 12,
+ "vaer": "Lettskyet · -5° · 4 m/s",
+ "antall_arter": 5,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 100,
+   "tid": "08:44–09:44",
+   "belegg": "2 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Grønnsisik",
+   "latin": "Spinus spinus",
+   "sikkerhet": 97,
+   "tid": "07:44",
+   "belegg": "3 ggr",
+   "boks": [
+    814,
+    917,
+    946,
+    1043
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Svartbak",
+   "latin": "Larus marinus",
+   "sikkerhet": 60,
+   "tid": "09:29",
+   "belegg": "1 ggr",
+   "boks": [
+    636,
+    552,
+    804,
+    736
+   ],
+   "merke": [
+    600,
+    736
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Gulspurv",
+   "latin": "Emberiza citrinella",
+   "sikkerhet": 50,
+   "tid": "08:44",
+   "belegg": "1 ggr",
+   "boks": [
+    291,
+    1254,
+    476,
+    1414
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Pilfink"
+ ],
+ "bilde": "2026-11-18.png",
+ "doegn": [
+  {"t": "06:41", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:44", "arter": [["Grønnsisik", "Spinus spinus", 97]]},
+  {"t": "07:59", "arter": []},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": [["Skjære", "Pica pica", 88], ["Gulspurv", "Emberiza citrinella", 50]]},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": []},
+  {"t": "09:29", "arter": [["Svartbak", "Larus marinus", 60]]},
+  {"t": "09:44", "arter": [["Skjære", "Pica pica", 100]]}
+ ]
+}

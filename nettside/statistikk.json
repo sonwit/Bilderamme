@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 53,
+   "dager": 54,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-17"
+   "sist": "2026-11-18"
   },
   "Parus major": {
    "dager": 31,
@@ -28,6 +28,12 @@
    "foerst": "2026-08-04",
    "sist": "2026-10-26"
   },
+  "Spinus spinus": {
+   "dager": 15,
+   "beste": 0.98,
+   "foerst": "2026-08-25",
+   "sist": "2026-11-18"
+  },
   "Cyanistes caeruleus": {
    "dager": 15,
    "beste": 0.95,
@@ -39,12 +45,6 @@
    "beste": 0.94,
    "foerst": "2026-09-25",
    "sist": "2026-11-17"
-  },
-  "Spinus spinus": {
-   "dager": 14,
-   "beste": 0.98,
-   "foerst": "2026-08-25",
-   "sist": "2026-11-13"
   },
   "Turdus pilaris": {
    "dager": 11,
@@ -244,6 +244,12 @@
    "foerst": "2026-09-09",
    "sist": "2026-09-09"
   },
+  "Larus marinus": {
+   "dager": 1,
+   "beste": 0.6,
+   "foerst": "2026-11-18",
+   "sist": "2026-11-18"
+  },
   "Prunella modularis": {
    "dager": 1,
    "beste": 0.6,
@@ -303,6 +309,12 @@
    "beste": 0.5,
    "foerst": "2026-11-15",
    "sist": "2026-11-15"
+  },
+  "Emberiza citrinella": {
+   "dager": 1,
+   "beste": 0.5,
+   "foerst": "2026-11-18",
+   "sist": "2026-11-18"
   }
  }
 }
