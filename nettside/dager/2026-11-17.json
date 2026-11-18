@@ -1,9 +1,9 @@
 {
  "dato": "2026-11-17",
- "tegnet": "16:00",
- "periode": "06:40–15:59",
- "opptak": 29,
- "vaer": "Klarvær · -1° · 3 m/s",
+ "tegnet": "07:07",
+ "periode": "06:40–21:29",
+ "opptak": 42,
+ "vaer": "Delvis skyet · -5° · 4 m/s",
  "antall_arter": 9,
  "hoert": [
   {
@@ -167,6 +167,19 @@
   {"t": "14:39", "arter": []},
   {"t": "14:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 67], ["Grønnfink", "Chloris chloris", 64]]},
   {"t": "15:29", "arter": [["Grønnfink", "Chloris chloris", 66]]},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:29", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:39", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:29", "arter": []},
+  {"t": "18:39", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:29", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:29", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:29", "arter": []}
  ]
 }
