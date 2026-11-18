@@ -17,10 +17,10 @@
    "sist": "2026-11-17"
   },
   "Chloris chloris": {
-   "dager": 29,
+   "dager": 30,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-11-17"
+   "sist": "2026-11-18"
   },
   "Dryobates minor": {
    "dager": 28,
@@ -46,17 +46,23 @@
    "foerst": "2026-09-25",
    "sist": "2026-11-17"
   },
+  "Pyrrhula pyrrhula": {
+   "dager": 12,
+   "beste": 0.98,
+   "foerst": "2026-09-08",
+   "sist": "2026-11-18"
+  },
   "Turdus pilaris": {
    "dager": 11,
    "beste": 1.0,
    "foerst": "2026-08-25",
    "sist": "2026-11-10"
   },
-  "Pyrrhula pyrrhula": {
-   "dager": 11,
-   "beste": 0.98,
-   "foerst": "2026-09-08",
-   "sist": "2026-11-17"
+  "Acanthis flammea": {
+   "dager": 9,
+   "beste": 0.71,
+   "foerst": "2026-08-27",
+   "sist": "2026-11-18"
   },
   "Sitta europaea": {
    "dager": 8,
@@ -75,12 +81,6 @@
    "beste": 0.84,
    "foerst": "2026-08-29",
    "sist": "2026-11-11"
-  },
-  "Acanthis flammea": {
-   "dager": 8,
-   "beste": 0.71,
-   "foerst": "2026-08-27",
-   "sist": "2026-11-17"
   },
   "Fringilla coelebs": {
    "dager": 7,
