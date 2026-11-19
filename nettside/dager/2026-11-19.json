@@ -1,0 +1,68 @@
+{
+ "dato": "2026-11-19",
+ "tegnet": "09:37",
+ "periode": "06:41–09:44",
+ "opptak": 14,
+ "vaer": "Overskyet · -4° · 2 m/s",
+ "antall_arter": 5,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 94,
+   "tid": "08:44–09:44",
+   "belegg": "3 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 54,
+   "tid": "08:29–09:14",
+   "belegg": "2 økter",
+   "boks": [
+    303,
+    1262,
+    449,
+    1408
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Pilfink",
+  "Gray Wagtail",
+  "Grønnfink"
+ ],
+ "bilde": "2026-11-19.png",
+ "doegn": [
+  {"t": "06:41", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:19", "arter": []},
+  {"t": "07:39", "arter": []},
+  {"t": "07:49", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:09", "arter": []},
+  {"t": "08:19", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": []},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": [["Skjære", "Pica pica", 86], ["Gråsisik", "Acanthis flammea", 54]]},
+  {"t": "09:29", "arter": []},
+  {"t": "09:44", "arter": [["Skjære", "Pica pica", 94]]}
+ ]
+}
