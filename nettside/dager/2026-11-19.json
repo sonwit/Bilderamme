@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-19",
- "tegnet": "16:00",
- "periode": "06:41–15:59",
- "opptak": 35,
- "vaer": "Delvis skyet · -2° · 2 m/s",
- "antall_arter": 9,
+ "tegnet": "07:07",
+ "periode": "06:41–21:29",
+ "opptak": 46,
+ "vaer": "Lettskyet · -2° · 3 m/s",
+ "antall_arter": 11,
  "hoert": [
   {
    "nr": 1,
@@ -118,7 +118,9 @@
  "ogsaa": [
   "Måltrost",
   "Gray Wagtail",
-  "Blåmeis"
+  "Hubro",
+  "Blåmeis",
+  "Dvergspett"
  ],
  "bilde": "2026-11-19.png",
  "doegn": [
@@ -156,6 +158,17 @@
   {"t": "14:28", "arter": []},
   {"t": "14:59", "arter": []},
   {"t": "15:29", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:29", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:29", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:29", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:29", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:29", "arter": []}
  ]
 }
