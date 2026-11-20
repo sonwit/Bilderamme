@@ -1,0 +1,101 @@
+{
+ "dato": "2026-11-20",
+ "tegnet": "09:37",
+ "periode": "06:42–09:44",
+ "opptak": 12,
+ "vaer": "Lettskyet · -1° · 4 m/s",
+ "antall_arter": 6,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 95,
+   "tid": "07:59–08:44",
+   "belegg": "2 økter",
+   "boks": [
+    592,
+    1211,
+    757,
+    1395
+   ],
+   "merke": [
+    664,
+    1382
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 93,
+   "tid": "08:44",
+   "belegg": "6 ggr",
+   "boks": [
+    238,
+    1266,
+    422,
+    1404
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 58,
+   "tid": "07:59–08:29",
+   "belegg": "2 økter",
+   "boks": [
+    808,
+    905,
+    956,
+    1039
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Dvergspett",
+   "latin": "Dryobates minor",
+   "sikkerhet": 26,
+   "tid": "06:59–07:29",
+   "belegg": "2 økter",
+   "boks": [
+    963,
+    1167,
+    1053,
+    1360
+   ],
+   "merke": [
+    927,
+    1360
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Skogsnipe",
+  "Gråsisik"
+ ],
+ "bilde": "2026-11-20.png",
+ "doegn": [
+  {"t": "06:42", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:44", "arter": []},
+  {"t": "07:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 95], ["Pilfink", "Passer montanus", 53]]},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": [["Pilfink", "Passer montanus", 58]]},
+  {"t": "08:44", "arter": [["Dompap", "Pyrrhula pyrrhula", 94], ["Grønnfink", "Chloris chloris", 93]]},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": []},
+  {"t": "09:29", "arter": []},
+  {"t": "09:44", "arter": []}
+ ]
+}
