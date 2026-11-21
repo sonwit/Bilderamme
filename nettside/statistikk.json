@@ -10,17 +10,17 @@
    "foerst": "2026-07-27",
    "sist": "2026-11-21"
   },
+  "Chloris chloris": {
+   "dager": 33,
+   "beste": 0.98,
+   "foerst": "2026-07-27",
+   "sist": "2026-11-21"
+  },
   "Parus major": {
    "dager": 32,
    "beste": 0.99,
    "foerst": "2026-08-03",
    "sist": "2026-11-19"
-  },
-  "Chloris chloris": {
-   "dager": 32,
-   "beste": 0.98,
-   "foerst": "2026-07-27",
-   "sist": "2026-11-20"
   },
   "Dryobates minor": {
    "dager": 29,
@@ -34,17 +34,17 @@
    "foerst": "2026-09-25",
    "sist": "2026-11-20"
   },
+  "Spinus spinus": {
+   "dager": 16,
+   "beste": 0.98,
+   "foerst": "2026-08-25",
+   "sist": "2026-11-21"
+  },
   "Pyrrhula pyrrhula": {
    "dager": 15,
    "beste": 0.98,
    "foerst": "2026-09-08",
    "sist": "2026-11-21"
-  },
-  "Spinus spinus": {
-   "dager": 15,
-   "beste": 0.98,
-   "foerst": "2026-08-25",
-   "sist": "2026-11-18"
   },
   "Cyanistes caeruleus": {
    "dager": 15,
@@ -52,17 +52,17 @@
    "foerst": "2026-08-26",
    "sist": "2026-11-16"
   },
+  "Acanthis flammea": {
+   "dager": 12,
+   "beste": 0.88,
+   "foerst": "2026-08-27",
+   "sist": "2026-11-21"
+  },
   "Turdus pilaris": {
    "dager": 11,
    "beste": 1.0,
    "foerst": "2026-08-25",
    "sist": "2026-11-10"
-  },
-  "Acanthis flammea": {
-   "dager": 11,
-   "beste": 0.88,
-   "foerst": "2026-08-27",
-   "sist": "2026-11-20"
   },
   "Sitta europaea": {
    "dager": 8,
@@ -94,6 +94,12 @@
    "foerst": "2026-09-05",
    "sist": "2026-10-03"
   },
+  "Corvus monedula": {
+   "dager": 6,
+   "beste": 0.91,
+   "foerst": "2026-09-24",
+   "sist": "2026-11-21"
+  },
   "Dendrocopos major": {
    "dager": 6,
    "beste": 0.82,
@@ -105,12 +111,6 @@
    "beste": 0.77,
    "foerst": "2026-09-02",
    "sist": "2026-11-09"
-  },
-  "Corvus monedula": {
-   "dager": 5,
-   "beste": 0.91,
-   "foerst": "2026-09-24",
-   "sist": "2026-11-16"
   },
   "Turdus iliacus": {
    "dager": 5,
