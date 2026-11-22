@@ -1,0 +1,103 @@
+{
+ "dato": "2026-11-22",
+ "tegnet": "09:37",
+ "periode": "06:41–09:44",
+ "opptak": 13,
+ "vaer": "Lettskyet · 0° · 3 m/s",
+ "antall_arter": 7,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 90,
+   "tid": "07:59–09:14",
+   "belegg": "3 økter",
+   "boks": [
+    247,
+    1247,
+    404,
+    1422
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 76,
+   "tid": "08:44–09:14",
+   "belegg": "3 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 68,
+   "tid": "08:09–08:19",
+   "belegg": "2 økter",
+   "boks": [
+    834,
+    918,
+    1003,
+    1045
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 55,
+   "tid": "08:49–09:44",
+   "belegg": "2 økter",
+   "boks": [
+    951,
+    570,
+    1075,
+    694
+   ],
+   "merke": [
+    999,
+    698
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Bjørkefink",
+  "Grønnsisik",
+  "White-throated Dipper"
+ ],
+ "bilde": "2026-11-22.png",
+ "doegn": [
+  {"t": "06:41", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 57]]},
+  {"t": "08:09", "arter": [["Grønnfink", "Chloris chloris", 68]]},
+  {"t": "08:19", "arter": [["Grønnfink", "Chloris chloris", 66]]},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": []},
+  {"t": "08:49", "arter": [["Skjære", "Pica pica", 76], ["Gråsisik", "Acanthis flammea", 55]]},
+  {"t": "08:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 80]]},
+  {"t": "09:14", "arter": [["Dompap", "Pyrrhula pyrrhula", 90]]},
+  {"t": "09:29", "arter": []},
+  {"t": "09:44", "arter": [["Gråsisik", "Acanthis flammea", 51]]}
+ ]
+}

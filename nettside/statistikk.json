@@ -5,16 +5,16 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 57,
+   "dager": 58,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-21"
+   "sist": "2026-11-22"
   },
   "Chloris chloris": {
-   "dager": 33,
+   "dager": 34,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-11-21"
+   "sist": "2026-11-22"
   },
   "Parus major": {
    "dager": 32,
@@ -34,16 +34,16 @@
    "foerst": "2026-09-25",
    "sist": "2026-11-20"
   },
+  "Pyrrhula pyrrhula": {
+   "dager": 16,
+   "beste": 0.98,
+   "foerst": "2026-09-08",
+   "sist": "2026-11-22"
+  },
   "Spinus spinus": {
    "dager": 16,
    "beste": 0.98,
    "foerst": "2026-08-25",
-   "sist": "2026-11-21"
-  },
-  "Pyrrhula pyrrhula": {
-   "dager": 15,
-   "beste": 0.98,
-   "foerst": "2026-09-08",
    "sist": "2026-11-21"
   },
   "Cyanistes caeruleus": {
@@ -53,10 +53,10 @@
    "sist": "2026-11-16"
   },
   "Acanthis flammea": {
-   "dager": 12,
+   "dager": 13,
    "beste": 0.88,
    "foerst": "2026-08-27",
-   "sist": "2026-11-21"
+   "sist": "2026-11-22"
   },
   "Turdus pilaris": {
    "dager": 11,
