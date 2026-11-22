@@ -54,7 +54,7 @@
   },
   "Acanthis flammea": {
    "dager": 13,
-   "beste": 0.88,
+   "beste": 0.98,
    "foerst": "2026-08-27",
    "sist": "2026-11-22"
   },
@@ -142,6 +142,12 @@
    "foerst": "2026-11-08",
    "sist": "2026-11-11"
   },
+  "Phoenicurus phoenicurus": {
+   "dager": 3,
+   "beste": 0.7,
+   "foerst": "2026-08-28",
+   "sist": "2026-11-22"
+  },
   "Bubo bubo": {
    "dager": 3,
    "beste": 0.63,
@@ -177,12 +183,6 @@
    "beste": 0.65,
    "foerst": "2026-11-07",
    "sist": "2026-11-12"
-  },
-  "Phoenicurus phoenicurus": {
-   "dager": 2,
-   "beste": 0.6,
-   "foerst": "2026-08-28",
-   "sist": "2026-09-19"
   },
   "Gallinula chloropus": {
    "dager": 2,

@@ -1,54 +1,36 @@
 {
  "dato": "2026-11-22",
- "tegnet": "09:37",
- "periode": "06:41–09:44",
- "opptak": 13,
- "vaer": "Lettskyet · 0° · 3 m/s",
- "antall_arter": 7,
+ "tegnet": "16:00",
+ "periode": "06:41–15:59",
+ "opptak": 36,
+ "vaer": "Klarvær · 0° · 5 m/s",
+ "antall_arter": 12,
  "hoert": [
   {
    "nr": 1,
-   "norsk": "Dompap",
-   "latin": "Pyrrhula pyrrhula",
-   "sikkerhet": 90,
-   "tid": "07:59–09:14",
-   "belegg": "3 økter",
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 98,
+   "tid": "08:49–12:59",
+   "belegg": "5 økter",
    "boks": [
-    247,
-    1247,
-    404,
-    1422
+    962,
+    196,
+    1078,
+    312
    ],
    "merke": [
-    314,
-    1410
+    964,
+    317
    ]
   },
   {
    "nr": 2,
-   "norsk": "Skjære",
-   "latin": "Pica pica",
-   "sikkerhet": 76,
-   "tid": "08:44–09:14",
-   "belegg": "3 økter",
-   "boks": [
-    592,
-    1143,
-    964,
-    1417
-   ],
-   "merke": [
-    675,
-    1385
-   ]
-  },
-  {
-   "nr": 3,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
-   "sikkerhet": 68,
-   "tid": "08:09–08:19",
-   "belegg": "2 økter",
+   "sikkerhet": 98,
+   "tid": "08:09–14:39",
+   "belegg": "6 økter",
    "boks": [
     834,
     918,
@@ -61,17 +43,53 @@
    ]
   },
   {
-   "nr": 4,
-   "norsk": "Gråsisik",
-   "latin": "Acanthis flammea",
-   "sikkerhet": 55,
-   "tid": "08:49–09:44",
-   "belegg": "2 økter",
+   "nr": 3,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 90,
+   "tid": "07:59–12:39",
+   "belegg": "4 økter",
    "boks": [
-    951,
-    570,
-    1075,
-    694
+    247,
+    1247,
+    404,
+    1422
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 76,
+   "tid": "08:44–09:59",
+   "belegg": "4 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Rødstjert",
+   "latin": "Phoenicurus phoenicurus",
+   "sikkerhet": 70,
+   "tid": "10:14",
+   "belegg": "1 ggr",
+   "boks": [
+    992,
+    555,
+    1112,
+    695
    ],
    "merke": [
     999,
@@ -81,8 +99,11 @@
  ],
  "ogsaa": [
   "Bjørkefink",
-  "Grønnsisik",
-  "White-throated Dipper"
+  "Pilfink",
+  "Skogdue",
+  "Svartmeis",
+  "Ravn",
+  "Grønnsisik"
  ],
  "bilde": "2026-11-22.png",
  "doegn": [
@@ -98,6 +119,29 @@
   {"t": "08:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 80]]},
   {"t": "09:14", "arter": [["Dompap", "Pyrrhula pyrrhula", 90]]},
   {"t": "09:29", "arter": []},
-  {"t": "09:44", "arter": [["Gråsisik", "Acanthis flammea", 51]]}
+  {"t": "09:44", "arter": [["Gråsisik", "Acanthis flammea", 51]]},
+  {"t": "09:59", "arter": [["Grønnfink", "Chloris chloris", 98], ["Skjære", "Pica pica", 64]]},
+  {"t": "10:14", "arter": [["Rødstjert", "Phoenicurus phoenicurus", 70]]},
+  {"t": "10:29", "arter": []},
+  {"t": "10:44", "arter": []},
+  {"t": "10:49", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:09", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:29", "arter": []},
+  {"t": "11:44", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:29", "arter": []},
+  {"t": "12:39", "arter": [["Gråsisik", "Acanthis flammea", 98]]},
+  {"t": "12:59", "arter": []},
+  {"t": "13:29", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": [["Grønnfink", "Chloris chloris", 65]]},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
