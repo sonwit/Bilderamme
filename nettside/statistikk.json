@@ -17,10 +17,10 @@
    "sist": "2026-11-23"
   },
   "Parus major": {
-   "dager": 32,
+   "dager": 33,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-11-19"
+   "sist": "2026-11-23"
   },
   "Dryobates minor": {
    "dager": 29,
@@ -41,10 +41,10 @@
    "sist": "2026-11-23"
   },
   "Spinus spinus": {
-   "dager": 16,
+   "dager": 17,
    "beste": 0.98,
    "foerst": "2026-08-25",
-   "sist": "2026-11-21"
+   "sist": "2026-11-23"
   },
   "Cyanistes caeruleus": {
    "dager": 15,
@@ -76,17 +76,17 @@
    "foerst": "2026-09-01",
    "sist": "2026-11-09"
   },
+  "Fringilla coelebs": {
+   "dager": 8,
+   "beste": 0.86,
+   "foerst": "2026-08-26",
+   "sist": "2026-11-23"
+  },
   "Corvus cornix": {
    "dager": 8,
    "beste": 0.84,
    "foerst": "2026-08-29",
    "sist": "2026-11-11"
-  },
-  "Fringilla coelebs": {
-   "dager": 7,
-   "beste": 0.83,
-   "foerst": "2026-08-26",
-   "sist": "2026-11-17"
   },
   "Phylloscopus collybita": {
    "dager": 6,
@@ -207,6 +207,12 @@
    "beste": 0.96,
    "foerst": "2026-09-28",
    "sist": "2026-09-28"
+  },
+  "Carduelis carduelis": {
+   "dager": 1,
+   "beste": 0.93,
+   "foerst": "2026-11-23",
+   "sist": "2026-11-23"
   },
   "Falco tinnunculus": {
    "dager": 1,

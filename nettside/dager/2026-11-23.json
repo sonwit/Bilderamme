@@ -1,13 +1,31 @@
 {
  "dato": "2026-11-23",
- "tegnet": "09:37",
- "periode": "06:44–09:44",
- "opptak": 15,
- "vaer": "Lettskyet · -3° · 4 m/s",
- "antall_arter": 5,
+ "tegnet": "16:01",
+ "periode": "06:44–15:59",
+ "opptak": 41,
+ "vaer": "Lettskyet · -2° · 3 m/s",
+ "antall_arter": 12,
  "hoert": [
   {
    "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 98,
+   "tid": "09:29–14:59",
+   "belegg": "5 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 2,
    "norsk": "Dompap",
    "latin": "Pyrrhula pyrrhula",
    "sikkerhet": 96,
@@ -25,12 +43,30 @@
    ]
   },
   {
-   "nr": 2,
+   "nr": 3,
+   "norsk": "Stillits",
+   "latin": "Carduelis carduelis",
+   "sikkerhet": 93,
+   "tid": "12:29",
+   "belegg": "1 ggr",
+   "boks": [
+    419,
+    1345,
+    529,
+    1432
+   ],
+   "merke": [
+    424,
+    1440
+   ]
+  },
+  {
+   "nr": 4,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
    "sikkerhet": 89,
-   "tid": "09:19–09:44",
-   "belegg": "3 økter",
+   "tid": "09:19–15:19",
+   "belegg": "4 økter",
    "boks": [
     834,
     918,
@@ -43,17 +79,17 @@
    ]
   },
   {
-   "nr": 3,
-   "norsk": "Pilfink",
-   "latin": "Passer montanus",
-   "sikkerhet": 64,
-   "tid": "08:14–08:29",
-   "belegg": "2 økter",
+   "nr": 5,
+   "norsk": "Bokfink",
+   "latin": "Fringilla coelebs",
+   "sikkerhet": 86,
+   "tid": "09:59",
+   "belegg": "1 ggr",
    "boks": [
-    951,
+    986,
     562,
-    1087,
-    685
+    1117,
+    701
    ],
    "merke": [
     999,
@@ -61,35 +97,53 @@
    ]
   },
   {
-   "nr": 4,
-   "norsk": "Skjære",
-   "latin": "Pica pica",
-   "sikkerhet": 57,
-   "tid": "09:29",
-   "belegg": "1 ggr",
+   "nr": 6,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 84,
+   "tid": "08:14–14:39",
+   "belegg": "6 økter",
    "boks": [
-    592,
-    1143,
-    964,
-    1417
+    667,
+    609,
+    774,
+    679
    ],
    "merke": [
-    675,
-    1385
+    631,
+    679
    ]
   },
   {
-   "nr": 5,
-   "norsk": "Gråsisik",
-   "latin": "Acanthis flammea",
-   "sikkerhet": 39,
-   "tid": "08:14–09:29",
-   "belegg": "3 økter",
+   "nr": 7,
+   "norsk": "Kjøttmeis",
+   "latin": "Parus major",
+   "sikkerhet": 79,
+   "tid": "09:59–10:09",
+   "belegg": "2 økter",
    "boks": [
-    962,
-    196,
-    1078,
-    312
+    912,
+    458,
+    1063,
+    576
+   ],
+   "merke": [
+    974,
+    580
+   ]
+  },
+  {
+   "nr": 8,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 64,
+   "tid": "08:14–08:29",
+   "belegg": "2 økter",
+   "boks": [
+    951,
+    188,
+    1079,
+    304
    ],
    "merke": [
     964,
@@ -97,7 +151,12 @@
    ]
   }
  ],
- "ogsaa": [],
+ "ogsaa": [
+  "Kjernebiter",
+  "Vannrikse",
+  "Spettmeis",
+  "Grønnsisik"
+ ],
  "bilde": "2026-11-23.png",
  "doegn": [
   {"t": "06:44", "arter": []},
@@ -114,6 +173,32 @@
   {"t": "09:14", "arter": []},
   {"t": "09:19", "arter": [["Grønnfink", "Chloris chloris", 89]]},
   {"t": "09:29", "arter": [["Skjære", "Pica pica", 57]]},
-  {"t": "09:44", "arter": [["Grønnfink", "Chloris chloris", 83]]}
+  {"t": "09:44", "arter": [["Grønnfink", "Chloris chloris", 83]]},
+  {"t": "09:59", "arter": [["Bokfink", "Fringilla coelebs", 86], ["Kjøttmeis", "Parus major", 79]]},
+  {"t": "10:09", "arter": []},
+  {"t": "10:14", "arter": []},
+  {"t": "10:19", "arter": [["Grønnsisik", "Spinus spinus", 52]]},
+  {"t": "10:29", "arter": []},
+  {"t": "10:39", "arter": []},
+  {"t": "10:49", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:14", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:29", "arter": []},
+  {"t": "11:44", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": []},
+  {"t": "12:29", "arter": [["Stillits", "Carduelis carduelis", 93]]},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": [["Gråsisik", "Acanthis flammea", 84]]},
+  {"t": "13:29", "arter": []},
+  {"t": "13:39", "arter": [["Skjære", "Pica pica", 98], ["Grønnsisik", "Spinus spinus", 63]]},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": [["Gråsisik", "Acanthis flammea", 64]]},
+  {"t": "14:59", "arter": [["Skjære", "Pica pica", 77]]},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
