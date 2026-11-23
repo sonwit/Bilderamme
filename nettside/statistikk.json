@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-11-22",
- "dager_med_opptak": 106,
+ "til": "2026-11-23",
+ "dager_med_opptak": 107,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -184,6 +184,12 @@
    "foerst": "2026-11-07",
    "sist": "2026-11-12"
   },
+  "Rallus aquaticus": {
+   "dager": 2,
+   "beste": 0.62,
+   "foerst": "2026-09-25",
+   "sist": "2026-11-22"
+  },
   "Gallinula chloropus": {
    "dager": 2,
    "beste": 0.54,
@@ -256,12 +262,6 @@
    "foerst": "2026-09-27",
    "sist": "2026-09-27"
   },
-  "Rallus aquaticus": {
-   "dager": 1,
-   "beste": 0.6,
-   "foerst": "2026-09-25",
-   "sist": "2026-09-25"
-  },
   "Tringa ochropus": {
    "dager": 1,
    "beste": 0.57,
@@ -315,6 +315,12 @@
    "beste": 0.5,
    "foerst": "2026-11-18",
    "sist": "2026-11-18"
+  },
+  "Fringilla montifringilla": {
+   "dager": 1,
+   "beste": 0.42,
+   "foerst": "2026-11-22",
+   "sist": "2026-11-22"
   }
  }
 }

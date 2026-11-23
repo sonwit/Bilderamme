@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-22",
- "tegnet": "16:00",
- "periode": "06:41–15:59",
- "opptak": 36,
- "vaer": "Klarvær · 0° · 5 m/s",
- "antall_arter": 12,
+ "tegnet": "07:08",
+ "periode": "06:41–21:29",
+ "opptak": 53,
+ "vaer": "Delvis skyet · -2° · 4 m/s",
+ "antall_arter": 13,
  "hoert": [
   {
    "nr": 1,
@@ -86,10 +86,46 @@
    "tid": "10:14",
    "belegg": "1 ggr",
    "boks": [
-    992,
-    555,
-    1112,
-    695
+    966,
+    435,
+    1089,
+    579
+   ],
+   "merke": [
+    974,
+    581
+   ]
+  },
+  {
+   "nr": 6,
+   "norsk": "Vannrikse",
+   "latin": "Rallus aquaticus",
+   "sikkerhet": 62,
+   "tid": "21:29",
+   "belegg": "1 ggr",
+   "boks": [
+    629,
+    591,
+    812,
+    697
+   ],
+   "merke": [
+    593,
+    697
+   ]
+  },
+  {
+   "nr": 7,
+   "norsk": "Bjørkefink",
+   "latin": "Fringilla montifringilla",
+   "sikkerhet": 42,
+   "tid": "09:44–18:39",
+   "belegg": "2 økter",
+   "boks": [
+    988,
+    563,
+    1128,
+    693
    ],
    "merke": [
     999,
@@ -98,12 +134,12 @@
   }
  ],
  "ogsaa": [
-  "Bjørkefink",
   "Pilfink",
   "Skogdue",
   "Svartmeis",
   "Ravn",
-  "Grønnsisik"
+  "Grønnsisik",
+  "White-throated Dipper"
  ],
  "bilde": "2026-11-22.png",
  "doegn": [
@@ -142,6 +178,23 @@
   {"t": "14:59", "arter": []},
   {"t": "15:19", "arter": []},
   {"t": "15:39", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:19", "arter": []},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:19", "arter": []},
+  {"t": "17:39", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:19", "arter": []},
+  {"t": "18:39", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:19", "arter": []},
+  {"t": "19:39", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:19", "arter": []},
+  {"t": "20:39", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:19", "arter": []},
+  {"t": "21:29", "arter": [["Vannrikse", "Rallus aquaticus", 62]]}
  ]
 }
