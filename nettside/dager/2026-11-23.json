@@ -1,0 +1,119 @@
+{
+ "dato": "2026-11-23",
+ "tegnet": "09:37",
+ "periode": "06:44–09:44",
+ "opptak": 15,
+ "vaer": "Lettskyet · -3° · 4 m/s",
+ "antall_arter": 5,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 96,
+   "tid": "08:29",
+   "belegg": "2 ggr",
+   "boks": [
+    247,
+    1247,
+    404,
+    1422
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Grønnfink",
+   "latin": "Chloris chloris",
+   "sikkerhet": 89,
+   "tid": "09:19–09:44",
+   "belegg": "3 økter",
+   "boks": [
+    834,
+    918,
+    1003,
+    1045
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 64,
+   "tid": "08:14–08:29",
+   "belegg": "2 økter",
+   "boks": [
+    951,
+    562,
+    1087,
+    685
+   ],
+   "merke": [
+    999,
+    698
+   ]
+  },
+  {
+   "nr": 4,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 57,
+   "tid": "09:29",
+   "belegg": "1 ggr",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 39,
+   "tid": "08:14–09:29",
+   "belegg": "3 økter",
+   "boks": [
+    962,
+    196,
+    1078,
+    312
+   ],
+   "merke": [
+    964,
+    317
+   ]
+  }
+ ],
+ "ogsaa": [],
+ "bilde": "2026-11-23.png",
+ "doegn": [
+  {"t": "06:44", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:39", "arter": []},
+  {"t": "07:49", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": [["Dompap", "Pyrrhula pyrrhula", 96], ["Pilfink", "Passer montanus", 64]]},
+  {"t": "08:39", "arter": []},
+  {"t": "08:49", "arter": []},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": []},
+  {"t": "09:19", "arter": [["Grønnfink", "Chloris chloris", 89]]},
+  {"t": "09:29", "arter": [["Skjære", "Pica pica", 57]]},
+  {"t": "09:44", "arter": [["Grønnfink", "Chloris chloris", 83]]}
+ ]
+}

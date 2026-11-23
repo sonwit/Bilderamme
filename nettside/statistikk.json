@@ -5,16 +5,16 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 58,
+   "dager": 59,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-22"
+   "sist": "2026-11-23"
   },
   "Chloris chloris": {
-   "dager": 34,
+   "dager": 35,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-11-22"
+   "sist": "2026-11-23"
   },
   "Parus major": {
    "dager": 32,
@@ -29,16 +29,16 @@
    "sist": "2026-11-20"
   },
   "Passer montanus": {
-   "dager": 17,
+   "dager": 18,
    "beste": 0.94,
    "foerst": "2026-09-25",
-   "sist": "2026-11-20"
+   "sist": "2026-11-23"
   },
   "Pyrrhula pyrrhula": {
-   "dager": 16,
+   "dager": 17,
    "beste": 0.98,
    "foerst": "2026-09-08",
-   "sist": "2026-11-22"
+   "sist": "2026-11-23"
   },
   "Spinus spinus": {
    "dager": 16,
@@ -53,10 +53,10 @@
    "sist": "2026-11-16"
   },
   "Acanthis flammea": {
-   "dager": 13,
+   "dager": 14,
    "beste": 0.98,
    "foerst": "2026-08-27",
-   "sist": "2026-11-22"
+   "sist": "2026-11-23"
   },
   "Turdus pilaris": {
    "dager": 11,
