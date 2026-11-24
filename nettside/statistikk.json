@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 59,
+   "dager": 60,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-23"
+   "sist": "2026-11-24"
   },
   "Chloris chloris": {
    "dager": 36,
@@ -17,10 +17,10 @@
    "sist": "2026-11-24"
   },
   "Parus major": {
-   "dager": 33,
+   "dager": 34,
    "beste": 0.99,
    "foerst": "2026-08-03",
-   "sist": "2026-11-23"
+   "sist": "2026-11-24"
   },
   "Dryobates minor": {
    "dager": 29,
@@ -35,10 +35,10 @@
    "sist": "2026-11-24"
   },
   "Pyrrhula pyrrhula": {
-   "dager": 17,
+   "dager": 18,
    "beste": 0.98,
    "foerst": "2026-09-08",
-   "sist": "2026-11-23"
+   "sist": "2026-11-24"
   },
   "Spinus spinus": {
    "dager": 17,
