@@ -11,10 +11,10 @@
    "sist": "2026-11-23"
   },
   "Chloris chloris": {
-   "dager": 35,
+   "dager": 36,
    "beste": 0.98,
    "foerst": "2026-07-27",
-   "sist": "2026-11-23"
+   "sist": "2026-11-24"
   },
   "Parus major": {
    "dager": 33,
@@ -29,10 +29,10 @@
    "sist": "2026-11-20"
   },
   "Passer montanus": {
-   "dager": 18,
+   "dager": 19,
    "beste": 0.94,
    "foerst": "2026-09-25",
-   "sist": "2026-11-23"
+   "sist": "2026-11-24"
   },
   "Pyrrhula pyrrhula": {
    "dager": 17,
@@ -46,17 +46,17 @@
    "foerst": "2026-08-25",
    "sist": "2026-11-23"
   },
+  "Acanthis flammea": {
+   "dager": 15,
+   "beste": 0.98,
+   "foerst": "2026-08-27",
+   "sist": "2026-11-24"
+  },
   "Cyanistes caeruleus": {
    "dager": 15,
    "beste": 0.95,
    "foerst": "2026-08-26",
    "sist": "2026-11-16"
-  },
-  "Acanthis flammea": {
-   "dager": 14,
-   "beste": 0.98,
-   "foerst": "2026-08-27",
-   "sist": "2026-11-23"
   },
   "Turdus pilaris": {
    "dager": 11,
