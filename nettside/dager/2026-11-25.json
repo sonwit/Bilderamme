@@ -1,31 +1,67 @@
 {
  "dato": "2026-11-25",
- "tegnet": "09:37",
- "periode": "06:43–09:44",
- "opptak": 13,
- "vaer": "Overskyet · -4° · 3 m/s",
- "antall_arter": 4,
+ "tegnet": "16:01",
+ "periode": "06:43–15:59",
+ "opptak": 36,
+ "vaer": "Delvis skyet · -6° · 1 m/s",
+ "antall_arter": 12,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Grønnfink",
    "latin": "Chloris chloris",
    "sikkerhet": 99,
-   "tid": "08:29–09:14",
-   "belegg": "2 økter",
+   "tid": "08:29–11:19",
+   "belegg": "4 økter",
    "boks": [
-    238,
-    1266,
-    422,
-    1404
+    974,
+    574,
+    1130,
+    691
    ],
    "merke": [
-    314,
-    1410
+    999,
+    698
    ]
   },
   {
    "nr": 2,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 95,
+   "tid": "10:29–14:39",
+   "belegg": "3 økter",
+   "boks": [
+    851,
+    900,
+    996,
+    1062
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 94,
+   "tid": "07:59–11:29",
+   "belegg": "5 økter",
+   "boks": [
+    962,
+    196,
+    1078,
+    312
+   ],
+   "merke": [
+    964,
+    317
+   ]
+  },
+  {
+   "nr": 4,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 82,
@@ -43,26 +79,83 @@
    ]
   },
   {
-   "nr": 3,
-   "norsk": "Gråsisik",
-   "latin": "Acanthis flammea",
-   "sikkerhet": 71,
-   "tid": "07:59–09:44",
-   "belegg": "2 økter",
+   "nr": 5,
+   "norsk": "Konglebiter",
+   "latin": "Pinicola enucleator",
+   "sikkerhet": 68,
+   "tid": "10:29",
+   "belegg": "1 ggr",
    "boks": [
-    809,
-    914,
-    944,
-    1049
+    225,
+    1214,
+    416,
+    1425
    ],
    "merke": [
-    864,
-    1052
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 6,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 68,
+   "tid": "09:59–12:59",
+   "belegg": "3 økter",
+   "boks": [
+    923,
+    453,
+    1063,
+    580
+   ],
+   "merke": [
+    974,
+    593
+   ]
+  },
+  {
+   "nr": 7,
+   "norsk": "Vannrikse",
+   "latin": "Rallus aquaticus",
+   "sikkerhet": 62,
+   "tid": "14:19",
+   "belegg": "1 ggr",
+   "boks": [
+    645,
+    99,
+    835,
+    209
+   ],
+   "merke": [
+    609,
+    209
+   ]
+  },
+  {
+   "nr": 8,
+   "norsk": "Rapphøne",
+   "latin": "Perdix perdix",
+   "sikkerhet": 51,
+   "tid": "12:59",
+   "belegg": "1 ggr",
+   "boks": [
+    649,
+    580,
+    792,
+    709
+   ],
+   "merke": [
+    613,
+    709
    ]
   }
  ],
  "ogsaa": [
-  "Kjernebiter"
+  "Bokfink",
+  "Grønnsisik",
+  "Kjernebiter",
+  "Gråspurv"
  ],
  "bilde": "2026-11-25.png",
  "doegn": [
@@ -78,6 +171,29 @@
   {"t": "09:14", "arter": [["Grønnfink", "Chloris chloris", 52]]},
   {"t": "09:19", "arter": []},
   {"t": "09:29", "arter": []},
-  {"t": "09:44", "arter": []}
+  {"t": "09:44", "arter": []},
+  {"t": "09:49", "arter": []},
+  {"t": "09:59", "arter": [["Pilfink", "Passer montanus", 64]]},
+  {"t": "10:14", "arter": []},
+  {"t": "10:29", "arter": [["Konglebiter", "Pinicola enucleator", 68]]},
+  {"t": "10:44", "arter": [["Grønnfink", "Chloris chloris", 69]]},
+  {"t": "10:59", "arter": []},
+  {"t": "11:09", "arter": []},
+  {"t": "11:19", "arter": [["Gråsisik", "Acanthis flammea", 94], ["Grønnfink", "Chloris chloris", 57]]},
+  {"t": "11:29", "arter": [["Pilfink", "Passer montanus", 55]]},
+  {"t": "11:39", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:19", "arter": []},
+  {"t": "12:39", "arter": []},
+  {"t": "12:59", "arter": [["Pilfink", "Passer montanus", 68], ["Rapphøne", "Perdix perdix", 51]]},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 95]]},
+  {"t": "14:19", "arter": [["Vannrikse", "Rallus aquaticus", 62]]},
+  {"t": "14:39", "arter": [["Dompap", "Pyrrhula pyrrhula", 84]]},
+  {"t": "14:59", "arter": []},
+  {"t": "15:19", "arter": []},
+  {"t": "15:39", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
