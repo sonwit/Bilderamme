@@ -5,16 +5,16 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 60,
+   "dager": 61,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-24"
+   "sist": "2026-11-25"
   },
   "Chloris chloris": {
-   "dager": 36,
-   "beste": 0.98,
+   "dager": 37,
+   "beste": 0.99,
    "foerst": "2026-07-27",
-   "sist": "2026-11-24"
+   "sist": "2026-11-25"
   },
   "Parus major": {
    "dager": 34,
@@ -47,10 +47,10 @@
    "sist": "2026-11-23"
   },
   "Acanthis flammea": {
-   "dager": 15,
+   "dager": 16,
    "beste": 0.98,
    "foerst": "2026-08-27",
-   "sist": "2026-11-24"
+   "sist": "2026-11-25"
   },
   "Cyanistes caeruleus": {
    "dager": 15,
