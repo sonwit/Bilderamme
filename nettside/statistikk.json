@@ -29,10 +29,10 @@
    "sist": "2026-11-20"
   },
   "Passer montanus": {
-   "dager": 20,
+   "dager": 21,
    "beste": 0.94,
    "foerst": "2026-09-25",
-   "sist": "2026-11-25"
+   "sist": "2026-11-26"
   },
   "Pyrrhula pyrrhula": {
    "dager": 19,
@@ -40,17 +40,17 @@
    "foerst": "2026-09-08",
    "sist": "2026-11-25"
   },
+  "Acanthis flammea": {
+   "dager": 17,
+   "beste": 0.98,
+   "foerst": "2026-08-27",
+   "sist": "2026-11-26"
+  },
   "Spinus spinus": {
    "dager": 17,
    "beste": 0.98,
    "foerst": "2026-08-25",
    "sist": "2026-11-23"
-  },
-  "Acanthis flammea": {
-   "dager": 16,
-   "beste": 0.98,
-   "foerst": "2026-08-27",
-   "sist": "2026-11-25"
   },
   "Cyanistes caeruleus": {
    "dager": 15,

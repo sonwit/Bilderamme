@@ -1,13 +1,49 @@
 {
  "dato": "2026-11-26",
- "tegnet": "09:37",
- "periode": "06:38–09:44",
- "opptak": 11,
- "vaer": "Klarvær · -11° · 1 m/s",
- "antall_arter": 3,
+ "tegnet": "16:00",
+ "periode": "06:38–15:59",
+ "opptak": 31,
+ "vaer": "Klarvær · -9° · 2 m/s",
+ "antall_arter": 4,
  "hoert": [
   {
    "nr": 1,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 91,
+   "tid": "14:59",
+   "belegg": "1 ggr",
+   "boks": [
+    809,
+    914,
+    944,
+    1049
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 73,
+   "tid": "07:59–12:29",
+   "belegg": "2 økter",
+   "boks": [
+    289,
+    1251,
+    450,
+    1397
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 3,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 53,
@@ -26,7 +62,6 @@
   }
  ],
  "ogsaa": [
-  "Pilfink",
   "Grønnfink"
  ],
  "bilde": "2026-11-26.png",
@@ -41,6 +76,26 @@
   {"t": "08:59", "arter": [["Skjære", "Pica pica", 53]]},
   {"t": "09:14", "arter": []},
   {"t": "09:29", "arter": []},
-  {"t": "09:44", "arter": []}
+  {"t": "09:44", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:14", "arter": []},
+  {"t": "10:29", "arter": []},
+  {"t": "10:44", "arter": []},
+  {"t": "10:59", "arter": []},
+  {"t": "11:14", "arter": []},
+  {"t": "11:29", "arter": []},
+  {"t": "11:44", "arter": []},
+  {"t": "11:59", "arter": []},
+  {"t": "12:29", "arter": [["Pilfink", "Passer montanus", 73]]},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": []},
+  {"t": "13:39", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:19", "arter": []},
+  {"t": "14:39", "arter": []},
+  {"t": "14:59", "arter": [["Gråsisik", "Acanthis flammea", 91]]},
+  {"t": "15:19", "arter": []},
+  {"t": "15:29", "arter": []},
+  {"t": "15:59", "arter": []}
  ]
 }
