@@ -1,0 +1,46 @@
+{
+ "dato": "2026-11-26",
+ "tegnet": "09:37",
+ "periode": "06:38–09:44",
+ "opptak": 11,
+ "vaer": "Klarvær · -11° · 1 m/s",
+ "antall_arter": 3,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 53,
+   "tid": "08:59",
+   "belegg": "1 ggr",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Pilfink",
+  "Grønnfink"
+ ],
+ "bilde": "2026-11-26.png",
+ "doegn": [
+  {"t": "06:38", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": []},
+  {"t": "08:59", "arter": [["Skjære", "Pica pica", 53]]},
+  {"t": "09:14", "arter": []},
+  {"t": "09:29", "arter": []},
+  {"t": "09:44", "arter": []}
+ ]
+}
