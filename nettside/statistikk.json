@@ -1,7 +1,7 @@
 {
  "fra": "2026-07-26",
- "til": "2026-11-26",
- "dager_med_opptak": 110,
+ "til": "2026-11-27",
+ "dager_med_opptak": 111,
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
@@ -130,6 +130,18 @@
    "foerst": "2026-08-19",
    "sist": "2026-09-24"
   },
+  "Strix uralensis": {
+   "dager": 4,
+   "beste": 0.79,
+   "foerst": "2026-11-07",
+   "sist": "2026-11-26"
+  },
+  "Bubo bubo": {
+   "dager": 4,
+   "beste": 0.78,
+   "foerst": "2026-08-21",
+   "sist": "2026-11-26"
+  },
   "Loxia leucoptera": {
    "dager": 3,
    "beste": 0.73,
@@ -147,18 +159,6 @@
    "beste": 0.7,
    "foerst": "2026-08-28",
    "sist": "2026-11-22"
-  },
-  "Strix uralensis": {
-   "dager": 3,
-   "beste": 0.65,
-   "foerst": "2026-11-07",
-   "sist": "2026-11-25"
-  },
-  "Bubo bubo": {
-   "dager": 3,
-   "beste": 0.63,
-   "foerst": "2026-08-21",
-   "sist": "2026-11-16"
   },
   "Rallus aquaticus": {
    "dager": 3,

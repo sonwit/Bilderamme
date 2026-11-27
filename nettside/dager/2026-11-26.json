@@ -1,10 +1,10 @@
 {
  "dato": "2026-11-26",
- "tegnet": "16:00",
- "periode": "06:38–15:59",
- "opptak": 31,
- "vaer": "Klarvær · -9° · 2 m/s",
- "antall_arter": 4,
+ "tegnet": "07:07",
+ "periode": "06:38–21:39",
+ "opptak": 48,
+ "vaer": "Overskyet · -6° · 2 m/s",
+ "antall_arter": 7,
  "hoert": [
   {
    "nr": 1,
@@ -14,10 +14,28 @@
    "tid": "14:59",
    "belegg": "1 ggr",
    "boks": [
-    809,
-    914,
-    944,
-    1049
+    962,
+    196,
+    1078,
+    312
+   ],
+   "merke": [
+    964,
+    317
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Slagugle",
+   "latin": "Strix uralensis",
+   "sikkerhet": 79,
+   "tid": "17:39",
+   "belegg": "1 ggr",
+   "boks": [
+    800,
+    775,
+    1058,
+    1098
    ],
    "merke": [
     864,
@@ -25,7 +43,25 @@
    ]
   },
   {
-   "nr": 2,
+   "nr": 3,
+   "norsk": "Hubro",
+   "latin": "Bubo bubo",
+   "sikkerhet": 78,
+   "tid": "17:39",
+   "belegg": "1 ggr",
+   "boks": [
+    592,
+    1060,
+    895,
+    1415
+   ],
+   "merke": [
+    738,
+    1401
+   ]
+  },
+  {
+   "nr": 4,
    "norsk": "Pilfink",
    "latin": "Passer montanus",
    "sikkerhet": 73,
@@ -43,25 +79,26 @@
    ]
   },
   {
-   "nr": 3,
+   "nr": 5,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 53,
    "tid": "08:59",
    "belegg": "1 ggr",
    "boks": [
-    592,
-    1143,
-    964,
-    1417
+    831,
+    500,
+    1131,
+    721
    ],
    "merke": [
-    675,
-    1385
+    999,
+    698
    ]
   }
  ],
  "ogsaa": [
+  "Dvergspett",
   "Grønnfink"
  ],
  "bilde": "2026-11-26.png",
@@ -96,6 +133,23 @@
   {"t": "14:59", "arter": [["Gråsisik", "Acanthis flammea", 91]]},
   {"t": "15:19", "arter": []},
   {"t": "15:29", "arter": []},
-  {"t": "15:59", "arter": []}
+  {"t": "15:59", "arter": []},
+  {"t": "16:29", "arter": []},
+  {"t": "16:39", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:39", "arter": [["Slagugle", "Strix uralensis", 79], ["Hubro", "Bubo bubo", 78]]},
+  {"t": "18:00", "arter": []},
+  {"t": "18:19", "arter": []},
+  {"t": "18:29", "arter": []},
+  {"t": "18:39", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:28", "arter": []},
+  {"t": "19:39", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:28", "arter": []},
+  {"t": "20:58", "arter": []},
+  {"t": "21:28", "arter": []},
+  {"t": "21:39", "arter": []}
  ]
 }
