@@ -29,10 +29,10 @@
    "sist": "2026-11-20"
   },
   "Passer montanus": {
-   "dager": 21,
+   "dager": 22,
    "beste": 0.94,
    "foerst": "2026-09-25",
-   "sist": "2026-11-26"
+   "sist": "2026-11-27"
   },
   "Pyrrhula pyrrhula": {
    "dager": 20,
@@ -41,16 +41,16 @@
    "sist": "2026-11-27"
   },
   "Acanthis flammea": {
-   "dager": 17,
+   "dager": 18,
    "beste": 0.98,
    "foerst": "2026-08-27",
-   "sist": "2026-11-26"
+   "sist": "2026-11-27"
   },
   "Spinus spinus": {
-   "dager": 17,
+   "dager": 18,
    "beste": 0.98,
    "foerst": "2026-08-25",
-   "sist": "2026-11-23"
+   "sist": "2026-11-27"
   },
   "Cyanistes caeruleus": {
    "dager": 15,
@@ -172,6 +172,12 @@
    "foerst": "2026-08-04",
    "sist": "2026-09-03"
   },
+  "Regulus regulus": {
+   "dager": 2,
+   "beste": 0.96,
+   "foerst": "2026-09-09",
+   "sist": "2026-11-27"
+  },
   "Lophophanes cristatus": {
    "dager": 2,
    "beste": 0.85,
@@ -261,12 +267,6 @@
    "beste": 0.64,
    "foerst": "2026-11-09",
    "sist": "2026-11-09"
-  },
-  "Regulus regulus": {
-   "dager": 1,
-   "beste": 0.63,
-   "foerst": "2026-09-09",
-   "sist": "2026-09-09"
   },
   "Larus marinus": {
    "dager": 1,

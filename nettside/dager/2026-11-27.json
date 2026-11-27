@@ -1,54 +1,18 @@
 {
  "dato": "2026-11-27",
- "tegnet": "09:38",
- "periode": "06:41–09:44",
- "opptak": 15,
- "vaer": "Overskyet · -5° · 2 m/s",
- "antall_arter": 4,
+ "tegnet": "16:00",
+ "periode": "06:41–15:58",
+ "opptak": 36,
+ "vaer": "Overskyet · -4° · 2 m/s",
+ "antall_arter": 9,
  "hoert": [
   {
    "nr": 1,
-   "norsk": "Dompap",
-   "latin": "Pyrrhula pyrrhula",
-   "sikkerhet": 82,
-   "tid": "08:59",
-   "belegg": "1 ggr",
-   "boks": [
-    247,
-    1247,
-    404,
-    1422
-   ],
-   "merke": [
-    314,
-    1410
-   ]
-  },
-  {
-   "nr": 2,
-   "norsk": "Rugde",
-   "latin": "Scolopax rusticola",
-   "sikkerhet": 80,
-   "tid": "08:19",
-   "belegg": "1 ggr",
-   "boks": [
-    647,
-    571,
-    793,
-    718
-   ],
-   "merke": [
-    611,
-    718
-   ]
-  },
-  {
-   "nr": 3,
    "norsk": "Skjære",
    "latin": "Pica pica",
-   "sikkerhet": 71,
-   "tid": "09:14",
-   "belegg": "1 ggr",
+   "sikkerhet": 100,
+   "tid": "09:14–11:44",
+   "belegg": "3 økter",
    "boks": [
     592,
     1143,
@@ -61,12 +25,120 @@
    ]
   },
   {
+   "nr": 2,
+   "norsk": "Fuglekonge",
+   "latin": "Regulus regulus",
+   "sikkerhet": 96,
+   "tid": "13:19",
+   "belegg": "2 ggr",
+   "boks": [
+    428,
+    1369,
+    516,
+    1439
+   ],
+   "merke": [
+    424,
+    1440
+   ]
+  },
+  {
+   "nr": 3,
+   "norsk": "Gråsisik",
+   "latin": "Acanthis flammea",
+   "sikkerhet": 87,
+   "tid": "11:29",
+   "belegg": "2 ggr",
+   "boks": [
+    951,
+    570,
+    1075,
+    694
+   ],
+   "merke": [
+    999,
+    698
+   ]
+  },
+  {
    "nr": 4,
+   "norsk": "Dompap",
+   "latin": "Pyrrhula pyrrhula",
+   "sikkerhet": 84,
+   "tid": "08:59–11:39",
+   "belegg": "2 økter",
+   "boks": [
+    247,
+    1247,
+    404,
+    1422
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  },
+  {
+   "nr": 5,
+   "norsk": "Rugde",
+   "latin": "Scolopax rusticola",
+   "sikkerhet": 80,
+   "tid": "08:19–15:28",
+   "belegg": "2 økter",
+   "boks": [
+    647,
+    571,
+    793,
+    718
+   ],
+   "merke": [
+    611,
+    718
+   ]
+  },
+  {
+   "nr": 6,
+   "norsk": "Grønnsisik",
+   "latin": "Spinus spinus",
+   "sikkerhet": 62,
+   "tid": "10:14–11:09",
+   "belegg": "2 økter",
+   "boks": [
+    960,
+    199,
+    1073,
+    307
+   ],
+   "merke": [
+    964,
+    317
+   ]
+  },
+  {
+   "nr": 7,
+   "norsk": "Pilfink",
+   "latin": "Passer montanus",
+   "sikkerhet": 57,
+   "tid": "10:59",
+   "belegg": "1 ggr",
+   "boks": [
+    808,
+    905,
+    956,
+    1039
+   ],
+   "merke": [
+    864,
+    1052
+   ]
+  },
+  {
+   "nr": 8,
    "norsk": "Flaggspett",
    "latin": "Dendrocopos major",
    "sikkerhet": 50,
-   "tid": "08:39",
-   "belegg": "2 ggr",
+   "tid": "08:39–14:29",
+   "belegg": "2 økter",
    "boks": [
     961,
     1139,
@@ -79,7 +151,9 @@
    ]
   }
  ],
- "ogsaa": [],
+ "ogsaa": [
+  "Hubro"
+ ],
  "bilde": "2026-11-27.png",
  "doegn": [
   {"t": "06:41", "arter": []},
@@ -96,6 +170,27 @@
   {"t": "08:59", "arter": [["Dompap", "Pyrrhula pyrrhula", 82]]},
   {"t": "09:14", "arter": [["Skjære", "Pica pica", 71]]},
   {"t": "09:29", "arter": []},
-  {"t": "09:44", "arter": []}
+  {"t": "09:44", "arter": []},
+  {"t": "09:59", "arter": []},
+  {"t": "10:14", "arter": [["Grønnsisik", "Spinus spinus", 62]]},
+  {"t": "10:29", "arter": []},
+  {"t": "10:39", "arter": []},
+  {"t": "10:44", "arter": []},
+  {"t": "10:59", "arter": [["Pilfink", "Passer montanus", 57]]},
+  {"t": "11:09", "arter": []},
+  {"t": "11:19", "arter": []},
+  {"t": "11:29", "arter": [["Skjære", "Pica pica", 95], ["Gråsisik", "Acanthis flammea", 87]]},
+  {"t": "11:39", "arter": [["Dompap", "Pyrrhula pyrrhula", 84]]},
+  {"t": "11:44", "arter": [["Skjære", "Pica pica", 100]]},
+  {"t": "11:59", "arter": []},
+  {"t": "12:29", "arter": []},
+  {"t": "12:59", "arter": []},
+  {"t": "13:19", "arter": [["Fuglekonge", "Regulus regulus", 96]]},
+  {"t": "13:29", "arter": []},
+  {"t": "13:59", "arter": []},
+  {"t": "14:29", "arter": []},
+  {"t": "14:59", "arter": []},
+  {"t": "15:28", "arter": []},
+  {"t": "15:58", "arter": []}
  ]
 }
