@@ -11,10 +11,10 @@
    "sist": "2026-11-28"
   },
   "Chloris chloris": {
-   "dager": 37,
+   "dager": 38,
    "beste": 0.99,
    "foerst": "2026-07-27",
-   "sist": "2026-11-25"
+   "sist": "2026-11-28"
   },
   "Parus major": {
    "dager": 34,
@@ -23,28 +23,28 @@
    "sist": "2026-11-24"
   },
   "Dryobates minor": {
-   "dager": 29,
+   "dager": 30,
    "beste": 0.72,
    "foerst": "2026-08-04",
-   "sist": "2026-11-20"
+   "sist": "2026-11-28"
   },
   "Passer montanus": {
-   "dager": 22,
+   "dager": 23,
    "beste": 0.94,
    "foerst": "2026-09-25",
-   "sist": "2026-11-27"
+   "sist": "2026-11-28"
   },
   "Pyrrhula pyrrhula": {
-   "dager": 20,
-   "beste": 0.98,
+   "dager": 21,
+   "beste": 0.99,
    "foerst": "2026-09-08",
-   "sist": "2026-11-27"
+   "sist": "2026-11-28"
   },
   "Acanthis flammea": {
-   "dager": 18,
+   "dager": 19,
    "beste": 0.98,
    "foerst": "2026-08-27",
-   "sist": "2026-11-27"
+   "sist": "2026-11-28"
   },
   "Spinus spinus": {
    "dager": 18,
@@ -64,6 +64,12 @@
    "foerst": "2026-08-25",
    "sist": "2026-11-10"
   },
+  "Corvus cornix": {
+   "dager": 9,
+   "beste": 0.84,
+   "foerst": "2026-08-29",
+   "sist": "2026-11-28"
+  },
   "Sitta europaea": {
    "dager": 8,
    "beste": 1.0,
@@ -81,12 +87,6 @@
    "beste": 0.86,
    "foerst": "2026-08-26",
    "sist": "2026-11-23"
-  },
-  "Corvus cornix": {
-   "dager": 8,
-   "beste": 0.84,
-   "foerst": "2026-08-29",
-   "sist": "2026-11-11"
   },
   "Dendrocopos major": {
    "dager": 8,
@@ -142,17 +142,17 @@
    "foerst": "2026-11-07",
    "sist": "2026-11-26"
   },
+  "Corvus corone": {
+   "dager": 4,
+   "beste": 0.71,
+   "foerst": "2026-11-08",
+   "sist": "2026-11-28"
+  },
   "Loxia leucoptera": {
    "dager": 3,
    "beste": 0.73,
    "foerst": "2026-09-11",
    "sist": "2026-11-15"
-  },
-  "Corvus corone": {
-   "dager": 3,
-   "beste": 0.71,
-   "foerst": "2026-11-08",
-   "sist": "2026-11-11"
   },
   "Phoenicurus phoenicurus": {
    "dager": 3,
