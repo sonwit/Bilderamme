@@ -1,27 +1,27 @@
 {
  "dato": "2026-11-27",
- "tegnet": "16:00",
- "periode": "06:41–15:58",
- "opptak": 36,
- "vaer": "Overskyet · -4° · 2 m/s",
- "antall_arter": 9,
+ "tegnet": "07:07",
+ "periode": "06:41–21:29",
+ "opptak": 47,
+ "vaer": "Overskyet · -3° · 1 m/s",
+ "antall_arter": 11,
  "hoert": [
   {
    "nr": 1,
    "norsk": "Skjære",
    "latin": "Pica pica",
    "sikkerhet": 100,
-   "tid": "09:14–11:44",
-   "belegg": "3 økter",
+   "tid": "09:14–18:59",
+   "belegg": "4 økter",
    "boks": [
-    592,
-    1143,
-    964,
-    1417
+    678,
+    838,
+    1005,
+    1079
    ],
    "merke": [
-    675,
-    1385
+    864,
+    1052
    ]
   },
   {
@@ -32,14 +32,14 @@
    "tid": "13:19",
    "belegg": "2 ggr",
    "boks": [
-    428,
-    1369,
-    516,
-    1439
+    683,
+    614,
+    757,
+    674
    ],
    "merke": [
-    424,
-    1440
+    647,
+    674
    ]
   },
   {
@@ -50,14 +50,14 @@
    "tid": "11:29",
    "belegg": "2 ggr",
    "boks": [
-    951,
-    570,
-    1075,
-    694
+    962,
+    196,
+    1078,
+    312
    ],
    "merke": [
-    999,
-    698
+    964,
+    317
    ]
   },
   {
@@ -80,60 +80,42 @@
   },
   {
    "nr": 5,
-   "norsk": "Rugde",
-   "latin": "Scolopax rusticola",
-   "sikkerhet": 80,
-   "tid": "08:19–15:28",
-   "belegg": "2 økter",
-   "boks": [
-    647,
-    571,
-    793,
-    718
-   ],
-   "merke": [
-    611,
-    718
-   ]
-  },
-  {
-   "nr": 6,
    "norsk": "Grønnsisik",
    "latin": "Spinus spinus",
    "sikkerhet": 62,
    "tid": "10:14–11:09",
    "belegg": "2 økter",
    "boks": [
-    960,
-    199,
-    1073,
-    307
+    427,
+    1339,
+    522,
+    1430
    ],
    "merke": [
-    964,
-    317
+    424,
+    1440
    ]
   },
   {
-   "nr": 7,
+   "nr": 6,
    "norsk": "Pilfink",
    "latin": "Passer montanus",
    "sikkerhet": 57,
    "tid": "10:59",
    "belegg": "1 ggr",
    "boks": [
-    808,
-    905,
-    956,
-    1039
+    951,
+    562,
+    1087,
+    685
    ],
    "merke": [
-    864,
-    1052
+    999,
+    698
    ]
   },
   {
-   "nr": 8,
+   "nr": 7,
    "norsk": "Flaggspett",
    "latin": "Dendrocopos major",
    "sikkerhet": 50,
@@ -149,10 +131,30 @@
     925,
     1388
    ]
+  },
+  {
+   "nr": 8,
+   "norsk": "Hubro",
+   "latin": "Bubo bubo",
+   "sikkerhet": 50,
+   "tid": "15:58–20:29",
+   "belegg": "2 økter",
+   "boks": [
+    592,
+    1060,
+    895,
+    1415
+   ],
+   "merke": [
+    738,
+    1401
+   ]
   }
  ],
  "ogsaa": [
-  "Hubro"
+  "Slagugle",
+  "Strandsnipe",
+  "Rugde"
  ],
  "bilde": "2026-11-27.png",
  "doegn": [
@@ -191,6 +193,17 @@
   {"t": "14:29", "arter": []},
   {"t": "14:59", "arter": []},
   {"t": "15:28", "arter": []},
-  {"t": "15:58", "arter": []}
+  {"t": "15:58", "arter": []},
+  {"t": "16:29", "arter": []},
+  {"t": "16:59", "arter": []},
+  {"t": "17:29", "arter": []},
+  {"t": "17:59", "arter": []},
+  {"t": "18:29", "arter": []},
+  {"t": "18:59", "arter": []},
+  {"t": "19:29", "arter": []},
+  {"t": "19:59", "arter": []},
+  {"t": "20:29", "arter": []},
+  {"t": "20:59", "arter": []},
+  {"t": "21:29", "arter": []}
  ]
 }
