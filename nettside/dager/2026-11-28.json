@@ -1,0 +1,68 @@
+{
+ "dato": "2026-11-28",
+ "tegnet": "09:37",
+ "periode": "06:43–09:44",
+ "opptak": 11,
+ "vaer": "Overskyet · -3° · 1 m/s",
+ "antall_arter": 8,
+ "hoert": [
+  {
+   "nr": 1,
+   "norsk": "Skjære",
+   "latin": "Pica pica",
+   "sikkerhet": 100,
+   "tid": "08:44–09:44",
+   "belegg": "2 økter",
+   "boks": [
+    592,
+    1143,
+    964,
+    1417
+   ],
+   "merke": [
+    675,
+    1385
+   ]
+  },
+  {
+   "nr": 2,
+   "norsk": "Blåmeis",
+   "latin": "Cyanistes caeruleus",
+   "sikkerhet": 92,
+   "tid": "09:29",
+   "belegg": "3 ggr",
+   "boks": [
+    245,
+    1273,
+    398,
+    1399
+   ],
+   "merke": [
+    314,
+    1410
+   ]
+  }
+ ],
+ "ogsaa": [
+  "Gråsisik",
+  "Flaggspett",
+  "Gulspurv",
+  "Jerpe",
+  "Pilfink",
+  "Fuglekonge"
+ ],
+ "bilde": "2026-11-28.png",
+ "doegn": [
+  {"t": "06:43", "arter": []},
+  {"t": "06:59", "arter": []},
+  {"t": "07:29", "arter": []},
+  {"t": "07:59", "arter": []},
+  {"t": "08:14", "arter": []},
+  {"t": "08:29", "arter": []},
+  {"t": "08:44", "arter": [["Skjære", "Pica pica", 100]]},
+  {"t": "08:59", "arter": []},
+  {"t": "09:14", "arter": []},
+  {"t": "09:29", "arter": [["Blåmeis", "Cyanistes caeruleus", 92]]},
+  {"t": "09:44", "arter": [["Skjære", "Pica pica", 99]]}
+ ]
+}

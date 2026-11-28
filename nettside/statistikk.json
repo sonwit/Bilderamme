@@ -5,10 +5,10 @@
  "terskel": 0.5,
  "arter": {
   "Pica pica": {
-   "dager": 63,
+   "dager": 64,
    "beste": 1.0,
    "foerst": "2026-07-27",
-   "sist": "2026-11-27"
+   "sist": "2026-11-28"
   },
   "Chloris chloris": {
    "dager": 37,
@@ -53,10 +53,10 @@
    "sist": "2026-11-27"
   },
   "Cyanistes caeruleus": {
-   "dager": 15,
+   "dager": 16,
    "beste": 0.95,
    "foerst": "2026-08-26",
-   "sist": "2026-11-16"
+   "sist": "2026-11-28"
   },
   "Turdus pilaris": {
    "dager": 11,
